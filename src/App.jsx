@@ -1658,7 +1658,7 @@ function DateConverter() {
 }
 
 // ─── LIBRARY ──────────────────────────────────────────────────────
-function Library() {
+function Library({ navigate }) {
   const [search, setSearch] = useState("");
   const [cat, setCat] = useState("All");
 
@@ -1685,12 +1685,13 @@ function Library() {
           onFocus={e => e.target.style.borderColor = GOLD}
           onBlur={e => e.target.style.borderColor = BORDER}
         />
-        <select value={cat} onChange={e => setCat(e.target.value)} style={{
+        <select value={cat} onChange={e => { if (e.target.value === "🎙️ Lectures") navigate("audio"); else setCat(e.target.value); }} style={{
           padding: "9px 14px", borderRadius: 2, border: `1px solid ${BORDER}`,
           fontSize: 12, color: TEXT, background: "#0E0E0E", cursor: "pointer",
           flex: "0 0 160px", letterSpacing: "0.04em", fontFamily: SANS, outline: "none",
         }}>
           {CATEGORIES.map(c => <option key={c} style={{ background: "#141414" }}>{c}</option>)}
+          <option style={{ background: "#141414", color: GOLD }}>🎙️ Lectures</option>
         </select>
       </div>
 
@@ -2092,7 +2093,7 @@ export default function App() {
         {page === "inheritance" && <Inheritance />}
         {page === "calendar" && <IslamicCalendar />}
         {page === "dates" && <DateConverter />}
-        {page === "library" && <Library />}
+        {page === "library" && <Library navigate={navigate} />}
         {page === "audio" && <AudioPage />}
       </main>
       {showSettings && (
