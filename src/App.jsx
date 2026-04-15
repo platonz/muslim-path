@@ -976,7 +976,8 @@ function Home({ quote, setPage, savedLocation }) {
 // ─── PRAYER TIMES ─────────────────────────────────────────────────
 function PrayerTimes({ savedLocation }) {
   const [city, setCity] = useState("");
-  const [method, setMethod] = useState(2);
+  const [method, setMethod] = useState(1);
+  const [school, setSchool] = useState(1);
   const [times, setTimes] = useState(null);
   const [loading, setLoading] = useState(false);
   const [err, setErr] = useState("");
@@ -1041,7 +1042,7 @@ function PrayerTimes({ savedLocation }) {
       let url;
       if (coords) {
         // Use coordinates — works for every city worldwide
-        url = `https://api.aladhan.com/v1/timings/${d}?latitude=${coords.lat}&longitude=${coords.lon}&method=${method}`;
+        url = `https://api.aladhan.com/v1/timings/${d}?latitude=${coords.lat}&longitude=${coords.lon}&method=${method}&school=${school}`;
       } else {
         // Fallback: geocode first, then use coordinates
         const geo = await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(q)}&format=json&limit=1`, { headers: { "Accept-Language": "en" } });
@@ -1050,7 +1051,7 @@ function PrayerTimes({ savedLocation }) {
           const { lat, lon } = geoJson[0];
           url = `https://api.aladhan.com/v1/timings/${d}?latitude=${lat}&longitude=${lon}&method=${method}`;
         } else {
-          url = `https://api.aladhan.com/v1/timingsByCity/${d}?city=${encodeURIComponent(q)}&country=&method=${method}`;
+          url = `https://api.aladhan.com/v1/timingsByCity/${d}?city=${encodeURIComponent(q)}&country=&method=${method}&school=${school}`;
         }
       }
       const res = await fetch(url);
@@ -1134,6 +1135,7 @@ function PrayerTimes({ savedLocation }) {
           </div>
 
           <Select label="Calculation Method" value={method} onChange={e => setMethod(e.target.value)} options={METHODS} />
+          <Select label="Asr Calculation" value={school} onChange={e => setSchool(e.target.value)} options={[{ v: 1, l: "Ḥanafī — later Asr (BIK Kosovo)" }, { v: 0, l: "Shāfiʿī / Standard — earlier Asr" }]} />
           <Btn onClick={() => search()} disabled={loading}>{loading ? "Searching…" : "Get Prayer Times"}</Btn>
         </div>
       </Card>
