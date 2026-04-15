@@ -1998,13 +1998,23 @@ function SettingsModal({ onClose, savedLocation, onSave }) {
 }
 
 // ─── APP ──────────────────────────────────────────────────────────
+const VALID_PAGES = ["home","prayer","qibla","zakat","inheritance","calendar","dates","library"];
+
 export default function App() {
-  const [page, setPage] = useState("home");
+  const [page, setPage] = useState(() => {
+    const hash = window.location.hash.replace("#", "");
+    return VALID_PAGES.includes(hash) ? hash : "home";
+  });
   const [quote] = useState(() => QUOTES[Math.floor(Math.random() * QUOTES.length)]);
   const [savedLocation, setSavedLocation] = useState(() => loadSavedLocation());
   const [showSettings, setShowSettings] = useState(false);
 
   function handleSaveLocation(loc) { setSavedLocation(loc); }
+
+  function navigate(p) {
+    setPage(p);
+    window.location.hash = p === "home" ? "" : p;
+  }
 
   return (
     <div style={{ minHeight: "100vh", background: BG, fontFamily: SANS, color: TEXT }}>
@@ -2018,9 +2028,9 @@ export default function App() {
         option { background: #141414; color: ${TEXT}; }
         body { background: ${BG}; }
       `}</style>
-      <Nav page={page} setPage={setPage} onSettings={() => setShowSettings(true)} hasLocation={!!savedLocation} />
+      <Nav page={page} setPage={navigate} onSettings={() => setShowSettings(true)} hasLocation={!!savedLocation} />
       <main>
-        {page === "home" && <Home quote={quote} setPage={setPage} savedLocation={savedLocation} />}
+        {page === "home" && <Home quote={quote} setPage={navigate} savedLocation={savedLocation} />}
         {page === "prayer" && <PrayerTimes savedLocation={savedLocation} />}
         {page === "qibla" && <Qibla savedLocation={savedLocation} />}
         {page === "zakat" && <Zakat />}
