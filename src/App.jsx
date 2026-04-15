@@ -844,20 +844,15 @@ function Home({ quote, setPage, savedLocation }) {
                 display: "flex", justifyContent: "space-between", alignItems: "center",
                 cursor: "pointer",
               }}>
-                <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                  <span style={{ fontSize: 13, color: MUTED, letterSpacing: "0.1em", textTransform: "uppercase" }}>Next Prayer</span>
-                  <span style={{ fontSize: 15, color: GOLD, fontFamily: SERIF, fontWeight: 500, letterSpacing: "0.06em" }}>
-                    {nextPrayer.name}
-                  </span>
-                </div>
-                <div style={{ textAlign: "right" }}>
-                  <span style={{ fontSize: 18, color: GOLD, fontFamily: SERIF, fontWeight: 300, letterSpacing: "0.1em", fontVariantNumeric: "tabular-nums" }}>
-                    {nextPrayer.time}
-                  </span>
-                  <span style={{ fontSize: 11, color: MUTED, marginLeft: 10, letterSpacing: "0.08em" }}>
-                    in {countdown}
-                  </span>
-                </div>
+                <span style={{ fontSize: 14, color: GOLD, fontFamily: SERIF, fontWeight: 500, letterSpacing: "0.06em" }}>
+                  {nextPrayer.name}
+                </span>
+                <span style={{ fontSize: 12, color: MUTED, letterSpacing: "0.1em", textTransform: "uppercase" }}>
+                  in {countdown}
+                </span>
+                <span style={{ fontSize: 18, color: GOLD, fontFamily: SERIF, fontWeight: 300, letterSpacing: "0.1em", fontVariantNumeric: "tabular-nums" }}>
+                  {nextPrayer.time}
+                </span>
               </div>
             )}
             {!savedLocation && (
