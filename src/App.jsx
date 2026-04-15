@@ -2231,4 +2231,10 @@ function AudioPage() {
         })}
       </div>
       <style>{`
-        @keyframes bounce1 { from { height: 6px } to { he
+        @keyframes bounce1 { from { height: 6px } to { height: 14px } }
+        @keyframes bounce2 { from { height: 10px } to { height: 18px } }
+        @keyframes bounce3 { from { height: 4px } to { height: 12px } }
+      `}</style>
+    </div>
+  );
+}
