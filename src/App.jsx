@@ -2130,6 +2130,20 @@ function AudioPage() {
     if (!current || !audioRef.current) return;
     audioRef.current.src = current.url;
     audioRef.current.play().catch(() => {});
+    // Media Session API — shows controls on phone lock screen / notification bar
+    if ("mediaSession" in navigator) {
+      navigator.mediaSession.metadata = new MediaMetadata({
+        title: current.title,
+        artist: "Muslim's Path",
+        album: "Ligjerata Islame",
+      });
+      navigator.mediaSession.setActionHandler("play", () => { audioRef.current.play(); setPlaying(true); });
+      navigator.mediaSession.setActionHandler("pause", () => { audioRef.current.pause(); setPlaying(false); });
+      navigator.mediaSession.setActionHandler("previoustrack", () => skip(-1));
+      navigator.mediaSession.setActionHandler("nexttrack", () => skip(1));
+      navigator.mediaSession.setActionHandler("seekbackward", () => { audioRef.current.currentTime = Math.max(0, audioRef.current.currentTime - 5); });
+      navigator.mediaSession.setActionHandler("seekforward", () => { audioRef.current.currentTime = Math.min(duration, audioRef.current.currentTime + 5); });
+    }
   }, [current]);
 
   function onTimeUpdate() {
@@ -2182,15 +2196,30 @@ function AudioPage() {
           </div>
 
           {/* Controls */}
-          <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 24 }}>
-            <button onClick={() => skip(-1)} style={{ background: "none", border: "none", cursor: "pointer", color: MUTED, fontSize: 20 }}>⏮</button>
+          <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 16 }}>
+            {/* Prev track */}
+            <button onClick={() => skip(-1)} title="Previous track" style={{ background: "none", border: "none", cursor: "pointer", color: MUTED, fontSize: 18 }}>⏮</button>
+            {/* -5s */}
+            <button onClick={() => { if (audioRef.current) audioRef.current.currentTime = Math.max(0, audioRef.current.currentTime - 5); }} title="-5 seconds" style={{
+              background: "none", border: `1px solid ${BORDER}`, borderRadius: 2,
+              cursor: "pointer", color: MUTED, fontSize: 11, fontWeight: 700,
+              padding: "4px 8px", letterSpacing: "0.04em", fontFamily: SANS,
+            }}>−5s</button>
+            {/* Play/Pause */}
             <button onClick={() => play(current)} style={{
               width: 52, height: 52, borderRadius: "50%", border: `1px solid ${GOLD}`,
               background: playing ? GOLD : "transparent", color: playing ? "#0A0A0A" : GOLD,
               cursor: "pointer", fontSize: 22, display: "flex", alignItems: "center", justifyContent: "center",
               transition: "all 0.2s",
             }}>{playing ? "⏸" : "▶"}</button>
-            <button onClick={() => skip(1)} style={{ background: "none", border: "none", cursor: "pointer", color: MUTED, fontSize: 20 }}>⏭</button>
+            {/* +5s */}
+            <button onClick={() => { if (audioRef.current) audioRef.current.currentTime = Math.min(duration, audioRef.current.currentTime + 5); }} title="+5 seconds" style={{
+              background: "none", border: `1px solid ${BORDER}`, borderRadius: 2,
+              cursor: "pointer", color: MUTED, fontSize: 11, fontWeight: 700,
+              padding: "4px 8px", letterSpacing: "0.04em", fontFamily: SANS,
+            }}>+5s</button>
+            {/* Next track */}
+            <button onClick={() => skip(1)} title="Next track" style={{ background: "none", border: "none", cursor: "pointer", color: MUTED, fontSize: 18 }}>⏭</button>
           </div>
         </div>
       )}
