@@ -2127,33 +2127,33 @@ function AudioPage() {
   }
 
   useEffect(() => {
-    if (\!current || \!audioRef.current) return;
+    if (!current || !audioRef.current) return;
     audioRef.current.src = current.url;
     audioRef.current.play().catch(() => {});
   }, [current]);
 
   function onTimeUpdate() {
-    if (\!audioRef.current) return;
+    if (!audioRef.current) return;
     setProgress(audioRef.current.currentTime);
     setDuration(audioRef.current.duration || 0);
   }
 
   function seek(e) {
-    if (\!audioRef.current || \!duration) return;
+    if (!audioRef.current || !duration) return;
     const rect = e.currentTarget.getBoundingClientRect();
     const ratio = (e.clientX - rect.left) / rect.width;
     audioRef.current.currentTime = ratio * duration;
   }
 
   function skip(dir) {
-    if (\!current) return;
+    if (!current) return;
     const idx = LECTURES.findIndex(l => l.id === current.id);
     const next = LECTURES[idx + dir];
     if (next) play(next);
   }
 
   function fmt(s) {
-    if (\!s || isNaN(s)) return "0:00";
+    if (!s || isNaN(s)) return "0:00";
     const m = Math.floor(s / 60), sec = Math.floor(s % 60);
     return `${m}:${sec.toString().padStart(2, "0")}`;
   }
@@ -2208,8 +2208,8 @@ function AudioPage() {
               borderLeft: isActive ? `2px solid ${GOLD}` : "2px solid transparent",
               transition: "all 0.15s",
             }}
-              onMouseEnter={e => { if (\!isActive) e.currentTarget.style.background = "#0E0E0E"; }}
-              onMouseLeave={e => { if (\!isActive) e.currentTarget.style.background = "transparent"; }}
+              onMouseEnter={e => { if (!isActive) e.currentTarget.style.background = "#0E0E0E"; }}
+              onMouseLeave={e => { if (!isActive) e.currentTarget.style.background = "transparent"; }}
             >
               <div style={{ width: 28, height: 28, borderRadius: "50%", border: `1px solid ${isActive ? GOLD : BORDER}`, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
                 {isActive && playing
@@ -2231,10 +2231,4 @@ function AudioPage() {
         })}
       </div>
       <style>{`
-        @keyframes bounce1 { from { height: 6px } to { height: 14px } }
-        @keyframes bounce2 { from { height: 10px } to { height: 18px } }
-        @keyframes bounce3 { from { height: 4px } to { height: 12px } }
-      `}</style>
-    </div>
-  );
-}
+        @keyframes bounce1 { from { height: 6px } to { he
