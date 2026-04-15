@@ -126,6 +126,37 @@ const LIBRARY = [
   { title: "Muslim Central", author: "Lectures & audio", cat: "Online", url: "https://muslimcentral.com" },
   { title: "1000 Duas", author: "Comprehensive dua resource", cat: "Online", url: "https://1000duas.com" },
   { title: "Duaa.app", author: "Daily supplications", cat: "Online", url: "https://duaa.app" },
+
+  // ── Albanian / Shqip ─────────────────────────────────────────────
+  { title: "10 Sfidat e Jetës", author: "Literaturë Islame", cat: "Shqip", url: "/books/10-sfidat-e-jetes.pdf" },
+  { title: "99 Emrat e Allahut", author: "Literaturë Islame", cat: "Shqip", url: "/books/99Names-2019.pdf" },
+  { title: "Kush është Profeti Muhamed ﷺ", author: "AIITC", cat: "Shqip", url: "/books/AIITC-Ky-është-profeti-Muhamed-a.s..pdf" },
+  { title: "Madhërimi i Allahut", author: "Abdulaziz et-Tarifi", cat: "Shqip", url: "/books/Abdulaziz-et-Tarifi-Madhërimi-i-Allahut.pdf" },
+  { title: "Gjykimi ndaj Magjisë dhe Fallit", author: "Abdulaziz ibn Baz", cat: "Shqip", url: "/books/Abdulaziz-ibn-Baz-Gjykimi-ndaj-magjisë-dhe-fallit.pdf" },
+  { title: "Mbi Rrugën e të Parëve Tanë — Selefitë", author: "Abdulkadër Arnauti", cat: "Shqip", url: "/books/Abdulkadër-Arnauti-Mbi-rrugën-e-të-parëve-tanë-selefit.pdf" },
+  { title: "Sahih el-Bukhari — Vëllimi 1", author: "Mehdi Polisi", cat: "Shqip", url: "/books/Mehdi-Polisi-Sahih-el-Bukhari-Vëllimi-01.pdf" },
+  { title: "Sahih el-Bukhari — Vëllimi 2", author: "Abdullah Hamiti", cat: "Shqip", url: "/books/Abdullah-Hamiti-Sahih-el-Bukhari-Vëllimi-02.pdf" },
+  { title: "Këshilla të Arta për Morale të Larta", author: "Abdulmelik Ramadani", cat: "Shqip", url: "/books/Abdulmelik-Ramadani-Këshilla-të-arta-për-morale-të-lartaMe-balline.pdf" },
+  { title: "Rregulla rreth Tekfirit", author: "Abdulmunim Mustafa Halime", cat: "Shqip", url: "/books/Abdulmunim-Mustafa-Halime-Rregulla-rreth-tekfirit.pdf" },
+  { title: "Realiteti i Besimit të Vërtetë", author: "Abdurrahman es-Sadij", cat: "Shqip", url: "/books/Abdurrahman-es-Sadij-Realiteti-i-Besimit-të-Vërtetë.pdf" },
+  { title: "Hallalli dhe Harami në Islam", author: "Dr. Jusuf Kardavi", cat: "Shqip", url: "/books/Dr.-Jusuf-Kardavi-Hallalli-dhe-harami-me-balline.pdf" },
+  { title: "Kandili i Ramazanit", author: "Literaturë Islame", cat: "Shqip", url: "/books/KANDILI-I-RAMAZANIT.pdf" },
+  { title: "Kurani dhe Shkenca", author: "Literaturë Islame", cat: "Shqip", url: "/books/Kurani-drejt-shkences-me-kopertine.pdf" },
+  { title: "Libri i Agjërimit", author: "Salih ibn Feuzan el-Feuzan", cat: "Shqip", url: "/books/Libri-i-Agjerimit-Salih-ibn-Feuzan-el-Feuzan-1.pdf" },
+  { title: "Forma e Namazit të të Dërguarit ﷺ", author: "Imam Albani", cat: "Shqip", url: "/books/Muhammed-Nasiruddin-el-Albani-Forma-e-namazit-te-te-derguarit.pdf" },
+  { title: "Namazi i Natës — Teravitë në Ramazan", author: "Imam Albani", cat: "Shqip", url: "/books/Namazi-i-nates-teravite-ne-Ramazan-Imam-Albani.pdf" },
+  { title: "Ndejat e Muajit Ramazan", author: "Literaturë Islame", cat: "Shqip", url: "/books/Ndejat-e-Muajit-Ramazan.pdf" },
+  { title: "Pozita e Synetit në Islam", author: "Literaturë Islame", cat: "Shqip", url: "/books/POZITA-E-SYNETIT-NE-ISLAM-ok.pdf" },
+  { title: "Përmendja — Dhikri dhe Lutjet", author: "Literaturë Islame", cat: "Shqip", url: "/books/Përmendja-finalja.pdf" },
+  { title: "Emrat dhe Cilësitë e Allahut", author: "Xhamia Mbret Fahd", cat: "Shqip", url: "/books/Xhamia-Mbret-Emrat-dhe-Cilësitë-e-Allahut.pdf" },
+  { title: "Historitë e Pejgamberëve", author: "Literaturë Islame", cat: "Shqip", url: "/books/historite-e-pejgambereve-botim-1-1.pdf" },
+  { title: "Albislam — Nr. 63", author: "Revistë Islame Shqip", cat: "Shqip", url: "/books/albislam63.pdf" },
+  { title: "Albislam — Nr. 64", author: "Revistë Islame Shqip", cat: "Shqip", url: "/books/albislam64.pdf" },
+  { title: "Albislam — Nr. 65", author: "Revistë Islame Shqip", cat: "Shqip", url: "/books/albislam65.pdf" },
+  { title: "Albislam — Nr. 66", author: "Revistë Islame Shqip", cat: "Shqip", url: "/books/albislam66.pdf" },
+  { title: "Dituria Islame — Nr. 250", author: "Revistë Islame Shqip", cat: "Shqip", url: "/books/dituria250.pdf" },
+  { title: "Dituria Islame — Nr. 282", author: "Revistë Islame Shqip", cat: "Shqip", url: "/books/dituria282.pdf" },
+  { title: "Dituria Islame — Nr. 283", author: "Revistë Islame Shqip", cat: "Shqip", url: "/books/dituria283.pdf" },
 ];
 
 const CATEGORIES = ["All", ...Array.from(new Set(LIBRARY.map(b => b.cat)))];
@@ -1655,7 +1686,9 @@ function Library() {
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 8 }}>
               <span style={{ fontSize: 10, fontWeight: 600, color: GOLD, letterSpacing: "0.1em", textTransform: "uppercase", borderBottom: `1px solid ${GOLD}40`, paddingBottom: 2 }}>{b.cat}</span>
               {b.url !== "#" && (
-                <a href={b.url} target="_blank" rel="noreferrer" style={{ color: MUTED, fontSize: 11, textDecoration: "none", letterSpacing: "0.04em" }}>↗ Visit</a>
+                <a href={b.url} target="_blank" rel="noreferrer" style={{ color: MUTED, fontSize: 11, textDecoration: "none", letterSpacing: "0.04em" }}>
+                  {b.url.startsWith("/books/") ? "↓ PDF" : "↗ Visit"}
+                </a>
               )}
             </div>
             <div style={{ fontWeight: 500, fontSize: 14, color: TEXT, lineHeight: 1.5, fontFamily: SERIF }}>{b.title}</div>
