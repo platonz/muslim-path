@@ -1617,27 +1617,36 @@ function Library() {
     <div style={{ maxWidth: 960, margin: "0 auto", padding: "40px 24px" }}>
       <PageTitle icon="📚" title="Islamic Library" sub={`${LIBRARY.length} curated books and resources`} />
 
-      <Card style={{ marginBottom: 24 }}>
-        <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
-          <Input placeholder="Search by title or author…" value={search} onChange={e => setSearch(e.target.value)} style={{ flex: "1 1 220px" }} />
-          <select value={cat} onChange={e => setCat(e.target.value)} style={{
-            padding: "11px 14px", borderRadius: 2, border: `1px solid ${BORDER}`,
-            fontSize: 12, color: TEXT, background: "#0E0E0E", cursor: "pointer", flex: "0 0 180px",
-            letterSpacing: "0.04em", fontFamily: SANS, outline: "none",
-          }}>
-            {CATEGORIES.map(c => <option key={c}>{c}</option>)}
-          </select>
-        </div>
-      </Card>
+      <div style={{ display: "flex", gap: 10, marginBottom: 20, flexWrap: "wrap" }}>
+        <input
+          placeholder="Search by title or author…"
+          value={search}
+          onChange={e => setSearch(e.target.value)}
+          style={{
+            flex: "1 1 200px", padding: "9px 14px", borderRadius: 2,
+            border: `1px solid ${BORDER}`, fontSize: 13, color: TEXT,
+            background: "#0E0E0E", outline: "none", fontFamily: SANS,
+          }}
+          onFocus={e => e.target.style.borderColor = GOLD}
+          onBlur={e => e.target.style.borderColor = BORDER}
+        />
+        <select value={cat} onChange={e => setCat(e.target.value)} style={{
+          padding: "9px 14px", borderRadius: 2, border: `1px solid ${BORDER}`,
+          fontSize: 12, color: TEXT, background: "#0E0E0E", cursor: "pointer",
+          flex: "0 0 160px", letterSpacing: "0.04em", fontFamily: SANS, outline: "none",
+        }}>
+          {CATEGORIES.map(c => <option key={c} style={{ background: "#141414" }}>{c}</option>)}
+        </select>
+      </div>
 
       <div style={{ marginBottom: 12, color: MUTED, fontSize: 13 }}>{filtered.length} results</div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: 1, border: `1px solid ${BORDER}` }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: 1, border: `1px solid ${BORDER}` }}>
         {filtered.map((b, i) => (
           <div key={i} style={{
             background: SURFACE, border: "none",
             borderRight: `1px solid ${BORDER}`, borderBottom: `1px solid ${BORDER}`,
-            padding: "20px 18px", display: "flex", flexDirection: "column", gap: 8,
+            padding: "14px 16px", display: "flex", flexDirection: "column", gap: 6,
             transition: "background 0.2s",
           }}
             onMouseEnter={e => e.currentTarget.style.background = GREEN_L}
