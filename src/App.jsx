@@ -683,6 +683,20 @@ function isRamadanDay(date) {
   return diff >= 0 && diff < 30;
 }
 
+// ─── SUPABASE CONFIG ──────────────────────────────────────────────
+// Fill these in after creating your Supabase project (Settings → API)
+const SUPA_URL      = "https://kpyasnchzjxmhgywlxij.supabase.co";   // e.g. "https://xxxxxxxxxxxx.supabase.co"
+const SUPA_ANON_KEY = "kpyasnchzjxmhgywlxij";   // your project's anon/public key
+
+async function supaFetch(table, opts = "") {
+  if (!SUPA_URL) return null;
+  const res = await fetch(`${SUPA_URL}/rest/v1/${table}?${opts}`, {
+    headers: { apikey: SUPA_ANON_KEY, Authorization: `Bearer ${SUPA_ANON_KEY}` },
+  });
+  if (!res.ok) return null;
+  return res.json();
+}
+
 // ─── NAV ──────────────────────────────────────────────────────────
 const R2 = "https://pub-cdb1d5a2606a4ef68b5d888d9c684d9e.r2.dev";
 
@@ -1663,8 +1677,25 @@ function DateConverter() {
 function Library({ navigate }) {
   const [search, setSearch] = useState("");
   const [cat, setCat] = useState("All");
+  const [books, setBooks] = useState(LIBRARY);
+  const [cats, setCats] = useState(CATEGORIES);
+  const [loading, setLoading] = useState(false);
 
-  const filtered = LIBRARY.filter(b => {
+  useEffect(() => {
+    if (!SUPA_URL) return;
+    setLoading(true);
+    supaFetch("books", "select=*&order=id")
+      .then(data => {
+        if (Array.isArray(data) && data.length > 0) {
+          setBooks(data);
+          setCats(["All", ...Array.from(new Set(data.map(b => b.cat)))]);
+        }
+      })
+      .catch(() => {})
+      .finally(() => setLoading(false));
+  }, []);
+
+  const filtered = books.filter(b => {
     const matchCat = cat === "All" || b.cat === cat;
     const matchSearch = !search || b.title.toLowerCase().includes(search.toLowerCase()) || b.author.toLowerCase().includes(search.toLowerCase());
     return matchCat && matchSearch;
@@ -1672,7 +1703,7 @@ function Library({ navigate }) {
 
   return (
     <div style={{ maxWidth: 960, margin: "0 auto", padding: "40px 24px" }}>
-      <PageTitle icon="📚" title="Islamic Library" sub={`${LIBRARY.length} curated books and resources`} />
+      <PageTitle icon="📚" title="Islamic Library" sub={loading ? "Loading…" : `${books.length} curated books and resources`} />
 
       <div style={{ display: "flex", gap: 10, marginBottom: 20, flexWrap: "wrap" }}>
         <input
@@ -1692,12 +1723,14 @@ function Library({ navigate }) {
           fontSize: 12, color: TEXT, background: "#0E0E0E", cursor: "pointer",
           flex: "0 0 160px", letterSpacing: "0.04em", fontFamily: SANS, outline: "none",
         }}>
-          {CATEGORIES.map(c => <option key={c} style={{ background: "#141414" }}>{c}</option>)}
+          {cats.map(c => <option key={c} style={{ background: "#141414" }}>{c}</option>)}
           <option style={{ background: "#141414", color: GOLD }}>🎙️ Lectures</option>
         </select>
       </div>
 
       <div style={{ marginBottom: 12, color: MUTED, fontSize: 13 }}>{filtered.length} results</div>
+
+      {loading && <div style={{ textAlign: "center", padding: 32, color: MUTED, letterSpacing: "0.08em", fontSize: 13 }}>Loading library…</div>}
 
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: 1, border: `1px solid ${BORDER}` }}>
         {filtered.map((b, i) => (
@@ -2111,11 +2144,19 @@ export default function App() {
 
 // ─── AUDIO / LECTURES ─────────────────────────────────────────────
 function AudioPage() {
+  const [lectures, setLectures] = useState(LECTURES);
   const [current, setCurrent] = useState(null);
   const [playing, setPlaying] = useState(false);
   const [progress, setProgress] = useState(0);
   const [duration, setDuration] = useState(0);
   const audioRef = useRef(null);
+
+  useEffect(() => {
+    if (!SUPA_URL) return;
+    supaFetch("lectures", "select=*&order=sort")
+      .then(data => { if (Array.isArray(data) && data.length > 0) setLectures(data); })
+      .catch(() => {});
+  }, []);
 
   function play(lecture) {
     if (current?.id === lecture.id) {
@@ -2163,8 +2204,8 @@ function AudioPage() {
 
   function skip(dir) {
     if (!current) return;
-    const idx = LECTURES.findIndex(l => l.id === current.id);
-    const next = LECTURES[idx + dir];
+    const idx = lectures.findIndex(l => l.id === current.id);
+    const next = lectures[idx + dir];
     if (next) play(next);
   }
 
@@ -2228,14 +2269,14 @@ function AudioPage() {
 
       {/* Playlist */}
       <div style={{ border: `1px solid ${BORDER}` }}>
-        {LECTURES.map((l, i) => {
+        {lectures.map((l, i) => {
           const isActive = current?.id === l.id;
           return (
             <div key={l.id} onClick={() => play(l)} style={{
               display: "flex", alignItems: "center", gap: 16,
               padding: "14px 20px", cursor: "pointer",
               background: isActive ? GREEN_L : "transparent",
-              borderBottom: i < LECTURES.length - 1 ? `1px solid ${BORDER}` : "none",
+              borderBottom: i < lectures.length - 1 ? `1px solid ${BORDER}` : "none",
               borderLeft: isActive ? `2px solid ${GOLD}` : "2px solid transparent",
               transition: "all 0.15s",
             }}
