@@ -736,6 +736,7 @@ const NAV_ITEMS = [
   { id: "library",     label: "Library",      icon: "📚" },
   { id: "audio",       label: "Lectures",     icon: "🎙️" },
   { id: "tasbeeh",     label: "Tasbeeh",      icon: "📿" },
+  { id: "quran",       label: "Quran",        icon: "📖" },
 ];
 
 function Nav({ page, setPage, onSettings, hasLocation }) {
@@ -2143,7 +2144,7 @@ function SettingsModal({ onClose, savedLocation, onSave }) {
 }
 
 // ─── APP ──────────────────────────────────────────────────────────
-const VALID_PAGES = ["home","prayer","qibla","zakat","inheritance","calendar","dates","library","audio","tasbeeh","admin"];
+const VALID_PAGES = ["home","prayer","qibla","zakat","inheritance","calendar","dates","library","audio","tasbeeh","quran","admin"];
 
 // ─── FLOATING MINI-PLAYER ─────────────────────────────────────────
 function FloatingPlayer({ current, playing, play, skip, stop, progress, duration, fmt, navigate }) {
@@ -2353,7 +2354,8 @@ export default function App() {
         {page === "library" && <Library navigate={navigate} />}
         {page === "audio" && <AudioPage {...audioProps} />}
         {page === "tasbeeh" && <TasbeehPage />}
-        {page === "admin" && <AdminPage />}
+        {page === "quran"   && <QuranPage />}
+        {page === "admin"   && <AdminPage />}
       </main>
       {showSettings && (
         <SettingsModal
@@ -2363,6 +2365,210 @@ export default function App() {
         />
       )}
       <FloatingPlayer {...audioProps} navigate={navigate} />
+    </div>
+  );
+}
+
+// ─── QURAN ────────────────────────────────────────────────────────
+const ARABIC = "'Amiri', 'Traditional Arabic', serif";
+
+function QuranPage() {
+  const [surahs,       setSurahs]       = useState([]);
+  const [current,      setCurrent]      = useState(() => { const s = localStorage.getItem("quranSurah"); return s ? parseInt(s) : null; });
+  const [verses,       setVerses]       = useState([]);
+  const [loadingList,  setLoadingList]  = useState(true);
+  const [loadingRead,  setLoadingRead]  = useState(false);
+  const [search,       setSearch]       = useState("");
+  const [showTrans,    setShowTrans]     = useState(true);
+  const topRef = useRef(null);
+
+  // Load surah list
+  useEffect(() => {
+    fetch("https://api.alquran.cloud/v1/surah")
+      .then(r => r.json())
+      .then(d => { setSurahs(d.data || []); setLoadingList(false); })
+      .catch(() => setLoadingList(false));
+  }, []);
+
+  // Load verses when surah selected
+  useEffect(() => {
+    if (!current) return;
+    setLoadingRead(true); setVerses([]);
+    fetch(`https://api.alquran.cloud/v1/surah/${current}/editions/quran-uthmani,en.sahih`)
+      .then(r => r.json())
+      .then(d => {
+        const [ar, en] = d.data;
+        setVerses(ar.ayahs.map((a, i) => ({ n: a.numberInSurah, ar: a.text, en: en.ayahs[i].text })));
+        setLoadingRead(false);
+        topRef.current?.scrollIntoView({ behavior: "smooth" });
+      })
+      .catch(() => setLoadingRead(false));
+  }, [current]);
+
+  function openSurah(num) { setCurrent(num); localStorage.setItem("quranSurah", num); }
+  function back()          { setCurrent(null); localStorage.removeItem("quranSurah"); }
+  function navSurah(dir)   { const n = Math.min(114, Math.max(1, current + dir)); openSurah(n); }
+
+  const surah    = surahs.find(s => s.number === current);
+  const filtered = surahs.filter(s =>
+    !search ||
+    s.englishName.toLowerCase().includes(search.toLowerCase()) ||
+    s.englishNameTranslation.toLowerCase().includes(search.toLowerCase()) ||
+    String(s.number).includes(search)
+  );
+
+  // ── READER VIEW ────────────────────────────────────────────────
+  if (current && surah) return (
+    <div style={{ maxWidth: 780, margin: "0 auto", padding: "40px 24px" }} ref={topRef}>
+      {/* Header */}
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 32, flexWrap: "wrap", gap: 12 }}>
+        <button onClick={back} style={{ background: "none", border: `1px solid ${BORDER}`, borderRadius: 2, color: MUTED, padding: "7px 16px", cursor: "pointer", fontSize: 12, fontFamily: SANS, letterSpacing: "0.06em" }}>
+          ← All Surahs
+        </button>
+        <div style={{ textAlign: "center", flex: 1 }}>
+          <div style={{ fontSize: 11, color: MUTED, letterSpacing: "0.14em", textTransform: "uppercase", marginBottom: 4 }}>
+            Surah {surah.number} · {surah.revelationType} · {surah.numberOfAyahs} verses
+          </div>
+          <div style={{ fontFamily: SERIF, fontSize: 22, color: TEXT }}>{surah.englishName}</div>
+          <div style={{ fontSize: 12, color: MUTED }}>{surah.englishNameTranslation}</div>
+        </div>
+        <div style={{ display: "flex", gap: 8 }}>
+          <button onClick={() => setShowTrans(t => !t)} style={{
+            background: showTrans ? GREEN_L : "transparent", border: `1px solid ${showTrans ? GOLD : BORDER}`,
+            borderRadius: 2, color: showTrans ? GOLD : MUTED, padding: "7px 14px", cursor: "pointer",
+            fontSize: 11, fontFamily: SANS, letterSpacing: "0.06em",
+          }}>Translation</button>
+        </div>
+      </div>
+
+      {/* Arabic title */}
+      <div style={{ textAlign: "center", marginBottom: 36 }}>
+        <div style={{ fontSize: 34, fontFamily: ARABIC, color: GOLD, direction: "rtl", letterSpacing: "0.04em", lineHeight: 1.6 }}>
+          {surah.name}
+        </div>
+        {surah.number !== 9 && (
+          <div style={{ fontSize: 20, fontFamily: ARABIC, color: MUTED, direction: "rtl", marginTop: 8, lineHeight: 2 }}>
+            بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ
+          </div>
+        )}
+        <div style={{ width: 60, height: 1, background: `linear-gradient(90deg, transparent, ${GOLD}60, transparent)`, margin: "20px auto 0" }} />
+      </div>
+
+      {loadingRead && (
+        <div style={{ textAlign: "center", padding: 60, color: MUTED, fontSize: 13, letterSpacing: "0.1em" }}>
+          Loading verses…
+        </div>
+      )}
+
+      {/* Verses */}
+      <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
+        {verses.map((v, i) => (
+          <div key={v.n} style={{
+            padding: "28px 0", borderBottom: `1px solid ${BORDER}`,
+            display: "flex", flexDirection: "column", gap: 14,
+          }}>
+            {/* Verse number + Arabic */}
+            <div style={{ display: "flex", alignItems: "flex-start", gap: 16, direction: "rtl" }}>
+              <div style={{
+                width: 32, height: 32, borderRadius: "50%", border: `1px solid ${GOLD}50`,
+                display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0,
+                fontSize: 11, color: GOLD, fontFamily: SANS, direction: "ltr",
+              }}>{v.n}</div>
+              <div style={{ fontSize: 26, fontFamily: ARABIC, color: TEXT, lineHeight: 2.2, flex: 1, textAlign: "right" }}>
+                {v.ar}
+              </div>
+            </div>
+            {/* Translation */}
+            {showTrans && (
+              <div style={{ fontSize: 14, color: MUTED, lineHeight: 1.9, paddingLeft: 48, fontFamily: SERIF, letterSpacing: "0.02em" }}>
+                {v.en}
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+
+      {/* Prev / Next surah */}
+      {!loadingRead && verses.length > 0 && (
+        <div style={{ display: "flex", justifyContent: "space-between", marginTop: 40, gap: 12 }}>
+          <button onClick={() => navSurah(-1)} disabled={current === 1} style={{
+            flex: 1, padding: "12px 0", background: "transparent", border: `1px solid ${BORDER}`,
+            borderRadius: 2, color: current === 1 ? BORDER : MUTED, cursor: current === 1 ? "default" : "pointer",
+            fontSize: 12, fontFamily: SANS, letterSpacing: "0.06em", transition: "all 0.2s",
+          }}>← Previous Surah</button>
+          <button onClick={back} style={{
+            padding: "12px 24px", background: "transparent", border: `1px solid ${BORDER}`,
+            borderRadius: 2, color: MUTED, cursor: "pointer", fontSize: 12, fontFamily: SANS,
+          }}>All Surahs</button>
+          <button onClick={() => navSurah(1)} disabled={current === 114} style={{
+            flex: 1, padding: "12px 0", background: "transparent", border: `1px solid ${BORDER}`,
+            borderRadius: 2, color: current === 114 ? BORDER : MUTED, cursor: current === 114 ? "default" : "pointer",
+            fontSize: 12, fontFamily: SANS, letterSpacing: "0.06em", transition: "all 0.2s",
+          }}>Next Surah →</button>
+        </div>
+      )}
+    </div>
+  );
+
+  // ── SURAH LIST VIEW ────────────────────────────────────────────
+  return (
+    <div style={{ maxWidth: 860, margin: "0 auto", padding: "40px 24px" }}>
+      <PageTitle icon="📖" title="The Noble Quran" sub="114 surahs · Arabic with English translation" />
+
+      <input
+        placeholder="Search surah by name or number…"
+        value={search} onChange={e => setSearch(e.target.value)}
+        style={{
+          width: "100%", padding: "11px 16px", background: "#0E0E0E",
+          border: `1px solid ${BORDER}`, borderRadius: 2, color: TEXT,
+          fontSize: 13, fontFamily: SANS, outline: "none", marginBottom: 24,
+          boxSizing: "border-box",
+        }}
+        onFocus={e => e.target.style.borderColor = GOLD}
+        onBlur={e => e.target.style.borderColor = BORDER}
+      />
+
+      {loadingList && (
+        <div style={{ textAlign: "center", padding: 60, color: MUTED, fontSize: 13, letterSpacing: "0.1em" }}>
+          Loading surahs…
+        </div>
+      )}
+
+      <div style={{ border: `1px solid ${BORDER}` }}>
+        {filtered.map((s, i) => (
+          <div key={s.number} onClick={() => openSurah(s.number)}
+            style={{
+              display: "flex", alignItems: "center", gap: 16, padding: "14px 20px",
+              borderBottom: i < filtered.length - 1 ? `1px solid ${BORDER}` : "none",
+              cursor: "pointer", transition: "background 0.15s",
+              borderLeft: current === s.number ? `2px solid ${GOLD}` : "2px solid transparent",
+              background: "transparent",
+            }}
+            onMouseEnter={e => e.currentTarget.style.background = GREEN_L}
+            onMouseLeave={e => e.currentTarget.style.background = "transparent"}
+          >
+            {/* Number */}
+            <div style={{
+              width: 36, height: 36, border: `1px solid ${BORDER}`, borderRadius: 2, flexShrink: 0,
+              display: "flex", alignItems: "center", justifyContent: "center",
+              fontSize: 12, color: GOLD, fontFamily: SANS, fontWeight: 600,
+            }}>{s.number}</div>
+
+            {/* English info */}
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <div style={{ fontSize: 14, color: TEXT, fontWeight: 500, fontFamily: SERIF, letterSpacing: "0.03em" }}>{s.englishName}</div>
+              <div style={{ fontSize: 11, color: MUTED, marginTop: 2 }}>
+                {s.englishNameTranslation} · {s.numberOfAyahs} verses · {s.revelationType}
+              </div>
+            </div>
+
+            {/* Arabic name */}
+            <div style={{ fontFamily: ARABIC, fontSize: 20, color: GOLD, direction: "rtl", flexShrink: 0, lineHeight: 1.6 }}>
+              {s.name}
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
