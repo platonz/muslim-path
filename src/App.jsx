@@ -747,7 +747,7 @@ function Nav({ page, setPage, onSettings, hasLocation }) {
       <div style={{ maxWidth: 1300, margin: "0 auto", display: "flex", alignItems: "center", justifyContent: "space-between", height: 64 }}>
         {/* Logo */}
         <button onClick={() => setPage("home")} style={{ background: "none", border: "none", cursor: "pointer", display: "flex", alignItems: "center", gap: 12 }}>
-          <div style={{ width: 32, height: 32, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18, borderBottom: `1px solid ${GOLD}60` }}>☪️</div>
+          <img src="/logo.png" alt="Muslim's Path" style={{ width: 38, height: 38, objectFit: "contain" }} />
           <div style={{ display: "flex", flexDirection: "column", lineHeight: 1.15 }}>
             <span style={{ fontWeight: 600, fontSize: 17, color: TEXT, fontFamily: SERIF, letterSpacing: "0.06em" }}>Muslim's Path</span>
             <span style={{ fontSize: 9, color: GOLD, letterSpacing: "0.18em", textTransform: "uppercase", fontFamily: SANS }}>Your Islamic Companion</span>
