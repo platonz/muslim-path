@@ -982,9 +982,56 @@ function Home({ quote, setPage, savedLocation }) {
             onMouseEnter={e => { e.currentTarget.style.background = GREEN_L; }}
             onMouseLeave={e => { e.currentTarget.style.background = SURFACE; }}
           >
-            <div style={{ fontSize: 24, marginBottom: 14, opacity: 0.8 }}>{n.icon}</div>
-            <div style={{ fontWeight: 500, color: TEXT, fontSize: 14, letterSpacing: "0.05em", fontFamily: SANS }}>{n.label}</div>
-            <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: 1, background: `linear-gradient(90deg, ${GOLD}40, transparent)`, opacity: 0, transition: "opacity 0.2s" }} />
+            {/* Arabesque pattern layer */}
+            <svg xmlns="http://www.w3.org/2000/svg"
+              style={{ position: "absolute", inset: 0, width: "100%", height: "100%", opacity: 0.13, pointerEvents: "none" }}>
+              <defs>
+                <pattern id={`ar-${n.id}`} width="80" height="80" patternUnits="userSpaceOnUse">
+                  <g fill="none" stroke="#C9A84C">
+                    {/* Central khatam — two overlapping squares = 8-pointed star */}
+                    <g transform="translate(40,40)">
+                      <rect x="-17" y="-17" width="34" height="34" strokeWidth="0.9"/>
+                      <rect x="-17" y="-17" width="34" height="34" transform="rotate(45)" strokeWidth="0.9"/>
+                      <circle r="10" strokeWidth="0.5"/>
+                      <circle r="22" strokeWidth="0.4" strokeDasharray="2 3"/>
+                    </g>
+                    {/* Quarter khatams at corners for seamless tiling */}
+                    <g transform="translate(0,0)">
+                      <rect x="-12" y="-12" width="24" height="24" strokeWidth="0.6"/>
+                      <rect x="-12" y="-12" width="24" height="24" transform="rotate(45)" strokeWidth="0.6"/>
+                    </g>
+                    <g transform="translate(80,0)">
+                      <rect x="-12" y="-12" width="24" height="24" strokeWidth="0.6"/>
+                      <rect x="-12" y="-12" width="24" height="24" transform="rotate(45)" strokeWidth="0.6"/>
+                    </g>
+                    <g transform="translate(0,80)">
+                      <rect x="-12" y="-12" width="24" height="24" strokeWidth="0.6"/>
+                      <rect x="-12" y="-12" width="24" height="24" transform="rotate(45)" strokeWidth="0.6"/>
+                    </g>
+                    <g transform="translate(80,80)">
+                      <rect x="-12" y="-12" width="24" height="24" strokeWidth="0.6"/>
+                      <rect x="-12" y="-12" width="24" height="24" transform="rotate(45)" strokeWidth="0.6"/>
+                    </g>
+                    {/* Connecting lines */}
+                    <line x1="40" y1="7"  x2="40" y2="23" strokeWidth="0.5"/>
+                    <line x1="40" y1="57" x2="40" y2="73" strokeWidth="0.5"/>
+                    <line x1="7"  y1="40" x2="23" y2="40" strokeWidth="0.5"/>
+                    <line x1="57" y1="40" x2="73" y2="40" strokeWidth="0.5"/>
+                    <line x1="12" y1="12" x2="26" y2="26" strokeWidth="0.5"/>
+                    <line x1="68" y1="12" x2="54" y2="26" strokeWidth="0.5"/>
+                    <line x1="12" y1="68" x2="26" y2="54" strokeWidth="0.5"/>
+                    <line x1="68" y1="68" x2="54" y2="54" strokeWidth="0.5"/>
+                  </g>
+                </pattern>
+              </defs>
+              <rect width="100%" height="100%" fill={`url(#ar-${n.id})`}/>
+            </svg>
+
+            {/* Content */}
+            <div style={{ position: "relative", zIndex: 1 }}>
+              <div style={{ fontSize: 24, marginBottom: 14, opacity: 0.9 }}>{n.icon}</div>
+              <div style={{ fontWeight: 500, color: TEXT, fontSize: 14, letterSpacing: "0.05em", fontFamily: SANS }}>{n.label}</div>
+            </div>
           </button>
         ))}
       </div>
