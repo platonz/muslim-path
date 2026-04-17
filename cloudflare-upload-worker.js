@@ -38,10 +38,12 @@ export default {
     }
 
     // ── Upload to R2 ────────────────────────────────────────────
-    const raw = request.headers.get("X-Filename") || "upload.pdf";
+    const raw = request.headers.get("X-Filename") || "upload";
     const filename = raw.replace(/[^\w.\-]/g, "_");
-    const path = `books/${Date.now()}_${filename}`;
-    const contentType = request.headers.get("Content-Type") || "application/pdf";
+    // X-Folder header lets caller choose: "books" or "audio/Ligjerata"
+    const folder = request.headers.get("X-Folder") || "books";
+    const path = `${folder}/${filename}`;
+    const contentType = request.headers.get("Content-Type") || "application/octet-stream";
 
     try {
       const body = await request.arrayBuffer();

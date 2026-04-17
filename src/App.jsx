@@ -2354,8 +2354,10 @@ function AdminPage() {
   const [editBook, setEditBook]   = useState(null);
   const [lecForm, setLecForm]     = useState(EMPTY_LEC);
   const [editLec, setEditLec]     = useState(null);
-  const [uploading, setUploading] = useState(false);
-  const [uploadPct, setUploadPct] = useState(0);
+  const [uploading, setUploading]     = useState(false);
+  const [uploadPct, setUploadPct]     = useState(0);
+  const [uploadingMp3, setUploadingMp3] = useState(false);
+  const [uploadMp3Pct, setUploadMp3Pct] = useState(0);
 
   function flash(m) { setMsg(m); setTimeout(() => setMsg(""), 2800); }
 
@@ -2386,6 +2388,44 @@ function AdminPage() {
       flash("Upload error: " + e.message);
     } finally {
       setUploading(false); setUploadPct(0);
+    }
+  }
+
+  async function uploadMP3(file) {
+    if (!file) return;
+    if (!UPLOAD_WORKER_URL) { flash("Set UPLOAD_WORKER_URL in App.jsx first."); return; }
+    setUploadingMp3(true); setUploadMp3Pct(0);
+    try {
+      const result = await new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+        xhr.open("POST", UPLOAD_WORKER_URL);
+        xhr.setRequestHeader("X-Admin-Key", UPLOAD_WORKER_KEY);
+        xhr.setRequestHeader("X-Filename", file.name.replace(/\s+/g, "_"));
+        xhr.setRequestHeader("X-Folder", "audio/Ligjerata");
+        xhr.setRequestHeader("Content-Type", file.type || "audio/mpeg");
+        xhr.upload.onprogress = e => { if (e.lengthComputable) setUploadMp3Pct(Math.round(e.loaded / e.total * 100)); };
+        xhr.onload = () => {
+          try {
+            const data = JSON.parse(xhr.responseText);
+            xhr.status < 300 ? resolve(data) : reject(new Error(data.error || xhr.responseText));
+          } catch { reject(new Error(xhr.responseText)); }
+        };
+        xhr.onerror = () => reject(new Error("Network error during upload"));
+        xhr.send(file);
+      });
+      // Auto-fill title (filename without extension), file, url
+      const nameNoExt = file.name.replace(/\.[^.]+$/, "").replace(/_/g, " ");
+      setLecForm(f => ({
+        ...f,
+        title: f.title || nameNoExt,
+        file: file.name.replace(/\s+/g, "_"),
+        url: result.url,
+      }));
+      flash("✓ MP3 uploaded to Cloudflare R2 — fields filled in.");
+    } catch (e) {
+      flash("Upload error: " + e.message);
+    } finally {
+      setUploadingMp3(false); setUploadMp3Pct(0);
     }
   }
 
@@ -2676,8 +2716,35 @@ function AdminPage() {
                 onChange={e => setLecForm(f => ({ ...f, url: e.target.value }))}
                 onFocus={e => e.target.style.borderColor = GOLD} onBlur={e => e.target.style.borderColor = BORDER} />
             </div>
+
+            {/* MP3 Upload */}
+            <div style={{ marginTop: 12, border: `1px dashed ${BORDER}`, borderRadius: 2, padding: "14px 16px" }}>
+              <div style={{ fontSize: 11, color: MUTED, marginBottom: 8, letterSpacing: "0.06em" }}>
+                UPLOAD MP3 — auto-fills filename, URL and title above
+              </div>
+              <input
+                type="file" accept=".mp3,audio/*"
+                onChange={e => uploadMP3(e.target.files[0])}
+                style={{ fontSize: 12, color: MUTED, cursor: "pointer" }}
+                disabled={uploadingMp3}
+              />
+              {uploadingMp3 && (
+                <div style={{ marginTop: 10 }}>
+                  <div style={{ height: 3, background: BORDER, borderRadius: 2 }}>
+                    <div style={{ height: "100%", width: `${uploadMp3Pct}%`, background: GOLD, borderRadius: 2, transition: "width 0.3s" }} />
+                  </div>
+                  <div style={{ fontSize: 11, color: GOLD, marginTop: 4 }}>Uploading… {uploadMp3Pct}%</div>
+                </div>
+              )}
+              {lecForm.url && lecForm.url.includes("r2.dev") && (
+                <div style={{ fontSize: 11, color: GOLD, marginTop: 8 }}>✓ MP3 ready: {lecForm.file}</div>
+              )}
+            </div>
+
             <div style={{ display: "flex", gap: 10, marginTop: 14 }}>
-              <button onClick={saveLec} style={btn()}>{editLec ? "Update Lecture" : "Add Lecture"}</button>
+              <button onClick={saveLec} disabled={uploadingMp3} style={{ ...btn(), opacity: uploadingMp3 ? 0.5 : 1 }}>
+                {editLec ? "Update Lecture" : "Add Lecture"}
+              </button>
               {editLec && <button onClick={() => { setEditLec(null); setLecForm(EMPTY_LEC); }} style={btn(MUTED, true)}>Cancel</button>}
             </div>
           </div>
