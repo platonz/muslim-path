@@ -688,6 +688,10 @@ function isRamadanDay(date) {
 const SUPA_URL      = "https://kpyasnchzjxmhgywlxij.supabase.co";   // e.g. "https://xxxxxxxxxxxx.supabase.co"
 const SUPA_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtweWFzbmNoemp4bWhneXdseGlqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYzMzk1MDEsImV4cCI6MjA5MTkxNTUwMX0.V5l2VG1Pl3cF4JO91mf_9vNiImA37jOgqcWTFr3Qm34";   // your project's anon/public key
 
+// Cloudflare Worker for PDF uploads → R2
+const UPLOAD_WORKER_URL = ""; // e.g. "https://muslims-path-upload.yourname.workers.dev"
+const UPLOAD_WORKER_KEY = ""; // the ADMIN_KEY secret you set in the Worker
+
 async function supaFetch(table, opts = "") {
   if (!SUPA_URL) return null;
   const res = await fetch(`${SUPA_URL}/rest/v1/${table}?${opts}`, {
@@ -2350,8 +2354,40 @@ function AdminPage() {
   const [editBook, setEditBook]   = useState(null);
   const [lecForm, setLecForm]     = useState(EMPTY_LEC);
   const [editLec, setEditLec]     = useState(null);
+  const [uploading, setUploading] = useState(false);
+  const [uploadPct, setUploadPct] = useState(0);
 
   function flash(m) { setMsg(m); setTimeout(() => setMsg(""), 2800); }
+
+  async function uploadPDF(file) {
+    if (!file) return;
+    if (!UPLOAD_WORKER_URL) { flash("Set UPLOAD_WORKER_URL in App.jsx first."); return; }
+    setUploading(true); setUploadPct(0);
+    try {
+      const result = await new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+        xhr.open("POST", UPLOAD_WORKER_URL);
+        xhr.setRequestHeader("X-Admin-Key", UPLOAD_WORKER_KEY);
+        xhr.setRequestHeader("X-Filename", file.name.replace(/\s+/g, "_"));
+        xhr.setRequestHeader("Content-Type", file.type || "application/pdf");
+        xhr.upload.onprogress = e => { if (e.lengthComputable) setUploadPct(Math.round(e.loaded / e.total * 100)); };
+        xhr.onload = () => {
+          try {
+            const data = JSON.parse(xhr.responseText);
+            xhr.status < 300 ? resolve(data) : reject(new Error(data.error || xhr.responseText));
+          } catch { reject(new Error(xhr.responseText)); }
+        };
+        xhr.onerror = () => reject(new Error("Network error during upload"));
+        xhr.send(file);
+      });
+      setBookForm(f => ({ ...f, url: result.url }));
+      flash("✓ PDF uploaded to Cloudflare R2 — URL filled in.");
+    } catch (e) {
+      flash("Upload error: " + e.message);
+    } finally {
+      setUploading(false); setUploadPct(0);
+    }
+  }
 
   async function login() {
     if (!SUPA_URL) { setLoginErr("Supabase not configured in App.jsx"); return; }
@@ -2552,12 +2588,39 @@ function AdminPage() {
                 style={{ ...inp, cursor: "pointer" }}>
                 {BOOK_CATS.map(c => <option key={c}>{c}</option>)}
               </select>
-              <input style={inp} placeholder="URL (or #)" value={bookForm.url}
-                onChange={e => setBookForm(f => ({ ...f, url: e.target.value }))}
+              <input style={inp} placeholder="URL (leave blank if uploading PDF)" value={bookForm.url === "#" ? "" : bookForm.url}
+                onChange={e => setBookForm(f => ({ ...f, url: e.target.value || "#" }))}
                 onFocus={e => e.target.style.borderColor = GOLD} onBlur={e => e.target.style.borderColor = BORDER} />
             </div>
+
+            {/* PDF Upload */}
+            <div style={{ marginTop: 12, border: `1px dashed ${BORDER}`, borderRadius: 2, padding: "14px 16px" }}>
+              <div style={{ fontSize: 11, color: MUTED, marginBottom: 8, letterSpacing: "0.06em" }}>
+                UPLOAD PDF — auto-fills the URL above
+              </div>
+              <input
+                type="file" accept=".pdf"
+                onChange={e => uploadPDF(e.target.files[0])}
+                style={{ fontSize: 12, color: MUTED, cursor: "pointer" }}
+                disabled={uploading}
+              />
+              {uploading && (
+                <div style={{ marginTop: 10 }}>
+                  <div style={{ height: 3, background: BORDER, borderRadius: 2 }}>
+                    <div style={{ height: "100%", width: `${uploadPct}%`, background: GOLD, borderRadius: 2, transition: "width 0.3s" }} />
+                  </div>
+                  <div style={{ fontSize: 11, color: GOLD, marginTop: 4 }}>Uploading… {uploadPct}%</div>
+                </div>
+              )}
+              {bookForm.url && bookForm.url !== "#" && bookForm.url.includes("supabase") && (
+                <div style={{ fontSize: 11, color: GOLD, marginTop: 8 }}>✓ PDF ready: {bookForm.url.split("/").pop()}</div>
+              )}
+            </div>
+
             <div style={{ display: "flex", gap: 10, marginTop: 14 }}>
-              <button onClick={saveBook} style={btn()}>{editBook ? "Update Book" : "Add Book"}</button>
+              <button onClick={saveBook} disabled={uploading} style={{ ...btn(), opacity: uploading ? 0.5 : 1 }}>
+                {editBook ? "Update Book" : "Add Book"}
+              </button>
               {editBook && <button onClick={() => { setEditBook(null); setBookForm(EMPTY_BOOK); }} style={btn(MUTED, true)}>Cancel</button>}
             </div>
           </div>
