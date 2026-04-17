@@ -2089,7 +2089,7 @@ function SettingsModal({ onClose, savedLocation, onSave }) {
 }
 
 // ─── APP ──────────────────────────────────────────────────────────
-const VALID_PAGES = ["home","prayer","qibla","zakat","inheritance","calendar","dates","library","audio"];
+const VALID_PAGES = ["home","prayer","qibla","zakat","inheritance","calendar","dates","library","audio","admin"];
 
 // ─── FLOATING MINI-PLAYER ─────────────────────────────────────────
 function FloatingPlayer({ current, playing, play, skip, stop, progress, duration, fmt, navigate }) {
@@ -2298,6 +2298,7 @@ export default function App() {
         {page === "dates" && <DateConverter />}
         {page === "library" && <Library navigate={navigate} />}
         {page === "audio" && <AudioPage {...audioProps} />}
+        {page === "admin" && <AdminPage />}
       </main>
       {showSettings && (
         <SettingsModal
@@ -2307,6 +2308,339 @@ export default function App() {
         />
       )}
       <FloatingPlayer {...audioProps} navigate={navigate} />
+    </div>
+  );
+}
+
+// ─── ADMIN ────────────────────────────────────────────────────────
+const BOOK_CATS = ["Quran","Tafsir","Hadith","Seerah","Fiqh","Aqeedah","Spirituality","Dua & Dhikr","History","Modern Thought","Arabic","Online","Shqip"];
+const EMPTY_BOOK = { title: "", author: "", cat: "Quran", url: "#" };
+const EMPTY_LEC  = { sort: "", title: "", file: "", url: "" };
+
+async function supaAdmin(method, table, body, token, filter = "") {
+  const res = await fetch(`${SUPA_URL}/rest/v1/${table}${filter ? "?" + filter : ""}`, {
+    method,
+    headers: {
+      apikey: SUPA_ANON_KEY,
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+      Prefer: method === "POST" ? "return=representation" : "",
+    },
+    body: body ? JSON.stringify(body) : undefined,
+  });
+  const text = await res.text();
+  if (!res.ok) throw new Error(text);
+  return text ? JSON.parse(text) : null;
+}
+
+function AdminPage() {
+  const [token, setToken]       = useState(null);
+  const [email, setEmail]       = useState("");
+  const [pass, setPass]         = useState("");
+  const [loginErr, setLoginErr] = useState("");
+  const [logging, setLogging]   = useState(false);
+  const [tab, setTab]           = useState("books");
+
+  const [books, setBooks]       = useState([]);
+  const [lectures, setLectures] = useState([]);
+  const [busy, setBusy]         = useState(false);
+  const [msg, setMsg]           = useState("");
+
+  const [bookForm, setBookForm]   = useState(EMPTY_BOOK);
+  const [editBook, setEditBook]   = useState(null);
+  const [lecForm, setLecForm]     = useState(EMPTY_LEC);
+  const [editLec, setEditLec]     = useState(null);
+
+  function flash(m) { setMsg(m); setTimeout(() => setMsg(""), 2800); }
+
+  async function login() {
+    if (!SUPA_URL) { setLoginErr("Supabase not configured in App.jsx"); return; }
+    setLogging(true); setLoginErr("");
+    try {
+      const res = await fetch(`${SUPA_URL}/auth/v1/token?grant_type=password`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", apikey: SUPA_ANON_KEY },
+        body: JSON.stringify({ email, password: pass }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error_description || data.msg || "Login failed");
+      setToken(data.access_token);
+    } catch (e) { setLoginErr(e.message); }
+    finally { setLogging(false); }
+  }
+
+  async function load() {
+    setBusy(true);
+    try {
+      const [b, l] = await Promise.all([
+        supaFetch("books", "select=*&order=id"),
+        supaFetch("lectures", "select=*&order=sort"),
+      ]);
+      if (b) setBooks(b);
+      if (l) setLectures(l);
+    } finally { setBusy(false); }
+  }
+
+  useEffect(() => { if (token) load(); }, [token]);
+
+  // ── Books CRUD ─────────────────────────────────────────────────
+  async function saveBook() {
+    if (!bookForm.title.trim()) return;
+    setBusy(true);
+    try {
+      if (editBook) {
+        await supaAdmin("PATCH", "books", bookForm, token, `id=eq.${editBook}`);
+        setBooks(bs => bs.map(b => b.id === editBook ? { ...b, ...bookForm } : b));
+        flash("Book updated.");
+      } else {
+        const [created] = await supaAdmin("POST", "books", bookForm, token);
+        setBooks(bs => [...bs, created]);
+        flash("Book added.");
+      }
+      setBookForm(EMPTY_BOOK); setEditBook(null);
+    } catch (e) { flash("Error: " + e.message); }
+    finally { setBusy(false); }
+  }
+
+  async function deleteBook(id) {
+    if (!confirm("Delete this book?")) return;
+    setBusy(true);
+    try {
+      await supaAdmin("DELETE", "books", null, token, `id=eq.${id}`);
+      setBooks(bs => bs.filter(b => b.id !== id));
+      flash("Deleted.");
+    } catch (e) { flash("Error: " + e.message); }
+    finally { setBusy(false); }
+  }
+
+  function startEditBook(b) {
+    setEditBook(b.id);
+    setBookForm({ title: b.title, author: b.author, cat: b.cat, url: b.url });
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  // ── Lectures CRUD ──────────────────────────────────────────────
+  async function saveLec() {
+    if (!lecForm.title.trim()) return;
+    setBusy(true);
+    try {
+      const payload = { ...lecForm, sort: Number(lecForm.sort) || 0 };
+      if (editLec) {
+        await supaAdmin("PATCH", "lectures", payload, token, `id=eq.${editLec}`);
+        setLectures(ls => ls.map(l => l.id === editLec ? { ...l, ...payload } : l));
+        flash("Lecture updated.");
+      } else {
+        const [created] = await supaAdmin("POST", "lectures", payload, token);
+        setLectures(ls => [...ls, created].sort((a,b) => a.sort - b.sort));
+        flash("Lecture added.");
+      }
+      setLecForm(EMPTY_LEC); setEditLec(null);
+    } catch (e) { flash("Error: " + e.message); }
+    finally { setBusy(false); }
+  }
+
+  async function deleteLec(id) {
+    if (!confirm("Delete this lecture?")) return;
+    setBusy(true);
+    try {
+      await supaAdmin("DELETE", "lectures", null, token, `id=eq.${id}`);
+      setLectures(ls => ls.filter(l => l.id !== id));
+      flash("Deleted.");
+    } catch (e) { flash("Error: " + e.message); }
+    finally { setBusy(false); }
+  }
+
+  function startEditLec(l) {
+    setEditLec(l.id);
+    setLecForm({ sort: l.sort, title: l.title, file: l.file, url: l.url });
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  // ── Styles ─────────────────────────────────────────────────────
+  const inp = {
+    width: "100%", padding: "9px 12px", background: "#0E0E0E",
+    border: `1px solid ${BORDER}`, borderRadius: 2, color: TEXT,
+    fontSize: 13, fontFamily: SANS, outline: "none",
+  };
+  const btn = (accent = GOLD, outline = false) => ({
+    padding: "8px 18px", borderRadius: 2, cursor: "pointer", fontSize: 12,
+    fontFamily: SANS, fontWeight: 600, letterSpacing: "0.06em",
+    border: `1px solid ${accent}`,
+    background: outline ? "transparent" : accent,
+    color: outline ? accent : "#0A0A0A",
+    transition: "opacity 0.2s",
+  });
+
+  // ── Login screen ───────────────────────────────────────────────
+  if (!token) return (
+    <div style={{ minHeight: "60vh", display: "flex", alignItems: "center", justifyContent: "center", padding: 24 }}>
+      <div style={{ width: "100%", maxWidth: 380, background: SURFACE, border: `1px solid ${BORDER}`, padding: "40px 36px" }}>
+        <div style={{ textAlign: "center", marginBottom: 32 }}>
+          <img src="/logo.png" alt="" style={{ width: 52, height: 52, objectFit: "contain", marginBottom: 16 }} />
+          <div style={{ fontFamily: SERIF, fontSize: 22, color: TEXT, letterSpacing: "0.04em" }}>Admin Panel</div>
+          <div style={{ fontSize: 12, color: MUTED, marginTop: 4 }}>Muslim's Path</div>
+        </div>
+        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+          <input style={inp} type="email" placeholder="Email" value={email}
+            onChange={e => setEmail(e.target.value)}
+            onFocus={e => e.target.style.borderColor = GOLD}
+            onBlur={e => e.target.style.borderColor = BORDER}
+            onKeyDown={e => e.key === "Enter" && login()} />
+          <input style={inp} type="password" placeholder="Password" value={pass}
+            onChange={e => setPass(e.target.value)}
+            onFocus={e => e.target.style.borderColor = GOLD}
+            onBlur={e => e.target.style.borderColor = BORDER}
+            onKeyDown={e => e.key === "Enter" && login()} />
+          {loginErr && <div style={{ fontSize: 12, color: "#e74c3c", textAlign: "center" }}>{loginErr}</div>}
+          <button onClick={login} disabled={logging} style={{ ...btn(), marginTop: 8, opacity: logging ? 0.6 : 1 }}>
+            {logging ? "Signing in…" : "Sign In"}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+
+  // ── Dashboard ──────────────────────────────────────────────────
+  return (
+    <div style={{ maxWidth: 960, margin: "0 auto", padding: "40px 24px" }}>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 32 }}>
+        <div>
+          <div style={{ fontFamily: SERIF, fontSize: 28, color: TEXT }}>Admin Panel</div>
+          <div style={{ fontSize: 12, color: MUTED, marginTop: 4 }}>Manage library books and lectures</div>
+        </div>
+        <button onClick={() => { setToken(null); setEmail(""); setPass(""); }} style={btn("#c0392b", true)}>Sign Out</button>
+      </div>
+
+      {/* Flash message */}
+      {msg && (
+        <div style={{ background: GREEN_L, border: `1px solid ${GOLD}40`, color: GOLD, padding: "10px 16px", fontSize: 13, marginBottom: 20, borderRadius: 2 }}>
+          {msg}
+        </div>
+      )}
+
+      {/* Tabs */}
+      <div style={{ display: "flex", borderBottom: `1px solid ${BORDER}`, marginBottom: 28 }}>
+        {["books", "lectures"].map(t => (
+          <button key={t} onClick={() => setTab(t)} style={{
+            background: "none", border: "none", borderBottom: tab === t ? `2px solid ${GOLD}` : "2px solid transparent",
+            color: tab === t ? GOLD : MUTED, padding: "10px 20px", cursor: "pointer",
+            fontSize: 12, fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase",
+            fontFamily: SANS, transition: "color 0.2s",
+          }}>{t}</button>
+        ))}
+        <div style={{ flex: 1 }} />
+        {busy && <div style={{ fontSize: 12, color: MUTED, alignSelf: "center", paddingRight: 8 }}>Loading…</div>}
+      </div>
+
+      {/* ── BOOKS TAB ── */}
+      {tab === "books" && (
+        <div>
+          {/* Form */}
+          <div style={{ background: SURFACE, border: `1px solid ${BORDER}`, padding: "24px", marginBottom: 28 }}>
+            <div style={{ fontSize: 11, color: GOLD, letterSpacing: "0.12em", textTransform: "uppercase", marginBottom: 16 }}>
+              {editBook ? "Edit Book" : "Add New Book"}
+            </div>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+              <input style={inp} placeholder="Title *" value={bookForm.title}
+                onChange={e => setBookForm(f => ({ ...f, title: e.target.value }))}
+                onFocus={e => e.target.style.borderColor = GOLD} onBlur={e => e.target.style.borderColor = BORDER} />
+              <input style={inp} placeholder="Author" value={bookForm.author}
+                onChange={e => setBookForm(f => ({ ...f, author: e.target.value }))}
+                onFocus={e => e.target.style.borderColor = GOLD} onBlur={e => e.target.style.borderColor = BORDER} />
+              <select value={bookForm.cat} onChange={e => setBookForm(f => ({ ...f, cat: e.target.value }))}
+                style={{ ...inp, cursor: "pointer" }}>
+                {BOOK_CATS.map(c => <option key={c}>{c}</option>)}
+              </select>
+              <input style={inp} placeholder="URL (or #)" value={bookForm.url}
+                onChange={e => setBookForm(f => ({ ...f, url: e.target.value }))}
+                onFocus={e => e.target.style.borderColor = GOLD} onBlur={e => e.target.style.borderColor = BORDER} />
+            </div>
+            <div style={{ display: "flex", gap: 10, marginTop: 14 }}>
+              <button onClick={saveBook} style={btn()}>{editBook ? "Update Book" : "Add Book"}</button>
+              {editBook && <button onClick={() => { setEditBook(null); setBookForm(EMPTY_BOOK); }} style={btn(MUTED, true)}>Cancel</button>}
+            </div>
+          </div>
+
+          {/* Books list */}
+          <div style={{ border: `1px solid ${BORDER}` }}>
+            {books.map((b, i) => (
+              <div key={b.id} style={{
+                display: "flex", alignItems: "center", gap: 12, padding: "12px 16px",
+                borderBottom: i < books.length - 1 ? `1px solid ${BORDER}` : "none",
+                background: editBook === b.id ? GREEN_L : "transparent",
+              }}>
+                <span style={{ fontSize: 10, color: GOLD, letterSpacing: "0.08em", textTransform: "uppercase", minWidth: 80, flexShrink: 0 }}>{b.cat}</span>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{ fontSize: 13, color: TEXT, fontFamily: SERIF }}>{b.title}</div>
+                  <div style={{ fontSize: 11, color: MUTED }}>{b.author}</div>
+                </div>
+                {b.url !== "#" && (
+                  <a href={b.url} target="_blank" rel="noreferrer" style={{ fontSize: 11, color: MUTED, textDecoration: "none", flexShrink: 0 }}>↗</a>
+                )}
+                <button onClick={() => startEditBook(b)} style={{ ...btn(GOLD, true), padding: "5px 12px", fontSize: 11 }}>Edit</button>
+                <button onClick={() => deleteBook(b.id)} style={{ ...btn("#c0392b", true), padding: "5px 12px", fontSize: 11 }}>Del</button>
+              </div>
+            ))}
+            {books.length === 0 && !busy && (
+              <div style={{ padding: 32, textAlign: "center", color: MUTED, fontSize: 13 }}>No books yet.</div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* ── LECTURES TAB ── */}
+      {tab === "lectures" && (
+        <div>
+          {/* Form */}
+          <div style={{ background: SURFACE, border: `1px solid ${BORDER}`, padding: "24px", marginBottom: 28 }}>
+            <div style={{ fontSize: 11, color: GOLD, letterSpacing: "0.12em", textTransform: "uppercase", marginBottom: 16 }}>
+              {editLec ? "Edit Lecture" : "Add New Lecture"}
+            </div>
+            <div style={{ display: "grid", gridTemplateColumns: "80px 1fr", gap: 10, marginBottom: 10 }}>
+              <input style={inp} placeholder="Order" type="number" value={lecForm.sort}
+                onChange={e => setLecForm(f => ({ ...f, sort: e.target.value }))}
+                onFocus={e => e.target.style.borderColor = GOLD} onBlur={e => e.target.style.borderColor = BORDER} />
+              <input style={inp} placeholder="Title *" value={lecForm.title}
+                onChange={e => setLecForm(f => ({ ...f, title: e.target.value }))}
+                onFocus={e => e.target.style.borderColor = GOLD} onBlur={e => e.target.style.borderColor = BORDER} />
+            </div>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+              <input style={inp} placeholder="Filename (e.g. Lecture.mp3)" value={lecForm.file}
+                onChange={e => setLecForm(f => ({ ...f, file: e.target.value }))}
+                onFocus={e => e.target.style.borderColor = GOLD} onBlur={e => e.target.style.borderColor = BORDER} />
+              <input style={inp} placeholder="Full URL" value={lecForm.url}
+                onChange={e => setLecForm(f => ({ ...f, url: e.target.value }))}
+                onFocus={e => e.target.style.borderColor = GOLD} onBlur={e => e.target.style.borderColor = BORDER} />
+            </div>
+            <div style={{ display: "flex", gap: 10, marginTop: 14 }}>
+              <button onClick={saveLec} style={btn()}>{editLec ? "Update Lecture" : "Add Lecture"}</button>
+              {editLec && <button onClick={() => { setEditLec(null); setLecForm(EMPTY_LEC); }} style={btn(MUTED, true)}>Cancel</button>}
+            </div>
+          </div>
+
+          {/* Lectures list */}
+          <div style={{ border: `1px solid ${BORDER}` }}>
+            {lectures.map((l, i) => (
+              <div key={l.id} style={{
+                display: "flex", alignItems: "center", gap: 12, padding: "12px 16px",
+                borderBottom: i < lectures.length - 1 ? `1px solid ${BORDER}` : "none",
+                background: editLec === l.id ? GREEN_L : "transparent",
+              }}>
+                <span style={{ fontSize: 11, color: MUTED, minWidth: 24, flexShrink: 0 }}>#{l.sort}</span>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{ fontSize: 13, color: TEXT, fontFamily: SERIF }}>{l.title}</div>
+                  <div style={{ fontSize: 11, color: MUTED, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{l.file}</div>
+                </div>
+                <button onClick={() => startEditLec(l)} style={{ ...btn(GOLD, true), padding: "5px 12px", fontSize: 11 }}>Edit</button>
+                <button onClick={() => deleteLec(l.id)} style={{ ...btn("#c0392b", true), padding: "5px 12px", fontSize: 11 }}>Del</button>
+              </div>
+            ))}
+            {lectures.length === 0 && !busy && (
+              <div style={{ padding: 32, textAlign: "center", color: MUTED, fontSize: 13 }}>No lectures yet.</div>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
