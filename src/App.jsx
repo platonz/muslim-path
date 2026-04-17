@@ -2092,34 +2092,37 @@ function SettingsModal({ onClose, savedLocation, onSave }) {
 const VALID_PAGES = ["home","prayer","qibla","zakat","inheritance","calendar","dates","library","audio"];
 
 // ─── FLOATING MINI-PLAYER ─────────────────────────────────────────
-function FloatingPlayer({ current, playing, play, skip, progress, duration, fmt, seek, navigate }) {
-  if (!current || !playing) return null;
+function FloatingPlayer({ current, playing, play, skip, stop, progress, duration, fmt, navigate }) {
+  if (!current) return null;
   const pct = duration ? (progress / duration) * 100 : 0;
   return (
     <div style={{
       position: "fixed", bottom: 0, left: 0, right: 0, zIndex: 300,
       background: "linear-gradient(135deg,#0D0B07,#161410)",
-      borderTop: `1px solid ${GOLD}50`,
+      borderTop: `1px solid ${playing ? GOLD + "50" : BORDER}`,
       boxShadow: `0 -4px 40px rgba(0,0,0,0.85)`,
       padding: "0 24px",
       animation: "slideUp 0.28s cubic-bezier(0.22,1,0.36,1)",
+      transition: "border-color 0.3s",
     }}>
-      {/* Thin gold progress bar at very top */}
+      {/* Progress bar at top — only animates when playing */}
       <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 2, background: BORDER }}>
-        <div style={{ height: "100%", width: `${pct}%`, background: GOLD, transition: "width 0.4s linear" }} />
+        <div style={{ height: "100%", width: `${pct}%`, background: playing ? GOLD : MUTED, transition: "width 0.4s linear, background 0.3s" }} />
       </div>
 
       <div style={{ maxWidth: 900, margin: "0 auto", display: "flex", alignItems: "center", gap: 18, height: 68 }}>
-        {/* Logo / go-to-audio link */}
+        {/* Logo */}
         <img
           src="/logo.png" alt="" onClick={() => navigate("audio")}
-          style={{ width: 34, height: 34, objectFit: "contain", cursor: "pointer", opacity: 0.9, flexShrink: 0 }}
+          style={{ width: 34, height: 34, objectFit: "contain", cursor: "pointer", opacity: playing ? 0.9 : 0.45, flexShrink: 0, transition: "opacity 0.3s" }}
         />
 
-        {/* Track title */}
+        {/* Track title + status */}
         <div onClick={() => navigate("audio")} style={{ flex: 1, minWidth: 0, cursor: "pointer" }}>
-          <div style={{ fontSize: 9, color: GOLD, letterSpacing: "0.16em", textTransform: "uppercase", marginBottom: 2 }}>Now Playing</div>
-          <div style={{ fontSize: 14, color: TEXT, fontFamily: SERIF, letterSpacing: "0.03em", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+          <div style={{ fontSize: 9, color: playing ? GOLD : MUTED, letterSpacing: "0.16em", textTransform: "uppercase", marginBottom: 2, transition: "color 0.3s" }}>
+            {playing ? "Now Playing" : "Paused"}
+          </div>
+          <div style={{ fontSize: 14, color: playing ? TEXT : MUTED, fontFamily: SERIF, letterSpacing: "0.03em", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", transition: "color 0.3s" }}>
             {current.title}
           </div>
         </div>
@@ -2131,20 +2134,40 @@ function FloatingPlayer({ current, playing, play, skip, progress, duration, fmt,
 
         {/* Controls */}
         <div style={{ display: "flex", alignItems: "center", gap: 8, flexShrink: 0 }}>
-          <button onClick={() => skip(-1)} style={{ background: "none", border: "none", cursor: "pointer", color: MUTED, fontSize: 16, padding: 4 }}>⏮</button>
+          <button onClick={() => skip(-1)} title="Previous" style={{ background: "none", border: "none", cursor: "pointer", color: MUTED, fontSize: 16, padding: 4 }}>⏮</button>
+
+          {/* Pause / Resume */}
           <button
             onClick={() => play(current)}
+            title={playing ? "Pause" : "Resume"}
             style={{
               width: 42, height: 42, borderRadius: "50%",
-              border: `1px solid ${GOLD}`, background: GOLD,
-              color: "#0A0A0A", cursor: "pointer", fontSize: 18,
+              border: `1px solid ${GOLD}`,
+              background: playing ? GOLD : "transparent",
+              color: playing ? "#0A0A0A" : GOLD,
+              cursor: "pointer", fontSize: playing ? 18 : 16,
               display: "flex", alignItems: "center", justifyContent: "center",
-              transition: "transform 0.15s",
+              transition: "all 0.2s",
             }}
             onMouseEnter={e => e.currentTarget.style.transform = "scale(1.08)"}
             onMouseLeave={e => e.currentTarget.style.transform = "scale(1)"}
-          >⏸</button>
-          <button onClick={() => skip(1)} style={{ background: "none", border: "none", cursor: "pointer", color: MUTED, fontSize: 16, padding: 4 }}>⏭</button>
+          >{playing ? "⏸" : "▶"}</button>
+
+          <button onClick={() => skip(1)} title="Next" style={{ background: "none", border: "none", cursor: "pointer", color: MUTED, fontSize: 16, padding: 4 }}>⏭</button>
+
+          {/* Stop — closes player */}
+          <button
+            onClick={stop}
+            title="Stop"
+            style={{
+              background: "none", border: `1px solid ${BORDER}`, borderRadius: 2,
+              cursor: "pointer", color: MUTED, fontSize: 13, fontWeight: 700,
+              width: 28, height: 28, display: "flex", alignItems: "center", justifyContent: "center",
+              marginLeft: 4, transition: "all 0.2s",
+            }}
+            onMouseEnter={e => { e.currentTarget.style.borderColor = "#c0392b"; e.currentTarget.style.color = "#c0392b"; }}
+            onMouseLeave={e => { e.currentTarget.style.borderColor = BORDER; e.currentTarget.style.color = MUTED; }}
+          >■</button>
         </div>
       </div>
 
@@ -2214,6 +2237,14 @@ export default function App() {
     if (next) playLecture(next);
   }
 
+  function stopAudio() {
+    if (audioRef.current) { audioRef.current.pause(); audioRef.current.currentTime = 0; }
+    setPlaying(false);
+    setCurrent(null);
+    setProgress(0);
+    setDuration(0);
+  }
+
   function onTimeUpdate() {
     if (!audioRef.current) return;
     setProgress(audioRef.current.currentTime);
@@ -2241,10 +2272,10 @@ export default function App() {
     window.location.hash = p === "home" ? "" : p;
   }
 
-  const audioProps = { lectures, current, playing, play: playLecture, skip: skipLecture, seek: seekAudio, progress, duration, fmt: fmtTime, audioRef };
+  const audioProps = { lectures, current, playing, play: playLecture, skip: skipLecture, stop: stopAudio, seek: seekAudio, progress, duration, fmt: fmtTime, audioRef };
 
   return (
-    <div style={{ minHeight: "100vh", background: BG, fontFamily: SANS, color: TEXT, paddingBottom: current && playing ? 68 : 0 }}>
+    <div style={{ minHeight: "100vh", background: BG, fontFamily: SANS, color: TEXT, paddingBottom: current ? 68 : 0 }}>
       <style>{`
         h1,h2,h3 { font-family: ${SERIF}; }
         * { box-sizing: border-box; }
