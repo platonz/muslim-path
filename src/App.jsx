@@ -2363,7 +2363,8 @@ function AdminPage() {
         body: JSON.stringify({ email, password: pass }),
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error_description || data.msg || "Login failed");
+      console.log("Supabase auth response:", data);
+      if (!res.ok) throw new Error(data.error_description || data.error || data.msg || JSON.stringify(data));
       setToken(data.access_token);
     } catch (e) { setLoginErr(e.message); }
     finally { setLogging(false); }
