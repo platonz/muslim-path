@@ -971,13 +971,15 @@ function Home({ quote, setPage, savedLocation }) {
       </div>
 
       {/* Grid */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 1, border: `1px solid ${BORDER}` }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(140px, 1fr))", gap: 1, border: `1px solid ${BORDER}` }}>
         {NAV_ITEMS.filter(n => n.id !== "home").map(n => (
           <button key={n.id} onClick={() => setPage(n.id)} style={{
             background: SURFACE, border: "none", borderRight: `1px solid ${BORDER}`, borderBottom: `1px solid ${BORDER}`,
-            padding: "28px 24px", textAlign: "left", cursor: "pointer",
+            padding: "24px 16px", cursor: "pointer",
             transition: "background 0.2s",
             position: "relative", overflow: "hidden",
+            display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
+            minHeight: 110, textAlign: "center",
           }}
             onMouseEnter={e => { e.currentTarget.style.background = GREEN_L; }}
             onMouseLeave={e => { e.currentTarget.style.background = SURFACE; }}
@@ -1028,9 +1030,9 @@ function Home({ quote, setPage, savedLocation }) {
             </svg>
 
             {/* Content */}
-            <div style={{ position: "relative", zIndex: 1 }}>
-              <div style={{ fontSize: 24, marginBottom: 14, opacity: 0.9 }}>{n.icon}</div>
-              <div style={{ fontWeight: 500, color: TEXT, fontSize: 14, letterSpacing: "0.05em", fontFamily: SANS }}>{n.label}</div>
+            <div style={{ position: "relative", zIndex: 1, display: "flex", flexDirection: "column", alignItems: "center", gap: 10 }}>
+              <div style={{ fontSize: 22, opacity: 0.9, lineHeight: 1 }}>{n.icon}</div>
+              <div style={{ fontWeight: 500, color: TEXT, fontSize: 12, letterSpacing: "0.06em", fontFamily: SANS }}>{n.label}</div>
             </div>
           </button>
         ))}
