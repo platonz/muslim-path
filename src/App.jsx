@@ -686,7 +686,7 @@ function isRamadanDay(date) {
 // ─── SUPABASE CONFIG ──────────────────────────────────────────────
 // Fill these in after creating your Supabase project (Settings → API)
 const SUPA_URL      = "https://kpyasnchzjxmhgywlxij.supabase.co";   // e.g. "https://xxxxxxxxxxxx.supabase.co"
-const SUPA_ANON_KEY = "kpyasnchzjxmhgywlxij";   // your project's anon/public key
+const SUPA_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtweWFzbmNoemp4bWhneXdseGlqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYzMzk1MDEsImV4cCI6MjA5MTkxNTUwMX0.V5l2VG1Pl3cF4JO91mf_9vNiImA37jOgqcWTFr3Qm34";   // your project's anon/public key
 
 async function supaFetch(table, opts = "") {
   if (!SUPA_URL) return null;
