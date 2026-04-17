@@ -2091,6 +2091,68 @@ function SettingsModal({ onClose, savedLocation, onSave }) {
 // ─── APP ──────────────────────────────────────────────────────────
 const VALID_PAGES = ["home","prayer","qibla","zakat","inheritance","calendar","dates","library","audio"];
 
+// ─── FLOATING MINI-PLAYER ─────────────────────────────────────────
+function FloatingPlayer({ current, playing, play, skip, progress, duration, fmt, seek, navigate }) {
+  if (!current || !playing) return null;
+  const pct = duration ? (progress / duration) * 100 : 0;
+  return (
+    <div style={{
+      position: "fixed", bottom: 0, left: 0, right: 0, zIndex: 300,
+      background: "linear-gradient(135deg,#0D0B07,#161410)",
+      borderTop: `1px solid ${GOLD}50`,
+      boxShadow: `0 -4px 40px rgba(0,0,0,0.85)`,
+      padding: "0 24px",
+      animation: "slideUp 0.28s cubic-bezier(0.22,1,0.36,1)",
+    }}>
+      {/* Thin gold progress bar at very top */}
+      <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 2, background: BORDER }}>
+        <div style={{ height: "100%", width: `${pct}%`, background: GOLD, transition: "width 0.4s linear" }} />
+      </div>
+
+      <div style={{ maxWidth: 900, margin: "0 auto", display: "flex", alignItems: "center", gap: 18, height: 68 }}>
+        {/* Logo / go-to-audio link */}
+        <img
+          src="/logo.png" alt="" onClick={() => navigate("audio")}
+          style={{ width: 34, height: 34, objectFit: "contain", cursor: "pointer", opacity: 0.9, flexShrink: 0 }}
+        />
+
+        {/* Track title */}
+        <div onClick={() => navigate("audio")} style={{ flex: 1, minWidth: 0, cursor: "pointer" }}>
+          <div style={{ fontSize: 9, color: GOLD, letterSpacing: "0.16em", textTransform: "uppercase", marginBottom: 2 }}>Now Playing</div>
+          <div style={{ fontSize: 14, color: TEXT, fontFamily: SERIF, letterSpacing: "0.03em", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+            {current.title}
+          </div>
+        </div>
+
+        {/* Time */}
+        <div style={{ fontSize: 11, color: MUTED, fontVariantNumeric: "tabular-nums", flexShrink: 0, display: "flex", gap: 4 }}>
+          <span>{fmt(progress)}</span><span style={{ opacity: 0.4 }}>/</span><span>{fmt(duration)}</span>
+        </div>
+
+        {/* Controls */}
+        <div style={{ display: "flex", alignItems: "center", gap: 8, flexShrink: 0 }}>
+          <button onClick={() => skip(-1)} style={{ background: "none", border: "none", cursor: "pointer", color: MUTED, fontSize: 16, padding: 4 }}>⏮</button>
+          <button
+            onClick={() => play(current)}
+            style={{
+              width: 42, height: 42, borderRadius: "50%",
+              border: `1px solid ${GOLD}`, background: GOLD,
+              color: "#0A0A0A", cursor: "pointer", fontSize: 18,
+              display: "flex", alignItems: "center", justifyContent: "center",
+              transition: "transform 0.15s",
+            }}
+            onMouseEnter={e => e.currentTarget.style.transform = "scale(1.08)"}
+            onMouseLeave={e => e.currentTarget.style.transform = "scale(1)"}
+          >⏸</button>
+          <button onClick={() => skip(1)} style={{ background: "none", border: "none", cursor: "pointer", color: MUTED, fontSize: 16, padding: 4 }}>⏭</button>
+        </div>
+      </div>
+
+      <style>{`@keyframes slideUp { from { transform: translateY(100%) } to { transform: translateY(0) } }`}</style>
+    </div>
+  );
+}
+
 export default function App() {
   const [page, setPage] = useState(() => {
     const hash = window.location.hash.replace("#", "");
@@ -2100,50 +2162,7 @@ export default function App() {
   const [savedLocation, setSavedLocation] = useState(() => loadSavedLocation());
   const [showSettings, setShowSettings] = useState(false);
 
-  function handleSaveLocation(loc) { setSavedLocation(loc); }
-
-  function navigate(p) {
-    setPage(p);
-    window.location.hash = p === "home" ? "" : p;
-  }
-
-  return (
-    <div style={{ minHeight: "100vh", background: BG, fontFamily: SANS, color: TEXT }}>
-      <style>{`
-        h1,h2,h3 { font-family: ${SERIF}; }
-        * { box-sizing: border-box; }
-        ::selection { background: ${GOLD}33; color: ${TEXT}; }
-        ::-webkit-scrollbar { width: 5px; background: ${BG}; }
-        ::-webkit-scrollbar-thumb { background: ${BORDER}; border-radius: 0; }
-        input::placeholder, textarea::placeholder { color: ${MUTED}; opacity: 0.6; }
-        option { background: #141414; color: ${TEXT}; }
-        body { background: ${BG}; }
-      `}</style>
-      <Nav page={page} setPage={navigate} onSettings={() => setShowSettings(true)} hasLocation={!!savedLocation} />
-      <main>
-        {page === "home" && <Home quote={quote} setPage={navigate} savedLocation={savedLocation} />}
-        {page === "prayer" && <PrayerTimes savedLocation={savedLocation} />}
-        {page === "qibla" && <Qibla savedLocation={savedLocation} />}
-        {page === "zakat" && <Zakat />}
-        {page === "inheritance" && <Inheritance />}
-        {page === "calendar" && <IslamicCalendar />}
-        {page === "dates" && <DateConverter />}
-        {page === "library" && <Library navigate={navigate} />}
-        {page === "audio" && <AudioPage />}
-      </main>
-      {showSettings && (
-        <SettingsModal
-          onClose={() => setShowSettings(false)}
-          savedLocation={savedLocation}
-          onSave={handleSaveLocation}
-        />
-      )}
-    </div>
-  );
-}
-
-// ─── AUDIO / LECTURES ─────────────────────────────────────────────
-function AudioPage() {
+  // ── Global audio state ─────────────────────────────────────────
   const [lectures, setLectures] = useState(LECTURES);
   const [current, setCurrent] = useState(null);
   const [playing, setPlaying] = useState(false);
@@ -2158,7 +2177,7 @@ function AudioPage() {
       .catch(() => {});
   }, []);
 
-  function play(lecture) {
+  function playLecture(lecture) {
     if (current?.id === lecture.id) {
       if (playing) { audioRef.current.pause(); setPlaying(false); }
       else { audioRef.current.play(); setPlaying(true); }
@@ -2173,7 +2192,6 @@ function AudioPage() {
     if (!current || !audioRef.current) return;
     audioRef.current.src = current.url;
     audioRef.current.play().catch(() => {});
-    // Media Session API — shows controls on phone lock screen / notification bar
     if ("mediaSession" in navigator) {
       navigator.mediaSession.metadata = new MediaMetadata({
         title: current.title,
@@ -2182,12 +2200,19 @@ function AudioPage() {
       });
       navigator.mediaSession.setActionHandler("play", () => { audioRef.current.play(); setPlaying(true); });
       navigator.mediaSession.setActionHandler("pause", () => { audioRef.current.pause(); setPlaying(false); });
-      navigator.mediaSession.setActionHandler("previoustrack", () => skip(-1));
-      navigator.mediaSession.setActionHandler("nexttrack", () => skip(1));
+      navigator.mediaSession.setActionHandler("previoustrack", () => skipLecture(-1));
+      navigator.mediaSession.setActionHandler("nexttrack", () => skipLecture(1));
       navigator.mediaSession.setActionHandler("seekbackward", () => { audioRef.current.currentTime = Math.max(0, audioRef.current.currentTime - 5); });
-      navigator.mediaSession.setActionHandler("seekforward", () => { audioRef.current.currentTime = Math.min(duration, audioRef.current.currentTime + 5); });
+      navigator.mediaSession.setActionHandler("seekforward", () => { audioRef.current.currentTime = Math.min(audioRef.current.duration || 0, audioRef.current.currentTime + 5); });
     }
   }, [current]);
+
+  function skipLecture(dir) {
+    if (!current) return;
+    const idx = lectures.findIndex(l => l.id === current.id);
+    const next = lectures[idx + dir];
+    if (next) playLecture(next);
+  }
 
   function onTimeUpdate() {
     if (!audioRef.current) return;
@@ -2195,31 +2220,72 @@ function AudioPage() {
     setDuration(audioRef.current.duration || 0);
   }
 
-  function seek(e) {
+  function seekAudio(e) {
     if (!audioRef.current || !duration) return;
     const rect = e.currentTarget.getBoundingClientRect();
     const ratio = (e.clientX - rect.left) / rect.width;
     audioRef.current.currentTime = ratio * duration;
   }
 
-  function skip(dir) {
-    if (!current) return;
-    const idx = lectures.findIndex(l => l.id === current.id);
-    const next = lectures[idx + dir];
-    if (next) play(next);
-  }
-
-  function fmt(s) {
+  function fmtTime(s) {
     if (!s || isNaN(s)) return "0:00";
     const m = Math.floor(s / 60), sec = Math.floor(s % 60);
     return `${m}:${sec.toString().padStart(2, "0")}`;
   }
+  // ──────────────────────────────────────────────────────────────
 
+  function handleSaveLocation(loc) { setSavedLocation(loc); }
+
+  function navigate(p) {
+    setPage(p);
+    window.location.hash = p === "home" ? "" : p;
+  }
+
+  const audioProps = { lectures, current, playing, play: playLecture, skip: skipLecture, seek: seekAudio, progress, duration, fmt: fmtTime, audioRef };
+
+  return (
+    <div style={{ minHeight: "100vh", background: BG, fontFamily: SANS, color: TEXT, paddingBottom: current && playing ? 68 : 0 }}>
+      <style>{`
+        h1,h2,h3 { font-family: ${SERIF}; }
+        * { box-sizing: border-box; }
+        ::selection { background: ${GOLD}33; color: ${TEXT}; }
+        ::-webkit-scrollbar { width: 5px; background: ${BG}; }
+        ::-webkit-scrollbar-thumb { background: ${BORDER}; border-radius: 0; }
+        input::placeholder, textarea::placeholder { color: ${MUTED}; opacity: 0.6; }
+        option { background: #141414; color: ${TEXT}; }
+        body { background: ${BG}; }
+      `}</style>
+      <audio ref={audioRef} onTimeUpdate={onTimeUpdate} onEnded={() => skipLecture(1)} onLoadedMetadata={() => setDuration(audioRef.current?.duration || 0)} />
+      <Nav page={page} setPage={navigate} onSettings={() => setShowSettings(true)} hasLocation={!!savedLocation} />
+      <main>
+        {page === "home" && <Home quote={quote} setPage={navigate} savedLocation={savedLocation} />}
+        {page === "prayer" && <PrayerTimes savedLocation={savedLocation} />}
+        {page === "qibla" && <Qibla savedLocation={savedLocation} />}
+        {page === "zakat" && <Zakat />}
+        {page === "inheritance" && <Inheritance />}
+        {page === "calendar" && <IslamicCalendar />}
+        {page === "dates" && <DateConverter />}
+        {page === "library" && <Library navigate={navigate} />}
+        {page === "audio" && <AudioPage {...audioProps} />}
+      </main>
+      {showSettings && (
+        <SettingsModal
+          onClose={() => setShowSettings(false)}
+          savedLocation={savedLocation}
+          onSave={handleSaveLocation}
+        />
+      )}
+      <FloatingPlayer {...audioProps} navigate={navigate} />
+    </div>
+  );
+}
+
+// ─── AUDIO / LECTURES ─────────────────────────────────────────────
+function AudioPage({ lectures, current, playing, play, skip, seek, progress, duration, fmt, audioRef }) {
   const pct = duration ? (progress / duration) * 100 : 0;
 
   return (
     <div style={{ maxWidth: 720, margin: "0 auto", padding: "40px 24px" }}>
-      <audio ref={audioRef} onTimeUpdate={onTimeUpdate} onEnded={() => { skip(1); }} onLoadedMetadata={() => setDuration(audioRef.current?.duration || 0)} />
       <PageTitle icon="🎙️" title="Ligjerata Islame" sub="Leksione dhe mësime nga studiuesit Islam" />
 
       {/* Player */}
