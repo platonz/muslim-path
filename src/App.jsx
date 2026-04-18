@@ -3158,8 +3158,8 @@ function AsmaPage() {
             border:"none", borderRight:`1px solid ${BORDER}`, borderBottom:`1px solid ${BORDER}`,
             padding:"14px 10px", cursor:"pointer", textAlign:"center", transition:"background 0.15s",
           }}
-            onMouseEnter={e => { if(sel?.n\!==a.n) e.currentTarget.style.background=GREEN_L; }}
-            onMouseLeave={e => { if(sel?.n\!==a.n) e.currentTarget.style.background=SURFACE; }}
+            onMouseEnter={e => { if(sel?.n!==a.n) e.currentTarget.style.background=GREEN_L; }}
+            onMouseLeave={e => { if(sel?.n!==a.n) e.currentTarget.style.background=SURFACE; }}
           >
             <div style={{ fontSize:9, color:sel?.n===a.n ? GOLD : MUTED, letterSpacing:"0.1em", marginBottom:4 }}>{a.n}</div>
             <div style={{ fontFamily:ARABIC_F, fontSize:18, color:sel?.n===a.n ? GOLD : TEXT, lineHeight:1.9, marginBottom:4 }}>{a.ar}</div>
