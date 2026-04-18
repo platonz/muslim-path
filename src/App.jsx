@@ -3229,20 +3229,84 @@ function AsmaPage() {
         ))}
       </div>
 
-      {/* Detail panel */}
+      {/* Modal popup */}
       {sel && (
-        <div style={{ marginTop:20, background:"linear-gradient(135deg,#0E0C08,#141210)", border:`1px solid ${GOLD}40`, padding:"24px 28px", boxShadow:`0 8px 40px rgba(0,0,0,0.6)` }}>
-          <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", flexWrap:"wrap", gap:16, marginBottom:16 }}>
-            <div>
-              <div style={{ fontSize:9, color:GOLD, letterSpacing:"0.16em", textTransform:"uppercase", marginBottom:8 }}>Name {sel.n} of 99</div>
-              <div style={{ fontFamily:ARABIC_F, fontSize:38, color:GOLD, lineHeight:1.7, direction:"rtl" }}>{sel.ar}</div>
-              <div style={{ fontSize:20, color:TEXT, fontFamily:SERIF, marginTop:6, letterSpacing:"0.04em" }}>{sel.tr}</div>
-              <div style={{ fontSize:13, color:MUTED, marginTop:4, letterSpacing:"0.04em" }}>{sel.en}</div>
+        <div onClick={() => setSel(null)} style={{
+          position:"fixed", inset:0, zIndex:500,
+          background:"rgba(0,0,0,0.75)", backdropFilter:"blur(4px)",
+          display:"flex", alignItems:"center", justifyContent:"center",
+          padding:"20px",
+        }}>
+          <div onClick={e => e.stopPropagation()} style={{
+            background:"linear-gradient(135deg,#0E0C08,#161210)",
+            border:`1px solid ${GOLD}50`,
+            boxShadow:`0 24px 80px rgba(0,0,0,0.9), 0 0 0 1px ${GOLD}15`,
+            maxWidth:480, width:"100%", padding:"36px 32px",
+            position:"relative",
+          }}>
+            {/* Close button */}
+            <button onClick={() => setSel(null)} style={{
+              position:"absolute", top:14, right:14,
+              background:"none", border:`1px solid ${BORDER}`,
+              color:MUTED, width:28, height:28, cursor:"pointer",
+              fontSize:13, display:"flex", alignItems:"center", justifyContent:"center",
+              fontFamily:SANS, borderRadius:2,
+            }}>✕</button>
+
+            {/* Number badge */}
+            <div style={{ fontSize:10, color:GOLD, letterSpacing:"0.18em", textTransform:"uppercase", marginBottom:16 }}>
+              Name {sel.n} of 99
             </div>
-            <button onClick={() => setSel(null)} style={{ background:"none", border:`1px solid ${BORDER}`, color:MUTED, padding:"4px 12px", cursor:"pointer", fontSize:11, fontFamily:SANS }}>✕ Close</button>
-          </div>
-          <div style={{ borderTop:`1px solid ${BORDER}`, paddingTop:16, fontSize:14, color:TEXT, lineHeight:1.75 }}>
-            {sel.m}
+
+            {/* Arabic */}
+            <div style={{
+              fontFamily:ARABIC_F, fontSize:46, color:GOLD,
+              lineHeight:1.8, direction:"rtl", textAlign:"center",
+              marginBottom:12,
+              textShadow:`0 0 40px ${GOLD}40`,
+            }}>{sel.ar}</div>
+
+            {/* Divider */}
+            <div style={{ height:1, background:`linear-gradient(to right, transparent, ${GOLD}40, transparent)`, marginBottom:16 }} />
+
+            {/* Transliteration + English */}
+            <div style={{ textAlign:"center", marginBottom:20 }}>
+              <div style={{ fontSize:22, color:TEXT, fontFamily:SERIF, letterSpacing:"0.05em", marginBottom:6 }}>{sel.tr}</div>
+              <div style={{ fontSize:13, color:GOLD, letterSpacing:"0.1em", textTransform:"uppercase", fontFamily:SANS }}>{sel.en}</div>
+            </div>
+
+            {/* Meaning */}
+            <div style={{
+              background:"rgba(201,168,76,0.06)",
+              border:`1px solid ${GOLD}20`,
+              padding:"16px 18px",
+              fontSize:14, color:TEXT, lineHeight:1.8,
+              fontFamily:SANS,
+            }}>
+              {sel.m}
+            </div>
+
+            {/* Nav prev/next */}
+            <div style={{ display:"flex", justifyContent:"space-between", marginTop:20 }}>
+              <button
+                disabled={sel.n === 1}
+                onClick={() => setSel(ASMA[sel.n - 2])}
+                style={{
+                  background:"none", border:`1px solid ${sel.n === 1 ? BORDER : GOLD + "50"}`,
+                  color: sel.n === 1 ? MUTED : GOLD,
+                  padding:"6px 16px", cursor: sel.n === 1 ? "default" : "pointer",
+                  fontSize:11, fontFamily:SANS, letterSpacing:"0.07em",
+                }}>&#8592; Prev</button>
+              <button
+                disabled={sel.n === 99}
+                onClick={() => setSel(ASMA[sel.n])}
+                style={{
+                  background:"none", border:`1px solid ${sel.n === 99 ? BORDER : GOLD + "50"}`,
+                  color: sel.n === 99 ? MUTED : GOLD,
+                  padding:"6px 16px", cursor: sel.n === 99 ? "default" : "pointer",
+                  fontSize:11, fontFamily:SANS, letterSpacing:"0.07em",
+                }}>Next &#8594;</button>
+            </div>
           </div>
         </div>
       )}
