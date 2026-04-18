@@ -693,7 +693,7 @@ const UPLOAD_WORKER_URL = "https://uploadworker.platoni-af6.workers.dev";
 
 // Emails allowed to access /admin — add yours here
 const ADMIN_EMAILS = ["platoni@live.com"];
-const UPLOAD_WORKER_KEY = ""; // the ADMIN_KEY secret you set in the Worker
+const UPLOAD_WORKER_KEY = "Purg1upload$"; // the ADMIN_KEY secret you set in the Worker
 
 async function supaFetch(table, opts = "") {
   if (!SUPA_URL) return null;
@@ -4613,4 +4613,4 @@ function AudioPage({ lectures, current, playing, play, skip, seek, progress, dur
     </div>
   );
 }
-               
+   
