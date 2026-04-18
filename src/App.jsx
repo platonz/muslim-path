@@ -747,8 +747,7 @@ const TOOLS_ITEMS = [
   { id: "dates",       label: "Dates",        icon: "🔄" },
 ];
 
-function Nav({ page, setPage, onSettings, hasLocation, onSearch, authUser, onAuthClick, onSignOut, navHidden, setNavHidden }) {
-  const [menuOpen, setMenuOpen] = useState(false);
+function Nav({ page, setPage, onSettings, hasLocation, onSearch, authUser, onAuthClick, onSignOut, navHidden, setNavHidden, menuOpen, setMenuOpen }) {
   const [toolsOpen, setToolsOpen] = useState(false);
   const [mobileToolsOpen, setMobileToolsOpen] = useState(false);
   const [hovered, setHovered] = useState(null);
@@ -803,10 +802,10 @@ function Nav({ page, setPage, onSettings, hasLocation, onSearch, authUser, onAut
       transition: "transform 0.3s ease",
     }}>
       {/* 3-col grid: [search+nav] [logo center] [settings+auth+hamburger] */}
-      <div style={{ maxWidth: 1300, margin: "0 auto", display: "grid", gridTemplateColumns: "1fr auto 1fr", alignItems: "center", height: 64 }}>
+      <div style={{ maxWidth: 1300, margin: "0 auto", display: "grid", gridTemplateColumns: "1fr auto 1fr", alignItems: "center", height: 64, minWidth: 0, width: "100%" }}>
 
         {/* LEFT: Search pill + Desktop nav items */}
-        <div style={{ display: "flex", alignItems: "center", gap: 2 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 2, minWidth: 0, overflow: "hidden" }}>
           <button onClick={onSearch} title="Search" className="nav-search-btn" style={{
             background: "transparent", border: `1px solid ${BORDER}`,
             borderRadius: 20, cursor: "pointer", color: MUTED,
@@ -901,7 +900,7 @@ function Nav({ page, setPage, onSettings, hasLocation, onSearch, authUser, onAut
         </button>
 
         {/* RIGHT: Settings + Auth + Hamburger */}
-        <div style={{ display: "flex", justifyContent: "flex-end", alignItems: "center", gap: 8 }}>
+        <div style={{ display: "flex", justifyContent: "flex-end", alignItems: "center", gap: 6, minWidth: 0, flexShrink: 0 }}>
           <button onClick={onSettings} title="Settings" className="nav-settings-btn" style={{
             background: "transparent",
             border: `1px solid ${hasLocation ? GOLD + "60" : BORDER}`,
@@ -2961,8 +2960,9 @@ export default function App() {
     try { localStorage.setItem("mp-pwa-dismissed", "1"); } catch {}
   }
 
-  // ── Nav hidden state (scroll-hide on mobile) ──────────────────
+  // ── Nav state (scroll-hide + mobile menu) ─────────────────────
   const [navHidden, setNavHidden] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   // ── Auth state ─────────────────────────────────────────────────
   const [authSession, setAuthSession] = useState(() => loadSession());
@@ -3202,13 +3202,12 @@ export default function App() {
         }
       `}</style>
       <audio ref={audioRef} onTimeUpdate={onTimeUpdate} onEnded={() => skipLecture(1)} onLoadedMetadata={() => setDuration(audioRef.current?.duration || 0)} />
-      <Nav page={page} setPage={navigate} onSettings={() => setShowSettings(true)} hasLocation={!!savedLocation} onSearch={() => setShowSearch(true)} authUser={authUser} onAuthClick={() => setShowAuth(true)} onSignOut={handleSignOut} navHidden={navHidden} setNavHidden={setNavHidden} />
+      <Nav page={page} setPage={navigate} onSettings={() => setShowSettings(true)} hasLocation={!!savedLocation} onSearch={() => setShowSearch(true)} authUser={authUser} onAuthClick={() => setShowAuth(true)} onSignOut={handleSignOut} navHidden={navHidden} setNavHidden={setNavHidden} menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
 
       {/* Floating hamburger — rendered at App level so position:fixed is never inside a transformed ancestor */}
       {navHidden && (
         <button
-          onClick={() => setNavHidden(false)}
-          className="nav-float-hamburger"
+          onClick={() => { setNavHidden(false); setMenuOpen(true); }}
           style={{
             position: "fixed", top: 12, right: 12, zIndex: 600,
             background: "#111109", border: `1px solid ${GOLD}60`,
