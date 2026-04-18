@@ -747,12 +747,11 @@ const TOOLS_ITEMS = [
   { id: "dates",       label: "Dates",        icon: "🔄" },
 ];
 
-function Nav({ page, setPage, onSettings, hasLocation, onSearch, authUser, onAuthClick, onSignOut }) {
+function Nav({ page, setPage, onSettings, hasLocation, onSearch, authUser, onAuthClick, onSignOut, navHidden, setNavHidden }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [toolsOpen, setToolsOpen] = useState(false);
   const [mobileToolsOpen, setMobileToolsOpen] = useState(false);
   const [hovered, setHovered] = useState(null);
-  const [navHidden, setNavHidden] = useState(false);
   const toolsRef = useRef(null);
   const menuRef = useRef(null);
   const lastScrollY = useRef(0);
@@ -779,9 +778,10 @@ function Nav({ page, setPage, onSettings, hasLocation, onSearch, authUser, onAut
     };
   }, [menuOpen]);
 
-  // Hide nav on scroll-down, show on scroll-up (mobile)
+  // Hide nav on scroll-down, show on scroll-up (mobile only)
   useEffect(() => {
     function onScroll() {
+      if (window.innerWidth > 900) { setNavHidden(false); return; }
       const y = window.scrollY;
       const delta = y - lastScrollY.current;
       if (delta > 6 && y > 80) { setNavHidden(true); setMenuOpen(false); }
@@ -790,10 +790,9 @@ function Nav({ page, setPage, onSettings, hasLocation, onSearch, authUser, onAut
     }
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+  }, [setNavHidden]);
 
   return (
-    <>
     <nav ref={menuRef} style={{
       position: "sticky", top: 0, zIndex: 100,
       background: "#080808",
@@ -1086,24 +1085,6 @@ function Nav({ page, setPage, onSettings, hasLocation, onSearch, authUser, onAut
         }
       `}</style>
     </nav>
-
-    {/* Floating hamburger — always tappable on mobile even when nav is scrolled away */}
-    {navHidden && !menuOpen && (
-      <button
-        onClick={() => { setMenuOpen(true); setNavHidden(false); }}
-        className="nav-float-hamburger"
-        style={{
-          position: "fixed", top: 10, right: 10, zIndex: 500,
-          background: "#0A0A0A", border: `1px solid ${BORDER}`,
-          borderRadius: 8, cursor: "pointer",
-          width: 40, height: 40,
-          alignItems: "center", justifyContent: "center",
-          color: TEXT, fontSize: 18,
-          boxShadow: "0 4px 24px rgba(0,0,0,0.8)",
-        }}
-      >☰</button>
-    )}
-    </>
   );
 }
 
@@ -2980,6 +2961,9 @@ export default function App() {
     try { localStorage.setItem("mp-pwa-dismissed", "1"); } catch {}
   }
 
+  // ── Nav hidden state (scroll-hide on mobile) ──────────────────
+  const [navHidden, setNavHidden] = useState(false);
+
   // ── Auth state ─────────────────────────────────────────────────
   const [authSession, setAuthSession] = useState(() => loadSession());
   const [showAuth, setShowAuth] = useState(false);
@@ -3217,7 +3201,23 @@ export default function App() {
         }
       `}</style>
       <audio ref={audioRef} onTimeUpdate={onTimeUpdate} onEnded={() => skipLecture(1)} onLoadedMetadata={() => setDuration(audioRef.current?.duration || 0)} />
-      <Nav page={page} setPage={navigate} onSettings={() => setShowSettings(true)} hasLocation={!!savedLocation} onSearch={() => setShowSearch(true)} authUser={authUser} onAuthClick={() => setShowAuth(true)} onSignOut={handleSignOut} />
+      <Nav page={page} setPage={navigate} onSettings={() => setShowSettings(true)} hasLocation={!!savedLocation} onSearch={() => setShowSearch(true)} authUser={authUser} onAuthClick={() => setShowAuth(true)} onSignOut={handleSignOut} navHidden={navHidden} setNavHidden={setNavHidden} />
+
+      {/* Floating hamburger — rendered at App level so position:fixed is never inside a transformed ancestor */}
+      {navHidden && (
+        <button
+          onClick={() => setNavHidden(false)}
+          style={{
+            position: "fixed", top: 12, right: 12, zIndex: 600,
+            background: "#0A0A0A", border: "1px solid #2A2520",
+            borderRadius: 8, cursor: "pointer",
+            width: 40, height: 40,
+            display: "flex", alignItems: "center", justifyContent: "center",
+            color: "#EDE8DC", fontSize: 18,
+            boxShadow: "0 4px 24px rgba(0,0,0,0.8)",
+          }}
+        >☰</button>
+      )}
       <main>
         {page === "home" && <Home quote={quote} setPage={navigate} savedLocation={savedLocation} />}
         {page === "prayer" && <PrayerTimes savedLocation={savedLocation} />}
