@@ -798,7 +798,7 @@ function Nav({ page, setPage, onSettings, hasLocation, onSearch, authUser, onAut
       background: "#080808",
       borderBottom: `1px solid ${BORDER}`,
       boxShadow: `0 1px 0 ${GOLD}18, 0 4px 40px rgba(0,0,0,0.8)`,
-      padding: "0 32px",
+      padding: "0 16px",
       transform: navHidden ? "translateY(-100%)" : "translateY(0)",
       transition: "transform 0.3s ease",
     }}>
@@ -3172,10 +3172,11 @@ export default function App() {
   const audioProps = { lectures, current, playing, play: playLecture, skip: skipLecture, stop: stopAudio, seek: seekAudio, progress, duration, fmt: fmtTime, audioRef };
 
   return (
-    <div style={{ minHeight: "100vh", background: BG, fontFamily: SANS, color: TEXT, paddingBottom: current ? 68 : 0 }}>
+    <div style={{ minHeight: "100vh", background: BG, fontFamily: SANS, color: TEXT, paddingBottom: current ? 68 : 0, overflowX: "hidden", maxWidth: "100vw" }}>
       <style>{`
         h1,h2,h3 { font-family: ${SERIF}; }
         * { box-sizing: border-box; }
+        html, body { overflow-x: hidden; max-width: 100%; }
         ::selection { background: ${GOLD}33; color: ${TEXT}; }
         ::-webkit-scrollbar { width: 5px; background: ${BG}; }
         ::-webkit-scrollbar-thumb { background: ${BORDER}; border-radius: 0; }
@@ -3207,14 +3208,15 @@ export default function App() {
       {navHidden && (
         <button
           onClick={() => setNavHidden(false)}
+          className="nav-float-hamburger"
           style={{
             position: "fixed", top: 12, right: 12, zIndex: 600,
-            background: "#0A0A0A", border: "1px solid #2A2520",
-            borderRadius: 8, cursor: "pointer",
-            width: 40, height: 40,
+            background: "#111109", border: `1px solid ${GOLD}60`,
+            borderRadius: 10, cursor: "pointer",
+            width: 44, height: 44,
             display: "flex", alignItems: "center", justifyContent: "center",
-            color: "#EDE8DC", fontSize: 18,
-            boxShadow: "0 4px 24px rgba(0,0,0,0.8)",
+            color: GOLD, fontSize: 20,
+            boxShadow: `0 4px 24px rgba(0,0,0,0.9), 0 0 0 1px ${GOLD}20`,
           }}
         >☰</button>
       )}
