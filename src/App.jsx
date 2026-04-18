@@ -1512,13 +1512,22 @@ function Qibla({ savedLocation }) {
   const [needsPermission, setNeedsPermission] = useState(false);
   const handlerRef = useRef(null);
 
+  // Al-Adhan Qibla API — returns bearing in degrees from North
+  async function fetchQibla(lat, lon) {
+    const res = await fetch(`https://api.aladhan.com/v1/qibla/${lat}/${lon}`);
+    const json = await res.json();
+    if (json.code !== 200) throw new Error("API error");
+    return json.data.direction;
+  }
+
   // Auto-load from saved location
   useEffect(() => {
-    if (savedLocation && bearing === null) {
-      setBearing(calcQibla(savedLocation.lat, savedLocation.lon));
-      setLocName(savedLocation.name);
-      setCity(savedLocation.name);
-    }
+    if (!savedLocation || bearing !== null) return;
+    setLocName(savedLocation.name);
+    setCity(savedLocation.name);
+    fetchQibla(savedLocation.lat, savedLocation.lon)
+      .then(dir => setBearing(dir))
+      .catch(() => setBearing(calcQibla(savedLocation.lat, savedLocation.lon)));
   }, [savedLocation]);
 
   // Set up device compass (magnetometer)
@@ -1575,7 +1584,9 @@ function Qibla({ savedLocation }) {
       const json = await res.json();
       if (!json.length) throw new Error("City not found");
       const { lat, lon, display_name } = json[0];
-      setBearing(calcQibla(parseFloat(lat), parseFloat(lon)));
+      const dir = await fetchQibla(parseFloat(lat), parseFloat(lon))
+        .catch(() => calcQibla(parseFloat(lat), parseFloat(lon)));
+      setBearing(dir);
       setLocName(display_name.split(",").slice(0,2).join(", "));
     } catch { setErr("Location not found. Try a different city name."); }
     setLoading(false);
@@ -1584,7 +1595,11 @@ function Qibla({ savedLocation }) {
   function useMyLocation() {
     if (!navigator.geolocation) return setErr("Geolocation not supported by your browser.");
     navigator.geolocation.getCurrentPosition(
-      pos => { setBearing(calcQibla(pos.coords.latitude, pos.coords.longitude)); setLocName("Your Location"); },
+      pos => {
+        fetchQibla(pos.coords.latitude, pos.coords.longitude)
+          .then(dir => { setBearing(dir); setLocName("Your Location"); })
+          .catch(() => { setBearing(calcQibla(pos.coords.latitude, pos.coords.longitude)); setLocName("Your Location"); });
+      },
       () => setErr("Could not access location. Please try searching by city.")
     );
   }
