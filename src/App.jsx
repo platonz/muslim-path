@@ -739,7 +739,7 @@ const NAV_ITEMS = [
   { id: "quran",       label: "Quran",        icon: "📖" },
 ];
 
-function Nav({ page, setPage, onSettings, hasLocation }) {
+function Nav({ page, setPage, onSettings, hasLocation, onSearch }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [hovered, setHovered] = useState(null);
   return (
@@ -789,8 +789,18 @@ function Nav({ page, setPage, onSettings, hasLocation }) {
           })}
         </div>
 
-        {/* Settings + mobile hamburger */}
+        {/* Search + Settings + mobile hamburger */}
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+          <button onClick={onSearch} title="Search" style={{
+            background: "transparent",
+            border: `1px solid ${BORDER}`,
+            borderRadius: 2, cursor: "pointer", color: MUTED,
+            width: 36, height: 36, display: "flex", alignItems: "center", justifyContent: "center",
+            fontSize: 15, transition: "all 0.2s",
+          }}
+            onMouseEnter={e => { e.currentTarget.style.borderColor = GOLD; e.currentTarget.style.color = GOLD; }}
+            onMouseLeave={e => { e.currentTarget.style.borderColor = BORDER; e.currentTarget.style.color = MUTED; }}
+          >🔍</button>
           <button onClick={onSettings} title="Settings" style={{
             background: "transparent",
             border: `1px solid ${hasLocation ? GOLD + "60" : BORDER}`,
@@ -826,11 +836,20 @@ function Nav({ page, setPage, onSettings, hasLocation }) {
               borderLeft: page === n.id ? `2px solid ${GOLD}` : "2px solid transparent",
             }}><span>{n.icon}</span>{n.label}</button>
           ))}
-          <button onClick={() => { onSettings(); setMenuOpen(false); }} style={{
+          <button onClick={() => { onSearch(); setMenuOpen(false); }} style={{
             background: "none", border: "none", cursor: "pointer", textAlign: "left",
             padding: "12px 32px", fontSize: 12, color: MUTED,
             display: "flex", alignItems: "center", gap: 12,
             borderTop: `1px solid ${BORDER}`, marginTop: 8,
+            letterSpacing: "0.08em", textTransform: "uppercase", fontFamily: SANS,
+            borderLeft: "2px solid transparent",
+          }}>
+            <span>🔍</span> Search
+          </button>
+          <button onClick={() => { onSettings(); setMenuOpen(false); }} style={{
+            background: "none", border: "none", cursor: "pointer", textAlign: "left",
+            padding: "12px 32px", fontSize: 12, color: MUTED,
+            display: "flex", alignItems: "center", gap: 12,
             letterSpacing: "0.08em", textTransform: "uppercase", fontFamily: SANS,
             borderLeft: "2px solid transparent",
           }}>
@@ -2022,7 +2041,7 @@ function saveSavedLocation(loc) {
 }
 
 // ─── SETTINGS MODAL ───────────────────────────────────────────────
-function SettingsModal({ onClose, savedLocation, onSave }) {
+function SettingsModal({ onClose, savedLocation, onSave, notifEnabled, onNotifToggle }) {
   const [city, setCity] = useState(savedLocation?.name || "");
   const [suggestions, setSuggestions] = useState([]);
   const [showSugg, setShowSugg] = useState(false);
@@ -2137,6 +2156,187 @@ function SettingsModal({ onClose, savedLocation, onSave }) {
           <p style={{ margin:"14px 0 0", fontSize:12, color:MUTED, textAlign:"center" }}>
             Prayer times and Qibla will auto-load with this location on every visit.
           </p>
+
+          {/* Prayer Notification Toggle */}
+          <div style={{ marginTop:24, paddingTop:20, borderTop:`1px solid ${BORDER}` }}>
+            <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center" }}>
+              <div>
+                <div style={{ fontSize:13, fontWeight:600, color:TEXT }}>Prayer Notifications</div>
+                <div style={{ fontSize:11, color:MUTED, marginTop:3, letterSpacing:"0.03em" }}>
+                  Browser alert at each prayer time
+                  {!savedLocation && <span style={{ color:GOLD }}> — save a location first</span>}
+                </div>
+              </div>
+              <button
+                disabled={!savedLocation}
+                onClick={() => onNotifToggle(!notifEnabled)}
+                style={{
+                  width:46, height:26, borderRadius:13,
+                  background: notifEnabled ? GOLD : BORDER,
+                  border:"none", cursor: savedLocation ? "pointer" : "not-allowed",
+                  position:"relative", transition:"background 0.25s", flexShrink:0,
+                  opacity: savedLocation ? 1 : 0.4,
+                }}
+              >
+                <span style={{
+                  position:"absolute", top:3, left: notifEnabled ? 23 : 3,
+                  width:20, height:20, borderRadius:"50%",
+                  background: notifEnabled ? "#0A0A0A" : MUTED,
+                  transition:"left 0.25s",
+                }} />
+              </button>
+            </div>
+            {notifEnabled && savedLocation && (
+              <div style={{ marginTop:10, fontSize:11, color:GOLD, background:GREEN_L, border:`1px solid ${GOLD}30`, borderRadius:2, padding:"8px 12px" }}>
+                🔔 Notifications scheduled for today's prayers in {savedLocation.name}
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── GLOBAL SEARCH ────────────────────────────────────────────────
+function GlobalSearch({ onClose, navigate, lectures }) {
+  const [query, setQuery] = useState("");
+  const inputRef = useRef(null);
+
+  useEffect(() => { inputRef.current?.focus(); }, []);
+
+  useEffect(() => {
+    function onKey(e) { if (e.key === "Escape") onClose(); }
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [onClose]);
+
+  const q = query.trim().toLowerCase();
+
+  const bookResults = !q ? [] : LIBRARY.filter(b =>
+    b.title.toLowerCase().includes(q) ||
+    b.author.toLowerCase().includes(q) ||
+    b.cat.toLowerCase().includes(q)
+  ).slice(0, 6);
+
+  const lectureResults = !q ? [] : lectures.filter(l =>
+    l.title.toLowerCase().includes(q)
+  ).slice(0, 5);
+
+  // Surah list from module-level cache
+  const surahResults = !q ? [] : (_surahCache || []).filter(s =>
+    s.englishName.toLowerCase().includes(q) ||
+    s.englishNameTranslation.toLowerCase().includes(q) ||
+    String(s.number) === q
+  ).slice(0, 5);
+
+  const total = bookResults.length + lectureResults.length + surahResults.length;
+
+  function goBook(b) {
+    onClose();
+    navigate("library");
+  }
+  function goLecture(l) {
+    onClose();
+    navigate("audio");
+  }
+  function goSurah(s) {
+    localStorage.setItem("quranSurah", s.number);
+    onClose();
+    navigate("quran");
+  }
+
+  return (
+    <div onClick={onClose} style={{ position:"fixed", inset:0, zIndex:1100, background:"rgba(0,0,0,0.65)", backdropFilter:"blur(6px)", display:"flex", alignItems:"flex-start", justifyContent:"center", paddingTop:80, padding:"80px 24px 24px" }}>
+      <div onClick={e => e.stopPropagation()} style={{ background:"#0E0E0E", borderRadius:0, maxWidth:600, width:"100%", border:`1px solid ${GOLD}25`, boxShadow:`0 32px 80px rgba(0,0,0,0.95)`, overflow:"hidden" }}>
+
+        {/* Search input */}
+        <div style={{ display:"flex", alignItems:"center", gap:12, padding:"18px 20px", borderBottom:`1px solid ${BORDER}` }}>
+          <span style={{ fontSize:18, opacity:0.5 }}>🔍</span>
+          <input
+            ref={inputRef}
+            value={query}
+            onChange={e => setQuery(e.target.value)}
+            placeholder="Search surahs, books, lectures…"
+            style={{ flex:1, background:"none", border:"none", outline:"none", fontSize:16, color:TEXT, fontFamily:SANS }}
+          />
+          <button onClick={onClose} style={{ background:"none", border:`1px solid ${BORDER}`, borderRadius:2, color:MUTED, padding:"4px 10px", cursor:"pointer", fontSize:11, letterSpacing:"0.06em", fontFamily:SANS }}>ESC</button>
+        </div>
+
+        {/* Results */}
+        <div style={{ maxHeight:420, overflowY:"auto" }}>
+          {!q && (
+            <div style={{ padding:"40px 20px", textAlign:"center", color:MUTED, fontSize:13 }}>
+              Start typing to search across the Quran, library, and lectures…
+            </div>
+          )}
+
+          {q && total === 0 && (
+            <div style={{ padding:"40px 20px", textAlign:"center", color:MUTED, fontSize:13 }}>
+              No results for "{query}"
+            </div>
+          )}
+
+          {surahResults.length > 0 && (
+            <div>
+              <div style={{ padding:"10px 20px 6px", fontSize:9, fontWeight:700, color:GOLD, letterSpacing:"0.18em", textTransform:"uppercase", borderBottom:`1px solid ${BORDER}` }}>Quran — Surahs</div>
+              {surahResults.map(s => (
+                <button key={s.number} onClick={() => goSurah(s)} style={{ display:"flex", width:"100%", textAlign:"left", padding:"12px 20px", background:"none", border:"none", borderBottom:`1px solid ${BORDER}`, cursor:"pointer", alignItems:"center", gap:14, transition:"background 0.1s" }}
+                  onMouseEnter={e => e.currentTarget.style.background=GREEN_L}
+                  onMouseLeave={e => e.currentTarget.style.background="none"}
+                >
+                  <span style={{ fontSize:11, color:GOLD, fontVariantNumeric:"tabular-nums", minWidth:24, fontFamily:SANS }}>{s.number}</span>
+                  <div style={{ flex:1 }}>
+                    <div style={{ fontSize:14, color:TEXT, fontFamily:SERIF }}>{s.englishName}</div>
+                    <div style={{ fontSize:11, color:MUTED }}>{s.englishNameTranslation} · {s.numberOfAyahs} verses · {s.revelationType}</div>
+                  </div>
+                  <span style={{ fontSize:18, fontFamily:"'Amiri','Traditional Arabic',serif", color:GOLD, direction:"rtl" }}>{s.name}</span>
+                </button>
+              ))}
+            </div>
+          )}
+
+          {bookResults.length > 0 && (
+            <div>
+              <div style={{ padding:"10px 20px 6px", fontSize:9, fontWeight:700, color:GOLD, letterSpacing:"0.18em", textTransform:"uppercase", borderBottom:`1px solid ${BORDER}` }}>Library — Books</div>
+              {bookResults.map((b, i) => (
+                <button key={i} onClick={() => goBook(b)} style={{ display:"flex", width:"100%", textAlign:"left", padding:"12px 20px", background:"none", border:"none", borderBottom:`1px solid ${BORDER}`, cursor:"pointer", alignItems:"center", gap:14, transition:"background 0.1s" }}
+                  onMouseEnter={e => e.currentTarget.style.background=GREEN_L}
+                  onMouseLeave={e => e.currentTarget.style.background="none"}
+                >
+                  <span style={{ fontSize:16 }}>📚</span>
+                  <div style={{ flex:1 }}>
+                    <div style={{ fontSize:14, color:TEXT, fontFamily:SERIF }}>{b.title}</div>
+                    <div style={{ fontSize:11, color:MUTED }}>{b.author} · {b.cat}</div>
+                  </div>
+                  {b.url && b.url !== "#" && <span style={{ fontSize:10, color:GOLD, border:`1px solid ${GOLD}40`, padding:"2px 7px", letterSpacing:"0.06em" }}>PDF</span>}
+                </button>
+              ))}
+            </div>
+          )}
+
+          {lectureResults.length > 0 && (
+            <div>
+              <div style={{ padding:"10px 20px 6px", fontSize:9, fontWeight:700, color:GOLD, letterSpacing:"0.18em", textTransform:"uppercase", borderBottom:`1px solid ${BORDER}` }}>Lectures — Audio</div>
+              {lectureResults.map(l => (
+                <button key={l.id} onClick={() => goLecture(l)} style={{ display:"flex", width:"100%", textAlign:"left", padding:"12px 20px", background:"none", border:"none", borderBottom:`1px solid ${BORDER}`, cursor:"pointer", alignItems:"center", gap:14, transition:"background 0.1s" }}
+                  onMouseEnter={e => e.currentTarget.style.background=GREEN_L}
+                  onMouseLeave={e => e.currentTarget.style.background="none"}
+                >
+                  <span style={{ fontSize:16 }}>🎙️</span>
+                  <div style={{ flex:1 }}>
+                    <div style={{ fontSize:14, color:TEXT, fontFamily:SERIF }}>{l.title}</div>
+                  </div>
+                  <span style={{ fontSize:10, color:MUTED }}>MP3</span>
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+
+        <div style={{ padding:"10px 20px", borderTop:`1px solid ${BORDER}`, display:"flex", justifyContent:"space-between", fontSize:11, color:MUTED }}>
+          <span>{q ? `${total} result${total !== 1 ? "s" : ""}` : "Tip: search by name, author, or surah number"}</span>
+          <span>↑↓ navigate · Enter open · Esc close</span>
         </div>
       </div>
     </div>
@@ -2239,6 +2439,9 @@ export default function App() {
   const [quote] = useState(() => QUOTES[Math.floor(Math.random() * QUOTES.length)]);
   const [savedLocation, setSavedLocation] = useState(() => loadSavedLocation());
   const [showSettings, setShowSettings] = useState(false);
+  const [showSearch, setShowSearch] = useState(false);
+  const [notifEnabled, setNotifEnabled] = useState(() => localStorage.getItem("mp-notifs") === "1");
+  const notifTimers = useRef([]);
 
   // ── Global audio state ─────────────────────────────────────────
   const [lectures, setLectures] = useState(LECTURES);
@@ -2320,7 +2523,62 @@ export default function App() {
   }
   // ──────────────────────────────────────────────────────────────
 
+  // ── Prayer notifications ───────────────────────────────────────
+  async function schedulePrayerNotifs(loc) {
+    if (!loc || !("Notification" in window)) return;
+    let perm = Notification.permission;
+    if (perm === "denied") return;
+    if (perm !== "granted") perm = await Notification.requestPermission();
+    if (perm !== "granted") return;
+
+    notifTimers.current.forEach(t => clearTimeout(t));
+    notifTimers.current = [];
+
+    const d = new Date();
+    const dateStr = `${d.getDate()}-${d.getMonth()+1}-${d.getFullYear()}`;
+    try {
+      const res = await fetch(`https://api.aladhan.com/v1/timings/${dateStr}?latitude=${loc.lat}&longitude=${loc.lon}&method=2`);
+      const json = await res.json();
+      if (json.code !== 200) return;
+      const now = Date.now();
+      for (const name of ["Fajr","Dhuhr","Asr","Maghrib","Isha"]) {
+        const [h, m] = json.data.timings[name].split(":").map(Number);
+        const pDate = new Date(); pDate.setHours(h, m, 0, 0);
+        const ms = pDate.getTime() - now;
+        if (ms > 0) {
+          const t = setTimeout(() => {
+            new Notification(`🕌 ${name} — Time to Pray`, {
+              body: `${name} prayer time has begun in ${loc.name}`,
+              icon: "/logo.png",
+            });
+          }, ms);
+          notifTimers.current.push(t);
+        }
+      }
+    } catch {}
+  }
+
+  useEffect(() => {
+    if (notifEnabled && savedLocation) schedulePrayerNotifs(savedLocation);
+    else { notifTimers.current.forEach(t => clearTimeout(t)); notifTimers.current = []; }
+  }, [notifEnabled, savedLocation]);
+
+  function handleNotifToggle(val) {
+    setNotifEnabled(val);
+    try { localStorage.setItem("mp-notifs", val ? "1" : "0"); } catch {}
+  }
+  // ──────────────────────────────────────────────────────────────
+
   function handleSaveLocation(loc) { setSavedLocation(loc); }
+
+  // Ctrl+K / Cmd+K opens search
+  useEffect(() => {
+    function onKey(e) {
+      if ((e.ctrlKey || e.metaKey) && e.key === "k") { e.preventDefault(); setShowSearch(s => !s); }
+    }
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, []);
 
   function navigate(p) {
     setPage(p);
@@ -2342,7 +2600,7 @@ export default function App() {
         body { background: ${BG}; }
       `}</style>
       <audio ref={audioRef} onTimeUpdate={onTimeUpdate} onEnded={() => skipLecture(1)} onLoadedMetadata={() => setDuration(audioRef.current?.duration || 0)} />
-      <Nav page={page} setPage={navigate} onSettings={() => setShowSettings(true)} hasLocation={!!savedLocation} />
+      <Nav page={page} setPage={navigate} onSettings={() => setShowSettings(true)} hasLocation={!!savedLocation} onSearch={() => setShowSearch(true)} />
       <main>
         {page === "home" && <Home quote={quote} setPage={navigate} savedLocation={savedLocation} />}
         {page === "prayer" && <PrayerTimes savedLocation={savedLocation} />}
@@ -2362,6 +2620,15 @@ export default function App() {
           onClose={() => setShowSettings(false)}
           savedLocation={savedLocation}
           onSave={handleSaveLocation}
+          notifEnabled={notifEnabled}
+          onNotifToggle={handleNotifToggle}
+        />
+      )}
+      {showSearch && (
+        <GlobalSearch
+          onClose={() => setShowSearch(false)}
+          navigate={navigate}
+          lectures={lectures}
         />
       )}
       <FloatingPlayer {...audioProps} navigate={navigate} />
@@ -2371,35 +2638,58 @@ export default function App() {
 
 // ─── QURAN ────────────────────────────────────────────────────────
 const ARABIC = "'Amiri', 'Traditional Arabic', serif";
+let _surahCache = null; // module-level cache shared with GlobalSearch
 
 function QuranPage() {
-  const [surahs,       setSurahs]       = useState([]);
+  const [surahs,       setSurahs]       = useState(() => _surahCache || []);
   const [current,      setCurrent]      = useState(() => { const s = localStorage.getItem("quranSurah"); return s ? parseInt(s) : null; });
   const [verses,       setVerses]       = useState([]);
-  const [loadingList,  setLoadingList]  = useState(true);
+  const [loadingList,  setLoadingList]  = useState(!_surahCache);
   const [loadingRead,  setLoadingRead]  = useState(false);
   const [search,       setSearch]       = useState("");
   const [showTrans,    setShowTrans]     = useState(true);
+  const [fromCache,    setFromCache]    = useState(false);
   const topRef = useRef(null);
 
-  // Load surah list
+  // Load surah list — use module cache if available
   useEffect(() => {
+    if (_surahCache) { setSurahs(_surahCache); setLoadingList(false); return; }
     fetch("https://api.alquran.cloud/v1/surah")
       .then(r => r.json())
-      .then(d => { setSurahs(d.data || []); setLoadingList(false); })
+      .then(d => {
+        _surahCache = d.data || [];
+        setSurahs(_surahCache);
+        setLoadingList(false);
+      })
       .catch(() => setLoadingList(false));
   }, []);
 
-  // Load verses when surah selected
+  // Load verses — check localStorage first (offline cache)
   useEffect(() => {
     if (!current) return;
-    setLoadingRead(true); setVerses([]);
+    setLoadingRead(true); setVerses([]); setFromCache(false);
+
+    // Try offline cache first
+    try {
+      const cached = localStorage.getItem(`qv_${current}`);
+      if (cached) {
+        setVerses(JSON.parse(cached));
+        setLoadingRead(false);
+        setFromCache(true);
+        topRef.current?.scrollIntoView({ behavior: "smooth" });
+        return;
+      }
+    } catch {}
+
     fetch(`https://api.alquran.cloud/v1/surah/${current}/editions/quran-uthmani,en.sahih`)
       .then(r => r.json())
       .then(d => {
         const [ar, en] = d.data;
-        setVerses(ar.ayahs.map((a, i) => ({ n: a.numberInSurah, ar: a.text, en: en.ayahs[i].text })));
+        const parsed = ar.ayahs.map((a, i) => ({ n: a.numberInSurah, ar: a.text, en: en.ayahs[i].text }));
+        setVerses(parsed);
         setLoadingRead(false);
+        // Save to localStorage for offline use
+        try { localStorage.setItem(`qv_${current}`, JSON.stringify(parsed)); } catch {}
         topRef.current?.scrollIntoView({ behavior: "smooth" });
       })
       .catch(() => setLoadingRead(false));
@@ -2428,6 +2718,7 @@ function QuranPage() {
         <div style={{ textAlign: "center", flex: 1 }}>
           <div style={{ fontSize: 11, color: MUTED, letterSpacing: "0.14em", textTransform: "uppercase", marginBottom: 4 }}>
             Surah {surah.number} · {surah.revelationType} · {surah.numberOfAyahs} verses
+            {fromCache && <span style={{ marginLeft:8, color:GOLD, fontSize:9, border:`1px solid ${GOLD}40`, padding:"1px 6px", letterSpacing:"0.1em" }}>CACHED</span>}
           </div>
           <div style={{ fontFamily: SERIF, fontSize: 22, color: TEXT }}>{surah.englishName}</div>
           <div style={{ fontSize: 12, color: MUTED }}>{surah.englishNameTranslation}</div>
