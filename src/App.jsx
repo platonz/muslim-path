@@ -3564,6 +3564,9 @@ function DuaPage({ favs = new Set(), onFav = () => {} }) {
       <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
         {filtered.map((dua, i) => {
           const id = `${dua.cat}-${i}`;
+          const origIdx = DUAS.indexOf(dua);
+          const favId = `${dua.cat}-${origIdx}`;
+          const isFav = favs.has(favId);
           const isOpen = open === id;
           return (
             <div key={id} style={{ border: `1px solid ${isOpen ? GOLD+"40" : BORDER}`, background: isOpen ? "#0E0C08" : SURFACE, transition: "all 0.2s" }}>
