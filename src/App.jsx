@@ -928,7 +928,11 @@ function Nav({ page, setPage, onSettings, hasLocation, onSearch, authUser, onAut
       </div>
 
       {/* Mobile menu — position:fixed so it always overlays content regardless of scroll */}
-      {menuOpen && (
+      {menuOpen && <>
+        {/* Overlay: tap outside to close */}
+        <div onClick={() => setMenuOpen(false)} style={{
+          position: "fixed", inset: 0, zIndex: 499,
+        }} />
         <div className="nav-mobile-menu" style={{
           position: "fixed", top: 64, left: 0, right: 0, zIndex: 500,
           borderTop: `1px solid ${BORDER}`,
@@ -1021,7 +1025,7 @@ function Nav({ page, setPage, onSettings, hasLocation, onSearch, authUser, onAut
             </button>
           )}
         </div>
-      )}
+      </>}
 
       <style>{`
         @media (max-width: 900px) {
@@ -2856,6 +2860,7 @@ export default function App() {
     const hash = window.location.hash.replace("#", "");
     return VALID_PAGES.includes(hash) ? hash : "home";
   });
+  const [navHistory, setNavHistory] = useState([]);
   const [quote] = useState(() => QUOTES[Math.floor(Math.random() * QUOTES.length)]);
   const [savedLocation, setSavedLocation] = useState(() => loadSavedLocation());
   const [showSettings, setShowSettings] = useState(false);
@@ -3084,8 +3089,17 @@ export default function App() {
   }, []);
 
   function navigate(p) {
+    if (p !== page) setNavHistory(h => [...h, page]);
     setPage(p);
     window.location.hash = p === "home" ? "" : p;
+  }
+
+  function goBack() {
+    if (navHistory.length === 0) return;
+    const prev = navHistory[navHistory.length - 1];
+    setNavHistory(h => h.slice(0, -1));
+    setPage(prev);
+    window.location.hash = prev === "home" ? "" : prev;
   }
 
   const audioProps = { lectures, current, playing, play: playLecture, skip: skipLecture, stop: stopAudio, seek: seekAudio, progress, duration, fmt: fmtTime, audioRef };
@@ -3149,6 +3163,28 @@ export default function App() {
           navigate={navigate}
           lectures={lectures}
         />
+      )}
+      {/* Back button — fixed bottom-left, only when there's history */}
+      {navHistory.length > 0 && (
+        <button onClick={goBack} title="Go back" style={{
+          position: "fixed",
+          bottom: current ? 80 : 24,
+          left: 16,
+          zIndex: 450,
+          background: "#141414",
+          border: `1px solid ${BORDER}`,
+          borderRadius: 2,
+          color: MUTED,
+          cursor: "pointer",
+          width: 40, height: 40,
+          display: "flex", alignItems: "center", justifyContent: "center",
+          fontSize: 20, lineHeight: 1,
+          boxShadow: "0 4px 20px rgba(0,0,0,0.7)",
+          transition: "border-color 0.2s, color 0.2s",
+        }}
+          onMouseEnter={e => { e.currentTarget.style.borderColor = GOLD; e.currentTarget.style.color = GOLD; }}
+          onMouseLeave={e => { e.currentTarget.style.borderColor = BORDER; e.currentTarget.style.color = MUTED; }}
+        >‹</button>
       )}
       <FloatingPlayer {...audioProps} navigate={navigate} />
 
