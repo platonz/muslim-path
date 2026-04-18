@@ -1084,7 +1084,7 @@ function Nav({ page, setPage, onSettings, hasLocation, onSearch, authUser, onAut
     </nav>
 
     {/* Floating hamburger — always tappable on mobile even when nav is scrolled away */}
-    {navHidden && \!menuOpen && (
+    {navHidden && !menuOpen && (
       <button
         onClick={() => { setMenuOpen(true); setNavHidden(false); }}
         className="nav-mobile"
