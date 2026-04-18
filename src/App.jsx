@@ -728,20 +728,35 @@ const LECTURES = [
 const NAV_ITEMS = [
   { id: "home",        label: "Home",         icon: "🏠" },
   { id: "prayer",      label: "Prayer Times", icon: "🕌" },
-  { id: "qibla",       label: "Qibla",        icon: "🧭" },
-  { id: "zakat",       label: "Zakat",        icon: "💰" },
-  { id: "inheritance", label: "Inheritance",  icon: "⚖️" },
   { id: "calendar",    label: "Calendar",     icon: "📆" },
-  { id: "dates",       label: "Dates",        icon: "🔄" },
   { id: "library",     label: "Library",      icon: "📚" },
   { id: "audio",       label: "Lectures",     icon: "🎙️" },
   { id: "tasbeeh",     label: "Tasbeeh",      icon: "📿" },
   { id: "quran",       label: "Quran",        icon: "📖" },
 ];
 
+const TOOLS_ITEMS = [
+  { id: "zakat",       label: "Zakat",        icon: "💰" },
+  { id: "inheritance", label: "Inheritance",  icon: "⚖️" },
+  { id: "qibla",       label: "Qibla",        icon: "🧭" },
+  { id: "dates",       label: "Dates",        icon: "🔄" },
+];
+
 function Nav({ page, setPage, onSettings, hasLocation, onSearch }) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [toolsOpen, setToolsOpen] = useState(false);
+  const [mobileToolsOpen, setMobileToolsOpen] = useState(false);
   const [hovered, setHovered] = useState(null);
+  const toolsRef = useRef(null);
+  const toolsActive = TOOLS_ITEMS.some(t => t.id === page);
+
+  // Close tools dropdown on outside click
+  useEffect(() => {
+    function handle(e) { if (toolsRef.current && !toolsRef.current.contains(e.target)) setToolsOpen(false); }
+    document.addEventListener("mousedown", handle);
+    return () => document.removeEventListener("mousedown", handle);
+  }, []);
+
   return (
     <nav style={{
       position: "sticky", top: 0, zIndex: 100,
@@ -770,30 +785,69 @@ function Nav({ page, setPage, onSettings, hasLocation, onSearch }) {
                 onMouseEnter={() => setHovered(n.id)}
                 onMouseLeave={() => setHovered(null)}
                 style={{
-                  background: "transparent",
-                  border: "none",
+                  background: "transparent", border: "none",
                   borderBottom: isActive ? `1px solid ${GOLD}` : "1px solid transparent",
-                  cursor: "pointer",
-                  padding: "8px 14px", fontSize: 12,
+                  cursor: "pointer", padding: "8px 14px", fontSize: 12,
                   fontWeight: isActive ? 600 : 400,
                   color: isActive ? GOLD : isHov ? TEXT : MUTED,
-                  transition: "all 0.2s",
-                  letterSpacing: "0.07em",
-                  textTransform: "uppercase",
-                  fontFamily: SANS,
+                  transition: "all 0.2s", letterSpacing: "0.07em",
+                  textTransform: "uppercase", fontFamily: SANS,
                   height: 64, borderRadius: 0,
                 }}>
                 {n.label}
               </button>
             );
           })}
+
+          {/* Tools dropdown */}
+          <div ref={toolsRef} style={{ position: "relative", height: 64, display: "flex", alignItems: "center" }}>
+            <button
+              onClick={() => setToolsOpen(o => !o)}
+              onMouseEnter={() => setToolsOpen(true)}
+              style={{
+                background: "transparent", border: "none",
+                borderBottom: toolsActive ? `1px solid ${GOLD}` : toolsOpen ? `1px solid ${GOLD}60` : "1px solid transparent",
+                cursor: "pointer", padding: "8px 14px", fontSize: 12,
+                fontWeight: toolsActive ? 600 : 400,
+                color: toolsActive ? GOLD : toolsOpen ? TEXT : MUTED,
+                transition: "all 0.2s", letterSpacing: "0.07em",
+                textTransform: "uppercase", fontFamily: SANS,
+                height: 64, borderRadius: 0, display: "flex", alignItems: "center", gap: 5,
+              }}>
+              🛠 Tools <span style={{ fontSize: 9, opacity: 0.6 }}>▾</span>
+            </button>
+            {toolsOpen && (
+              <div onMouseLeave={() => setToolsOpen(false)} style={{
+                position: "absolute", top: "100%", left: 0,
+                background: "#0D0D0D", border: `1px solid ${GOLD}25`,
+                boxShadow: `0 16px 48px rgba(0,0,0,0.9)`,
+                minWidth: 180, zIndex: 200,
+              }}>
+                {TOOLS_ITEMS.map(t => (
+                  <button key={t.id} onClick={() => { setPage(t.id); setToolsOpen(false); }} style={{
+                    display: "flex", alignItems: "center", gap: 10, width: "100%",
+                    padding: "12px 18px", background: page === t.id ? GREEN_L : "none",
+                    border: "none", borderLeft: page === t.id ? `2px solid ${GOLD}` : "2px solid transparent",
+                    cursor: "pointer", fontSize: 12, color: page === t.id ? GOLD : MUTED,
+                    fontWeight: page === t.id ? 600 : 400,
+                    letterSpacing: "0.07em", textTransform: "uppercase", fontFamily: SANS,
+                    transition: "all 0.15s", textAlign: "left",
+                  }}
+                    onMouseEnter={e => { if (page !== t.id) { e.currentTarget.style.background = GREEN_L; e.currentTarget.style.color = TEXT; } }}
+                    onMouseLeave={e => { if (page !== t.id) { e.currentTarget.style.background = "none"; e.currentTarget.style.color = MUTED; } }}
+                  >
+                    <span>{t.icon}</span>{t.label}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Search + Settings + mobile hamburger */}
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
           <button onClick={onSearch} title="Search" style={{
-            background: "transparent",
-            border: `1px solid ${BORDER}`,
+            background: "transparent", border: `1px solid ${BORDER}`,
             borderRadius: 2, cursor: "pointer", color: MUTED,
             width: 36, height: 36, display: "flex", alignItems: "center", justifyContent: "center",
             fontSize: 15, transition: "all 0.2s",
@@ -836,6 +890,31 @@ function Nav({ page, setPage, onSettings, hasLocation, onSearch }) {
               borderLeft: page === n.id ? `2px solid ${GOLD}` : "2px solid transparent",
             }}><span>{n.icon}</span>{n.label}</button>
           ))}
+
+          {/* Tools section in mobile */}
+          <button onClick={() => setMobileToolsOpen(o => !o)} style={{
+            background: "none", border: "none", cursor: "pointer", textAlign: "left",
+            padding: "12px 32px", fontSize: 12, color: toolsActive ? GOLD : MUTED,
+            fontWeight: toolsActive ? 600 : 400,
+            letterSpacing: "0.08em", textTransform: "uppercase",
+            display: "flex", alignItems: "center", gap: 12, fontFamily: SANS,
+            borderLeft: toolsActive ? `2px solid ${GOLD}` : "2px solid transparent",
+            borderTop: `1px solid ${BORDER}`, marginTop: 4,
+          }}>
+            <span>🛠</span> Tools <span style={{ marginLeft: "auto", fontSize: 10, opacity: 0.5 }}>{mobileToolsOpen ? "▲" : "▼"}</span>
+          </button>
+          {mobileToolsOpen && TOOLS_ITEMS.map(t => (
+            <button key={t.id} onClick={() => { setPage(t.id); setMenuOpen(false); }} style={{
+              background: page === t.id ? GREEN_L : "none", border: "none", cursor: "pointer", textAlign: "left",
+              padding: "11px 32px 11px 52px", fontSize: 12,
+              color: page === t.id ? GOLD : MUTED,
+              fontWeight: page === t.id ? 600 : 400,
+              letterSpacing: "0.08em", textTransform: "uppercase",
+              display: "flex", alignItems: "center", gap: 12, fontFamily: SANS,
+              borderLeft: page === t.id ? `2px solid ${GOLD}` : "2px solid transparent",
+            }}><span>{t.icon}</span>{t.label}</button>
+          ))}
+
           <button onClick={() => { onSearch(); setMenuOpen(false); }} style={{
             background: "none", border: "none", cursor: "pointer", textAlign: "left",
             padding: "12px 32px", fontSize: 12, color: MUTED,
@@ -859,7 +938,7 @@ function Nav({ page, setPage, onSettings, hasLocation, onSearch }) {
       )}
 
       <style>{`
-        @media (max-width: 760px) {
+        @media (max-width: 900px) {
           .nav-desktop { display: none !important; }
           .nav-mobile { display: flex !important; }
         }
@@ -1542,7 +1621,7 @@ function Inheritance() {
     <div style={{ maxWidth: 720, margin: "0 auto", padding: "40px 24px" }}>
       <PageTitle icon="⚖️" title="Inheritance Calculator" sub="Calculate Islamic inheritance shares (Farāʾiḍ) according to your madhab" />
 
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 16 }}>
+      <div className="inherit-top-grid">
         <Card>
           <Select label="Madhab" value={madhab} onChange={e => setMadhab(e.target.value)} options={MADHABS} />
           <div style={{ marginTop: 8, fontSize: 12, color: MUTED }}>
@@ -1564,7 +1643,7 @@ function Inheritance() {
       <Card style={{ marginBottom: 16 }}>
         <h4 style={{ margin: "0 0 4px", color: GOLD, fontWeight: 600, fontSize: 10, textTransform: "uppercase", letterSpacing: "0.14em" }}>Heirs</h4>
         <p style={{ margin: "0 0 16px", fontSize: 13, color: MUTED }}>Select only the heirs who survive the deceased</p>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0 32px" }}>
+        <div className="inherit-heirs-grid">
           <div>
             <p style={{ margin: "0 0 6px", fontSize: 10, fontWeight: 600, textTransform: "uppercase", color: GOLD, letterSpacing: "0.14em", borderBottom: `1px solid ${GOLD}20`, paddingBottom: 4 }}>Spouse</p>
             {toggle("Husband", "husband")}
@@ -1595,35 +1674,50 @@ function Inheritance() {
 
       {results && (
         <Card>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 16 }}>
-            <h3 style={{ margin: 0, fontWeight: 700 }}>Results</h3>
-            <span style={{ fontSize: 13, color: MUTED }}>{currency} {fmt(results.estate)} estate · {MADHABS.find(m=>m.v===madhab)?.l}</span>
+          <div style={{ marginBottom: 16 }}>
+            <h3 style={{ margin: "0 0 4px", fontWeight: 700 }}>Results</h3>
+            <span style={{ fontSize: 12, color: MUTED }}>{currency} {fmt(results.estate)} estate · {MADHABS.find(m=>m.v===madhab)?.l}</span>
           </div>
           {results.shares.length === 0 ? (
             <p style={{ color: MUTED }}>No recognised heirs. Please add at least one heir.</p>
           ) : (
             <div>
-              {/* Header */}
-              <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr 1fr 1fr", gap: 8, padding: "8px 0", borderBottom: `2px solid ${BORDER}`, marginBottom: 4 }}>
-                {["Heir","Share","Each","Amount per person"].map(h => (
-                  <span key={h} style={{ fontSize: 12, fontWeight: 700, color: MUTED, textTransform: "uppercase" }}>{h}</span>
+              {/* Desktop header row — hidden on mobile */}
+              <div className="inherit-results-header">
+                {["Heir","Share","Each","Amount"].map(h => (
+                  <span key={h} style={{ fontSize: 11, fontWeight: 700, color: MUTED, textTransform: "uppercase", letterSpacing: "0.08em" }}>{h}</span>
                 ))}
               </div>
               {results.shares.map((s, i) => {
                 const totalAmt = fracVal(s.frac) * results.estate;
                 const eachAmt = fracVal(s.each) * results.estate;
                 return (
-                  <div key={i}>
-                    <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr 1fr 1fr", gap: 8, padding: "12px 0", borderBottom: `1px solid ${BORDER}` }}>
+                  <div key={i} style={{ borderBottom: `1px solid ${BORDER}` }}>
+                    {/* Desktop row */}
+                    <div className="inherit-results-row">
                       <div>
                         <div style={{ fontWeight: 600, fontSize: 14, color: TEXT }}>{s.heir}</div>
                         {s.count > 1 && <div style={{ fontSize: 12, color: MUTED }}>× {s.count}</div>}
                       </div>
                       <span style={{ fontFamily: "monospace", color: GREEN, fontWeight: 600, fontSize: 14 }}>{fmtFrac(s.frac)}</span>
-                      <span style={{ fontFamily: "monospace", fontSize: 14 }}>{fmtFrac(s.each)}</span>
+                      <span style={{ fontFamily: "monospace", fontSize: 14, color: MUTED }}>{fmtFrac(s.each)}</span>
                       <span style={{ fontWeight: 600, fontSize: 14 }}>{currency} {fmt(s.count > 1 ? totalAmt : eachAmt)}</span>
                     </div>
-                    {s.note && <div style={{ fontSize: 12, color: MUTED, padding: "2px 0 8px", fontStyle: "italic" }}>{s.note}</div>}
+                    {/* Mobile card row */}
+                    <div className="inherit-results-card">
+                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+                        <div>
+                          <div style={{ fontWeight: 600, fontSize: 14, color: TEXT }}>{s.heir}</div>
+                          {s.count > 1 && <div style={{ fontSize: 11, color: MUTED }}>× {s.count} persons</div>}
+                        </div>
+                        <span style={{ fontFamily: "monospace", color: GREEN, fontWeight: 700, fontSize: 15 }}>{fmtFrac(s.frac)}</span>
+                      </div>
+                      <div style={{ display: "flex", justifyContent: "space-between", marginTop: 6 }}>
+                        <span style={{ fontSize: 11, color: MUTED }}>Each: {fmtFrac(s.each)}</span>
+                        <span style={{ fontWeight: 700, fontSize: 14, color: TEXT }}>{currency} {fmt(s.count > 1 ? totalAmt : eachAmt)}</span>
+                      </div>
+                    </div>
+                    {s.note && <div style={{ fontSize: 12, color: MUTED, padding: "4px 0 8px", fontStyle: "italic" }}>{s.note}</div>}
                   </div>
                 );
               })}
@@ -2598,6 +2692,20 @@ export default function App() {
         input::placeholder, textarea::placeholder { color: ${MUTED}; opacity: 0.6; }
         option { background: #141414; color: ${TEXT}; }
         body { background: ${BG}; }
+
+        /* Inheritance responsive layouts */
+        .inherit-top-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+        .inherit-heirs-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 32px; }
+        .inherit-results-header { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 8px; padding: 8px 0; border-bottom: 2px solid ${BORDER}; margin-bottom: 4px; }
+        .inherit-results-row { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 8px; padding: 12px 0; }
+        .inherit-results-card { display: none; padding: 12px 0; }
+        @media (max-width: 600px) {
+          .inherit-top-grid { grid-template-columns: 1fr; }
+          .inherit-heirs-grid { grid-template-columns: 1fr; }
+          .inherit-results-header { display: none; }
+          .inherit-results-row { display: none; }
+          .inherit-results-card { display: block; }
+        }
       `}</style>
       <audio ref={audioRef} onTimeUpdate={onTimeUpdate} onEnded={() => skipLecture(1)} onLoadedMetadata={() => setDuration(audioRef.current?.duration || 0)} />
       <Nav page={page} setPage={navigate} onSettings={() => setShowSettings(true)} hasLocation={!!savedLocation} onSearch={() => setShowSearch(true)} />
