@@ -1508,6 +1508,9 @@ function Qibla({ savedLocation }) {
   const [loading, setLoading] = useState(false);
   const [err, setErr] = useState("");
   const [locName, setLocName] = useState("");
+  const [deviceHeading, setDeviceHeading] = useState(null);
+  const [needsPermission, setNeedsPermission] = useState(false);
+  const handlerRef = useRef(null);
 
   // Auto-load from saved location
   useEffect(() => {
@@ -1517,6 +1520,50 @@ function Qibla({ savedLocation }) {
       setCity(savedLocation.name);
     }
   }, [savedLocation]);
+
+  // Set up device compass (magnetometer)
+  useEffect(() => {
+    if (typeof DeviceOrientationEvent === "undefined") return;
+    if (typeof DeviceOrientationEvent.requestPermission === "function") {
+      // iOS 13+ requires explicit user gesture to grant permission
+      setNeedsPermission(true);
+      return;
+    }
+    startCompass();
+    return stopCompass;
+  }, []);
+
+  function startCompass() {
+    if (handlerRef.current) return;
+    handlerRef.current = (e) => {
+      let h = null;
+      if (e.webkitCompassHeading != null && !isNaN(e.webkitCompassHeading)) {
+        // iOS: 0 = North, increases clockwise — most accurate
+        h = e.webkitCompassHeading;
+      } else if (e.alpha != null) {
+        // Android / fallback: alpha = CCW from North, so invert
+        h = (360 - e.alpha + 360) % 360;
+      }
+      if (h !== null) setDeviceHeading(h);
+    };
+    window.addEventListener("deviceorientationabsolute", handlerRef.current, true);
+    window.addEventListener("deviceorientation", handlerRef.current, true);
+  }
+
+  function stopCompass() {
+    if (handlerRef.current) {
+      window.removeEventListener("deviceorientationabsolute", handlerRef.current, true);
+      window.removeEventListener("deviceorientation", handlerRef.current, true);
+      handlerRef.current = null;
+    }
+  }
+
+  async function requestCompassPermission() {
+    try {
+      const result = await DeviceOrientationEvent.requestPermission();
+      if (result === "granted") { setNeedsPermission(false); startCompass(); }
+    } catch { setNeedsPermission(false); }
+  }
 
   async function search() {
     if (!city.trim()) return;
@@ -1530,7 +1577,7 @@ function Qibla({ savedLocation }) {
       const { lat, lon, display_name } = json[0];
       setBearing(calcQibla(parseFloat(lat), parseFloat(lon)));
       setLocName(display_name.split(",").slice(0,2).join(", "));
-    } catch(e) { setErr("Location not found. Try a different city name."); }
+    } catch { setErr("Location not found. Try a different city name."); }
     setLoading(false);
   }
 
@@ -1548,6 +1595,14 @@ function Qibla({ savedLocation }) {
     bearing < 292.5 ? "W" : bearing < 337.5 ? "NW" : "N"
   ) : "";
 
+  // Live compass: rotate rose so N always aligns with physical North.
+  // Needle stays at absolute Qibla bearing relative to screen top would mean
+  // needle angle = bearing - deviceHeading (so it always points at Mecca).
+  const h = deviceHeading ?? 0;
+  const roseAngle   = deviceHeading !== null ? -h : 0;
+  const needleAngle = bearing !== null ? ((bearing - h) + 360) % 360 : 0;
+  const kaabaDeg    = needleAngle;
+
   return (
     <div style={{ maxWidth: 520, margin: "0 auto", padding: "40px 24px" }}>
       <PageTitle icon="🧭" title="Qibla Direction" sub="Find the direction of the Kaaba from your location" />
@@ -1556,7 +1611,7 @@ function Qibla({ savedLocation }) {
           <Input label="City" placeholder="e.g. London, New York, Jakarta" value={city} onChange={e => setCity(e.target.value)} onKeyDown={e => e.key === "Enter" && search()} />
           <div style={{ display: "flex", gap: 10 }}>
             <Btn onClick={search} disabled={loading} style={{ flex: 1 }}>{loading ? "Searching…" : "Search"}</Btn>
-            <Btn onClick={useMyLocation} variant="secondary">Use My Location</Btn>
+            <Btn onClick={useMyLocation} variant="secondary">📍 My Location</Btn>
           </div>
         </div>
       </Card>
@@ -1565,51 +1620,108 @@ function Qibla({ savedLocation }) {
 
       {bearing !== null && (
         <Card style={{ textAlign: "center" }}>
-          {locName && <p style={{ margin: "0 0 20px", color: MUTED, fontSize: 13 }}>📍 {locName}</p>}
+          {locName && <p style={{ margin: "0 0 16px", color: MUTED, fontSize: 13 }}>📍 {locName}</p>}
 
-          {/* Compass */}
-          <div style={{ position: "relative", width: 220, height: 220, margin: "0 auto 24px" }}>
-            {/* Outer ring */}
+          {/* iOS compass permission prompt */}
+          {needsPermission && (
+            <button onClick={requestCompassPermission} style={{
+              display: "block", margin: "0 auto 20px",
+              background: "linear-gradient(135deg,#C9A84C,#A8883E)",
+              border: "none", padding: "10px 20px", cursor: "pointer",
+              fontSize: 12, fontWeight: 700, color: "#0A0A0A",
+              letterSpacing: "0.08em", textTransform: "uppercase", fontFamily: SANS,
+            }}>Enable Live Compass</button>
+          )}
+
+          {/* Compass — fluid, max 220px, fixed internals scale from 220px radius=110 */}
+          <div style={{
+            position: "relative",
+            width: "min(220px, calc(100vw - 110px))",
+            height: "min(220px, calc(100vw - 110px))",
+            margin: "0 auto 24px",
+          }}>
+            {/* Compass rose — rotates with device heading so N = physical North */}
             <div style={{
               position: "absolute", inset: 0, borderRadius: "50%",
               border: `2px solid ${BORDER}`, background: SURFACE,
+              transform: `rotate(${roseAngle}deg)`,
+              transition: deviceHeading !== null ? "transform 0.1s linear" : "none",
             }}>
-              {/* Cardinal directions */}
+              {/* Cardinal labels — pixel offset matches 220px compass (radius 110) */}
               {[{l:"N",r:0},{l:"E",r:90},{l:"S",r:180},{l:"W",r:270}].map(({l,r}) => (
                 <div key={l} style={{
                   position: "absolute", top: "50%", left: "50%",
                   transform: `rotate(${r}deg) translateY(-88px) rotate(-${r}deg) translate(-50%,-50%)`,
-                  fontSize: 12, fontWeight: 700, color: l==="N" ? "#EF4444" : MUTED, letterSpacing: "0.06em"
+                  fontSize: 11, fontWeight: 700,
+                  color: l === "N" ? "#EF4444" : MUTED,
+                  letterSpacing: "0.06em", pointerEvents: "none", userSelect: "none",
                 }}>{l}</div>
               ))}
-              {/* Needle pointing to Qibla */}
+              {/* Minor degree ticks — positioned at compass rim */}
+              {[0,45,90,135,180,225,270,315].map(r => (
+                <div key={r} style={{
+                  position: "absolute",
+                  top: r % 90 === 0 ? 4 : 6,
+                  left: "calc(50% - 1px)",
+                  width: r % 90 === 0 ? 2 : 1,
+                  height: r % 90 === 0 ? 10 : 6,
+                  background: r % 90 === 0 ? GOLD + "60" : BORDER,
+                  transformOrigin: `1px ${110 - (r % 90 === 0 ? 4 : 6)}px`,
+                  transform: `rotate(${r}deg)`,
+                }}/>
+              ))}
+            </div>
+
+            {/* Needle layer — separate from rose so it stays unaffected by rose rotation */}
+            <div style={{ position: "absolute", inset: 0, pointerEvents: "none" }}>
+              {/* Gold needle pointing at Qibla — rotates by (bearing − deviceHeading) */}
               <div style={{
                 position: "absolute", top: "50%", left: "50%",
                 width: 4, height: 80,
-                transform: `translate(-50%, -100%) rotate(${bearing}deg)`,
+                transform: `translate(-50%, -100%) rotate(${needleAngle}deg)`,
                 transformOrigin: "bottom center",
-                background: GREEN, borderRadius: 4,
-                transition: "transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1)"
+                background: `linear-gradient(to top, ${GREEN}70, ${GREEN})`,
+                borderRadius: "3px 3px 0 0",
+                boxShadow: `0 0 6px ${GREEN}55`,
+                transition: "transform 0.15s linear",
               }} />
-              {/* Ka'aba icon at needle tip */}
+              {/* Opposite counter-tail */}
               <div style={{
                 position: "absolute", top: "50%", left: "50%",
-                width: 20, height: 20,
-                transform: `translate(-50%, -50%) rotate(${bearing}deg) translateY(-82px) rotate(-${bearing}deg)`,
-                fontSize: 16, lineHeight: 1, marginLeft: -2,
-                transition: "transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1)"
+                width: 3, height: 30,
+                transform: `translate(-50%, 0%) rotate(${needleAngle}deg)`,
+                transformOrigin: "top center",
+                background: MUTED + "44",
+                borderRadius: "0 0 3px 3px",
+                transition: "transform 0.15s linear",
+              }} />
+              {/* Ka'aba emoji — fixed 82px offset matches needle tip on 220px compass */}
+              <div style={{
+                position: "absolute", top: "50%", left: "50%",
+                width: 22, height: 22,
+                transform: `translate(-50%,-50%) rotate(${kaabaDeg}deg) translateY(-82px) rotate(-${kaabaDeg}deg)`,
+                fontSize: 16, lineHeight: "22px", textAlign: "center",
+                transition: "transform 0.15s linear",
               }}>🕋</div>
-              {/* Center dot */}
+              {/* Center pivot */}
               <div style={{
                 position: "absolute", top: "50%", left: "50%",
-                width: 10, height: 10, borderRadius: "50%",
-                background: GREEN, transform: "translate(-50%,-50%)"
+                width: 12, height: 12, borderRadius: "50%",
+                background: GREEN, border: `2px solid ${BG}`,
+                transform: "translate(-50%,-50%)", zIndex: 2,
               }} />
             </div>
           </div>
 
-          <div style={{ fontSize: 32, fontWeight: 700, color: TEXT }}>{Math.round(bearing)}°</div>
-          <div style={{ fontSize: 16, color: MUTED, marginTop: 4 }}>{direction} — Qibla Direction</div>
+          <div style={{ fontSize: 36, fontWeight: 700, color: TEXT, fontFamily: SERIF }}>{Math.round(bearing)}°</div>
+          <div style={{ fontSize: 14, color: MUTED, marginTop: 4, letterSpacing: "0.06em", textTransform: "uppercase" }}>
+            {direction} — from North
+          </div>
+          <div style={{ marginTop: 10, fontSize: 11, color: MUTED, letterSpacing: "0.05em" }}>
+            {deviceHeading !== null
+              ? `🧭 Live compass active · facing ${Math.round(deviceHeading)}°`
+              : "Point your phone towards the compass needle to face the Qibla"}
+          </div>
         </Card>
       )}
     </div>
