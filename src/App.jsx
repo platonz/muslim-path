@@ -747,13 +747,12 @@ const TOOLS_ITEMS = [
   { id: "dates",       label: "Dates",        icon: "🔄" },
 ];
 
-function Nav({ page, setPage, onSettings, hasLocation, onSearch, authUser, onAuthClick, onSignOut, navHidden, setNavHidden, menuOpen, setMenuOpen }) {
+function Nav({ page, setPage, onSettings, hasLocation, onSearch, authUser, onAuthClick, onSignOut }) {
+  const [menuOpen, setMenuOpen] = useState(false);
   const [toolsOpen, setToolsOpen] = useState(false);
   const [mobileToolsOpen, setMobileToolsOpen] = useState(false);
   const [hovered, setHovered] = useState(null);
   const toolsRef = useRef(null);
-  const menuRef = useRef(null);
-  const lastScrollY = useRef(0);
   const toolsActive = TOOLS_ITEMS.some(t => t.id === page);
 
   // Close tools dropdown on outside click
@@ -763,149 +762,109 @@ function Nav({ page, setPage, onSettings, hasLocation, onSearch, authUser, onAut
     return () => document.removeEventListener("mousedown", handle);
   }, []);
 
-  // Close mobile menu on outside click / tap
-  useEffect(() => {
-    if (!menuOpen) return;
-    function handle(e) {
-      if (menuRef.current && !menuRef.current.contains(e.target)) setMenuOpen(false);
-    }
-    document.addEventListener("mousedown", handle);
-    document.addEventListener("touchstart", handle, { passive: true });
-    return () => {
-      document.removeEventListener("mousedown", handle);
-      document.removeEventListener("touchstart", handle);
-    };
-  }, [menuOpen]);
-
-  // Hide nav on scroll-down, show on scroll-up (mobile only)
-  useEffect(() => {
-    function onScroll() {
-      if (window.innerWidth > 900) { setNavHidden(false); return; }
-      const y = window.scrollY;
-      const delta = y - lastScrollY.current;
-      if (delta > 6 && y > 80) { setNavHidden(true); setMenuOpen(false); }
-      else if (delta < -4) setNavHidden(false);
-      lastScrollY.current = y;
-    }
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, [setNavHidden]);
-
   return (
-    <nav ref={menuRef} style={{
+    <nav className="nav-bar" style={{
       position: "sticky", top: 0, zIndex: 100,
       background: "#080808",
       borderBottom: `1px solid ${BORDER}`,
       boxShadow: `0 1px 0 ${GOLD}18, 0 4px 40px rgba(0,0,0,0.8)`,
-      padding: "0 16px",
-      transform: navHidden ? "translateY(-100%)" : "translateY(0)",
-      transition: "transform 0.3s ease",
+      padding: "0 32px",
     }}>
-      {/* 3-col grid: [search+nav] [logo center] [settings+auth+hamburger] */}
-      <div style={{ maxWidth: 1300, margin: "0 auto", display: "grid", gridTemplateColumns: "1fr auto 1fr", alignItems: "center", height: 64, minWidth: 0, width: "100%" }}>
-
-        {/* LEFT: Search pill + Desktop nav items */}
-        <div style={{ display: "flex", alignItems: "center", gap: 2, minWidth: 0, overflow: "hidden" }}>
-          <button onClick={onSearch} title="Search" className="nav-search-btn" style={{
-            background: "transparent", border: `1px solid ${BORDER}`,
-            borderRadius: 20, cursor: "pointer", color: MUTED,
-            padding: "0 14px", height: 34, display: "flex", alignItems: "center", gap: 6,
-            fontSize: 12, transition: "all 0.2s", fontFamily: SANS, letterSpacing: "0.04em",
-            flexShrink: 0,
-          }}
-            onMouseEnter={e => { e.currentTarget.style.borderColor = GOLD; e.currentTarget.style.color = GOLD; }}
-            onMouseLeave={e => { e.currentTarget.style.borderColor = BORDER; e.currentTarget.style.color = MUTED; }}
-          >
-            <span style={{ fontSize: 14 }}>🔍</span>
-            <span className="nav-search-label">Search</span>
-          </button>
-
-          {/* Desktop nav */}
-          <div style={{ display: "flex", gap: 0, alignItems: "center" }} className="nav-desktop">
-            {NAV_ITEMS.filter(n => n.id !== "home").map(n => {
-              const isActive = page === n.id;
-              const isHov = hovered === n.id;
-              return (
-                <button key={n.id} onClick={() => setPage(n.id)}
-                  onMouseEnter={() => setHovered(n.id)}
-                  onMouseLeave={() => setHovered(null)}
-                  style={{
-                    background: "transparent", border: "none",
-                    borderBottom: isActive ? `1px solid ${GOLD}` : "1px solid transparent",
-                    cursor: "pointer", padding: "8px 12px", fontSize: 11,
-                    fontWeight: isActive ? 600 : 400,
-                    color: isActive ? GOLD : isHov ? TEXT : MUTED,
-                    transition: "all 0.2s", letterSpacing: "0.07em",
-                    textTransform: "uppercase", fontFamily: SANS,
-                    height: 64, borderRadius: 0,
-                  }}>
-                  {n.label}
-                </button>
-              );
-            })}
-
-            {/* Tools dropdown */}
-            <div ref={toolsRef} style={{ position: "relative", height: 64, display: "flex", alignItems: "center" }}>
-              <button
-                onClick={() => setToolsOpen(o => !o)}
-                onMouseEnter={() => setToolsOpen(true)}
-                style={{
-                  background: "transparent", border: "none",
-                  borderBottom: toolsActive ? `1px solid ${GOLD}` : toolsOpen ? `1px solid ${GOLD}60` : "1px solid transparent",
-                  cursor: "pointer", padding: "8px 12px", fontSize: 11,
-                  fontWeight: toolsActive ? 600 : 400,
-                  color: toolsActive ? GOLD : toolsOpen ? TEXT : MUTED,
-                  transition: "all 0.2s", letterSpacing: "0.07em",
-                  textTransform: "uppercase", fontFamily: SANS,
-                  height: 64, borderRadius: 0, display: "flex", alignItems: "center", gap: 5,
-                }}>
-                🛠 Tools <span style={{ fontSize: 9, opacity: 0.6 }}>▾</span>
-              </button>
-              {toolsOpen && (
-                <div onMouseLeave={() => setToolsOpen(false)} style={{
-                  position: "absolute", top: "100%", left: 0,
-                  background: "#0D0D0D", border: `1px solid ${GOLD}25`,
-                  boxShadow: `0 16px 48px rgba(0,0,0,0.9)`,
-                  minWidth: 180, zIndex: 200,
-                }}>
-                  {TOOLS_ITEMS.map(t => (
-                    <button key={t.id} onClick={() => { setPage(t.id); setToolsOpen(false); }} style={{
-                      display: "flex", alignItems: "center", gap: 10, width: "100%",
-                      padding: "12px 18px", background: page === t.id ? GREEN_L : "none",
-                      border: "none", borderLeft: page === t.id ? `2px solid ${GOLD}` : "2px solid transparent",
-                      cursor: "pointer", fontSize: 12, color: page === t.id ? GOLD : MUTED,
-                      fontWeight: page === t.id ? 600 : 400,
-                      letterSpacing: "0.07em", textTransform: "uppercase", fontFamily: SANS,
-                      transition: "all 0.15s", textAlign: "left",
-                    }}
-                      onMouseEnter={e => { if (page !== t.id) { e.currentTarget.style.background = GREEN_L; e.currentTarget.style.color = TEXT; } }}
-                      onMouseLeave={e => { if (page !== t.id) { e.currentTarget.style.background = "none"; e.currentTarget.style.color = MUTED; } }}
-                    >
-                      <span>{t.icon}</span>{t.label}
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-
-        {/* CENTER: Logo */}
-        <button onClick={() => setPage("home")} style={{ background: "none", border: "none", cursor: "pointer", display: "flex", alignItems: "center", gap: 10, padding: "0 12px" }}>
-          <img src="/logo.png" alt="Muslim's Path" style={{ width: 36, height: 36, objectFit: "contain" }} />
+      <div style={{ maxWidth: 1300, margin: "0 auto", display: "flex", alignItems: "center", justifyContent: "space-between", height: 64 }}>
+        {/* Logo */}
+        <button onClick={() => setPage("home")} style={{ background: "none", border: "none", cursor: "pointer", display: "flex", alignItems: "center", gap: 12 }}>
+          <img src="/logo.png" alt="Muslim's Path" style={{ width: 38, height: 38, objectFit: "contain" }} />
           <div style={{ display: "flex", flexDirection: "column", lineHeight: 1.15 }}>
-            <span style={{ fontWeight: 600, fontSize: 16, color: TEXT, fontFamily: SERIF, letterSpacing: "0.06em", whiteSpace: "nowrap" }}>Muslim's Path</span>
-            <span style={{ fontSize: 8, color: GOLD, letterSpacing: "0.16em", textTransform: "uppercase", fontFamily: SANS, whiteSpace: "nowrap" }} className="nav-tagline">Your Islamic Companion</span>
+            <span style={{ fontWeight: 600, fontSize: 17, color: TEXT, fontFamily: SERIF, letterSpacing: "0.06em" }}>Muslim's Path</span>
+            <span className="nav-logo-sub" style={{ fontSize: 9, color: GOLD, letterSpacing: "0.18em", textTransform: "uppercase", fontFamily: SANS }}>Your Islamic Companion</span>
           </div>
         </button>
 
-        {/* RIGHT: Settings + Auth + Hamburger */}
-        <div style={{ display: "flex", justifyContent: "flex-end", alignItems: "center", gap: 6, minWidth: 0, flexShrink: 0 }}>
-          <button onClick={onSettings} title="Settings" className="nav-settings-btn" style={{
+        {/* Desktop nav */}
+        <div style={{ display: "flex", gap: 0, alignItems: "center" }} className="nav-desktop">
+          {NAV_ITEMS.filter(n => n.id !== "home").map(n => {
+            const isActive = page === n.id;
+            const isHov = hovered === n.id;
+            return (
+              <button key={n.id} onClick={() => setPage(n.id)}
+                onMouseEnter={() => setHovered(n.id)}
+                onMouseLeave={() => setHovered(null)}
+                style={{
+                  background: "transparent", border: "none",
+                  borderBottom: isActive ? `1px solid ${GOLD}` : "1px solid transparent",
+                  cursor: "pointer", padding: "8px 14px", fontSize: 12,
+                  fontWeight: isActive ? 600 : 400,
+                  color: isActive ? GOLD : isHov ? TEXT : MUTED,
+                  transition: "all 0.2s", letterSpacing: "0.07em",
+                  textTransform: "uppercase", fontFamily: SANS,
+                  height: 64, borderRadius: 0,
+                }}>
+                {n.label}
+              </button>
+            );
+          })}
+
+          {/* Tools dropdown */}
+          <div ref={toolsRef} style={{ position: "relative", height: 64, display: "flex", alignItems: "center" }}>
+            <button
+              onClick={() => setToolsOpen(o => !o)}
+              onMouseEnter={() => setToolsOpen(true)}
+              style={{
+                background: "transparent", border: "none",
+                borderBottom: toolsActive ? `1px solid ${GOLD}` : toolsOpen ? `1px solid ${GOLD}60` : "1px solid transparent",
+                cursor: "pointer", padding: "8px 14px", fontSize: 12,
+                fontWeight: toolsActive ? 600 : 400,
+                color: toolsActive ? GOLD : toolsOpen ? TEXT : MUTED,
+                transition: "all 0.2s", letterSpacing: "0.07em",
+                textTransform: "uppercase", fontFamily: SANS,
+                height: 64, borderRadius: 0, display: "flex", alignItems: "center", gap: 5,
+              }}>
+              🛠 Tools <span style={{ fontSize: 9, opacity: 0.6 }}>▾</span>
+            </button>
+            {toolsOpen && (
+              <div onMouseLeave={() => setToolsOpen(false)} style={{
+                position: "absolute", top: "100%", left: 0,
+                background: "#0D0D0D", border: `1px solid ${GOLD}25`,
+                boxShadow: `0 16px 48px rgba(0,0,0,0.9)`,
+                minWidth: 180, zIndex: 200,
+              }}>
+                {TOOLS_ITEMS.map(t => (
+                  <button key={t.id} onClick={() => { setPage(t.id); setToolsOpen(false); }} style={{
+                    display: "flex", alignItems: "center", gap: 10, width: "100%",
+                    padding: "12px 18px", background: page === t.id ? GREEN_L : "none",
+                    border: "none", borderLeft: page === t.id ? `2px solid ${GOLD}` : "2px solid transparent",
+                    cursor: "pointer", fontSize: 12, color: page === t.id ? GOLD : MUTED,
+                    fontWeight: page === t.id ? 600 : 400,
+                    letterSpacing: "0.07em", textTransform: "uppercase", fontFamily: SANS,
+                    transition: "all 0.15s", textAlign: "left",
+                  }}
+                    onMouseEnter={e => { if (page !== t.id) { e.currentTarget.style.background = GREEN_L; e.currentTarget.style.color = TEXT; } }}
+                    onMouseLeave={e => { if (page !== t.id) { e.currentTarget.style.background = "none"; e.currentTarget.style.color = MUTED; } }}
+                  >
+                    <span>{t.icon}</span>{t.label}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Search + Settings + mobile hamburger */}
+        <div style={{ display: "flex", alignItems: "center", gap: 10, flexShrink: 0 }}>
+          <button onClick={onSearch} title="Search" style={{
+            background: "transparent", border: `1px solid ${BORDER}`,
+            borderRadius: 2, cursor: "pointer", color: MUTED,
+            width: 36, height: 36, display: "flex", alignItems: "center", justifyContent: "center",
+            fontSize: 15, transition: "all 0.2s",
+          }}
+            onMouseEnter={e => { e.currentTarget.style.borderColor = GOLD; e.currentTarget.style.color = GOLD; }}
+            onMouseLeave={e => { e.currentTarget.style.borderColor = BORDER; e.currentTarget.style.color = MUTED; }}
+          >🔍</button>
+          <button onClick={onSettings} title="Settings" style={{
             background: "transparent",
             border: `1px solid ${hasLocation ? GOLD + "60" : BORDER}`,
-            borderRadius: 20, cursor: "pointer", color: hasLocation ? GOLD : MUTED,
-            width: 34, height: 34, display: "flex", alignItems: "center", justifyContent: "center",
+            borderRadius: 2, cursor: "pointer", color: hasLocation ? GOLD : MUTED,
+            width: 36, height: 36, display: "flex", alignItems: "center", justifyContent: "center",
             fontSize: 14, transition: "all 0.2s", position: "relative",
           }}
             onMouseEnter={e => { e.currentTarget.style.borderColor = GOLD; e.currentTarget.style.color = GOLD; }}
@@ -914,16 +873,16 @@ function Nav({ page, setPage, onSettings, hasLocation, onSearch, authUser, onAut
             ⚙
             {hasLocation && <span style={{ position: "absolute", top: 3, right: 3, width: 6, height: 6, borderRadius: "50%", background: GOLD }} />}
           </button>
-
           {/* Auth button */}
           {authUser ? (
             <div style={{ position: "relative" }} className="nav-auth-wrap">
-              <button title="Account" onClick={e => { e.stopPropagation(); const m = document.getElementById("nav-user-menu"); if (m) m.style.display = m.style.display === "none" ? "block" : "none"; }}
+              <button title="Account" onClick={e => { e.stopPropagation(); document.getElementById("nav-user-menu") && (document.getElementById("nav-user-menu").style.display === "none" ? document.getElementById("nav-user-menu").style.display = "block" : document.getElementById("nav-user-menu").style.display = "none"); }}
                 style={{
                   background: "linear-gradient(135deg,#C9A84C,#A8883E)", border: "none",
                   borderRadius: "50%", width: 32, height: 32, cursor: "pointer",
                   fontSize: 12, fontWeight: 700, color: "#0A0A0A",
-                  display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0,
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  flexShrink: 0,
                 }}>
                 {(authUser.user_metadata?.full_name || authUser.email || "U").charAt(0).toUpperCase()}
               </button>
@@ -941,7 +900,7 @@ function Nav({ page, setPage, onSettings, hasLocation, onSearch, authUser, onAut
                   width: "100%", background: "none", border: "none",
                   padding: "10px 16px", textAlign: "left", cursor: "pointer",
                   fontSize: 11, color: "#6B6358", letterSpacing: "0.07em", textTransform: "uppercase",
-                  fontFamily: SANS,
+                  fontFamily: "'Inter', sans-serif",
                 }}
                   onMouseEnter={e => { e.currentTarget.style.color = "#e74c3c"; }}
                   onMouseLeave={e => { e.currentTarget.style.color = "#6B6358"; }}
@@ -952,28 +911,33 @@ function Nav({ page, setPage, onSettings, hasLocation, onSearch, authUser, onAut
             <button onClick={onAuthClick} style={{
               background: "linear-gradient(135deg,#C9A84C,#A8883E)",
               border: "none", cursor: "pointer",
-              padding: "8px 18px", fontSize: 11, fontWeight: 700, color: "#0A0A0A",
-              letterSpacing: "0.06em", textTransform: "uppercase",
-              fontFamily: SANS, transition: "opacity 0.2s",
-              borderRadius: 20, whiteSpace: "nowrap",
+              padding: "7px 16px", fontSize: 11, fontWeight: 700, color: "#0A0A0A",
+              letterSpacing: "0.08em", textTransform: "uppercase",
+              fontFamily: "'Inter', sans-serif", transition: "opacity 0.2s",
             }}
               onMouseEnter={e => e.currentTarget.style.opacity = "0.85"}
               onMouseLeave={e => e.currentTarget.style.opacity = "1"}
             >Sign In</button>
           )}
-
-          {/* Hamburger — also un-hides nav if scrolled away */}
-          <button onClick={() => { setMenuOpen(o => !o); setNavHidden(false); }} style={{
+          <button onClick={() => setMenuOpen(!menuOpen)} style={{
             display: "none", background: "transparent", border: `1px solid ${BORDER}`,
-            borderRadius: 8, cursor: "pointer", fontSize: 16, color: MUTED,
+            borderRadius: 2, cursor: "pointer", fontSize: 16, color: MUTED,
             width: 36, height: 36, alignItems: "center", justifyContent: "center",
           }} className="nav-mobile">{menuOpen ? "✕" : "☰"}</button>
         </div>
       </div>
 
-      {/* Mobile menu */}
+      {/* Mobile menu — position:fixed so it always overlays content regardless of scroll */}
       {menuOpen && (
-        <div className="nav-mobile-menu" style={{ borderTop: `1px solid ${BORDER}`, padding: "8px 0 16px", display: "flex", flexDirection: "column", background: "#080808" }}>
+        <div className="nav-mobile-menu" style={{
+          position: "fixed", top: 64, left: 0, right: 0, zIndex: 500,
+          borderTop: `1px solid ${BORDER}`,
+          padding: "8px 0 16px",
+          display: "flex", flexDirection: "column",
+          background: "#080808",
+          boxShadow: "0 8px 32px rgba(0,0,0,0.85)",
+          maxHeight: "calc(100vh - 64px)", overflowY: "auto",
+        }}>
           {NAV_ITEMS.map(n => (
             <button key={n.id} onClick={() => { setPage(n.id); setMenuOpen(false); }} style={{
               background: "none", border: "none", cursor: "pointer", textAlign: "left",
@@ -1064,23 +1028,16 @@ function Nav({ page, setPage, onSettings, hasLocation, onSearch, authUser, onAut
           .nav-desktop { display: none !important; }
           .nav-mobile { display: flex !important; }
         }
+        @media (max-width: 560px) {
+          .nav-bar { padding: 0 14px !important; }
+          .nav-logo-sub { display: none !important; }
+        }
         .home-prayer-strip { display: none !important; }
         @keyframes navSlideDown { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
         .nav-mobile-menu { animation: navSlideDown 0.22s cubic-bezier(0.22,1,0.36,1); }
         #nav-user-menu { animation: navSlideDown 0.18s cubic-bezier(0.22,1,0.36,1); }
         @media (max-width: 760px) {
           .home-prayer-strip { display: flex !important; }
-        }
-        @media (max-width: 400px) {
-          .nav-tagline { display: none !important; }
-        }
-        @media (max-width: 900px) {
-          .nav-search-label { display: none !important; }
-          .nav-search-btn { padding: 0 10px !important; }
-        }
-        .nav-float-hamburger { display: none; }
-        @media (max-width: 900px) {
-          .nav-float-hamburger { display: flex; }
         }
       `}</style>
     </nav>
@@ -1606,56 +1563,43 @@ function Qibla({ savedLocation }) {
         <Card style={{ textAlign: "center" }}>
           {locName && <p style={{ margin: "0 0 20px", color: MUTED, fontSize: 13 }}>📍 {locName}</p>}
 
-          {/* Compass — responsive, clean rotation via wrapper div */}
-          <div style={{ position: "relative", width: "min(220px, 72vw)", height: "min(220px, 72vw)", margin: "0 auto 24px" }}>
+          {/* Compass */}
+          <div style={{ position: "relative", width: 220, height: 220, margin: "0 auto 24px" }}>
             {/* Outer ring */}
             <div style={{
               position: "absolute", inset: 0, borderRadius: "50%",
               border: `2px solid ${BORDER}`, background: SURFACE,
             }}>
-              {/* Cardinal labels — N fixed red, others muted */}
-              {[{l:"N",r:0,pct:8},{l:"E",r:90,pct:42},{l:"S",r:180,pct:76},{l:"W",r:270,pct:42}].map(({l,r,pct}) => {
-                const rad = (r - 90) * Math.PI / 180;
-                const cx = 50 + 42 * Math.cos(rad);
-                const cy = 50 + 42 * Math.sin(rad);
-                return (
-                  <div key={l} style={{
-                    position: "absolute",
-                    left: cx + "%", top: cy + "%",
-                    transform: "translate(-50%,-50%)",
-                    fontSize: 11, fontWeight: 700,
-                    color: l === "N" ? "#EF4444" : MUTED,
-                    letterSpacing: "0.06em", userSelect: "none",
-                  }}>{l}</div>
-                );
-              })}
-
-              {/* Single rotating wrapper for needle + icon */}
+              {/* Cardinal directions */}
+              {[{l:"N",r:0},{l:"E",r:90},{l:"S",r:180},{l:"W",r:270}].map(({l,r}) => (
+                <div key={l} style={{
+                  position: "absolute", top: "50%", left: "50%",
+                  transform: `rotate(${r}deg) translateY(-88px) rotate(-${r}deg) translate(-50%,-50%)`,
+                  fontSize: 12, fontWeight: 700, color: l==="N" ? "#EF4444" : MUTED, letterSpacing: "0.06em"
+                }}>{l}</div>
+              ))}
+              {/* Needle pointing to Qibla */}
               <div style={{
-                position: "absolute", inset: 0, borderRadius: "50%",
-                transform: `rotate(${bearing}deg)`,
-                transition: "transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1)",
-              }}>
-                {/* Green needle pointing up toward Qibla */}
-                <div style={{
-                  position: "absolute", left: "50%", top: "50%",
-                  width: 4, height: "36%",
-                  transform: "translate(-50%, -100%)",
-                  background: GREEN, borderRadius: "3px 3px 0 0",
-                }} />
-                {/* Ka'aba at needle tip */}
-                <div style={{
-                  position: "absolute", left: "50%", top: "12%",
-                  transform: "translateX(-50%)",
-                  fontSize: 16, lineHeight: 1,
-                }}>🕋</div>
-              </div>
-
-              {/* Center dot (on top) */}
+                position: "absolute", top: "50%", left: "50%",
+                width: 4, height: 80,
+                transform: `translate(-50%, -100%) rotate(${bearing}deg)`,
+                transformOrigin: "bottom center",
+                background: GREEN, borderRadius: 4,
+                transition: "transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1)"
+              }} />
+              {/* Ka'aba icon at needle tip */}
+              <div style={{
+                position: "absolute", top: "50%", left: "50%",
+                width: 20, height: 20,
+                transform: `translate(-50%, -50%) rotate(${bearing}deg) translateY(-82px) rotate(-${bearing}deg)`,
+                fontSize: 16, lineHeight: 1, marginLeft: -2,
+                transition: "transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1)"
+              }}>🕋</div>
+              {/* Center dot */}
               <div style={{
                 position: "absolute", top: "50%", left: "50%",
                 width: 10, height: 10, borderRadius: "50%",
-                background: GREEN, transform: "translate(-50%,-50%)", zIndex: 2,
+                background: GREEN, transform: "translate(-50%,-50%)"
               }} />
             </div>
           </div>
@@ -2960,10 +2904,6 @@ export default function App() {
     try { localStorage.setItem("mp-pwa-dismissed", "1"); } catch {}
   }
 
-  // ── Nav state (scroll-hide + mobile menu) ─────────────────────
-  const [navHidden, setNavHidden] = useState(false);
-  const [menuOpen, setMenuOpen] = useState(false);
-
   // ── Auth state ─────────────────────────────────────────────────
   const [authSession, setAuthSession] = useState(() => loadSession());
   const [showAuth, setShowAuth] = useState(false);
@@ -3143,49 +3083,24 @@ export default function App() {
     return () => document.removeEventListener("keydown", onKey);
   }, []);
 
-  const pageHistory = useRef(["home"]);
-
   function navigate(p) {
-    if (p !== page) pageHistory.current.push(p);
     setPage(p);
     window.location.hash = p === "home" ? "" : p;
   }
 
-  function goBack() {
-    if (pageHistory.current.length > 1) pageHistory.current.pop();
-    const prev = pageHistory.current[pageHistory.current.length - 1] || "home";
-    setPage(prev);
-    window.location.hash = prev === "home" ? "" : prev;
-  }
-
-  // Browser back/forward button support
-  useEffect(() => {
-    function onHashChange() {
-      const hash = window.location.hash.replace("#", "");
-      const p = VALID_PAGES.includes(hash) ? hash : "home";
-      setPage(p);
-    }
-    window.addEventListener("hashchange", onHashChange);
-    return () => window.removeEventListener("hashchange", onHashChange);
-  }, []);
-
   const audioProps = { lectures, current, playing, play: playLecture, skip: skipLecture, stop: stopAudio, seek: seekAudio, progress, duration, fmt: fmtTime, audioRef };
 
   return (
-    <div style={{ minHeight: "100vh", background: BG, fontFamily: SANS, color: TEXT, paddingBottom: current ? 68 : 0, overflowX: "hidden", maxWidth: "100vw" }}>
+    <div style={{ minHeight: "100vh", background: BG, fontFamily: SANS, color: TEXT, paddingBottom: current ? 68 : 0 }}>
       <style>{`
         h1,h2,h3 { font-family: ${SERIF}; }
         * { box-sizing: border-box; }
-        html, body { overflow-x: hidden; max-width: 100%; }
         ::selection { background: ${GOLD}33; color: ${TEXT}; }
         ::-webkit-scrollbar { width: 5px; background: ${BG}; }
         ::-webkit-scrollbar-thumb { background: ${BORDER}; border-radius: 0; }
         input::placeholder, textarea::placeholder { color: ${MUTED}; opacity: 0.6; }
         option { background: #141414; color: ${TEXT}; }
         body { background: ${BG}; }
-
-        .mobile-back-btn { display: none !important; }
-        @media (max-width: 900px) { .mobile-back-btn { display: flex !important; } }
 
         /* Inheritance responsive layouts */
         .inherit-top-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
@@ -3202,23 +3117,7 @@ export default function App() {
         }
       `}</style>
       <audio ref={audioRef} onTimeUpdate={onTimeUpdate} onEnded={() => skipLecture(1)} onLoadedMetadata={() => setDuration(audioRef.current?.duration || 0)} />
-      <Nav page={page} setPage={navigate} onSettings={() => setShowSettings(true)} hasLocation={!!savedLocation} onSearch={() => setShowSearch(true)} authUser={authUser} onAuthClick={() => setShowAuth(true)} onSignOut={handleSignOut} navHidden={navHidden} setNavHidden={setNavHidden} menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
-
-      {/* Floating hamburger — rendered at App level so position:fixed is never inside a transformed ancestor */}
-      {navHidden && (
-        <button
-          onClick={() => { setNavHidden(false); setMenuOpen(true); }}
-          style={{
-            position: "fixed", top: 12, right: 12, zIndex: 600,
-            background: "#111109", border: `1px solid ${GOLD}60`,
-            borderRadius: 10, cursor: "pointer",
-            width: 44, height: 44,
-            display: "flex", alignItems: "center", justifyContent: "center",
-            color: GOLD, fontSize: 20,
-            boxShadow: `0 4px 24px rgba(0,0,0,0.9), 0 0 0 1px ${GOLD}20`,
-          }}
-        >☰</button>
-      )}
+      <Nav page={page} setPage={navigate} onSettings={() => setShowSettings(true)} hasLocation={!!savedLocation} onSearch={() => setShowSearch(true)} authUser={authUser} onAuthClick={() => setShowAuth(true)} onSignOut={handleSignOut} />
       <main>
         {page === "home" && <Home quote={quote} setPage={navigate} savedLocation={savedLocation} />}
         {page === "prayer" && <PrayerTimes savedLocation={savedLocation} />}
@@ -3252,22 +3151,6 @@ export default function App() {
         />
       )}
       <FloatingPlayer {...audioProps} navigate={navigate} />
-
-      {/* Mobile back button */}
-      {page !== "home" && (
-        <button
-          className="mobile-back-btn"
-          onClick={goBack}
-          style={{
-            position: "fixed", bottom: current ? 80 : 24, left: 16, zIndex: 350,
-            background: "#111", border: `1px solid ${BORDER}`,
-            borderRadius: "50%", width: 44, height: 44,
-            display: "none", alignItems: "center", justifyContent: "center",
-            color: TEXT, fontSize: 20, cursor: "pointer",
-            boxShadow: "0 4px 20px rgba(0,0,0,0.7)",
-          }}
-        >←</button>
-      )}
 
       {/* PWA Install Banner */}
       {showInstall && (
@@ -3519,8 +3402,6 @@ function DuaPage({ favs = new Set(), onFav = () => {} }) {
         {filtered.map((dua, i) => {
           const id = `${dua.cat}-${i}`;
           const isOpen = open === id;
-          const favId = id;
-          const isFav = favs.has(favId);
           return (
             <div key={id} style={{ border: `1px solid ${isOpen ? GOLD+"40" : BORDER}`, background: isOpen ? "#0E0C08" : SURFACE, transition: "all 0.2s" }}>
               <button onClick={() => setOpen(isOpen ? null : id)} style={{
@@ -4803,14 +4684,6 @@ function AdminPage({ authSession }) {
 // ─── AUDIO / LECTURES ─────────────────────────────────────────────
 function AudioPage({ lectures, current, playing, play, skip, seek, progress, duration, fmt, audioRef }) {
   const pct = duration ? (progress / duration) * 100 : 0;
-  const activeItemRef = useRef(null);
-
-  // Auto-scroll to playing lecture
-  useEffect(() => {
-    if (activeItemRef.current) {
-      activeItemRef.current.scrollIntoView({ behavior: "smooth", block: "nearest" });
-    }
-  }, [current?.id]);
 
   return (
     <div style={{ maxWidth: 720, margin: "0 auto", padding: "40px 24px" }}>
@@ -4866,7 +4739,7 @@ function AudioPage({ lectures, current, playing, play, skip, seek, progress, dur
         {lectures.map((l, i) => {
           const isActive = current?.id === l.id;
           return (
-            <div key={l.id} ref={isActive ? activeItemRef : null} onClick={() => play(l)} style={{
+            <div key={l.id} onClick={() => play(l)} style={{
               display: "flex", alignItems: "center", gap: 16,
               padding: "14px 20px", cursor: "pointer",
               background: isActive ? GREEN_L : "transparent",
@@ -4904,3 +4777,4 @@ function AudioPage({ lectures, current, playing, play, skip, seek, progress, dur
     </div>
   );
 }
+git push origin main
