@@ -752,7 +752,10 @@ function Nav({ page, setPage, onSettings, hasLocation, onSearch, authUser, onAut
   const [toolsOpen, setToolsOpen] = useState(false);
   const [mobileToolsOpen, setMobileToolsOpen] = useState(false);
   const [hovered, setHovered] = useState(null);
+  const [navHidden, setNavHidden] = useState(false);
   const toolsRef = useRef(null);
+  const menuRef = useRef(null);
+  const lastScrollY = useRef(0);
   const toolsActive = TOOLS_ITEMS.some(t => t.id === page);
 
   // Close tools dropdown on outside click
@@ -762,13 +765,42 @@ function Nav({ page, setPage, onSettings, hasLocation, onSearch, authUser, onAut
     return () => document.removeEventListener("mousedown", handle);
   }, []);
 
+  // Close mobile menu on outside click / tap
+  useEffect(() => {
+    if (!menuOpen) return;
+    function handle(e) {
+      if (menuRef.current && !menuRef.current.contains(e.target)) setMenuOpen(false);
+    }
+    document.addEventListener("mousedown", handle);
+    document.addEventListener("touchstart", handle, { passive: true });
+    return () => {
+      document.removeEventListener("mousedown", handle);
+      document.removeEventListener("touchstart", handle);
+    };
+  }, [menuOpen]);
+
+  // Hide nav on scroll-down, show on scroll-up (mobile)
+  useEffect(() => {
+    function onScroll() {
+      const y = window.scrollY;
+      const delta = y - lastScrollY.current;
+      if (delta > 6 && y > 80) { setNavHidden(true); setMenuOpen(false); }
+      else if (delta < -4) setNavHidden(false);
+      lastScrollY.current = y;
+    }
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   return (
-    <nav style={{
+    <nav ref={menuRef} style={{
       position: "sticky", top: 0, zIndex: 100,
       background: "#080808",
       borderBottom: `1px solid ${BORDER}`,
       boxShadow: `0 1px 0 ${GOLD}18, 0 4px 40px rgba(0,0,0,0.8)`,
       padding: "0 32px",
+      transform: navHidden ? "translateY(-100%)" : "translateY(0)",
+      transition: "transform 0.3s ease",
     }}>
       <div style={{ maxWidth: 1300, margin: "0 auto", display: "flex", alignItems: "center", justifyContent: "space-between", height: 64 }}>
         {/* Logo */}
@@ -776,7 +808,7 @@ function Nav({ page, setPage, onSettings, hasLocation, onSearch, authUser, onAut
           <img src="/logo.png" alt="Muslim's Path" style={{ width: 38, height: 38, objectFit: "contain" }} />
           <div style={{ display: "flex", flexDirection: "column", lineHeight: 1.15 }}>
             <span style={{ fontWeight: 600, fontSize: 17, color: TEXT, fontFamily: SERIF, letterSpacing: "0.06em" }}>Muslim's Path</span>
-            <span style={{ fontSize: 9, color: GOLD, letterSpacing: "0.18em", textTransform: "uppercase", fontFamily: SANS }}>Your Islamic Companion</span>
+            <span style={{ fontSize: 9, color: GOLD, letterSpacing: "0.18em", textTransform: "uppercase", fontFamily: SANS }} className="nav-tagline">Your Islamic Companion</span>
           </div>
         </button>
 
@@ -851,7 +883,7 @@ function Nav({ page, setPage, onSettings, hasLocation, onSearch, authUser, onAut
 
         {/* Search + Settings + mobile hamburger */}
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-          <button onClick={onSearch} title="Search" style={{
+          <button onClick={onSearch} title="Search" className="nav-search-btn" style={{
             background: "transparent", border: `1px solid ${BORDER}`,
             borderRadius: 2, cursor: "pointer", color: MUTED,
             width: 36, height: 36, display: "flex", alignItems: "center", justifyContent: "center",
@@ -860,7 +892,7 @@ function Nav({ page, setPage, onSettings, hasLocation, onSearch, authUser, onAut
             onMouseEnter={e => { e.currentTarget.style.borderColor = GOLD; e.currentTarget.style.color = GOLD; }}
             onMouseLeave={e => { e.currentTarget.style.borderColor = BORDER; e.currentTarget.style.color = MUTED; }}
           >🔍</button>
-          <button onClick={onSettings} title="Settings" style={{
+          <button onClick={onSettings} title="Settings" className="nav-settings-btn" style={{
             background: "transparent",
             border: `1px solid ${hasLocation ? GOLD + "60" : BORDER}`,
             borderRadius: 2, cursor: "pointer", color: hasLocation ? GOLD : MUTED,
@@ -1026,6 +1058,11 @@ function Nav({ page, setPage, onSettings, hasLocation, onSearch, authUser, onAut
         #nav-user-menu { animation: navSlideDown 0.18s cubic-bezier(0.22,1,0.36,1); }
         @media (max-width: 760px) {
           .home-prayer-strip { display: flex !important; }
+        }
+        @media (max-width: 400px) {
+          .nav-tagline { display: none !important; }
+          .nav-search-btn { width: 30px !important; height: 30px !important; font-size: 13px !important; }
+          .nav-settings-btn { width: 30px !important; height: 30px !important; font-size: 12px !important; }
         }
       `}</style>
     </nav>
@@ -1551,43 +1588,56 @@ function Qibla({ savedLocation }) {
         <Card style={{ textAlign: "center" }}>
           {locName && <p style={{ margin: "0 0 20px", color: MUTED, fontSize: 13 }}>📍 {locName}</p>}
 
-          {/* Compass */}
-          <div style={{ position: "relative", width: 220, height: 220, margin: "0 auto 24px" }}>
+          {/* Compass — responsive, clean rotation via wrapper div */}
+          <div style={{ position: "relative", width: "min(220px, 72vw)", height: "min(220px, 72vw)", margin: "0 auto 24px" }}>
             {/* Outer ring */}
             <div style={{
               position: "absolute", inset: 0, borderRadius: "50%",
               border: `2px solid ${BORDER}`, background: SURFACE,
             }}>
-              {/* Cardinal directions */}
-              {[{l:"N",r:0},{l:"E",r:90},{l:"S",r:180},{l:"W",r:270}].map(({l,r}) => (
-                <div key={l} style={{
-                  position: "absolute", top: "50%", left: "50%",
-                  transform: `rotate(${r}deg) translateY(-88px) rotate(-${r}deg) translate(-50%,-50%)`,
-                  fontSize: 12, fontWeight: 700, color: l==="N" ? "#EF4444" : MUTED, letterSpacing: "0.06em"
-                }}>{l}</div>
-              ))}
-              {/* Needle pointing to Qibla */}
+              {/* Cardinal labels — N fixed red, others muted */}
+              {[{l:"N",r:0,pct:8},{l:"E",r:90,pct:42},{l:"S",r:180,pct:76},{l:"W",r:270,pct:42}].map(({l,r,pct}) => {
+                const rad = (r - 90) * Math.PI / 180;
+                const cx = 50 + 42 * Math.cos(rad);
+                const cy = 50 + 42 * Math.sin(rad);
+                return (
+                  <div key={l} style={{
+                    position: "absolute",
+                    left: cx + "%", top: cy + "%",
+                    transform: "translate(-50%,-50%)",
+                    fontSize: 11, fontWeight: 700,
+                    color: l === "N" ? "#EF4444" : MUTED,
+                    letterSpacing: "0.06em", userSelect: "none",
+                  }}>{l}</div>
+                );
+              })}
+
+              {/* Single rotating wrapper for needle + icon */}
               <div style={{
-                position: "absolute", top: "50%", left: "50%",
-                width: 4, height: 80,
-                transform: `translate(-50%, -100%) rotate(${bearing}deg)`,
-                transformOrigin: "bottom center",
-                background: GREEN, borderRadius: 4,
-                transition: "transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1)"
-              }} />
-              {/* Ka'aba icon at needle tip */}
-              <div style={{
-                position: "absolute", top: "50%", left: "50%",
-                width: 20, height: 20,
-                transform: `translate(-50%, -50%) rotate(${bearing}deg) translateY(-82px) rotate(-${bearing}deg)`,
-                fontSize: 16, lineHeight: 1, marginLeft: -2,
-                transition: "transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1)"
-              }}>🕋</div>
-              {/* Center dot */}
+                position: "absolute", inset: 0, borderRadius: "50%",
+                transform: `rotate(${bearing}deg)`,
+                transition: "transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1)",
+              }}>
+                {/* Green needle pointing up toward Qibla */}
+                <div style={{
+                  position: "absolute", left: "50%", top: "50%",
+                  width: 4, height: "36%",
+                  transform: "translate(-50%, -100%)",
+                  background: GREEN, borderRadius: "3px 3px 0 0",
+                }} />
+                {/* Ka'aba at needle tip */}
+                <div style={{
+                  position: "absolute", left: "50%", top: "12%",
+                  transform: "translateX(-50%)",
+                  fontSize: 16, lineHeight: 1,
+                }}>🕋</div>
+              </div>
+
+              {/* Center dot (on top) */}
               <div style={{
                 position: "absolute", top: "50%", left: "50%",
                 width: 10, height: 10, borderRadius: "50%",
-                background: GREEN, transform: "translate(-50%,-50%)"
+                background: GREEN, transform: "translate(-50%,-50%)", zIndex: 2,
               }} />
             </div>
           </div>
@@ -3076,6 +3126,17 @@ export default function App() {
     window.location.hash = p === "home" ? "" : p;
   }
 
+  // Browser back/forward button support
+  useEffect(() => {
+    function onHashChange() {
+      const hash = window.location.hash.replace("#", "");
+      const p = VALID_PAGES.includes(hash) ? hash : "home";
+      setPage(p);
+    }
+    window.addEventListener("hashchange", onHashChange);
+    return () => window.removeEventListener("hashchange", onHashChange);
+  }, []);
+
   const audioProps = { lectures, current, playing, play: playLecture, skip: skipLecture, stop: stopAudio, seek: seekAudio, progress, duration, fmt: fmtTime, audioRef };
 
   return (
@@ -3390,6 +3451,8 @@ function DuaPage({ favs = new Set(), onFav = () => {} }) {
         {filtered.map((dua, i) => {
           const id = `${dua.cat}-${i}`;
           const isOpen = open === id;
+          const favId = id;
+          const isFav = favs.has(favId);
           return (
             <div key={id} style={{ border: `1px solid ${isOpen ? GOLD+"40" : BORDER}`, background: isOpen ? "#0E0C08" : SURFACE, transition: "all 0.2s" }}>
               <button onClick={() => setOpen(isOpen ? null : id)} style={{
