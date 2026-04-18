@@ -690,6 +690,9 @@ const SUPA_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFz
 
 // Cloudflare Worker for PDF uploads → R2
 const UPLOAD_WORKER_URL = ""; // e.g. "https://muslims-path-upload.yourname.workers.dev"
+
+// Emails allowed to access /admin — add yours here
+const ADMIN_EMAILS = ["platoni@live.com"];
 const UPLOAD_WORKER_KEY = ""; // the ADMIN_KEY secret you set in the Worker
 
 async function supaFetch(table, opts = "") {
@@ -3088,7 +3091,7 @@ export default function App() {
         {page === "quran"   && <QuranPage />}
         {page === "dua"     && <DuaPage favs={duaFavs} onFav={toggleDuaFav} />}
         {page === "asma"    && <AsmaPage />}
-        {page === "admin"   && <AdminPage />}
+        {page === "admin"   && <AdminPage authSession={authSession} />}
       </main>
       {showSettings && (
         <SettingsModal
@@ -4053,8 +4056,13 @@ async function supaAdmin(method, table, body, token, filter = "") {
   return text ? JSON.parse(text) : null;
 }
 
-function AdminPage() {
-  const [token, setToken]       = useState(null);
+function AdminPage({ authSession }) {
+  // Use existing auth session token if user is already signed in as admin
+  const sessionToken = authSession?.access_token || null;
+  const sessionEmail = authSession?.user?.email || "";
+  const isAdminEmail = ADMIN_EMAILS.includes(sessionEmail);
+
+  const [token, setToken]       = useState(() => (sessionToken && isAdminEmail) ? sessionToken : null);
   const [email, setEmail]       = useState("");
   const [pass, setPass]         = useState("");
   const [loginErr, setLoginErr] = useState("");
@@ -4265,33 +4273,48 @@ function AdminPage() {
   });
 
   // ── Login screen ───────────────────────────────────────────────
-  if (!token) return (
-    <div style={{ minHeight: "60vh", display: "flex", alignItems: "center", justifyContent: "center", padding: 24 }}>
-      <div style={{ width: "100%", maxWidth: 380, background: SURFACE, border: `1px solid ${BORDER}`, padding: "40px 36px" }}>
-        <div style={{ textAlign: "center", marginBottom: 32 }}>
-          <img src="/logo.png" alt="" style={{ width: 52, height: 52, objectFit: "contain", marginBottom: 16 }} />
-          <div style={{ fontFamily: SERIF, fontSize: 22, color: TEXT, letterSpacing: "0.04em" }}>Admin Panel</div>
-          <div style={{ fontSize: 12, color: MUTED, marginTop: 4 }}>Muslim's Path</div>
-        </div>
-        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-          <input style={inp} type="email" placeholder="Email" value={email}
-            onChange={e => setEmail(e.target.value)}
-            onFocus={e => e.target.style.borderColor = GOLD}
-            onBlur={e => e.target.style.borderColor = BORDER}
-            onKeyDown={e => e.key === "Enter" && login()} />
-          <input style={inp} type="password" placeholder="Password" value={pass}
-            onChange={e => setPass(e.target.value)}
-            onFocus={e => e.target.style.borderColor = GOLD}
-            onBlur={e => e.target.style.borderColor = BORDER}
-            onKeyDown={e => e.key === "Enter" && login()} />
-          {loginErr && <div style={{ fontSize: 12, color: "#e74c3c", textAlign: "center" }}>{loginErr}</div>}
-          <button onClick={login} disabled={logging} style={{ ...btn(), marginTop: 8, opacity: logging ? 0.6 : 1 }}>
-            {logging ? "Signing in…" : "Sign In"}
-          </button>
+  if (!token) {
+    // User is signed in but not an admin
+    if (sessionToken && !isAdminEmail) return (
+      <div style={{ minHeight: "60vh", display: "flex", alignItems: "center", justifyContent: "center", padding: 24 }}>
+        <div style={{ textAlign: "center", maxWidth: 340 }}>
+          <div style={{ fontSize: 32, marginBottom: 16 }}>&#x1F512;</div>
+          <div style={{ fontFamily: SERIF, fontSize: 20, color: TEXT, marginBottom: 8 }}>Access Restricted</div>
+          <div style={{ fontSize: 13, color: MUTED, lineHeight: 1.7 }}>
+            Your account ({sessionEmail}) does not have admin access.
+          </div>
         </div>
       </div>
-    </div>
-  );
+    );
+
+    return (
+      <div style={{ minHeight: "60vh", display: "flex", alignItems: "center", justifyContent: "center", padding: 24 }}>
+        <div style={{ width: "100%", maxWidth: 380, background: SURFACE, border: `1px solid ${BORDER}`, padding: "40px 36px" }}>
+          <div style={{ textAlign: "center", marginBottom: 32 }}>
+            <img src="/logo.png" alt="" style={{ width: 52, height: 52, objectFit: "contain", marginBottom: 16 }} />
+            <div style={{ fontFamily: SERIF, fontSize: 22, color: TEXT, letterSpacing: "0.04em" }}>Admin Panel</div>
+            <div style={{ fontSize: 12, color: MUTED, marginTop: 4 }}>Muslim’s Path</div>
+          </div>
+          <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+            <input style={inp} type="email" placeholder="Admin Email" value={email}
+              onChange={e => setEmail(e.target.value)}
+              onFocus={e => e.target.style.borderColor = GOLD}
+              onBlur={e => e.target.style.borderColor = BORDER}
+              onKeyDown={e => e.key === "Enter" && login()} />
+            <input style={inp} type="password" placeholder="Password" value={pass}
+              onChange={e => setPass(e.target.value)}
+              onFocus={e => e.target.style.borderColor = GOLD}
+              onBlur={e => e.target.style.borderColor = BORDER}
+              onKeyDown={e => e.key === "Enter" && login()} />
+            {loginErr && <div style={{ fontSize: 12, color: "#e74c3c", textAlign: "center" }}>{loginErr}</div>}
+            <button onClick={login} disabled={logging} style={{ ...btn(), marginTop: 8, opacity: logging ? 0.6 : 1 }}>
+              {logging ? "Signing in…" : "Sign In"}
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   // ── Dashboard ──────────────────────────────────────────────────
   return (
@@ -4350,9 +4373,10 @@ function AdminPage() {
             </div>
 
             {/* PDF Upload */}
-            <div style={{ marginTop: 12, border: `1px dashed ${BORDER}`, borderRadius: 2, padding: "14px 16px" }}>
+            <div style={{ marginTop: 12, border: `1px dashed ${UPLOAD_WORKER_URL ? BORDER : GOLD+"30"}`, borderRadius: 2, padding: "14px 16px" }}>
               <div style={{ fontSize: 11, color: MUTED, marginBottom: 8, letterSpacing: "0.06em" }}>
                 UPLOAD PDF — auto-fills the URL above
+                {!UPLOAD_WORKER_URL && <span style={{ color: "#e67e22", marginLeft: 8 }}>⚠ Set UPLOAD_WORKER_URL in App.jsx to enable uploads</span>}
               </div>
               <input
                 type="file" accept=".pdf"
@@ -4434,9 +4458,10 @@ function AdminPage() {
             </div>
 
             {/* MP3 Upload */}
-            <div style={{ marginTop: 12, border: `1px dashed ${BORDER}`, borderRadius: 2, padding: "14px 16px" }}>
+            <div style={{ marginTop: 12, border: `1px dashed ${UPLOAD_WORKER_URL ? BORDER : GOLD+"30"}`, borderRadius: 2, padding: "14px 16px" }}>
               <div style={{ fontSize: 11, color: MUTED, marginBottom: 8, letterSpacing: "0.06em" }}>
                 UPLOAD MP3 — auto-fills filename, URL and title above
+                {!UPLOAD_WORKER_URL && <span style={{ color: "#e67e22", marginLeft: 8 }}>⚠ Set UPLOAD_WORKER_URL in App.jsx to enable uploads</span>}
               </div>
               <input
                 type="file" accept=".mp3,audio/*"
