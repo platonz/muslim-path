@@ -1080,6 +1080,10 @@ function Nav({ page, setPage, onSettings, hasLocation, onSearch, authUser, onAut
           .nav-search-label { display: none !important; }
           .nav-search-btn { padding: 0 10px !important; }
         }
+        .nav-float-hamburger { display: none; }
+        @media (max-width: 900px) {
+          .nav-float-hamburger { display: flex; }
+        }
       `}</style>
     </nav>
 
@@ -1087,12 +1091,12 @@ function Nav({ page, setPage, onSettings, hasLocation, onSearch, authUser, onAut
     {navHidden && !menuOpen && (
       <button
         onClick={() => { setMenuOpen(true); setNavHidden(false); }}
-        className="nav-mobile"
+        className="nav-float-hamburger"
         style={{
           position: "fixed", top: 10, right: 10, zIndex: 500,
           background: "#0A0A0A", border: `1px solid ${BORDER}`,
           borderRadius: 8, cursor: "pointer",
-          width: 40, height: 40, display: "none",
+          width: 40, height: 40,
           alignItems: "center", justifyContent: "center",
           color: TEXT, fontSize: 18,
           boxShadow: "0 4px 24px rgba(0,0,0,0.8)",
