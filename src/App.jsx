@@ -728,11 +728,13 @@ const LECTURES = [
 const NAV_ITEMS = [
   { id: "home",        label: "Home",         icon: "🏠" },
   { id: "prayer",      label: "Prayer Times", icon: "🕌" },
+  { id: "dua",         label: "Dua",          icon: "🤲" },
   { id: "calendar",    label: "Calendar",     icon: "📆" },
   { id: "library",     label: "Library",      icon: "📚" },
   { id: "audio",       label: "Lectures",     icon: "🎙️" },
   { id: "tasbeeh",     label: "Tasbeeh",      icon: "📿" },
   { id: "quran",       label: "Quran",        icon: "📖" },
+  { id: "asma",        label: "99 Names",     icon: "✨" },
 ];
 
 const TOOLS_ITEMS = [
@@ -1071,7 +1073,7 @@ function Home({ quote, setPage, savedLocation }) {
 
       {/* Grid */}
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(140px, 1fr))", gap: 1, border: `1px solid ${BORDER}` }}>
-        {NAV_ITEMS.filter(n => n.id !== "home").map(n => (
+        {[...NAV_ITEMS.filter(n => n.id !== "home"), ...TOOLS_ITEMS].map(n => (
           <button key={n.id} onClick={() => setPage(n.id)} style={{
             background: SURFACE, border: "none", borderRight: `1px solid ${BORDER}`, borderBottom: `1px solid ${BORDER}`,
             padding: "24px 16px", cursor: "pointer",
@@ -2438,7 +2440,7 @@ function GlobalSearch({ onClose, navigate, lectures }) {
 }
 
 // ─── APP ──────────────────────────────────────────────────────────
-const VALID_PAGES = ["home","prayer","qibla","zakat","inheritance","calendar","dates","library","audio","tasbeeh","quran","admin"];
+const VALID_PAGES = ["home","prayer","qibla","zakat","inheritance","calendar","dates","library","audio","tasbeeh","quran","dua","asma","admin"];
 
 // ─── FLOATING MINI-PLAYER ─────────────────────────────────────────
 function FloatingPlayer({ current, playing, play, skip, stop, progress, duration, fmt, navigate }) {
@@ -2721,6 +2723,8 @@ export default function App() {
         {page === "audio" && <AudioPage {...audioProps} />}
         {page === "tasbeeh" && <TasbeehPage />}
         {page === "quran"   && <QuranPage />}
+        {page === "dua"     && <DuaPage />}
+        {page === "asma"    && <AsmaPage />}
         {page === "admin"   && <AdminPage />}
       </main>
       {showSettings && (
@@ -2740,6 +2744,451 @@ export default function App() {
         />
       )}
       <FloatingPlayer {...audioProps} navigate={navigate} />
+    </div>
+  );
+}
+
+// ─── DUA DATA ─────────────────────────────────────────────────────
+const DUA_CATS = ["All","Morning","Evening","Prayer","Meals","Home","Sleep","Travel","Protection","Distress","General"];
+
+const DUAS = [
+  // ── MORNING ──────────────────────────────────────────────────────
+  { cat:"Morning", title:"Waking Up",
+    ar:"الْحَمْدُ لِلَّهِ الَّذِي أَحْيَانَا بَعْدَ مَا أَمَاتَنَا وَإِلَيْهِ النُّشُورُ",
+    tr:"Alḥamdu lillāhi alladhī aḥyānā baʿda mā amātanā wa-ilayhi al-nushūr",
+    en:"All praise is for Allah who gave us life after having taken it from us, and unto Him is the resurrection.", src:"Bukhari 6312" },
+  { cat:"Morning", title:"Morning Remembrance",
+    ar:"أَصْبَحْنَا وَأَصْبَحَ الْمُلْكُ لِلَّهِ، وَالْحَمْدُ لِلَّهِ، لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ",
+    tr:"Aṣbaḥnā wa-aṣbaḥa al-mulku lillāh, wal-ḥamdu lillāh, lā ilāha illā Allāhu waḥdahu lā sharīka lah, lahu al-mulku wa-lahu al-ḥamdu wa-huwa ʿalā kulli shayʾin qadīr",
+    en:"We have entered the morning and at this very time unto Allah belongs all sovereignty, and all praise is for Allah. None is worthy of worship except Allah, alone, without partner, to Him belongs all sovereignty and praise and He is over all things omnipotent.", src:"Abu Dawud 5076" },
+  { cat:"Morning", title:"Sayyid al-Istighfar",
+    ar:"اللَّهُمَّ أَنْتَ رَبِّي لَا إِلَهَ إِلَّا أَنْتَ، خَلَقْتَنِي وَأَنَا عَبْدُكَ، وَأَنَا عَلَى عَهْدِكَ وَوَعْدِكَ مَا اسْتَطَعْتُ، أَعُوذُ بِكَ مِنْ شَرِّ مَا صَنَعْتُ، أَبُوءُ لَكَ بِنِعْمَتِكَ عَلَيَّ، وَأَبُوءُ بِذَنْبِي فَاغْفِرْ لِي فَإِنَّهُ لَا يَغْفِرُ الذُّنُوبَ إِلَّا أَنْتَ",
+    tr:"Allāhumma anta rabbī lā ilāha illā anta, khalaqtanī wa-anā ʿabduk, wa-anā ʿalā ʿahdika wa-waʿdika mā istaṭaʿtu, aʿūdhu bika min sharri mā ṣanaʿtu, abūʾu laka biniʿmatika ʿalayya, wa-abūʾu bidhanbī faghfir lī fa-innahū lā yaghfiru al-dhunūba illā anta",
+    en:"O Allah, You are my Lord, none is worthy of worship but You. You created me and I am Your servant, abiding by Your covenant and promise as best I can. I seek refuge in You from the evil I have done. I acknowledge Your blessings upon me, and I acknowledge my sin, so forgive me — for none forgives sins except You.", src:"Bukhari 6306",
+    note:"Whoever says this with certainty in the morning and dies that day shall enter Paradise. Same for evening. — Bukhari" },
+  { cat:"Morning", title:"Morning Protection",
+    ar:"بِسْمِ اللَّهِ الَّذِي لَا يَضُرُّ مَعَ اسْمِهِ شَيْءٌ فِي الْأَرْضِ وَلَا فِي السَّمَاءِ وَهُوَ السَّمِيعُ الْعَلِيمُ",
+    tr:"Bismillāhi alladhī lā yaḍurru maʿa ismihi shayʾun fī al-arḍi wa-lā fī al-samāʾ, wa-huwa al-samīʿu al-ʿalīm",
+    en:"In the name of Allah with Whose name nothing on earth or in heaven can cause harm, and He is the All-Hearing, the All-Knowing.", src:"Abu Dawud 5088",
+    note:"Recite 3 times in the morning and evening — nothing will harm you that day." },
+
+  // ── EVENING ──────────────────────────────────────────────────────
+  { cat:"Evening", title:"Evening Remembrance",
+    ar:"أَمْسَيْنَا وَأَمْسَى الْمُلْكُ لِلَّهِ، وَالْحَمْدُ لِلَّهِ، لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ",
+    tr:"Amsaynā wa-amsā al-mulku lillāh, wal-ḥamdu lillāh, lā ilāha illā Allāhu waḥdahu lā sharīka lah, lahu al-mulku wa-lahu al-ḥamdu wa-huwa ʿalā kulli shayʾin qadīr",
+    en:"We have entered the evening and at this very time unto Allah belongs all sovereignty, all praise is for Allah. None is worthy of worship except Allah, alone, without partner, to Him belongs all sovereignty and praise, and He is over all things omnipotent.", src:"Abu Dawud 5076" },
+  { cat:"Evening", title:"Sayyid al-Istighfar (Evening)",
+    ar:"اللَّهُمَّ أَنْتَ رَبِّي لَا إِلَهَ إِلَّا أَنْتَ، خَلَقْتَنِي وَأَنَا عَبْدُكَ، وَأَنَا عَلَى عَهْدِكَ وَوَعْدِكَ مَا اسْتَطَعْتُ، أَعُوذُ بِكَ مِنْ شَرِّ مَا صَنَعْتُ، أَبُوءُ لَكَ بِنِعْمَتِكَ عَلَيَّ، وَأَبُوءُ بِذَنْبِي فَاغْفِرْ لِي فَإِنَّهُ لَا يَغْفِرُ الذُّنُوبَ إِلَّا أَنْتَ",
+    tr:"Allāhumma anta rabbī lā ilāha illā anta, khalaqtanī wa-anā ʿabduk…",
+    en:"O Allah, You are my Lord, none is worthy of worship but You. You created me and I am Your servant, abiding by Your covenant and promise as best I can. I seek refuge in You from the evil I have done. I acknowledge Your blessings upon me, and I acknowledge my sin, so forgive me — for none forgives sins except You.", src:"Bukhari 6306" },
+  { cat:"Evening", title:"Al-Ikhlas, Al-Falaq, An-Nas",
+    ar:"قُلْ هُوَ اللَّهُ أَحَدٌ ۝ قُلْ أَعُوذُ بِرَبِّ الْفَلَقِ ۝ قُلْ أَعُوذُ بِرَبِّ النَّاسِ",
+    tr:"Qul huwa Allāhu Aḥad · Qul aʿūdhu bi-rabbi al-falaq · Qul aʿūdhu bi-rabbi al-nās",
+    en:"Recite Surah Al-Ikhlas, Al-Falaq, and An-Nas — each three times in the morning and evening for complete protection.", src:"Abu Dawud 5082",
+    note:"Sufficient for everything. — Abu Dawud" },
+
+  // ── AFTER PRAYER ────────────────────────────────────────────────
+  { cat:"Prayer", title:"Tasbih, Tahmid, Takbir",
+    ar:"سُبْحَانَ اللَّهِ (٣٣×) ۝ الْحَمْدُ لِلَّهِ (٣٣×) ۝ اللَّهُ أَكْبَرُ (٣٣×)",
+    tr:"Subḥāna Allāh (33×) · Al-ḥamdu lillāh (33×) · Allāhu akbar (33×)",
+    en:"Glory be to Allah (33×) · All praise be to Allah (33×) · Allah is the Greatest (33×). Complete to 100: 'Lā ilāha illā Allāhu waḥdahu lā sharīka lah, lahu al-mulku wa-lahu al-ḥamd, wa-huwa ʿalā kulli shayʾin qadīr.'", src:"Muslim 597" },
+  { cat:"Prayer", title:"Ayatul Kursi",
+    ar:"اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ ۚ لَا تَأْخُذُهُ سِنَةٌ وَلَا نَوْمٌ ۚ لَهُ مَا فِي السَّمَاوَاتِ وَمَا فِي الْأَرْضِ ۗ مَنْ ذَا الَّذِي يَشْفَعُ عِنْدَهُ إِلَّا بِإِذْنِهِ ۚ يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ ۖ وَلَا يُحِيطُونَ بِشَيْءٍ مِنْ عِلْمِهِ إِلَّا بِمَا شَاءَ ۚ وَسِعَ كُرْسِيُّهُ السَّمَاوَاتِ وَالْأَرْضَ ۖ وَلَا يَئُودُهُ حِفْظُهُمَا ۚ وَهُوَ الْعَلِيُّ الْعَظِيمُ",
+    tr:"Allāhu lā ilāha illā huwa al-ḥayyu al-qayyūm, lā taʾkhudhuhū sinatun wa-lā nawm…",
+    en:"Allah — there is no deity except Him, the Ever-Living, the Sustainer of existence. Neither drowsiness nor sleep overtakes Him. To Him belongs whatever is in the heavens and earth… He is the Most High, the Most Great.", src:"Quran 2:255",
+    note:"Whoever recites this after every prayer — nothing prevents him from entering Paradise except death. — Nasai 9928" },
+  { cat:"Prayer", title:"Dua After Prayer",
+    ar:"اللَّهُمَّ أَعِنِّي عَلَى ذِكْرِكَ وَشُكْرِكَ وَحُسْنِ عِبَادَتِكَ",
+    tr:"Allāhumma aʿinnī ʿalā dhikrika wa-shukrika wa-ḥusni ʿibādatik",
+    en:"O Allah, help me to remember You, to give thanks to You, and to worship You in the best manner.", src:"Abu Dawud 1522",
+    note:"The Prophet ﷺ advised Muadh ibn Jabal to say this after every prayer." },
+
+  // ── MEALS ────────────────────────────────────────────────────────
+  { cat:"Meals", title:"Before Eating",
+    ar:"بِسْمِ اللَّهِ",
+    tr:"Bismillāh",
+    en:"In the name of Allah.", src:"Abu Dawud 3767",
+    note:"If you forget, say when you remember: 'Bismillāhi fī awwalihi wa-ākhirih' — In the name of Allah at its beginning and end." },
+  { cat:"Meals", title:"After Eating",
+    ar:"الْحَمْدُ لِلَّهِ الَّذِي أَطْعَمَنِي هَذَا وَرَزَقَنِيهِ مِنْ غَيْرِ حَوْلٍ مِنِّي وَلَا قُوَّةٍ",
+    tr:"Al-ḥamdu lillāhi alladhī aṭʿamanī hādhā wa-razaqanīhi min ghayri ḥawlin minnī wa-lā quwwa",
+    en:"All praise is for Allah who fed me this and provided it for me without any might or power from myself.", src:"Tirmidhi 3458",
+    note:"His past sins will be forgiven. — Tirmidhi" },
+  { cat:"Meals", title:"When Invited to a Meal",
+    ar:"اللَّهُمَّ أَطْعِمْ مَنْ أَطْعَمَنِي وَاسْقِ مَنْ سَقَانِي",
+    tr:"Allāhumma aṭʿim man aṭʿamanī wa-sqī man saqānī",
+    en:"O Allah, feed the one who fed me and give drink to the one who gave me drink.", src:"Muslim 2055" },
+
+  // ── HOME ─────────────────────────────────────────────────────────
+  { cat:"Home", title:"Entering the Home",
+    ar:"بِسْمِ اللَّهِ وَلَجْنَا، وَبِسْمِ اللَّهِ خَرَجْنَا، وَعَلَى اللَّهِ رَبِّنَا تَوَكَّلْنَا",
+    tr:"Bismillāhi walajna, wa-bismillāhi kharajnā, wa-ʿalā Allāhi rabbinā tawakkalnā",
+    en:"In the name of Allah we enter, in the name of Allah we leave, and upon our Lord we rely.", src:"Abu Dawud 5096" },
+  { cat:"Home", title:"Leaving the Home",
+    ar:"بِسْمِ اللَّهِ، تَوَكَّلْتُ عَلَى اللَّهِ، وَلَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللَّهِ",
+    tr:"Bismillāh, tawakkaltu ʿalā Allāh, wa-lā ḥawla wa-lā quwwata illā billāh",
+    en:"In the name of Allah, I place my trust in Allah, and there is no might nor power except with Allah.", src:"Abu Dawud 5095",
+    note:"It will be said: 'You are guided, defended and protected.' The devil will not come near him. — Abu Dawud" },
+
+  // ── SLEEP ─────────────────────────────────────────────────────────
+  { cat:"Sleep", title:"Before Sleeping",
+    ar:"بِاسْمِكَ اللَّهُمَّ أَمُوتُ وَأَحْيَا",
+    tr:"Bismika Allāhumma amūtu wa-aḥyā",
+    en:"In Your name, O Allah, I die and I live.", src:"Bukhari 6324" },
+  { cat:"Sleep", title:"Protection Before Sleep",
+    ar:"اللَّهُمَّ قِنِي عَذَابَكَ يَوْمَ تَبْعَثُ عِبَادَكَ",
+    tr:"Allāhumma qinī ʿadhābaka yawma tabʿathu ʿibādak",
+    en:"O Allah, protect me from Your punishment on the Day You resurrect Your servants.", src:"Abu Dawud 5045",
+    note:"Say 3 times when lying down on your right side." },
+  { cat:"Sleep", title:"Tasbeeh Before Sleep",
+    ar:"سُبْحَانَ اللَّهِ (٣٣×) ۝ الْحَمْدُ لِلَّهِ (٣٣×) ۝ اللَّهُ أَكْبَرُ (٣٤×)",
+    tr:"Subḥāna Allāh (33×) · Al-ḥamdu lillāh (33×) · Allāhu akbar (34×)",
+    en:"Glory be to Allah 33 times, All Praise to Allah 33 times, Allah is Greatest 34 times — before sleeping.", src:"Bukhari 5362",
+    note:"This is better for you than a servant. — Bukhari" },
+
+  // ── TRAVEL ───────────────────────────────────────────────────────
+  { cat:"Travel", title:"Entering a Vehicle",
+    ar:"سُبْحَانَ الَّذِي سَخَّرَ لَنَا هَذَا وَمَا كُنَّا لَهُ مُقْرِنِينَ وَإِنَّا إِلَى رَبِّنَا لَمُنْقَلِبُونَ",
+    tr:"Subḥāna alladhī sakhkhara lanā hādhā wa-mā kunnā lahu muqrinīna wa-innā ilā rabbinā lamunqalibūn",
+    en:"Glory to Him Who subjected this to us, for we could never have done so by our own power. And indeed, to our Lord we shall return.", src:"Quran 43:13–14 · Abu Dawud 2602" },
+  { cat:"Travel", title:"Dua for a Journey",
+    ar:"اللَّهُمَّ إِنَّا نَسْأَلُكَ فِي سَفَرِنَا هَذَا الْبِرَّ وَالتَّقْوَى، وَمِنَ الْعَمَلِ مَا تَرْضَى، اللَّهُمَّ هَوِّنْ عَلَيْنَا سَفَرَنَا هَذَا وَاطْوِ عَنَّا بُعْدَهُ، اللَّهُمَّ أَنْتَ الصَّاحِبُ فِي السَّفَرِ وَالْخَلِيفَةُ فِي الْأَهْلِ",
+    tr:"Allāhumma innā nasʾaluka fī safarinā hādhā al-birra wa-l-taqwā, wa-mina al-ʿamali mā tarḍā, Allāhumma hawwin ʿalaynā safaranā hādhā waṭwi ʿannā buʿdah, Allāhumma anta al-ṣāḥibu fī al-safar wal-khalīfatu fī al-ahl",
+    en:"O Allah, we ask You on this journey for righteousness, piety, and deeds that please You. O Allah, make this journey easy for us and shorten its distance. O Allah, You are the Companion in travel and the Guardian of the family.", src:"Muslim 1342" },
+
+  // ── PROTECTION ───────────────────────────────────────────────────
+  { cat:"Protection", title:"Against the Evil Eye",
+    ar:"أَعُوذُ بِكَلِمَاتِ اللَّهِ التَّامَّاتِ مِنْ كُلِّ شَيْطَانٍ وَهَامَّةٍ وَمِنْ كُلِّ عَيْنٍ لَامَّةٍ",
+    tr:"Aʿūdhu bi-kalimāti Allāhi al-tāmmāti min kulli shayṭānin wa-hāmmatin wa-min kulli ʿaynin lāmmah",
+    en:"I seek refuge in the perfect words of Allah from every devil and harmful creature, and from every evil eye.", src:"Bukhari 3371",
+    note:"The Prophet ﷺ used to seek Allah's protection for al-Hasan and al-Husain with these words." },
+  { cat:"Protection", title:"Morning & Evening Shield",
+    ar:"حَسْبِيَ اللَّهُ لَا إِلَهَ إِلَّا هُوَ عَلَيْهِ تَوَكَّلْتُ وَهُوَ رَبُّ الْعَرْشِ الْعَظِيمِ",
+    tr:"Ḥasbiya Allāhu lā ilāha illā huwa ʿalayhi tawakkaltu wa-huwa rabbu al-ʿarshi al-ʿaẓīm",
+    en:"Sufficient for me is Allah; there is no deity except Him. On Him I have relied, and He is the Lord of the Great Throne.", src:"Quran 9:129 · Abu Dawud 5081",
+    note:"Sufficient for whoever says it 7 times morning and evening. — Abu Dawud" },
+  { cat:"Protection", title:"Seeking Refuge from Four Things",
+    ar:"اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الْهَمِّ وَالْحَزَنِ، وَأَعُوذُ بِكَ مِنَ الْعَجْزِ وَالْكَسَلِ، وَأَعُوذُ بِكَ مِنَ الْجُبْنِ وَالْبُخْلِ، وَأَعُوذُ بِكَ مِنْ غَلَبَةِ الدَّيْنِ وَقَهْرِ الرِّجَالِ",
+    tr:"Allāhumma innī aʿūdhu bika mina al-hammi wal-ḥazani, wa-aʿūdhu bika mina al-ʿajzi wal-kasali, wa-aʿūdhu bika mina al-jubni wal-bukhli, wa-aʿūdhu bika min ghalabati al-dayni wa-qahri al-rijāl",
+    en:"O Allah, I seek refuge in You from worry and grief, from incapacity and laziness, from cowardice and miserliness, and from the burden of debt and the domination of men.", src:"Bukhari 6369" },
+
+  // ── DISTRESS ─────────────────────────────────────────────────────
+  { cat:"Distress", title:"Dua of Prophet Yunus ﷺ",
+    ar:"لَا إِلَهَ إِلَّا أَنْتَ سُبْحَانَكَ إِنِّي كُنْتُ مِنَ الظَّالِمِينَ",
+    tr:"Lā ilāha illā anta subḥānaka innī kuntu mina al-ẓālimīn",
+    en:"There is none worthy of worship except You, glory be to You. Indeed, I have been among the wrongdoers.", src:"Quran 21:87 · Tirmidhi 3505",
+    note:"No Muslim calls upon Allah with these words in any matter except that Allah responds to him. — Tirmidhi" },
+  { cat:"Distress", title:"Dua for Anxiety and Grief",
+    ar:"اللَّهُمَّ إِنِّي عَبْدُكَ وَابْنُ عَبْدِكَ وَابْنُ أَمَتِكَ، نَاصِيَتِي بِيَدِكَ، مَاضٍ فِيَّ حُكْمُكَ، عَدْلٌ فِيَّ قَضَاؤُكَ، أَسْأَلُكَ بِكُلِّ اسْمٍ هُوَ لَكَ... أَنْ تَجْعَلَ الْقُرْآنَ رَبِيعَ قَلْبِي وَنُورَ صَدْرِي وَجِلَاءَ حُزْنِي وَذَهَابَ هَمِّي",
+    tr:"Allāhumma innī ʿabduka wa-bnu ʿabdika wa-bnu amatik, nāṣiyatī bi-yadik… an tajʿala al-Qurʾāna rabīʿa qalbī wa-nūra ṣadrī wa-jalāʾa ḥuznī wa-dhahāba hammī",
+    en:"O Allah, I am Your servant, son of Your servant, son of Your female servant. My forelock is in Your hand… I ask You by every name belonging to You to make the Quran the spring of my heart, the light of my chest, the reliever of my distress, and the remover of my anxiety.", src:"Ahmad 3712",
+    note:"Allah will remove his distress and grief and replace it with joy. — Ahmad" },
+  { cat:"Distress", title:"Dua When Overwhelmed",
+    ar:"حَسْبُنَا اللَّهُ وَنِعْمَ الْوَكِيلُ",
+    tr:"Ḥasbunā Allāhu wa-niʿma al-wakīl",
+    en:"Allah is sufficient for us, and He is the best Disposer of affairs.", src:"Quran 3:173",
+    note:"This was the saying of Ibrahim ﷺ when cast into the fire, and Muhammad ﷺ when told a great army had gathered against him." },
+
+  // ── GENERAL ─────────────────────────────────────────────────────
+  { cat:"General", title:"Istighfar",
+    ar:"أَسْتَغْفِرُ اللَّهَ الَّذِي لَا إِلَهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ وَأَتُوبُ إِلَيْهِ",
+    tr:"Astaghfiru Allāha alladhī lā ilāha illā huwa al-ḥayyu al-qayyūmu wa-atūbu ilayh",
+    en:"I seek forgiveness from Allah, there is none worthy of worship but He, the Ever-Living, the Self-Subsisting, and I turn to Him in repentance.", src:"Abu Dawud 1517",
+    note:"Sins will be forgiven even if they were like the foam of the sea. — Abu Dawud" },
+  { cat:"General", title:"Salawat upon the Prophet ﷺ",
+    ar:"اللَّهُمَّ صَلِّ عَلَى مُحَمَّدٍ وَعَلَى آلِ مُحَمَّدٍ كَمَا صَلَّيْتَ عَلَى إِبْرَاهِيمَ وَعَلَى آلِ إِبْرَاهِيمَ إِنَّكَ حَمِيدٌ مَجِيدٌ",
+    tr:"Allāhumma ṣalli ʿalā Muḥammad wa-ʿalā āli Muḥammad kamā ṣallayta ʿalā Ibrāhīm wa-ʿalā āli Ibrāhīm, innaka ḥamīdun majīd",
+    en:"O Allah, send blessings upon Muhammad and upon the family of Muhammad as You sent blessings upon Ibrahim and the family of Ibrahim. Indeed, You are Praiseworthy and Glorious.", src:"Bukhari 3370" },
+  { cat:"General", title:"For Parents",
+    ar:"رَبِّ اغْفِرْ لِي وَلِوَالِدَيَّ وَلِمَنْ دَخَلَ بَيْتِيَ مُؤْمِنًا وَلِلْمُؤْمِنِينَ وَالْمُؤْمِنَاتِ",
+    tr:"Rabbi ighfir lī wa-liwālidayya wa-liman dakhala baytiya muʾminan wa-lil-muʾminīna wal-muʾmināt",
+    en:"My Lord, forgive me and my parents and whoever enters my house as a believer and all the believing men and women.", src:"Quran 71:28" },
+  { cat:"General", title:"Good in This Life and the Next",
+    ar:"رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً وَفِي الْآخِرَةِ حَسَنَةً وَقِنَا عَذَابَ النَّارِ",
+    tr:"Rabbanā ātinā fī al-dunyā ḥasanatan wa-fī al-ākhirati ḥasanatan wa-qinā ʿadhāba al-nār",
+    en:"Our Lord, give us good in this world and good in the Hereafter, and protect us from the punishment of the Fire.", src:"Quran 2:201 · Bukhari 6389",
+    note:"The Prophet ﷺ supplicated with this most frequently. — Bukhari" },
+  { cat:"General", title:"For Knowledge",
+    ar:"رَبِّ زِدْنِي عِلْمًا",
+    tr:"Rabbi zidnī ʿilmā",
+    en:"My Lord, increase me in knowledge.", src:"Quran 20:114" },
+  { cat:"General", title:"For Guidance and Steadfastness",
+    ar:"اللَّهُمَّ اهْدِنِي وَسَدِّدْنِي",
+    tr:"Allāhumma ihdinī wa-saddidnī",
+    en:"O Allah, guide me and make me steadfast.", src:"Muslim 2725" },
+];
+
+// ─── DUA PAGE ──────────────────────────────────────────────────────
+function DuaPage() {
+  const [cat, setCat] = useState("All");
+  const [open, setOpen] = useState(null);
+  const [copied, setCopied] = useState(null);
+  const ARABIC_F = "'Amiri', 'Traditional Arabic', serif";
+
+  const filtered = cat === "All" ? DUAS : DUAS.filter(d => d.cat === cat);
+
+  function copy(dua, id) {
+    const text = `${dua.ar}\n\n${dua.tr}\n\n${dua.en}\n— ${dua.src}`;
+    navigator.clipboard?.writeText(text).then(() => {
+      setCopied(id); setTimeout(() => setCopied(null), 1600);
+    }).catch(() => {});
+  }
+
+  return (
+    <div style={{ maxWidth: 720, margin: "0 auto", padding: "40px 24px" }}>
+      <PageTitle icon="🤲" title="Dua & Dhikr" sub="Daily supplications, morning & evening adhkar, and situational remembrances" />
+
+      {/* Category filter */}
+      <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 28 }}>
+        {DUA_CATS.map(c => (
+          <button key={c} onClick={() => { setCat(c); setOpen(null); }} style={{
+            padding: "6px 14px", border: `1px solid ${cat===c ? GOLD : BORDER}`,
+            background: cat===c ? GREEN_L : "transparent",
+            color: cat===c ? GOLD : MUTED, fontSize: 11, cursor: "pointer",
+            fontFamily: SANS, letterSpacing: "0.06em", textTransform: "uppercase",
+            transition: "all 0.15s", borderRadius: 2,
+          }}>{c}</button>
+        ))}
+      </div>
+
+      {/* Dua cards */}
+      <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+        {filtered.map((dua, i) => {
+          const id = `${dua.cat}-${i}`;
+          const isOpen = open === id;
+          return (
+            <div key={id} style={{ border: `1px solid ${isOpen ? GOLD+"40" : BORDER}`, background: isOpen ? "#0E0C08" : SURFACE, transition: "all 0.2s" }}>
+              <button onClick={() => setOpen(isOpen ? null : id)} style={{
+                width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between",
+                padding: "14px 18px", background: "none", border: "none", cursor: "pointer", textAlign: "left",
+              }}>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{ fontSize: 10, color: isOpen ? GOLD : MUTED, letterSpacing: "0.12em", textTransform: "uppercase", marginBottom: 3 }}>{dua.cat}</div>
+                  <div style={{ fontSize: 15, color: TEXT, fontFamily: SERIF, letterSpacing: "0.02em" }}>{dua.title}</div>
+                </div>
+                <span style={{ color: MUTED, fontSize: 11, flexShrink: 0, marginLeft: 12 }}>{isOpen ? "▲" : "▼"}</span>
+              </button>
+              {isOpen && (
+                <div style={{ padding: "0 18px 20px" }}>
+                  <div style={{ height: 1, background: `linear-gradient(90deg,transparent,${GOLD}40,transparent)`, marginBottom: 18 }} />
+                  {/* Arabic */}
+                  <div style={{ fontFamily: ARABIC_F, fontSize: 22, color: GOLD, direction: "rtl", lineHeight: 2.4, marginBottom: 16, textAlign: "right" }}>
+                    {dua.ar}
+                  </div>
+                  {/* Transliteration */}
+                  <div style={{ fontSize: 13, color: MUTED, fontStyle: "italic", marginBottom: 12, lineHeight: 1.8, borderLeft: `2px solid ${BORDER}`, paddingLeft: 12 }}>
+                    {dua.tr}
+                  </div>
+                  {/* Translation */}
+                  <div style={{ fontSize: 14, color: TEXT, lineHeight: 1.75, marginBottom: 14 }}>
+                    {dua.en}
+                  </div>
+                  {/* Note */}
+                  {dua.note && (
+                    <div style={{ fontSize: 12, color: GOLD, background: GREEN_L, border: `1px solid ${GOLD}30`, padding: "9px 14px", marginBottom: 14, lineHeight: 1.65 }}>
+                      ✦ {dua.note}
+                    </div>
+                  )}
+                  {/* Footer */}
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                    <span style={{ fontSize: 11, color: MUTED, letterSpacing: "0.04em" }}>📖 {dua.src}</span>
+                    <button onClick={() => copy(dua, id)} style={{
+                      background: "none", border: `1px solid ${copied===id ? GOLD : BORDER}`,
+                      padding: "4px 14px", fontSize: 11, color: copied===id ? GOLD : MUTED,
+                      cursor: "pointer", fontFamily: SANS, letterSpacing: "0.06em", transition: "all 0.15s",
+                    }}>{copied===id ? "✓ Copied" : "Copy"}</button>
+                  </div>
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+      <p style={{ marginTop: 24, fontSize: 12, color: MUTED, textAlign: "center", letterSpacing: "0.04em" }}>
+        Tap any dua to expand · Copy button copies Arabic, transliteration and translation
+      </p>
+    </div>
+  );
+}
+
+// ─── 99 NAMES DATA ────────────────────────────────────────────────
+const ASMA = [
+  {n:1,  ar:"ٱللَّهُ",                         tr:"Allāh",          en:"Allah",                    m:"The Greatest Name — the only one deserving all worship and devotion."},
+  {n:2,  ar:"ٱلرَّحْمَٰنُ",                     tr:"Ar-Raḥmān",     en:"The Most Gracious",        m:"The One whose mercy encompasses all creation in this world."},
+  {n:3,  ar:"ٱلرَّحِيمُ",                       tr:"Ar-Raḥīm",      en:"The Most Merciful",        m:"The One whose special mercy is reserved for the believers in the Hereafter."},
+  {n:4,  ar:"ٱلْمَلِكُ",                        tr:"Al-Malik",       en:"The King",                 m:"The Sovereign Lord who owns all creation and owes nothing to anyone."},
+  {n:5,  ar:"ٱلْقُدُّوسُ",                       tr:"Al-Quddūs",     en:"The Holy",                 m:"The One utterly free from all faults, defects and imperfections."},
+  {n:6,  ar:"ٱلسَّلَامُ",                        tr:"As-Salām",       en:"The Source of Peace",      m:"The One from whom peace descends, and who bestows true security."},
+  {n:7,  ar:"ٱلْمُؤْمِنُ",                       tr:"Al-Muʾmin",     en:"The Guardian of Faith",    m:"The One who grants security and affirms His servants in faith."},
+  {n:8,  ar:"ٱلْمُهَيْمِنُ",                      tr:"Al-Muhaymin",   en:"The Protector",            m:"The One who watches over, guards and protects all creation."},
+  {n:9,  ar:"ٱلْعَزِيزُ",                        tr:"Al-ʿAzīz",      en:"The Almighty",             m:"The Incomparably Great, invincible and impossible to overpower."},
+  {n:10, ar:"ٱلْجَبَّارُ",                       tr:"Al-Jabbār",     en:"The Compeller",            m:"The One who compels, restores the broken and subdues all."},
+  {n:11, ar:"ٱلْمُتَكَبِّرُ",                     tr:"Al-Mutakabbir", en:"The Supreme",              m:"The One who is supremely great and above all His creation."},
+  {n:12, ar:"ٱلْخَالِقُ",                        tr:"Al-Khāliq",     en:"The Creator",              m:"The One who brings existence out of non-existence."},
+  {n:13, ar:"ٱلْبَارِئُ",                        tr:"Al-Bāriʾ",      en:"The Originator",           m:"The One who creates beings distinctly fashioned and perfectly formed."},
+  {n:14, ar:"ٱلْمُصَوِّرُ",                       tr:"Al-Muṣawwir",  en:"The Fashioner",            m:"The One who gives every creation its unique and distinct form."},
+  {n:15, ar:"ٱلْغَفَّارُ",                        tr:"Al-Ghaffār",    en:"The Forgiving",            m:"The One who forgives repeatedly — covering sins time after time."},
+  {n:16, ar:"ٱلْقَهَّارُ",                        tr:"Al-Qahhār",     en:"The Subduer",              m:"The One who dominates everything and cannot be overcome."},
+  {n:17, ar:"ٱلْوَهَّابُ",                        tr:"Al-Wahhāb",     en:"The Bestower",             m:"The One who gives generously without expecting anything in return."},
+  {n:18, ar:"ٱلرَّزَّاقُ",                        tr:"Ar-Razzāq",     en:"The Provider",             m:"The One who provides all sustenance — seen and unseen."},
+  {n:19, ar:"ٱلْفَتَّاحُ",                        tr:"Al-Fattāḥ",     en:"The Opener",               m:"The One who opens all that is closed — doors, hearts and victories."},
+  {n:20, ar:"ٱلْعَلِيمُ",                         tr:"Al-ʿAlīm",      en:"The All-Knowing",          m:"The One whose knowledge encompasses every manifest and hidden thing."},
+  {n:21, ar:"ٱلْقَابِضُ",                         tr:"Al-Qābiḍ",      en:"The Restrainer",           m:"The One who withholds, constricts and seizes as He wills."},
+  {n:22, ar:"ٱلْبَاسِطُ",                         tr:"Al-Bāsiṭ",      en:"The Expander",             m:"The One who expands, enriches and opens as He wills."},
+  {n:23, ar:"ٱلْخَافِضُ",                         tr:"Al-Khāfiḍ",     en:"The Abaser",               m:"The One who lowers and humbles whom He wills."},
+  {n:24, ar:"ٱلرَّافِعُ",                          tr:"Ar-Rāfiʿ",      en:"The Exalter",              m:"The One who raises and elevates to honour whom He wills."},
+  {n:25, ar:"ٱلْمُعِزُّ",                          tr:"Al-Muʿizz",     en:"The Bestower of Honour",   m:"The One who gives honour, dignity and strength to whom He wills."},
+  {n:26, ar:"ٱلْمُذِلُّ",                          tr:"Al-Mudhill",    en:"The Humiliator",           m:"The One who abases and humiliates the arrogant and unjust."},
+  {n:27, ar:"ٱلسَّمِيعُ",                          tr:"As-Samīʿ",      en:"The All-Hearing",          m:"The One who hears every sound — near and far, loud and whispered."},
+  {n:28, ar:"ٱلْبَصِيرُ",                          tr:"Al-Baṣīr",      en:"The All-Seeing",           m:"The One who sees all things — manifest and hidden, large and small."},
+  {n:29, ar:"ٱلْحَكَمُ",                           tr:"Al-Ḥakam",      en:"The Judge",                m:"The One who judges between creation with absolute justice."},
+  {n:30, ar:"ٱلْعَدْلُ",                           tr:"Al-ʿAdl",       en:"The Just",                 m:"The One who is perfectly equitable in all His decrees and judgements."},
+  {n:31, ar:"ٱللَّطِيفُ",                          tr:"Al-Laṭīf",      en:"The Subtle",               m:"The One who is kind, gentle and aware of the finest details of creation."},
+  {n:32, ar:"ٱلْخَبِيرُ",                          tr:"Al-Khabīr",     en:"The All-Aware",            m:"The One fully aware of all inner affairs and hidden subtleties."},
+  {n:33, ar:"ٱلْحَلِيمُ",                          tr:"Al-Ḥalīm",      en:"The Forbearing",           m:"The One who does not hasten punishment despite having full power to do so."},
+  {n:34, ar:"ٱلْعَظِيمُ",                          tr:"Al-ʿAẓīm",      en:"The Magnificent",          m:"The One supremely great in all attributes — beyond any comprehension."},
+  {n:35, ar:"ٱلْغَفُورُ",                          tr:"Al-Ghafūr",     en:"The All-Forgiving",        m:"The One who completely forgives the sins of all who sincerely repent."},
+  {n:36, ar:"ٱلشَّكُورُ",                          tr:"Ash-Shakūr",    en:"The Appreciative",         m:"The One who greatly rewards even small deeds with immense recompense."},
+  {n:37, ar:"ٱلْعَلِيُّ",                          tr:"Al-ʿAliyy",     en:"The Most High",            m:"The One exalted above everything in His essence and attributes."},
+  {n:38, ar:"ٱلْكَبِيرُ",                          tr:"Al-Kabīr",      en:"The Most Great",           m:"The One whose greatness is infinite and beyond all comprehension."},
+  {n:39, ar:"ٱلْحَفِيظُ",                          tr:"Al-Ḥafīẓ",     en:"The Preserver",            m:"The One who protects, preserves and guards all His creation."},
+  {n:40, ar:"ٱلْمُقِيتُ",                          tr:"Al-Muqīt",      en:"The Nourisher",            m:"The One who provides sustenance and maintains life for all."},
+  {n:41, ar:"ٱلْحَسِيبُ",                          tr:"Al-Ḥasīb",      en:"The Reckoner",             m:"The One who takes account of all deeds and is completely sufficient."},
+  {n:42, ar:"ٱلْجَلِيلُ",                          tr:"Al-Jalīl",      en:"The Majestic",             m:"The One who possesses grandeur, magnificence and supremacy."},
+  {n:43, ar:"ٱلْكَرِيمُ",                          tr:"Al-Karīm",      en:"The Generous",             m:"The One who gives generously and abundantly without regard to merit."},
+  {n:44, ar:"ٱلرَّقِيبُ",                          tr:"Ar-Raqīb",      en:"The Watchful",             m:"The One who watches over all affairs of creation at all times."},
+  {n:45, ar:"ٱلْمُجِيبُ",                          tr:"Al-Mujīb",      en:"The Responsive",           m:"The One who answers and responds to every sincere supplication."},
+  {n:46, ar:"ٱلْوَاسِعُ",                          tr:"Al-Wāsiʿ",      en:"The Vast",                 m:"The One whose mercy, knowledge and generosity are boundless and infinite."},
+  {n:47, ar:"ٱلْحَكِيمُ",                          tr:"Al-Ḥakīm",      en:"The All-Wise",             m:"The One whose wisdom in creation and decree is absolutely perfect."},
+  {n:48, ar:"ٱلْوَدُودُ",                          tr:"Al-Wadūd",      en:"The Loving",               m:"The One who loves His righteous servants and is loved by them."},
+  {n:49, ar:"ٱلْمَجِيدُ",                          tr:"Al-Majīd",      en:"The Glorious",             m:"The One all-glorious, possessing every quality of perfection and honour."},
+  {n:50, ar:"ٱلْبَاعِثُ",                          tr:"Al-Bāʿith",     en:"The Resurrector",          m:"The One who raises creation from the dead on the Day of Resurrection."},
+  {n:51, ar:"ٱلشَّهِيدُ",                          tr:"Ash-Shahīd",    en:"The Witness",              m:"The One who witnesses all things — nothing is concealed from Him."},
+  {n:52, ar:"ٱلْحَقُّ",                            tr:"Al-Ḥaqq",       en:"The Truth",                m:"The One who truly and necessarily exists — whose word is absolute truth."},
+  {n:53, ar:"ٱلْوَكِيلُ",                          tr:"Al-Wakīl",      en:"The Trustee",              m:"The One in whom full trust is placed and who suffices for all affairs."},
+  {n:54, ar:"ٱلْقَوِيُّ",                          tr:"Al-Qawiyy",     en:"The All-Powerful",         m:"The One who is perfect in strength — never weak or fatigued."},
+  {n:55, ar:"ٱلْمَتِينُ",                          tr:"Al-Matīn",      en:"The Firm",                 m:"The One whose strength and might are never exhausted or diminished."},
+  {n:56, ar:"ٱلْوَلِيُّ",                          tr:"Al-Waliyy",     en:"The Protecting Friend",    m:"The One who is the ally and protector of the believers."},
+  {n:57, ar:"ٱلْحَمِيدُ",                          tr:"Al-Ḥamīd",      en:"The Praiseworthy",         m:"The One who deserves all praise by His very essence and all His actions."},
+  {n:58, ar:"ٱلْمُحْصِي",                          tr:"Al-Muḥṣī",      en:"The Counter",              m:"The One who counts and records all things with perfect precision."},
+  {n:59, ar:"ٱلْمُبْدِئُ",                         tr:"Al-Mubdiʾ",     en:"The Originator",           m:"The One who started creation from nothing, without precedent."},
+  {n:60, ar:"ٱلْمُعِيدُ",                          tr:"Al-Muʿīd",      en:"The Restorer",             m:"The One who will restore and recreate all creation after death."},
+  {n:61, ar:"ٱلْمُحْيِي",                          tr:"Al-Muḥyī",      en:"The Giver of Life",        m:"The One who grants life to everything that lives."},
+  {n:62, ar:"ٱلْمُمِيتُ",                          tr:"Al-Mumīt",      en:"The Taker of Life",        m:"The One who takes the souls of creation at their appointed time."},
+  {n:63, ar:"ٱلْحَيُّ",                            tr:"Al-Ḥayy",       en:"The Ever-Living",          m:"The One whose life has no beginning, no end, and no interruption."},
+  {n:64, ar:"ٱلْقَيُّومُ",                         tr:"Al-Qayyūm",     en:"The Self-Subsisting",      m:"The One upon whom all existence depends, yet who depends on nothing."},
+  {n:65, ar:"ٱلْوَاجِدُ",                          tr:"Al-Wājid",      en:"The Finder",               m:"The One who finds and perceives everything He wishes at will."},
+  {n:66, ar:"ٱلْمَاجِدُ",                          tr:"Al-Mājid",      en:"The Noble",                m:"The One noble and generous, full of honour and glory."},
+  {n:67, ar:"ٱلْوَاحِدُ",                          tr:"Al-Wāḥid",      en:"The One",                  m:"The One who is unique and without any partner or equal."},
+  {n:68, ar:"ٱلْأَحَدُ",                           tr:"Al-Aḥad",       en:"The Unique",               m:"The One who is absolutely singular, indivisible and incomparable."},
+  {n:69, ar:"ٱلصَّمَدُ",                           tr:"Aṣ-Ṣamad",     en:"The Eternal",              m:"The One upon whom all depend, but who Himself depends on nothing."},
+  {n:70, ar:"ٱلْقَادِرُ",                          tr:"Al-Qādir",      en:"The Capable",              m:"The One who has complete power over everything without any limit."},
+  {n:71, ar:"ٱلْمُقْتَدِرُ",                       tr:"Al-Muqtadir",   en:"The All-Powerful",         m:"The One of full authority who executes His will with absolute power."},
+  {n:72, ar:"ٱلْمُقَدِّمُ",                        tr:"Al-Muqaddim",   en:"The Expediter",            m:"The One who brings forward and prioritises whom and what He wills."},
+  {n:73, ar:"ٱلْمُؤَخِّرُ",                        tr:"Al-Muʾakhkhir", en:"The Delayer",              m:"The One who delays and puts back whom and what He wills."},
+  {n:74, ar:"ٱلْأَوَّلُ",                          tr:"Al-Awwal",      en:"The First",                m:"The One whose existence has no beginning — He precedes everything."},
+  {n:75, ar:"ٱلْآخِرُ",                            tr:"Al-Ākhir",      en:"The Last",                 m:"The One whose existence has no end — He remains after everything."},
+  {n:76, ar:"ٱلظَّاهِرُ",                          tr:"Aẓ-Ẓāhir",     en:"The Manifest",             m:"The One who is apparent and evident through His signs and creation."},
+  {n:77, ar:"ٱلْبَاطِنُ",                          tr:"Al-Bāṭin",      en:"The Hidden",               m:"The One hidden from the sight and senses of all His creation."},
+  {n:78, ar:"ٱلْوَالِي",                           tr:"Al-Wālī",       en:"The Governor",             m:"The One who governs and manages all affairs of the universe."},
+  {n:79, ar:"ٱلْمُتَعَالِي",                       tr:"Al-Mutaʿālī",   en:"The Most Exalted",         m:"The One far above all creation and any description in His greatness."},
+  {n:80, ar:"ٱلْبَرُّ",                            tr:"Al-Barr",       en:"The Source of Goodness",   m:"The One who is infinitely kind, righteous and true to all His promises."},
+  {n:81, ar:"ٱلتَّوَّابُ",                         tr:"At-Tawwāb",     en:"The Acceptor of Repentance",m:"The One who repeatedly and joyfully accepts the repentance of His servants."},
+  {n:82, ar:"ٱلْمُنْتَقِمُ",                       tr:"Al-Muntaqim",   en:"The Avenger",              m:"The One who punishes the oppressors and wrongdoers with perfect justice."},
+  {n:83, ar:"ٱلْعَفُوُّ",                          tr:"Al-ʿAfuww",     en:"The Pardoner",             m:"The One who erases sins entirely — as if they never occurred."},
+  {n:84, ar:"ٱلرَّءُوفُ",                          tr:"Ar-Raʾūf",      en:"The Most Kind",            m:"The One full of the deepest compassion and tenderness for His servants."},
+  {n:85, ar:"مَالِكُ ٱلْمُلْكِ",                   tr:"Mālik al-Mulk", en:"Owner of Sovereignty",     m:"The One who possesses absolute and exclusive ownership of all dominion."},
+  {n:86, ar:"ذُو ٱلْجَلَالِ وَٱلْإِكْرَامِ",       tr:"Dhul-Jalāli wal-Ikrām", en:"Lord of Majesty and Bounty", m:"The One who uniquely combines supreme greatness with infinite generosity."},
+  {n:87, ar:"ٱلْمُقْسِطُ",                         tr:"Al-Muqsiṭ",     en:"The Equitable",            m:"The One who is perfectly just in all His judgements and dealings."},
+  {n:88, ar:"ٱلْجَامِعُ",                          tr:"Al-Jāmiʿ",      en:"The Gatherer",             m:"The One who will gather all of creation on the Day of Judgement."},
+  {n:89, ar:"ٱلْغَنِيُّ",                          tr:"Al-Ghaniyy",    en:"The Self-Sufficient",      m:"The One who needs absolutely nothing from any of His creation."},
+  {n:90, ar:"ٱلْمُغْنِي",                          tr:"Al-Mughnī",     en:"The Enricher",             m:"The One who enriches and satisfies with His bounty whoever He wills."},
+  {n:91, ar:"ٱلْمَانِعُ",                          tr:"Al-Māniʿ",      en:"The Preventer",            m:"The One who withholds and protects — deciding what reaches His servants."},
+  {n:92, ar:"ٱلضَّارُّ",                           tr:"Aḍ-Ḍārr",      en:"The Distresser",           m:"The One who has power to cause harm when He wills as part of His wisdom."},
+  {n:93, ar:"ٱلنَّافِعُ",                          tr:"An-Nāfiʿ",      en:"The Benefiter",            m:"The One who creates all benefit and good for His creation as He wills."},
+  {n:94, ar:"ٱلنُّورُ",                            tr:"An-Nūr",        en:"The Light",                m:"The One who is the ultimate source of all light, guidance and illumination."},
+  {n:95, ar:"ٱلْهَادِي",                           tr:"Al-Hādī",       en:"The Guide",                m:"The One who guides His creation to the right path and true knowledge."},
+  {n:96, ar:"ٱلْبَدِيعُ",                          tr:"Al-Badīʿ",      en:"The Incomparable",         m:"The One who created the universe in a wholly new and unprecedented way."},
+  {n:97, ar:"ٱلْبَاقِي",                           tr:"Al-Bāqī",       en:"The Everlasting",          m:"The One who remains forever when all else ceases and perishes."},
+  {n:98, ar:"ٱلْوَارِثُ",                          tr:"Al-Wārith",     en:"The Inheritor",            m:"The One who inherits the earth and all that is upon it after creation ends."},
+  {n:99, ar:"ٱلصَّبُورُ",                          tr:"Aṣ-Ṣabūr",     en:"The Patient",              m:"The One who is infinitely patient — never rushing punishment beyond its due time."},
+];
+
+// ─── 99 NAMES PAGE ────────────────────────────────────────────────
+function AsmaPage() {
+  const [search, setSearch] = useState("");
+  const [sel, setSel] = useState(null);
+  const ARABIC_F = "'Amiri', 'Traditional Arabic', serif";
+
+  const filtered = !search.trim() ? ASMA : ASMA.filter(a =>
+    a.tr.toLowerCase().includes(search.toLowerCase()) ||
+    a.en.toLowerCase().includes(search.toLowerCase()) ||
+    a.m.toLowerCase().includes(search.toLowerCase()) ||
+    String(a.n) === search.trim()
+  );
+
+  return (
+    <div style={{ maxWidth: 940, margin: "0 auto", padding: "40px 24px" }}>
+      <PageTitle icon="✨" title="Asmāʾ ul-Ḥusnā" sub="The 99 Beautiful Names of Allah — memorise them to enter Paradise" />
+
+      {/* Quranic verse */}
+      <div style={{ textAlign: "center", marginBottom: 10 }}>
+        <div style={{ fontFamily: ARABIC_F, fontSize: 20, color: GOLD, direction: "rtl", lineHeight: 2 }}>
+          وَلِلَّهِ الْأَسْمَاءُ الْحُسْنَى فَادْعُوهُ بِهَا
+        </div>
+        <p style={{ fontSize: 12, color: MUTED, marginTop: 4, letterSpacing: "0.04em" }}>
+          "And to Allah belong the best names, so invoke Him by them." — Quran 7:180
+        </p>
+      </div>
+
+      {/* Search */}
+      <input value={search} onChange={e => setSearch(e.target.value)}
+        placeholder="Search by name, transliteration or meaning…"
+        style={{ width:"100%", padding:"10px 14px", background:SURFACE, border:`1px solid ${BORDER}`,
+          color:TEXT, fontSize:13, outline:"none", marginBottom:24, fontFamily:SANS, boxSizing:"border-box" }}
+        onFocus={e => e.target.style.borderColor=GOLD}
+        onBlur={e => e.target.style.borderColor=BORDER}
+      />
+
+      {/* Grid */}
+      <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(150px,1fr))", gap:1, border:`1px solid ${BORDER}` }}>
+        {filtered.map(a => (
+          <button key={a.n} onClick={() => setSel(sel?.n===a.n ? null : a)} style={{
+            background: sel?.n===a.n ? GREEN_L : SURFACE,
+            border:"none", borderRight:`1px solid ${BORDER}`, borderBottom:`1px solid ${BORDER}`,
+            padding:"14px 10px", cursor:"pointer", textAlign:"center", transition:"background 0.15s",
+          }}
+            onMouseEnter={e => { if(sel?.n\!==a.n) e.currentTarget.style.background=GREEN_L; }}
+            onMouseLeave={e => { if(sel?.n\!==a.n) e.currentTarget.style.background=SURFACE; }}
+          >
+            <div style={{ fontSize:9, color:sel?.n===a.n ? GOLD : MUTED, letterSpacing:"0.1em", marginBottom:4 }}>{a.n}</div>
+            <div style={{ fontFamily:ARABIC_F, fontSize:18, color:sel?.n===a.n ? GOLD : TEXT, lineHeight:1.9, marginBottom:4 }}>{a.ar}</div>
+            <div style={{ fontSize:9, color:sel?.n===a.n ? GOLD : MUTED, letterSpacing:"0.07em", textTransform:"uppercase", lineHeight:1.4 }}>{a.tr}</div>
+          </button>
+        ))}
+      </div>
+
+      {/* Detail panel */}
+      {sel && (
+        <div style={{ marginTop:20, background:"linear-gradient(135deg,#0E0C08,#141210)", border:`1px solid ${GOLD}40`, padding:"24px 28px", boxShadow:`0 8px 40px rgba(0,0,0,0.6)` }}>
+          <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", flexWrap:"wrap", gap:16, marginBottom:16 }}>
+            <div>
+              <div style={{ fontSize:9, color:GOLD, letterSpacing:"0.16em", textTransform:"uppercase", marginBottom:8 }}>Name {sel.n} of 99</div>
+              <div style={{ fontFamily:ARABIC_F, fontSize:38, color:GOLD, lineHeight:1.7, direction:"rtl" }}>{sel.ar}</div>
+              <div style={{ fontSize:20, color:TEXT, fontFamily:SERIF, marginTop:6, letterSpacing:"0.04em" }}>{sel.tr}</div>
+              <div style={{ fontSize:13, color:MUTED, marginTop:4, letterSpacing:"0.04em" }}>{sel.en}</div>
+            </div>
+            <button onClick={() => setSel(null)} style={{ background:"none", border:`1px solid ${BORDER}`, color:MUTED, padding:"4px 12px", cursor:"pointer", fontSize:11, fontFamily:SANS }}>✕ Close</button>
+          </div>
+          <div style={{ borderTop:`1px solid ${BORDER}`, paddingTop:16, fontSize:14, color:TEXT, lineHeight:1.75 }}>
+            {sel.m}
+          </div>
+        </div>
+      )}
+
+      <p style={{ marginTop:20, fontSize:12, color:MUTED, textAlign:"center", letterSpacing:"0.04em" }}>
+        "Allah has 99 names. Whoever memorises (and acts upon) them all will enter Paradise." — Bukhari 2736 · Muslim 2677
+      </p>
     </div>
   );
 }
