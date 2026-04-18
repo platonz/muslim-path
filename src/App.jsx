@@ -744,7 +744,7 @@ const TOOLS_ITEMS = [
   { id: "dates",       label: "Dates",        icon: "🔄" },
 ];
 
-function Nav({ page, setPage, onSettings, hasLocation, onSearch }) {
+function Nav({ page, setPage, onSettings, hasLocation, onSearch, authUser, onAuthClick, onSignOut }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [toolsOpen, setToolsOpen] = useState(false);
   const [mobileToolsOpen, setMobileToolsOpen] = useState(false);
@@ -870,6 +870,52 @@ function Nav({ page, setPage, onSettings, hasLocation, onSearch }) {
             ⚙
             {hasLocation && <span style={{ position: "absolute", top: 3, right: 3, width: 6, height: 6, borderRadius: "50%", background: GOLD }} />}
           </button>
+          {/* Auth button */}
+          {authUser ? (
+            <div style={{ position: "relative" }} className="nav-auth-wrap">
+              <button title="Account" onClick={e => { e.stopPropagation(); document.getElementById("nav-user-menu") && (document.getElementById("nav-user-menu").style.display === "none" ? document.getElementById("nav-user-menu").style.display = "block" : document.getElementById("nav-user-menu").style.display = "none"); }}
+                style={{
+                  background: "linear-gradient(135deg,#C9A84C,#A8883E)", border: "none",
+                  borderRadius: "50%", width: 32, height: 32, cursor: "pointer",
+                  fontSize: 12, fontWeight: 700, color: "#0A0A0A",
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  flexShrink: 0,
+                }}>
+                {(authUser.user_metadata?.full_name || authUser.email || "U").charAt(0).toUpperCase()}
+              </button>
+              <div id="nav-user-menu" style={{
+                display: "none", position: "absolute", top: "calc(100% + 10px)", right: 0,
+                background: "#0D0D0D", border: "1px solid #2A2520",
+                boxShadow: "0 16px 48px rgba(0,0,0,0.9)",
+                minWidth: 200, zIndex: 300, padding: "8px 0",
+              }}>
+                <div style={{ padding: "10px 16px 8px", borderBottom: "1px solid #242424" }}>
+                  <div style={{ fontSize: 12, color: "#EDE8DC", marginBottom: 2 }}>{authUser.user_metadata?.full_name || ""}</div>
+                  <div style={{ fontSize: 11, color: "#6B6358" }}>{authUser.email}</div>
+                </div>
+                <button onClick={() => { onSignOut(); document.getElementById("nav-user-menu").style.display = "none"; }} style={{
+                  width: "100%", background: "none", border: "none",
+                  padding: "10px 16px", textAlign: "left", cursor: "pointer",
+                  fontSize: 11, color: "#6B6358", letterSpacing: "0.07em", textTransform: "uppercase",
+                  fontFamily: "'Inter', sans-serif",
+                }}
+                  onMouseEnter={e => { e.currentTarget.style.color = "#e74c3c"; }}
+                  onMouseLeave={e => { e.currentTarget.style.color = "#6B6358"; }}
+                >Sign Out</button>
+              </div>
+            </div>
+          ) : (
+            <button onClick={onAuthClick} style={{
+              background: "linear-gradient(135deg,#C9A84C,#A8883E)",
+              border: "none", cursor: "pointer",
+              padding: "7px 16px", fontSize: 11, fontWeight: 700, color: "#0A0A0A",
+              letterSpacing: "0.08em", textTransform: "uppercase",
+              fontFamily: "'Inter', sans-serif", transition: "opacity 0.2s",
+            }}
+              onMouseEnter={e => e.currentTarget.style.opacity = "0.85"}
+              onMouseLeave={e => e.currentTarget.style.opacity = "1"}
+            >Sign In</button>
+          )}
           <button onClick={() => setMenuOpen(!menuOpen)} style={{
             display: "none", background: "transparent", border: `1px solid ${BORDER}`,
             borderRadius: 2, cursor: "pointer", fontSize: 16, color: MUTED,
@@ -880,7 +926,7 @@ function Nav({ page, setPage, onSettings, hasLocation, onSearch }) {
 
       {/* Mobile menu */}
       {menuOpen && (
-        <div style={{ borderTop: `1px solid ${BORDER}`, padding: "8px 0 16px", display: "flex", flexDirection: "column", background: "#080808" }}>
+        <div className="nav-mobile-menu" style={{ borderTop: `1px solid ${BORDER}`, padding: "8px 0 16px", display: "flex", flexDirection: "column", background: "#080808" }}>
           {NAV_ITEMS.map(n => (
             <button key={n.id} onClick={() => { setPage(n.id); setMenuOpen(false); }} style={{
               background: "none", border: "none", cursor: "pointer", textAlign: "left",
@@ -936,6 +982,33 @@ function Nav({ page, setPage, onSettings, hasLocation, onSearch }) {
           }}>
             <span>⚙</span> Settings {hasLocation && <span style={{ fontSize: 10, color: GOLD, border: `1px solid ${GOLD}60`, padding: "1px 7px", letterSpacing: "0.06em" }}>Active</span>}
           </button>
+          {authUser ? (
+            <>
+              <div style={{ padding: "10px 32px 6px", borderTop: `1px solid ${BORDER}`, marginTop: 4 }}>
+                <div style={{ fontSize: 11, color: MUTED }}>{authUser.user_metadata?.full_name || authUser.email}</div>
+              </div>
+              <button onClick={() => { onSignOut(); setMenuOpen(false); }} style={{
+                background: "none", border: "none", cursor: "pointer", textAlign: "left",
+                padding: "10px 32px 14px", fontSize: 12, color: "#e74c3c",
+                display: "flex", alignItems: "center", gap: 12,
+                letterSpacing: "0.08em", textTransform: "uppercase", fontFamily: SANS,
+                borderLeft: "2px solid transparent",
+              }}>
+                <span>&#x2715;</span> Sign Out
+              </button>
+            </>
+          ) : (
+            <button onClick={() => { onAuthClick(); setMenuOpen(false); }} style={{
+              background: "none", border: "none", cursor: "pointer", textAlign: "left",
+              padding: "12px 32px 16px", fontSize: 12, color: GOLD,
+              display: "flex", alignItems: "center", gap: 12,
+              borderTop: `1px solid ${BORDER}`, marginTop: 4,
+              letterSpacing: "0.08em", textTransform: "uppercase", fontFamily: SANS,
+              borderLeft: "2px solid transparent",
+            }}>
+              <span>&#x1F464;</span> Sign In / Sign Up
+            </button>
+          )}
         </div>
       )}
 
@@ -945,6 +1018,9 @@ function Nav({ page, setPage, onSettings, hasLocation, onSearch }) {
           .nav-mobile { display: flex !important; }
         }
         .home-prayer-strip { display: none !important; }
+        @keyframes navSlideDown { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+        .nav-mobile-menu { animation: navSlideDown 0.22s cubic-bezier(0.22,1,0.36,1); }
+        #nav-user-menu { animation: navSlideDown 0.18s cubic-bezier(0.22,1,0.36,1); }
         @media (max-width: 760px) {
           .home-prayer-strip { display: flex !important; }
         }
@@ -2500,6 +2576,178 @@ function GlobalSearch({ onClose, navigate, lectures }) {
   );
 }
 
+
+// ─── AUTH HELPERS ─────────────────────────────────────────────────
+const SESSION_KEY = "mp-session";
+
+function loadSession() {
+  try { const s = localStorage.getItem(SESSION_KEY); return s ? JSON.parse(s) : null; } catch { return null; }
+}
+function saveSession(s) {
+  try { localStorage.setItem(SESSION_KEY, JSON.stringify(s)); } catch {}
+}
+function clearSession() {
+  try { localStorage.removeItem(SESSION_KEY); } catch {}
+}
+
+async function supaAuthFetch(path, body) {
+  const res = await fetch(SUPA_URL + "/auth/v1" + path, {
+    method: "POST",
+    headers: { "Content-Type": "application/json", apikey: SUPA_ANON_KEY },
+    body: JSON.stringify(body),
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error_description || data.msg || data.error || JSON.stringify(data));
+  return data;
+}
+
+// ─── AUTH MODAL ────────────────────────────────────────────────────
+function AuthModal({ onClose, onAuth }) {
+  const [tab, setTab] = useState("signin");          // "signin" | "signup"
+  const [email, setEmail] = useState("");
+  const [pass, setPass] = useState("");
+  const [name, setName] = useState("");
+  const [err, setErr] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [done, setDone] = useState("");
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+    setErr(""); setBusy(true);
+    try {
+      let session;
+      if (tab === "signin") {
+        session = await supaAuthFetch("/token?grant_type=password", { email, password: pass });
+      } else {
+        session = await supaAuthFetch("/signup", { email, password: pass, data: { full_name: name } });
+        if (!session.access_token) {
+          setDone("Check your email for a confirmation link, then sign in.");
+          setBusy(false); return;
+        }
+      }
+      saveSession(session);
+      onAuth(session);
+      onClose();
+    } catch (e) { setErr(e.message); }
+    finally { setBusy(false); }
+  }
+
+  function googleSignIn() {
+    const redirect = window.location.origin + window.location.pathname;
+    window.location.href = SUPA_URL + "/auth/v1/authorize?provider=google&redirect_to=" + encodeURIComponent(redirect);
+  }
+
+  return (
+    <div onClick={onClose} style={{
+      position: "fixed", inset: 0, zIndex: 600,
+      background: "rgba(0,0,0,0.8)", backdropFilter: "blur(6px)",
+      display: "flex", alignItems: "center", justifyContent: "center", padding: 20,
+    }}>
+      <div onClick={e => e.stopPropagation()} style={{
+        background: "linear-gradient(135deg,#0E0C08,#161210)",
+        border: "1px solid #2A2520",
+        boxShadow: "0 32px 80px rgba(0,0,0,0.95)",
+        width: "100%", maxWidth: 400, padding: "36px 32px",
+        position: "relative",
+      }}>
+        <button onClick={onClose} style={{
+          position: "absolute", top: 14, right: 14,
+          background: "none", border: "1px solid #242424",
+          color: "#6B6358", width: 28, height: 28, cursor: "pointer",
+          fontSize: 13, display: "flex", alignItems: "center", justifyContent: "center",
+        }}>&#x2715;</button>
+
+        {/* Logo + title */}
+        <div style={{ textAlign: "center", marginBottom: 28 }}>
+          <img src="/logo.png" alt="" style={{ width: 44, height: 44, objectFit: "contain", marginBottom: 12 }} />
+          <div style={{ fontSize: 18, color: "#EDE8DC", fontFamily: "'Cormorant Garamond', Georgia, serif", letterSpacing: "0.05em" }}>Muslim&#x2019;s Path</div>
+          <div style={{ fontSize: 11, color: "#6B6358", letterSpacing: "0.12em", textTransform: "uppercase", marginTop: 4 }}>Your Islamic Companion</div>
+        </div>
+
+        {/* Tabs */}
+        <div style={{ display: "flex", marginBottom: 24, borderBottom: "1px solid #242424" }}>
+          {["signin","signup"].map(t => (
+            <button key={t} onClick={() => { setTab(t); setErr(""); setDone(""); }} style={{
+              flex: 1, background: "none", border: "none",
+              borderBottom: tab === t ? "2px solid #C9A84C" : "2px solid transparent",
+              color: tab === t ? "#C9A84C" : "#6B6358",
+              padding: "10px 0", fontSize: 11, cursor: "pointer",
+              letterSpacing: "0.1em", textTransform: "uppercase",
+              fontFamily: "'Inter', sans-serif", fontWeight: tab === t ? 600 : 400,
+              marginBottom: -1,
+            }}>{t === "signin" ? "Sign In" : "Sign Up"}</button>
+          ))}
+        </div>
+
+        {done ? (
+          <div style={{ textAlign: "center", padding: "20px 0", color: "#C9A84C", fontSize: 14, lineHeight: 1.7 }}>{done}</div>
+        ) : (
+          <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+            {tab === "signup" && (
+              <input value={name} onChange={e => setName(e.target.value)}
+                placeholder="Full name (optional)"
+                style={{ padding: "10px 14px", background: "#141414", border: "1px solid #242424", color: "#EDE8DC", fontSize: 13, outline: "none", fontFamily: "'Inter', sans-serif" }}
+                onFocus={e => e.target.style.borderColor = "#C9A84C"}
+                onBlur={e => e.target.style.borderColor = "#242424"}
+              />
+            )}
+            <input type="email" value={email} onChange={e => setEmail(e.target.value)}
+              placeholder="Email address" required
+              style={{ padding: "10px 14px", background: "#141414", border: "1px solid #242424", color: "#EDE8DC", fontSize: 13, outline: "none", fontFamily: "'Inter', sans-serif" }}
+              onFocus={e => e.target.style.borderColor = "#C9A84C"}
+              onBlur={e => e.target.style.borderColor = "#242424"}
+            />
+            <input type="password" value={pass} onChange={e => setPass(e.target.value)}
+              placeholder="Password" required minLength={6}
+              style={{ padding: "10px 14px", background: "#141414", border: "1px solid #242424", color: "#EDE8DC", fontSize: 13, outline: "none", fontFamily: "'Inter', sans-serif" }}
+              onFocus={e => e.target.style.borderColor = "#C9A84C"}
+              onBlur={e => e.target.style.borderColor = "#242424"}
+            />
+            {err && <div style={{ fontSize: 12, color: "#e74c3c", lineHeight: 1.5 }}>{err}</div>}
+            <button type="submit" disabled={busy} style={{
+              marginTop: 4, padding: "11px 0", background: busy ? "#1A1710" : "linear-gradient(135deg,#C9A84C,#A8883E)",
+              border: "none", color: busy ? "#6B6358" : "#0A0A0A",
+              fontSize: 12, fontWeight: 700, cursor: busy ? "default" : "pointer",
+              letterSpacing: "0.1em", textTransform: "uppercase",
+              fontFamily: "'Inter', sans-serif", transition: "all 0.2s",
+            }}>{busy ? "Please wait…" : (tab === "signin" ? "Sign In" : "Create Account")}</button>
+          </form>
+        )}
+
+        {/* Divider */}
+        <div style={{ display: "flex", alignItems: "center", gap: 12, margin: "20px 0 16px" }}>
+          <div style={{ flex: 1, height: 1, background: "#242424" }} />
+          <span style={{ fontSize: 10, color: "#6B6358", letterSpacing: "0.1em" }}>OR</span>
+          <div style={{ flex: 1, height: 1, background: "#242424" }} />
+        </div>
+
+        {/* Google */}
+        <button onClick={googleSignIn} style={{
+          width: "100%", padding: "10px 0", background: "none",
+          border: "1px solid #2A2520", color: "#EDE8DC",
+          fontSize: 12, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 10,
+          fontFamily: "'Inter', sans-serif", letterSpacing: "0.06em", transition: "border-color 0.2s",
+        }}
+          onMouseEnter={e => e.currentTarget.style.borderColor = "#C9A84C"}
+          onMouseLeave={e => e.currentTarget.style.borderColor = "#2A2520"}
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+            <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+            <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+            <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/>
+            <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+          </svg>
+          Continue with Google
+        </button>
+
+        <p style={{ marginTop: 16, fontSize: 11, color: "#6B6358", textAlign: "center", lineHeight: 1.6 }}>
+          Your data stays private. We only use your account to sync your preferences.
+        </p>
+      </div>
+    </div>
+  );
+}
+
 // ─── APP ──────────────────────────────────────────────────────────
 const VALID_PAGES = ["home","prayer","qibla","zakat","inheritance","calendar","dates","library","audio","tasbeeh","quran","dua","asma","admin"];
 
@@ -2598,7 +2846,61 @@ export default function App() {
   const [showSettings, setShowSettings] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
   const [notifEnabled, setNotifEnabled] = useState(() => localStorage.getItem("mp-notifs") === "1");
+  const [duaFavs, setDuaFavs] = useState(() => {
+    try { return new Set(JSON.parse(localStorage.getItem("mp-dua-favs") || "[]")); } catch { return new Set(); }
+  });
+
+  function toggleDuaFav(id) {
+    setDuaFavs(prev => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id); else next.add(id);
+      try { localStorage.setItem("mp-dua-favs", JSON.stringify([...next])); } catch {}
+      return next;
+    });
+  }
   const notifTimers = useRef([]);
+
+  // ── Auth state ─────────────────────────────────────────────────
+  const [authSession, setAuthSession] = useState(() => loadSession());
+  const [showAuth, setShowAuth] = useState(false);
+  const authUser = authSession?.user;
+
+  // Handle OAuth redirect hash (#access_token=...&type=recovery|signup etc.)
+  useEffect(() => {
+    const hash = window.location.hash;
+    if (hash && hash.includes("access_token")) {
+      try {
+        const params = new URLSearchParams(hash.slice(1));
+        const session = {
+          access_token: params.get("access_token"),
+          refresh_token: params.get("refresh_token"),
+          expires_in: params.get("expires_in"),
+          token_type: params.get("token_type"),
+        };
+        // Fetch user info
+        fetch(SUPA_URL + "/auth/v1/user", {
+          headers: { apikey: SUPA_ANON_KEY, Authorization: "Bearer " + session.access_token },
+        }).then(r => r.json()).then(user => {
+          const full = { ...session, user };
+          saveSession(full);
+          setAuthSession(full);
+          // Clean hash from URL
+          history.replaceState(null, "", window.location.pathname);
+        }).catch(() => {});
+      } catch {}
+    }
+  }, []);
+
+  function handleSignOut() {
+    if (authSession?.access_token) {
+      fetch(SUPA_URL + "/auth/v1/logout", {
+        method: "POST",
+        headers: { apikey: SUPA_ANON_KEY, Authorization: "Bearer " + authSession.access_token },
+      }).catch(() => {});
+    }
+    clearSession();
+    setAuthSession(null);
+  }
 
   // ── Global audio state ─────────────────────────────────────────
   const [lectures, setLectures] = useState(LECTURES);
@@ -2771,7 +3073,7 @@ export default function App() {
         }
       `}</style>
       <audio ref={audioRef} onTimeUpdate={onTimeUpdate} onEnded={() => skipLecture(1)} onLoadedMetadata={() => setDuration(audioRef.current?.duration || 0)} />
-      <Nav page={page} setPage={navigate} onSettings={() => setShowSettings(true)} hasLocation={!!savedLocation} onSearch={() => setShowSearch(true)} />
+      <Nav page={page} setPage={navigate} onSettings={() => setShowSettings(true)} hasLocation={!!savedLocation} onSearch={() => setShowSearch(true)} authUser={authUser} onAuthClick={() => setShowAuth(true)} onSignOut={handleSignOut} />
       <main>
         {page === "home" && <Home quote={quote} setPage={navigate} savedLocation={savedLocation} />}
         {page === "prayer" && <PrayerTimes savedLocation={savedLocation} />}
@@ -2784,7 +3086,7 @@ export default function App() {
         {page === "audio" && <AudioPage {...audioProps} />}
         {page === "tasbeeh" && <TasbeehPage />}
         {page === "quran"   && <QuranPage />}
-        {page === "dua"     && <DuaPage />}
+        {page === "dua"     && <DuaPage favs={duaFavs} onFav={toggleDuaFav} />}
         {page === "asma"    && <AsmaPage />}
         {page === "admin"   && <AdminPage />}
       </main>
@@ -2805,6 +3107,12 @@ export default function App() {
         />
       )}
       <FloatingPlayer {...audioProps} navigate={navigate} />
+      {showAuth && (
+        <AuthModal
+          onClose={() => setShowAuth(false)}
+          onAuth={session => setAuthSession(session)}
+        />
+      )}
     </div>
   );
 }
@@ -2980,13 +3288,15 @@ const DUAS = [
 ];
 
 // ─── DUA PAGE ──────────────────────────────────────────────────────
-function DuaPage() {
+function DuaPage({ favs = new Set(), onFav = () => {} }) {
   const [cat, setCat] = useState("All");
   const [open, setOpen] = useState(null);
   const [copied, setCopied] = useState(null);
   const ARABIC_F = "'Amiri', 'Traditional Arabic', serif";
 
-  const filtered = cat === "All" ? DUAS : DUAS.filter(d => d.cat === cat);
+  const filtered = cat === "Saved"
+    ? DUAS.filter((d, i) => favs.has(d.cat + "-" + i))
+    : cat === "All" ? DUAS : DUAS.filter(d => d.cat === cat);
 
   function copy(dua, id) {
     const text = `${dua.ar}\n\n${dua.tr}\n\n${dua.en}\n— ${dua.src}`;
@@ -3001,7 +3311,7 @@ function DuaPage() {
 
       {/* Category filter */}
       <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 28 }}>
-        {DUA_CATS.map(c => (
+        {["Saved", ...DUA_CATS].map(c => (
           <button key={c} onClick={() => { setCat(c); setOpen(null); }} style={{
             padding: "6px 14px", border: `1px solid ${cat===c ? GOLD : BORDER}`,
             background: cat===c ? GREEN_L : "transparent",
@@ -3053,11 +3363,18 @@ function DuaPage() {
                   {/* Footer */}
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                     <span style={{ fontSize: 11, color: MUTED, letterSpacing: "0.04em" }}>📖 {dua.src}</span>
-                    <button onClick={() => copy(dua, id)} style={{
-                      background: "none", border: `1px solid ${copied===id ? GOLD : BORDER}`,
-                      padding: "4px 14px", fontSize: 11, color: copied===id ? GOLD : MUTED,
-                      cursor: "pointer", fontFamily: SANS, letterSpacing: "0.06em", transition: "all 0.15s",
-                    }}>{copied===id ? "✓ Copied" : "Copy"}</button>
+                    <div style={{ display: "flex", gap: 8 }}>
+                      <button onClick={() => onFav(favId)} title={isFav ? "Remove from saved" : "Save"} style={{
+                        background: "none", border: "1px solid " + (isFav ? GOLD + "60" : BORDER),
+                        padding: "4px 10px", fontSize: 14, color: isFav ? GOLD : MUTED,
+                        cursor: "pointer", transition: "all 0.15s",
+                      }}>{isFav ? "♥" : "♡"}</button>
+                      <button onClick={() => copy(dua, id)} style={{
+                        background: "none", border: "1px solid " + (copied===id ? GOLD : BORDER),
+                        padding: "4px 14px", fontSize: 11, color: copied===id ? GOLD : MUTED,
+                        cursor: "pointer", fontFamily: SANS, letterSpacing: "0.06em", transition: "all 0.15s",
+                      }}>{copied===id ? "✓ Copied" : "Copy"}</button>
+                    </div>
                   </div>
                 </div>
               )}
@@ -3065,8 +3382,14 @@ function DuaPage() {
           );
         })}
       </div>
+      {cat === "Saved" && filtered.length === 0 && (
+        <div style={{ textAlign: "center", padding: "48px 0", color: MUTED }}>
+          <div style={{ fontSize: 28, marginBottom: 12 }}>♡</div>
+          <div style={{ fontSize: 13, letterSpacing: "0.04em" }}>No saved duas yet — tap ♡ on any dua to save it here</div>
+        </div>
+      )}
       <p style={{ marginTop: 24, fontSize: 12, color: MUTED, textAlign: "center", letterSpacing: "0.04em" }}>
-        Tap any dua to expand · Copy button copies Arabic, transliteration and translation
+        Tap any dua to expand · Tap ♡ to save favourites · Copy sends Arabic + translation
       </p>
     </div>
   );
