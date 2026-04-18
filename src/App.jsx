@@ -793,6 +793,7 @@ function Nav({ page, setPage, onSettings, hasLocation, onSearch, authUser, onAut
   }, []);
 
   return (
+    <>
     <nav ref={menuRef} style={{
       position: "sticky", top: 0, zIndex: 100,
       background: "#080808",
@@ -1081,6 +1082,24 @@ function Nav({ page, setPage, onSettings, hasLocation, onSearch, authUser, onAut
         }
       `}</style>
     </nav>
+
+    {/* Floating hamburger — always tappable on mobile even when nav is scrolled away */}
+    {navHidden && \!menuOpen && (
+      <button
+        onClick={() => { setMenuOpen(true); setNavHidden(false); }}
+        className="nav-mobile"
+        style={{
+          position: "fixed", top: 10, right: 10, zIndex: 500,
+          background: "#0A0A0A", border: `1px solid ${BORDER}`,
+          borderRadius: 8, cursor: "pointer",
+          width: 40, height: 40, display: "none",
+          alignItems: "center", justifyContent: "center",
+          color: TEXT, fontSize: 18,
+          boxShadow: "0 4px 24px rgba(0,0,0,0.8)",
+        }}
+      >☰</button>
+    )}
+    </>
   );
 }
 
