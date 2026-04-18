@@ -689,7 +689,7 @@ const SUPA_URL      = "https://kpyasnchzjxmhgywlxij.supabase.co";   // e.g. "htt
 const SUPA_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtweWFzbmNoemp4bWhneXdseGlqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYzMzk1MDEsImV4cCI6MjA5MTkxNTUwMX0.V5l2VG1Pl3cF4JO91mf_9vNiImA37jOgqcWTFr3Qm34";   // your project's anon/public key
 
 // Cloudflare Worker for PDF uploads → R2
-const UPLOAD_WORKER_URL = ""; // e.g. "https://muslims-path-upload.yourname.workers.dev"
+const UPLOAD_WORKER_URL = "https://uploadworker.platoni-af6.workers.dev";
 
 // Emails allowed to access /admin — add yours here
 const ADMIN_EMAILS = ["platoni@live.com"];
@@ -4613,3 +4613,4 @@ function AudioPage({ lectures, current, playing, play, skip, seek, progress, dur
     </div>
   );
 }
+               
