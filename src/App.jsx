@@ -2863,6 +2863,35 @@ export default function App() {
   }
   const notifTimers = useRef([]);
 
+  // ── PWA install prompt ────────────────────────────────────────
+  const deferredPrompt = useRef(null);
+  const [showInstall, setShowInstall] = useState(false);
+
+  useEffect(() => {
+    if (localStorage.getItem("mp-pwa-dismissed")) return;
+    function handler(e) {
+      e.preventDefault();
+      deferredPrompt.current = e;
+      setShowInstall(true);
+    }
+    window.addEventListener("beforeinstallprompt", handler);
+    return () => window.removeEventListener("beforeinstallprompt", handler);
+  }, []);
+
+  function handleInstall() {
+    if (!deferredPrompt.current) return;
+    deferredPrompt.current.prompt();
+    deferredPrompt.current.userChoice.then(() => {
+      deferredPrompt.current = null;
+      setShowInstall(false);
+    });
+  }
+
+  function dismissInstall() {
+    setShowInstall(false);
+    try { localStorage.setItem("mp-pwa-dismissed", "1"); } catch {}
+  }
+
   // ── Auth state ─────────────────────────────────────────────────
   const [authSession, setAuthSession] = useState(() => loadSession());
   const [showAuth, setShowAuth] = useState(false);
@@ -3110,6 +3139,37 @@ export default function App() {
         />
       )}
       <FloatingPlayer {...audioProps} navigate={navigate} />
+
+      {/* PWA Install Banner */}
+      {showInstall && (
+        <div style={{
+          position: "fixed", bottom: 8, left: 8, right: 8, zIndex: 400,
+          background: "linear-gradient(135deg,#0E0C08,#161210)",
+          border: "1px solid " + GOLD + "50",
+          boxShadow: "0 8px 40px rgba(0,0,0,0.8)",
+          padding: "14px 18px",
+          display: "flex", alignItems: "center", gap: 14,
+          maxWidth: 480, margin: "0 auto",
+        }}>
+          <img src="/logo.png" alt="" style={{ width: 36, height: 36, objectFit: "contain", flexShrink: 0 }} />
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div style={{ fontSize: 13, color: TEXT, fontFamily: SERIF, marginBottom: 2 }}>Add to Home Screen</div>
+            <div style={{ fontSize: 11, color: MUTED }}>Install Muslim’s Path for quick access</div>
+          </div>
+          <button onClick={handleInstall} style={{
+            background: "linear-gradient(135deg,#C9A84C,#A8883E)",
+            border: "none", padding: "8px 16px", cursor: "pointer",
+            fontSize: 11, fontWeight: 700, color: "#0A0A0A",
+            letterSpacing: "0.08em", textTransform: "uppercase",
+            fontFamily: SANS, flexShrink: 0,
+          }}>Install</button>
+          <button onClick={dismissInstall} style={{
+            background: "none", border: "none", cursor: "pointer",
+            color: MUTED, fontSize: 18, padding: "0 4px", flexShrink: 0, lineHeight: 1,
+          }}>×</button>
+        </div>
+      )}
+
       {showAuth && (
         <AuthModal
           onClose={() => setShowAuth(false)}
@@ -3657,7 +3717,39 @@ function QuranPage() {
   const [search,       setSearch]       = useState("");
   const [showTrans,    setShowTrans]     = useState(true);
   const [fromCache,    setFromCache]    = useState(false);
+  const [bookmarks,    setBookmarks]    = useState(() => {
+    try { return JSON.parse(localStorage.getItem("mp-quran-bkm") || "[]"); } catch { return []; }
+  });
   const topRef = useRef(null);
+
+  function toggleBookmark(verse) {
+    setBookmarks(prev => {
+      const surah = surahs.find(s => s.number === current);
+      const key = current + ":" + verse.n;
+      const exists = prev.find(b => b.key === key);
+      let next;
+      if (exists) {
+        next = prev.filter(b => b.key !== key);
+      } else {
+        const entry = {
+          key,
+          surah: current,
+          verse: verse.n,
+          surahEn: surah?.englishName || "",
+          surahAr: surah?.name || "",
+          preview: verse.en ? verse.en.substring(0, 80) + (verse.en.length > 80 ? "…" : "") : "",
+          savedAt: Date.now(),
+        };
+        next = [entry, ...prev].slice(0, 20);
+      }
+      try { localStorage.setItem("mp-quran-bkm", JSON.stringify(next)); } catch {}
+      return next;
+    });
+  }
+
+  function isBookmarked(verseN) {
+    return bookmarks.some(b => b.key === current + ":" + verseN);
+  }
 
   // Load surah list — use module cache if available
   useEffect(() => {
@@ -3765,14 +3857,23 @@ function QuranPage() {
           <div key={v.n} style={{
             padding: "28px 0", borderBottom: `1px solid ${BORDER}`,
             display: "flex", flexDirection: "column", gap: 14,
+            background: isBookmarked(v.n) ? "rgba(201,168,76,0.04)" : "transparent",
+            transition: "background 0.2s",
           }}>
             {/* Verse number + Arabic */}
             <div style={{ display: "flex", alignItems: "flex-start", gap: 16, direction: "rtl" }}>
-              <div style={{
-                width: 32, height: 32, borderRadius: "50%", border: `1px solid ${GOLD}50`,
-                display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0,
-                fontSize: 11, color: GOLD, fontFamily: SANS, direction: "ltr",
-              }}>{v.n}</div>
+              <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6, flexShrink: 0, direction: "ltr" }}>
+                <div style={{
+                  width: 32, height: 32, borderRadius: "50%", border: `1px solid ${GOLD}50`,
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  fontSize: 11, color: GOLD, fontFamily: SANS,
+                }}>{v.n}</div>
+                <button onClick={() => toggleBookmark(v)} title={isBookmarked(v.n) ? "Remove bookmark" : "Bookmark verse"} style={{
+                  background: "none", border: "none", cursor: "pointer",
+                  fontSize: 14, color: isBookmarked(v.n) ? GOLD : MUTED,
+                  padding: 2, transition: "color 0.15s", lineHeight: 1,
+                }}>{"🔖"}</button>
+              </div>
               <div style={{ fontSize: 26, fontFamily: ARABIC, color: TEXT, lineHeight: 2.2, flex: 1, textAlign: "right" }}>
                 {v.ar}
               </div>
@@ -3813,6 +3914,57 @@ function QuranPage() {
   return (
     <div style={{ maxWidth: 860, margin: "0 auto", padding: "40px 24px" }}>
       <PageTitle icon="📖" title="The Noble Quran" sub="114 surahs · Arabic with English translation" />
+
+      {/* Bookmarks panel */}
+      {bookmarks.length > 0 && (
+        <div style={{ marginBottom: 28, border: "1px solid " + GOLD + "30", background: "linear-gradient(135deg,#0E0C08,#120F08)" }}>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "12px 18px", borderBottom: "1px solid " + BORDER }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+              <span style={{ fontSize: 14 }}>{"🔖"}</span>
+              <span style={{ fontSize: 11, color: GOLD, letterSpacing: "0.14em", textTransform: "uppercase", fontFamily: SANS, fontWeight: 600 }}>Bookmarks</span>
+              <span style={{ fontSize: 10, color: MUTED, background: BORDER, padding: "1px 7px" }}>{bookmarks.length}</span>
+            </div>
+            <button onClick={() => {
+              setBookmarks([]);
+              try { localStorage.removeItem("mp-quran-bkm"); } catch {}
+            }} style={{ background: "none", border: "none", cursor: "pointer", fontSize: 11, color: MUTED, fontFamily: SANS, letterSpacing: "0.06em" }}>
+              Clear all
+            </button>
+          </div>
+          <div style={{ display: "flex", flexDirection: "column" }}>
+            {bookmarks.map((b, i) => (
+              <div key={b.key} onClick={() => openSurah(b.surah)}
+                style={{
+                  display: "flex", alignItems: "center", gap: 14, padding: "11px 18px",
+                  borderBottom: i < bookmarks.length - 1 ? "1px solid " + BORDER : "none",
+                  cursor: "pointer", transition: "background 0.15s",
+                }}
+                onMouseEnter={e => e.currentTarget.style.background = GREEN_L}
+                onMouseLeave={e => e.currentTarget.style.background = "transparent"}
+              >
+                <div style={{ flexShrink: 0, textAlign: "center" }}>
+                  <div style={{ fontSize: 10, color: GOLD, fontFamily: SANS, fontWeight: 600 }}>{b.surah}:{b.verse}</div>
+                </div>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{ fontSize: 13, color: TEXT, fontFamily: SERIF, marginBottom: 2 }}>{b.surahEn} — Verse {b.verse}</div>
+                  <div style={{ fontSize: 11, color: MUTED, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{b.preview}</div>
+                </div>
+                <div style={{ fontFamily: ARABIC, fontSize: 16, color: GOLD, flexShrink: 0, direction: "rtl" }}>{b.surahAr}</div>
+                <button onClick={e => {
+                  e.stopPropagation();
+                  setBookmarks(prev => {
+                    const next = prev.filter(x => x.key !== b.key);
+                    try { localStorage.setItem("mp-quran-bkm", JSON.stringify(next)); } catch {}
+                    return next;
+                  });
+                }} style={{ background: "none", border: "none", cursor: "pointer", color: MUTED, fontSize: 16, padding: "0 4px", flexShrink: 0 }}>
+                  ×
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       <input
         placeholder="Search surah by name or number…"
