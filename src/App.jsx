@@ -1073,7 +1073,7 @@ function Home({ quote, setPage, savedLocation }) {
 
       {/* Grid */}
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(140px, 1fr))", gap: 1, border: `1px solid ${BORDER}` }}>
-        {[...NAV_ITEMS.filter(n => n.id !== "home"), ...TOOLS_ITEMS].map(n => (
+        {[...NAV_ITEMS.filter(n => n.id !== "home")].map(n => (
           <button key={n.id} onClick={() => setPage(n.id)} style={{
             background: SURFACE, border: "none", borderRight: `1px solid ${BORDER}`, borderBottom: `1px solid ${BORDER}`,
             padding: "24px 16px", cursor: "pointer",
@@ -1134,6 +1134,67 @@ function Home({ quote, setPage, savedLocation }) {
             <div style={{ position: "relative", zIndex: 1, display: "flex", flexDirection: "column", alignItems: "center", gap: 10 }}>
               <div style={{ fontSize: 22, opacity: 0.9, lineHeight: 1 }}>{n.icon}</div>
               <div style={{ fontWeight: 500, color: TEXT, fontSize: 12, letterSpacing: "0.06em", fontFamily: SANS }}>{n.label}</div>
+            </div>
+          </button>
+        ))}
+
+        {/* Tools section divider */}
+        <div style={{
+          gridColumn: "1 / -1",
+          borderTop: "1px solid #242424",
+          borderBottom: "1px solid #242424",
+          background: "#0D0D0D",
+          padding: "10px 20px",
+          display: "flex", alignItems: "center", gap: 10,
+        }}>
+          <span style={{ fontSize: 15 }}>&#x1F6E0;</span>
+          <span style={{ fontSize: 11, color: "#C9A84C", letterSpacing: "0.18em", textTransform: "uppercase", fontWeight: 600 }}>Tools</span>
+          <div style={{ flex: 1, height: 1, background: "linear-gradient(to right, rgba(201,168,76,0.3), transparent)" }} />
+        </div>
+
+        {TOOLS_ITEMS.map(n => (
+          <button key={n.id} onClick={() => setPage(n.id)} style={{
+            background: SURFACE, border: "none", borderRight: "1px solid #242424", borderBottom: "1px solid #242424",
+            padding: "24px 16px", cursor: "pointer",
+            transition: "background 0.2s",
+            position: "relative", overflow: "hidden",
+            display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
+            minHeight: 110, textAlign: "center",
+          }}
+            onMouseEnter={e => { e.currentTarget.style.background = GREEN_L; }}
+            onMouseLeave={e => { e.currentTarget.style.background = SURFACE; }}
+          >
+            <svg xmlns="http://www.w3.org/2000/svg"
+              style={{ position: "absolute", inset: 0, width: "100%", height: "100%", opacity: 0.13, pointerEvents: "none" }}>
+              <defs>
+                <pattern id={"ar-t-" + n.id} width="80" height="80" patternUnits="userSpaceOnUse">
+                  <g fill="none" stroke="#C9A84C">
+                    <g transform="translate(40,40)">
+                      <rect x="-17" y="-17" width="34" height="34" strokeWidth="0.9"/>
+                      <rect x="-17" y="-17" width="34" height="34" transform="rotate(45)" strokeWidth="0.9"/>
+                      <circle r="10" strokeWidth="0.5"/>
+                      <circle r="22" strokeWidth="0.4" strokeDasharray="2 3"/>
+                    </g>
+                    <g transform="translate(0,0)">
+                      <rect x="-12" y="-12" width="24" height="24" strokeWidth="0.6"/>
+                      <rect x="-12" y="-12" width="24" height="24" transform="rotate(45)" strokeWidth="0.6"/>
+                    </g>
+                    <g transform="translate(80,80)">
+                      <rect x="-12" y="-12" width="24" height="24" strokeWidth="0.6"/>
+                      <rect x="-12" y="-12" width="24" height="24" transform="rotate(45)" strokeWidth="0.6"/>
+                    </g>
+                    <line x1="40" y1="7"  x2="40" y2="23" strokeWidth="0.5"/>
+                    <line x1="40" y1="57" x2="40" y2="73" strokeWidth="0.5"/>
+                    <line x1="7"  y1="40" x2="23" y2="40" strokeWidth="0.5"/>
+                    <line x1="57" y1="40" x2="73" y2="40" strokeWidth="0.5"/>
+                  </g>
+                </pattern>
+              </defs>
+              <rect width="100%" height="100%" fill={"url(#ar-t-" + n.id + ")"}/>
+            </svg>
+            <div style={{ position: "relative", zIndex: 1, display: "flex", flexDirection: "column", alignItems: "center", gap: 10 }}>
+              <div style={{ fontSize: 22, opacity: 0.9, lineHeight: 1 }}>{n.icon}</div>
+              <div style={{ fontWeight: 500, color: TEXT, fontSize: 12, letterSpacing: "0.06em" }}>{n.label}</div>
             </div>
           </button>
         ))}
