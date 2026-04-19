@@ -3642,15 +3642,15 @@ function QuranPage() {
                 {v.ar}
               </div>
             </div>
-            {/* Transliteration */}
-            {showTrans && v.tr && (
-              <div style={{ fontSize: 12, color: GOLD + "aa", lineHeight: 1.8, paddingLeft: 48, fontFamily: SANS, letterSpacing: "0.04em", fontStyle: "italic" }}>
+            {/* Transliteration — always visible */}
+            {v.tr && (
+              <div style={{ fontSize: 15, color: GOLD + "bb", lineHeight: 1.9, paddingLeft: 48, fontFamily: SANS, letterSpacing: "0.04em", fontStyle: "italic" }}>
                 {v.tr}
               </div>
             )}
             {/* Translation */}
             {showTrans && (
-              <div style={{ fontSize: 14, color: MUTED, lineHeight: 1.9, paddingLeft: 48, fontFamily: SERIF, letterSpacing: "0.02em" }}>
+              <div style={{ fontSize: 17, color: MUTED, lineHeight: 1.9, paddingLeft: 48, fontFamily: SERIF, letterSpacing: "0.02em" }}>
                 {v.en}
               </div>
             )}
