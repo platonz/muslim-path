@@ -1684,7 +1684,12 @@ function Library({ navigate }) {
             </div>
           ) : (
             <iframe
-              src={`${UPLOAD_WORKER_URL}/${pdfOpen.url.split("/").pop()}`}
+              src={(() => {
+                const R2_BASE = "https://pub-cdb1d5a2606a4ef68b5d888d9c684d9e.r2.dev/";
+                const path = pdfOpen.url.startsWith(R2_BASE) ? pdfOpen.url.slice(R2_BASE.length) : pdfOpen.url.split("/").pop();
+                const key = path.includes("/") ? path : `books/${path}`;
+                return `${UPLOAD_WORKER_URL}/${key}`;
+              })()}
               title={pdfOpen.title}
               style={{ flex: 1, border: "none", width: "100%", background: "#fff" }}
               onError={() => setPdfError(true)}
