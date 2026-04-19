@@ -1,3 +1,18 @@
 {
-  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
+  "rewrites": [{ "source": "/((?!api/).*)", "destination": "/index.html" }],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "X-Content-Type-Options",  "value": "nosniff" },
+        { "key": "X-Frame-Options",          "value": "DENY" },
+        { "key": "Referrer-Policy",          "value": "strict-origin-when-cross-origin" },
+        { "key": "Permissions-Policy",       "value": "camera=(), microphone=(), geolocation=(self)" },
+        {
+          "key": "Content-Security-Policy",
+          "value": "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://*.supabase.co https://api.aladhan.com https://api.alquran.cloud https://uploadworker.platoni-af6.workers.dev; frame-src https://docs.google.com https://uploadworker.platoni-af6.workers.dev https://pub-cdb1d5a2606a4ef68b5d888d9c684d9e.r2.dev; media-src https://uploadworker.platoni-af6.workers.dev https://pub-cdb1d5a2606a4ef68b5d888d9c684d9e.r2.dev;"
+        }
+      ]
+    }
+  ]
 }

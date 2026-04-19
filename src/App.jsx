@@ -678,15 +678,17 @@ function isRamadanDay(date) {
 
 // ─── SUPABASE CONFIG ──────────────────────────────────────────────
 // Fill these in after creating your Supabase project (Settings → API)
-const SUPA_URL      = "https://kpyasnchzjxmhgywlxij.supabase.co";   // e.g. "https://xxxxxxxxxxxx.supabase.co"
-const SUPA_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtweWFzbmNoemp4bWhneXdseGlqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYzMzk1MDEsImV4cCI6MjA5MTkxNTUwMX0.V5l2VG1Pl3cF4JO91mf_9vNiImA37jOgqcWTFr3Qm34";   // your project's anon/public key
+const SUPA_URL      = import.meta.env.VITE_SUPA_URL      || "";
+const SUPA_ANON_KEY = import.meta.env.VITE_SUPA_ANON_KEY || "";
 
-// Cloudflare Worker for PDF uploads → R2
-const UPLOAD_WORKER_URL = "https://uploadworker.platoni-af6.workers.dev";
+// Cloudflare Worker URL (public — used for reading files via GET)
+const UPLOAD_WORKER_URL = import.meta.env.VITE_UPLOAD_WORKER_URL || "";
+
+// Uploads go through /api/upload (Vercel serverless) — key never reaches browser
+const UPLOAD_API = "/api/upload";
 
 // Emails allowed to access /admin — add yours here
 const ADMIN_EMAILS = ["platoni@live.com"];
-const UPLOAD_WORKER_KEY = "Purg1upload$"; // the ADMIN_KEY secret you set in the Worker
 
 async function supaFetch(table, opts = "") {
   if (!SUPA_URL) return null;
@@ -4114,14 +4116,14 @@ function AdminPage({ authSession }) {
 
   async function uploadPDF(file) {
     if (!file) return;
-    if (!UPLOAD_WORKER_URL) { flash("Set UPLOAD_WORKER_URL in App.jsx first."); return; }
     setUploading(true); setUploadPct(0);
     try {
       const result = await new Promise((resolve, reject) => {
         const xhr = new XMLHttpRequest();
-        xhr.open("POST", UPLOAD_WORKER_URL);
-        xhr.setRequestHeader("X-Admin-Key", UPLOAD_WORKER_KEY);
+        xhr.open("POST", UPLOAD_API);
+        xhr.setRequestHeader("Authorization", "Bearer " + authSession.access_token);
         xhr.setRequestHeader("X-Filename", file.name.replace(/\s+/g, "_"));
+        xhr.setRequestHeader("X-Folder", "books");
         xhr.setRequestHeader("Content-Type", file.type || "application/pdf");
         xhr.upload.onprogress = e => { if (e.lengthComputable) setUploadPct(Math.round(e.loaded / e.total * 100)); };
         xhr.onload = () => {
@@ -4144,13 +4146,12 @@ function AdminPage({ authSession }) {
 
   async function uploadMP3(file) {
     if (!file) return;
-    if (!UPLOAD_WORKER_URL) { flash("Set UPLOAD_WORKER_URL in App.jsx first."); return; }
     setUploadingMp3(true); setUploadMp3Pct(0);
     try {
       const result = await new Promise((resolve, reject) => {
         const xhr = new XMLHttpRequest();
-        xhr.open("POST", UPLOAD_WORKER_URL);
-        xhr.setRequestHeader("X-Admin-Key", UPLOAD_WORKER_KEY);
+        xhr.open("POST", UPLOAD_API);
+        xhr.setRequestHeader("Authorization", "Bearer " + authSession.access_token);
         xhr.setRequestHeader("X-Filename", file.name.replace(/\s+/g, "_"));
         xhr.setRequestHeader("X-Folder", "audio/Ligjerata");
         xhr.setRequestHeader("Content-Type", file.type || "audio/mpeg");
@@ -4403,7 +4404,7 @@ function AdminPage({ authSession }) {
             <div style={{ marginTop: 12, border: `1px dashed ${UPLOAD_WORKER_URL ? BORDER : GOLD+"30"}`, borderRadius: 2, padding: "14px 16px" }}>
               <div style={{ fontSize: 11, color: MUTED, marginBottom: 8, letterSpacing: "0.06em" }}>
                 UPLOAD PDF — auto-fills the URL above
-                {!UPLOAD_WORKER_URL && <span style={{ color: "#e67e22", marginLeft: 8 }}>⚠ Set UPLOAD_WORKER_URL in App.jsx to enable uploads</span>}
+                {!UPLOAD_WORKER_URL && <span style={{ color: "#e67e22", marginLeft: 8 }}>⚠ Set VITE_UPLOAD_WORKER_URL in Vercel env vars to enable uploads</span>}
               </div>
               <input
                 type="file" accept=".pdf"
@@ -4488,7 +4489,7 @@ function AdminPage({ authSession }) {
             <div style={{ marginTop: 12, border: `1px dashed ${UPLOAD_WORKER_URL ? BORDER : GOLD+"30"}`, borderRadius: 2, padding: "14px 16px" }}>
               <div style={{ fontSize: 11, color: MUTED, marginBottom: 8, letterSpacing: "0.06em" }}>
                 UPLOAD MP3 — auto-fills filename, URL and title above
-                {!UPLOAD_WORKER_URL && <span style={{ color: "#e67e22", marginLeft: 8 }}>⚠ Set UPLOAD_WORKER_URL in App.jsx to enable uploads</span>}
+                {!UPLOAD_WORKER_URL && <span style={{ color: "#e67e22", marginLeft: 8 }}>⚠ Set VITE_UPLOAD_WORKER_URL in Vercel env vars to enable uploads</span>}
               </div>
               <input
                 type="file" accept=".mp3,audio/*"
