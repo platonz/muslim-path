@@ -1,0 +1,42 @@
+{
+  "nav": {
+    "home": "Ballina",
+    "prayer": "Kohët e Namazit",
+    "dua": "Dua",
+    "calendar": "Kalendari",
+    "library": "Biblioteka",
+    "audio": "Ligjerata",
+    "tasbeeh": "Tesbihe",
+    "quran": "Kurani",
+    "asma": "99 Emrat",
+    "tools": "Mjetet",
+    "search": "Kërko",
+    "settings": "Cilësimet",
+    "signIn": "Hyrje",
+    "signUp": "Regjistrim",
+    "signInUp": "Hyrje / Regjistrim",
+    "signOut": "Dil",
+    "active": "Aktiv"
+  },
+  "tools": {
+    "zakat": "Zekati",
+    "inheritance": "Trashëgimia",
+    "qibla": "Kibla",
+    "dates": "Datat"
+  },
+  "hero": {
+    "subtitle": "Mjete dhe Burime për Jetën Tuaj Islame të Përditshme",
+    "setLocation": "⚙ Vendosni vendndodhjen tuaj për të parë kohët e namazit",
+    "setLocationFull": "⚙ Vendosni vendndodhjen në Cilësime për të parë kohët e namazit"
+  },
+  "prayer": {
+    "next": "Namazi i Ardhshëm",
+    "in": "në",
+    "now": "Tani"
+  },
+  "lang": {
+    "en": "EN",
+    "sq": "SQ",
+    "switch": "Gjuha"
+  }
+}

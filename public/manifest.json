@@ -2,7 +2,9 @@
   "name": "Muslim's Path",
   "short_name": "Muslim's Path",
   "description": "Your Islamic Companion — Prayer Times, Qibla, Library, Zakat & more",
+  "id": "https://www.muslimspath.app/",
   "start_url": "/",
+  "scope": "/",
   "display": "standalone",
   "background_color": "#0A0A0A",
   "theme_color": "#C9A84C",
@@ -13,5 +15,7 @@
     { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
   ],
   "categories": ["education", "lifestyle", "religion"],
-  "lang": "en"
+  "lang": "en",
+  "related_applications": [],
+  "prefer_related_applications": false
 }

@@ -1,0 +1,42 @@
+{
+  "nav": {
+    "home": "Home",
+    "prayer": "Prayer Times",
+    "dua": "Dua",
+    "calendar": "Calendar",
+    "library": "Library",
+    "audio": "Lectures",
+    "tasbeeh": "Tasbeeh",
+    "quran": "Quran",
+    "asma": "99 Names",
+    "tools": "Tools",
+    "search": "Search",
+    "settings": "Settings",
+    "signIn": "Sign In",
+    "signUp": "Sign Up",
+    "signInUp": "Sign In / Sign Up",
+    "signOut": "Sign Out",
+    "active": "Active"
+  },
+  "tools": {
+    "zakat": "Zakat",
+    "inheritance": "Inheritance",
+    "qibla": "Qibla",
+    "dates": "Dates"
+  },
+  "hero": {
+    "subtitle": "Tools & Resources for Your Daily Islamic Life",
+    "setLocation": "⚙ Set your location to see prayer times",
+    "setLocationFull": "⚙ Set your location in Settings to see prayer times here"
+  },
+  "prayer": {
+    "next": "Next Prayer",
+    "in": "in",
+    "now": "Now"
+  },
+  "lang": {
+    "en": "EN",
+    "sq": "SQ",
+    "switch": "Language"
+  }
+}
