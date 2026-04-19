@@ -1559,6 +1559,7 @@ function Library({ navigate }) {
   const [books, setBooks] = useState(LIBRARY);
   const [cats, setCats] = useState(CATEGORIES);
   const [loading, setLoading] = useState(false);
+  const [pdfOpen, setPdfOpen] = useState(null); // { url, title }
 
   useEffect(() => {
     if (!SUPA_URL) return;
@@ -1575,6 +1576,7 @@ function Library({ navigate }) {
   }, []);
 
   const filtered = books.filter(b => {
+    if (!b.url || b.url === "#") return false; // hide books with no real content
     const matchCat = cat === "All" || b.cat === cat;
     const matchSearch = !search || b.title.toLowerCase().includes(search.toLowerCase()) || b.author.toLowerCase().includes(search.toLowerCase());
     return matchCat && matchSearch;
@@ -1612,32 +1614,66 @@ function Library({ navigate }) {
       {loading && <div style={{ textAlign: "center", padding: 32, color: MUTED, letterSpacing: "0.08em", fontSize: 13 }}>Loading library…</div>}
 
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: 1, border: `1px solid ${BORDER}` }}>
-        {filtered.map((b, i) => (
-          <div key={i} style={{
-            background: SURFACE, border: "none",
-            borderRight: `1px solid ${BORDER}`, borderBottom: `1px solid ${BORDER}`,
-            padding: "14px 16px", display: "flex", flexDirection: "column", gap: 6,
-            transition: "background 0.2s",
-          }}
-            onMouseEnter={e => e.currentTarget.style.background = GREEN_L}
-            onMouseLeave={e => e.currentTarget.style.background = SURFACE}
-          >
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 8 }}>
-              <span style={{ fontSize: 10, fontWeight: 600, color: GOLD, letterSpacing: "0.1em", textTransform: "uppercase", borderBottom: `1px solid ${GOLD}40`, paddingBottom: 2 }}>{b.cat}</span>
-              {b.url !== "#" && (
-                <a href={b.url} target="_blank" rel="noreferrer" style={{ color: MUTED, fontSize: 11, textDecoration: "none", letterSpacing: "0.04em" }}>{b.url.startsWith("https://pub-") && b.url.endsWith(".pdf") ? "↓ PDF" : "↗ Visit"}</a>
-              )}
+        {filtered.map((b, i) => {
+          const isPdf = b.url.endsWith(".pdf");
+          return (
+            <div key={i} style={{
+              background: SURFACE, border: "none",
+              borderRight: `1px solid ${BORDER}`, borderBottom: `1px solid ${BORDER}`,
+              padding: "14px 16px", display: "flex", flexDirection: "column", gap: 6,
+              transition: "background 0.2s", cursor: "pointer",
+            }}
+              onClick={() => isPdf ? setPdfOpen({ url: b.url, title: b.title }) : window.open(b.url, "_blank", "noreferrer")}
+              onMouseEnter={e => e.currentTarget.style.background = GREEN_L}
+              onMouseLeave={e => e.currentTarget.style.background = SURFACE}
+            >
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 8 }}>
+                <span style={{ fontSize: 10, fontWeight: 600, color: GOLD, letterSpacing: "0.1em", textTransform: "uppercase", borderBottom: `1px solid ${GOLD}40`, paddingBottom: 2 }}>{b.cat}</span>
+                <span style={{ color: MUTED, fontSize: 11, letterSpacing: "0.04em" }}>{isPdf ? "📖 Read" : "↗ Visit"}</span>
+              </div>
+              <div style={{ fontWeight: 500, fontSize: 14, color: TEXT, lineHeight: 1.5, fontFamily: SERIF }}>{b.title}</div>
+              <div style={{ fontSize: 12, color: MUTED, letterSpacing: "0.02em" }}>{b.author}</div>
             </div>
-            <div style={{ fontWeight: 500, fontSize: 14, color: TEXT, lineHeight: 1.5, fontFamily: SERIF }}>{b.title}</div>
-            <div style={{ fontSize: 12, color: MUTED, letterSpacing: "0.02em" }}>{b.author}</div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
       {filtered.length === 0 && (
         <div style={{ textAlign: "center", padding: "48px 0", color: MUTED }}>
           <div style={{ fontSize: 36, marginBottom: 12 }}>📭</div>
           <div>No results for "{search}"</div>
+        </div>
+      )}
+
+      {/* PDF reader modal */}
+      {pdfOpen && (
+        <div style={{ position: "fixed", inset: 0, zIndex: 900, background: "rgba(0,0,0,0.97)", display: "flex", flexDirection: "column" }}>
+          <div style={{
+            display: "flex", justifyContent: "space-between", alignItems: "center",
+            padding: "12px 20px", background: "#080808", borderBottom: `1px solid ${BORDER}`,
+            flexShrink: 0,
+          }}>
+            <span style={{ fontSize: 13, color: TEXT, fontFamily: SERIF, fontWeight: 500, maxWidth: "70%", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+              📖 {pdfOpen.title}
+            </span>
+            <div style={{ display: "flex", gap: 8 }}>
+              <a href={pdfOpen.url} download target="_blank" rel="noreferrer" style={{
+                background: "transparent", border: `1px solid ${BORDER}`, borderRadius: 2,
+                color: MUTED, padding: "6px 14px", cursor: "pointer", fontSize: 11,
+                fontFamily: SANS, letterSpacing: "0.06em", textDecoration: "none",
+              }}>↓ Download</a>
+              <button onClick={() => setPdfOpen(null)} style={{
+                background: "transparent", border: `1px solid ${BORDER}`, borderRadius: 2,
+                color: MUTED, padding: "6px 14px", cursor: "pointer", fontSize: 11,
+                fontFamily: SANS, letterSpacing: "0.06em",
+              }}>✕ Close</button>
+            </div>
+          </div>
+          <iframe
+            src={pdfOpen.url}
+            title={pdfOpen.title}
+            style={{ flex: 1, border: "none", width: "100%", background: "#fff" }}
+          />
         </div>
       )}
     </div>
@@ -2353,6 +2389,58 @@ function AuthModal({ onClose, onAuth }) {
   );
 }
 
+// ─── LANGUAGE BAR ─────────────────────────────────────────────────
+function LangBar({ page }) {
+  const { i18n } = useTranslation();
+  const current = i18n.language?.startsWith("sq") ? "sq" : "en";
+
+  function switchLang(lang) {
+    if (lang === current) return;
+    i18n.changeLanguage(lang);
+    const slug = (PAGE_SLUGS[lang] || PAGE_SLUGS.en)[page] ?? page;
+    const newUrl = page === "home" ? `/${lang}/` : `/${lang}/${slug}`;
+    window.location.href = newUrl;
+  }
+
+  const btn = (lang, flag, label) => {
+    const active = current === lang;
+    return (
+      <button
+        key={lang}
+        onClick={() => switchLang(lang)}
+        style={{
+          display: "flex", alignItems: "center", gap: 6,
+          padding: "5px 18px", borderRadius: 999,
+          border: `1px solid ${active ? GOLD : BORDER}`,
+          background: active ? `${GOLD}22` : "transparent",
+          color: active ? GOLD : MUTED,
+          cursor: active ? "default" : "pointer",
+          fontSize: 12, fontWeight: 700,
+          letterSpacing: "0.08em", fontFamily: SANS,
+          transition: "all 0.2s",
+        }}
+        onMouseEnter={e => { if (!active) { e.currentTarget.style.borderColor = GOLD + "80"; e.currentTarget.style.color = TEXT; } }}
+        onMouseLeave={e => { if (!active) { e.currentTarget.style.borderColor = BORDER; e.currentTarget.style.color = MUTED; } }}
+      >
+        <span style={{ fontSize: 16, lineHeight: 1 }}>{flag}</span>
+        {label}
+      </button>
+    );
+  };
+
+  return (
+    <div style={{
+      display: "flex", justifyContent: "center", alignItems: "center", gap: 8,
+      padding: "7px 16px",
+      background: "#060606",
+      borderBottom: `1px solid ${BORDER}`,
+    }}>
+      {btn("en", "🇬🇧", "EN")}
+      {btn("sq", "🇦🇱", "SQ")}
+    </div>
+  );
+}
+
 // ─── APP ──────────────────────────────────────────────────────────
 const VALID_PAGES = ["home","prayer","qibla","zakat","inheritance","calendar","dates","library","audio","tasbeeh","quran","dua","asma","admin"];
 
@@ -2798,6 +2886,7 @@ export default function App() {
       `}</style>
       <audio ref={audioRef} onTimeUpdate={onTimeUpdate} onEnded={() => skipLecture(1)} onLoadedMetadata={() => setDuration(audioRef.current?.duration || 0)} />
       <Navbar page={page} setPage={navigate} onSettings={() => setShowSettings(true)} hasLocation={!!savedLocation} onSearch={() => setShowSearch(true)} authUser={authUser} onAuthClick={() => setShowAuth(true)} onSignOut={handleSignOut} />
+      <LangBar page={page} />
       <main>
         {page === "home" && <Home quote={quote} setPage={navigate} savedLocation={savedLocation} />}
         {page === "prayer" && <PrayerTimes savedLocation={savedLocation} />}

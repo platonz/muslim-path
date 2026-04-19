@@ -14,12 +14,6 @@ export default function Navbar({ page, setPage, onSettings, hasLocation, onSearc
   const toolsRef = useRef(null);
   const toolsActive = TOOLS_ITEMS.some(tool => tool.id === page);
 
-  const currentLang = i18n.language?.startsWith("sq") ? "sq" : "en";
-  const toggleLang = () => {
-    const next = currentLang === "en" ? "sq" : "en";
-    i18n.changeLanguage(next);
-  };
-
   // Close tools dropdown on outside click
   useEffect(() => {
     function handle(e) {
@@ -135,21 +129,6 @@ export default function Navbar({ page, setPage, onSettings, hasLocation, onSearc
           >
             ⚙
             {hasLocation && <span style={{ position: "absolute", top: 3, right: 3, width: 6, height: 6, borderRadius: "50%", background: GOLD }} />}
-          </button>
-
-          {/* Language switcher */}
-          <button onClick={toggleLang} title={t("lang.switch")} style={{
-            background: "transparent", border: `1px solid ${BORDER}`,
-            borderRadius: 2, cursor: "pointer",
-            padding: "0 8px", height: 36, fontSize: 10,
-            fontWeight: 600, letterSpacing: "0.1em",
-            color: GOLD, fontFamily: SANS,
-            transition: "all 0.2s",
-          }}
-            onMouseEnter={e => { e.currentTarget.style.borderColor = GOLD; }}
-            onMouseLeave={e => { e.currentTarget.style.borderColor = BORDER; }}
-          >
-            {currentLang === "en" ? "SQ" : "EN"}
           </button>
 
           {/* Auth button */}
@@ -275,17 +254,6 @@ export default function Navbar({ page, setPage, onSettings, hasLocation, onSearc
             borderLeft: "2px solid transparent",
           }}>
             <span>⚙</span> {t("nav.settings")} {hasLocation && <span style={{ fontSize: 10, color: GOLD, border: `1px solid ${GOLD}60`, padding: "1px 7px", letterSpacing: "0.06em" }}>{t("nav.active")}</span>}
-          </button>
-
-          {/* Language switcher in mobile menu */}
-          <button onClick={() => { toggleLang(); setMenuOpen(false); }} style={{
-            background: "none", border: "none", cursor: "pointer", textAlign: "left",
-            padding: "12px 32px", fontSize: 12, color: GOLD,
-            display: "flex", alignItems: "center", gap: 12,
-            letterSpacing: "0.08em", textTransform: "uppercase", fontFamily: SANS,
-            borderLeft: "2px solid transparent",
-          }}>
-            <span>🌐</span> {currentLang === "en" ? "Shqip" : "English"}
           </button>
 
           {authUser ? (
