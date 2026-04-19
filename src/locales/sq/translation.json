@@ -37,6 +37,84 @@
   "lang": {
     "en": "EN",
     "sq": "SQ",
-    "switch": "Gjuha"
+    "switch": "Gjuha",
+    "chooseLabel": "Zgjidhni gjuhën tuaj",
+    "english": "Anglisht (English)",
+    "albanian": "Shqip (Albanian)"
+  },
+  "auth": {
+    "companion": "Shoqëruesi Juaj Islamik",
+    "signIn": "Hyrje",
+    "signUp": "Regjistrim",
+    "fullName": "Emri i plotë (opsional)",
+    "email": "Adresa e emailit",
+    "password": "Fjalëkalimi",
+    "pleaseWait": "Ju lutemi prisni…",
+    "createAccount": "Krijo Llogari",
+    "or": "OSE",
+    "continueGoogle": "Vazhdo me Google",
+    "checkEmail": "Kontrolloni emailin tuaj për lidhjen e konfirmimit, pastaj hyni.",
+    "langStep": "Zgjidhni gjuhën tuaj të preferuar",
+    "langContinue": "Vazhdo"
+  },
+  "dua": {
+    "title": "Dua & Dhikr",
+    "sub": "Lutjet e përditshme, dhikret e mëngjesit dhe mbrëmjes, dhe kujtimet situative",
+    "saved": "Të Ruajtura",
+    "noSaved": "Nuk ka dua të ruajtura — trokitni ♡ mbi çdo dua për ta ruajtur këtu",
+    "hint": "Trokitni mbi çdo dua për të zgjeruar · Trokitni ♡ për të ruajtur të preferuarat · Kopjo dërgon arabisht + përkthim",
+    "copy": "Kopjo",
+    "copied": "✓ Kopjuar",
+    "cats": {
+      "All": "Të Gjitha",
+      "Morning": "Mëngjesi",
+      "Evening": "Mbrëmja",
+      "Prayer": "Namazi",
+      "Meals": "Ushqimi",
+      "Home": "Shtëpia",
+      "Sleep": "Gjumi",
+      "Travel": "Udhëtimi",
+      "Protection": "Mbrojtja",
+      "Distress": "Vështirësia",
+      "General": "Të Përgjithshme"
+    }
+  },
+  "asma": {
+    "title": "Emrat e Bukur të Allahut",
+    "sub": "99 Emrat e Bukur të Allahut — mësoji ato për të hyrë në Xhenet",
+    "verse": "\"Allahut i takojnë emrat më të bukur, prandaj lutuni me ato.\" — Kurani 7:180",
+    "search": "Kërko sipas emrit, transliterimit ose kuptimit…",
+    "nameOf": "Emri {{n}} nga 99"
+  },
+  "quran": {
+    "search": "Kërko sure…",
+    "loading": "Duke ngarkuar…",
+    "cached": "Ruajtur",
+    "showTrans": "Përkthimi",
+    "bookmark": "Shëno",
+    "bookmarks": "Shënimet",
+    "noBookmarks": "Nuk ka shënime ende",
+    "back": "← Kthehu te suret"
+  },
+  "settings": {
+    "title": "Cilësimet",
+    "location": "Vendndodhja për Namaz",
+    "cityPlaceholder": "Emri i qytetit…",
+    "search": "Kërko",
+    "notifications": "Njoftime Namazi",
+    "notifOn": "Aktiv",
+    "notifOff": "Joaktiv",
+    "save": "Ruaj Vendndodhjen",
+    "saved": "Ruajtur",
+    "clear": "Pastro",
+    "language": "Gjuha"
+  },
+  "common": {
+    "close": "Mbyll",
+    "back": "Kthehu",
+    "install": "Instalo",
+    "addToHome": "Shto në Ekranin Kryesor",
+    "installMsg": "Instalo Muslim's Path për qasje të shpejtë",
+    "later": "Më vonë"
   }
 }

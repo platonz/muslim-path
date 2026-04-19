@@ -39,12 +39,8 @@ export default function Navbar({ page, setPage, onSettings, hasLocation, onSearc
     }}>
       <div style={{ maxWidth: 1300, margin: "0 auto", display: "flex", alignItems: "center", justifyContent: "space-between", height: 64 }}>
         {/* Logo */}
-        <button onClick={() => setPage("home")} style={{ background: "none", border: "none", cursor: "pointer", display: "flex", alignItems: "center", gap: 12 }}>
-          <img src="/logo.png" alt="Muslim's Path" style={{ width: 38, height: 38, objectFit: "contain" }} />
-          <div style={{ display: "flex", flexDirection: "column", lineHeight: 1.15 }}>
-            <span style={{ fontWeight: 600, fontSize: 17, color: TEXT, fontFamily: SERIF, letterSpacing: "0.06em" }}>Muslim's Path</span>
-            <span className="nav-logo-sub" style={{ fontSize: 9, color: GOLD, letterSpacing: "0.18em", textTransform: "uppercase", fontFamily: SANS }}>Your Islamic Companion</span>
-          </div>
+        <button onClick={() => setPage("home")} style={{ background: "none", border: "none", cursor: "pointer", display: "flex", alignItems: "center", gap: 10 }}>
+          <img src="/logo.png" alt="Muslim's Path" style={{ width: 40, height: 40, objectFit: "contain" }} />
         </button>
 
         {/* Desktop nav */}

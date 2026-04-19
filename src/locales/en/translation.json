@@ -37,6 +37,84 @@
   "lang": {
     "en": "EN",
     "sq": "SQ",
-    "switch": "Language"
+    "switch": "Language",
+    "chooseLabel": "Choose your language",
+    "english": "English",
+    "albanian": "Albanian (Shqip)"
+  },
+  "auth": {
+    "companion": "Your Islamic Companion",
+    "signIn": "Sign In",
+    "signUp": "Sign Up",
+    "fullName": "Full name (optional)",
+    "email": "Email address",
+    "password": "Password",
+    "pleaseWait": "Please wait…",
+    "createAccount": "Create Account",
+    "or": "OR",
+    "continueGoogle": "Continue with Google",
+    "checkEmail": "Check your email for a confirmation link, then sign in.",
+    "langStep": "Choose your preferred language",
+    "langContinue": "Continue"
+  },
+  "dua": {
+    "title": "Dua & Dhikr",
+    "sub": "Daily supplications, morning & evening adhkar, and situational remembrances",
+    "saved": "Saved",
+    "noSaved": "No saved duas yet — tap ♡ on any dua to save it here",
+    "hint": "Tap any dua to expand · Tap ♡ to save favourites · Copy sends Arabic + translation",
+    "copy": "Copy",
+    "copied": "✓ Copied",
+    "cats": {
+      "All": "All",
+      "Morning": "Morning",
+      "Evening": "Evening",
+      "Prayer": "Prayer",
+      "Meals": "Meals",
+      "Home": "Home",
+      "Sleep": "Sleep",
+      "Travel": "Travel",
+      "Protection": "Protection",
+      "Distress": "Distress",
+      "General": "General"
+    }
+  },
+  "asma": {
+    "title": "Asmāʾ ul-Ḥusnā",
+    "sub": "The 99 Beautiful Names of Allah — memorise them to enter Paradise",
+    "verse": "\"And to Allah belong the best names, so invoke Him by them.\" — Quran 7:180",
+    "search": "Search by name, transliteration or meaning…",
+    "nameOf": "Name {{n}} of 99"
+  },
+  "quran": {
+    "search": "Search surahs…",
+    "loading": "Loading…",
+    "cached": "Cached",
+    "showTrans": "Translation",
+    "bookmark": "Bookmark",
+    "bookmarks": "Bookmarks",
+    "noBookmarks": "No bookmarks yet",
+    "back": "← Back to surahs"
+  },
+  "settings": {
+    "title": "Settings",
+    "location": "Prayer Location",
+    "cityPlaceholder": "City name…",
+    "search": "Search",
+    "notifications": "Prayer Notifications",
+    "notifOn": "On",
+    "notifOff": "Off",
+    "save": "Save Location",
+    "saved": "Saved",
+    "clear": "Clear",
+    "language": "Language"
+  },
+  "common": {
+    "close": "Close",
+    "back": "Back",
+    "install": "Install",
+    "addToHome": "Add to Home Screen",
+    "installMsg": "Install Muslim's Path for quick access",
+    "later": "Later"
   }
 }

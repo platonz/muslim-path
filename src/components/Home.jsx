@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
+import i18n from "../i18n";
 import {
   BORDER, GOLD, GREEN_L, SURFACE, TEXT, MUTED, SERIF, SANS,
   NAV_ITEMS, TOOLS_ITEMS,
@@ -7,6 +8,8 @@ import {
 
 export default function Home({ quote, setPage, savedLocation }) {
   const { t } = useTranslation();
+  const isSq = i18n.language?.startsWith("sq");
+  const quoteText = isSq && quote.sq ? quote.sq : quote.text;
   const [nextPrayer, setNextPrayer] = useState(null);
   const [now, setNow] = useState(new Date());
 
@@ -72,7 +75,7 @@ export default function Home({ quote, setPage, savedLocation }) {
           <div style={{ position: "absolute", bottom: 0, left: 0, width: 20, height: 20, borderBottom: `1px solid ${GOLD}`, borderLeft: `1px solid ${GOLD}` }} />
           <div style={{ position: "absolute", bottom: 0, right: 0, width: 20, height: 20, borderBottom: `1px solid ${GOLD}`, borderRight: `1px solid ${GOLD}` }} />
           <div style={{ padding: "36px 40px", background: "linear-gradient(145deg,#111111,#0D0D0D)" }}>
-            <p style={{ fontSize: 22, color: TEXT, fontStyle: "italic", margin: 0, lineHeight: 1.8, fontFamily: SERIF, letterSpacing: "0.02em" }}>"{quote.text}"</p>
+            <p style={{ fontSize: 22, color: TEXT, fontStyle: "italic", margin: 0, lineHeight: 1.8, fontFamily: SERIF, letterSpacing: "0.02em" }}>"{quoteText}"</p>
             <div style={{ height: 1, background: `linear-gradient(90deg, transparent, ${GOLD}60, transparent)`, margin: "16px 0" }} />
             <p style={{ margin: 0, fontSize: 12, color: GOLD, fontWeight: 500, letterSpacing: "0.12em", textTransform: "uppercase" }}>— {quote.src}</p>
             {quote.ref && <p style={{ margin: "4px 0 0", fontSize: 11, color: MUTED, letterSpacing: "0.06em" }}>{quote.ref}</p>}
