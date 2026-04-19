@@ -1560,6 +1560,7 @@ function Library({ navigate }) {
   const [cats, setCats] = useState(CATEGORIES);
   const [loading, setLoading] = useState(false);
   const [pdfOpen, setPdfOpen] = useState(null); // { url, title }
+  const [pdfError, setPdfError] = useState(false);
 
   useEffect(() => {
     if (!SUPA_URL) return;
@@ -1623,7 +1624,7 @@ function Library({ navigate }) {
               padding: "14px 16px", display: "flex", flexDirection: "column", gap: 6,
               transition: "background 0.2s", cursor: "pointer",
             }}
-              onClick={() => isPdf ? setPdfOpen({ url: b.url, title: b.title }) : window.open(b.url, "_blank", "noreferrer")}
+              onClick={() => { if (isPdf) { setPdfOpen({ url: b.url, title: b.title }); setPdfError(false); } else window.open(b.url, "_blank", "noreferrer"); }}
               onMouseEnter={e => e.currentTarget.style.background = GREEN_L}
               onMouseLeave={e => e.currentTarget.style.background = SURFACE}
             >
@@ -1669,11 +1670,26 @@ function Library({ navigate }) {
               }}>✕ Close</button>
             </div>
           </div>
-          <iframe
-            src={pdfOpen.url}
-            title={pdfOpen.title}
-            style={{ flex: 1, border: "none", width: "100%", background: "#fff" }}
-          />
+          {pdfError ? (
+            <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 16, padding: 40 }}>
+              <div style={{ fontSize: 40 }}>📄</div>
+              <div style={{ fontSize: 15, color: TEXT, fontFamily: SERIF, textAlign: "center" }}>Could not load this PDF in the browser.</div>
+              <div style={{ fontSize: 13, color: MUTED, textAlign: "center", maxWidth: 360 }}>The file may not be publicly accessible yet. Use the Download button to open it directly.</div>
+              <a href={pdfOpen.url} target="_blank" rel="noreferrer" style={{
+                marginTop: 8, padding: "10px 28px", borderRadius: 2,
+                background: `linear-gradient(135deg, ${GOLD}, #A8893C)`,
+                color: "#0A0A0A", fontWeight: 700, fontSize: 13,
+                fontFamily: SANS, letterSpacing: "0.08em", textDecoration: "none",
+              }}>↓ Open / Download PDF</a>
+            </div>
+          ) : (
+            <iframe
+              src={pdfOpen.url}
+              title={pdfOpen.title}
+              style={{ flex: 1, border: "none", width: "100%", background: "#fff" }}
+              onError={() => setPdfError(true)}
+            />
+          )}
         </div>
       )}
     </div>
