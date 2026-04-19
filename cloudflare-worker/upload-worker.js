@@ -28,7 +28,7 @@
  */
 
 // Your R2 public bucket base URL (Settings → Public Access in R2)
-const R2_PUBLIC_URL = "https://pub-cdb1d5a2606a4ef68b5d888d9c684d9e.r2.dev";
+const R2_PUBLIC_URL = "https://cdn.muslimspath.app";
 
 export default {
   async fetch(request, env) {
