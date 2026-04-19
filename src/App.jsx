@@ -2429,12 +2429,7 @@ function LangBar({ page }) {
   };
 
   return (
-    <div style={{
-      display: "flex", justifyContent: "center", alignItems: "center", gap: 8,
-      padding: "7px 16px",
-      background: "#060606",
-      borderBottom: `1px solid ${BORDER}`,
-    }}>
+    <div style={{ display: "flex", justifyContent: "center", gap: 8, padding: "8px 16px" }}>
       {btn("en", "🇬🇧", "EN")}
       {btn("sq", "🇦🇱", "SQ")}
     </div>
