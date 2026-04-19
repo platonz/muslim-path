@@ -109,6 +109,12 @@
     "clear": "Clear",
     "language": "Language"
   },
+  "pages": {
+    "prayer":      { "title": "Prayer Times",       "sub": "Enter your city to get today's prayer schedule" },
+    "calendar":    { "title": "Islamic Calendar",   "sub": "Hijri dates, significant events, and White Days for every month" },
+    "library":     { "title": "Islamic Library",    "sub": "" },
+    "quran":       { "title": "The Noble Quran",    "sub": "114 surahs · Arabic with transliteration and translation" }
+  },
   "common": {
     "close": "Close",
     "back": "Back",

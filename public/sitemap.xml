@@ -1,16 +1,74 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://www.muslimspath.app/</loc>          <priority>1.0</priority><changefreq>daily</changefreq></url>
-  <url><loc>https://www.muslimspath.app/prayer</loc>     <priority>0.9</priority><changefreq>daily</changefreq></url>
-  <url><loc>https://www.muslimspath.app/quran</loc>      <priority>0.9</priority><changefreq>weekly</changefreq></url>
-  <url><loc>https://www.muslimspath.app/dua</loc>        <priority>0.9</priority><changefreq>weekly</changefreq></url>
-  <url><loc>https://www.muslimspath.app/qibla</loc>      <priority>0.8</priority><changefreq>monthly</changefreq></url>
-  <url><loc>https://www.muslimspath.app/tasbeeh</loc>    <priority>0.8</priority><changefreq>monthly</changefreq></url>
-  <url><loc>https://www.muslimspath.app/asma</loc>       <priority>0.8</priority><changefreq>monthly</changefreq></url>
-  <url><loc>https://www.muslimspath.app/library</loc>    <priority>0.8</priority><changefreq>monthly</changefreq></url>
-  <url><loc>https://www.muslimspath.app/audio</loc>      <priority>0.7</priority><changefreq>weekly</changefreq></url>
-  <url><loc>https://www.muslimspath.app/zakat</loc>      <priority>0.7</priority><changefreq>monthly</changefreq></url>
-  <url><loc>https://www.muslimspath.app/calendar</loc>   <priority>0.7</priority><changefreq>monthly</changefreq></url>
-  <url><loc>https://www.muslimspath.app/dates</loc>      <priority>0.6</priority><changefreq>monthly</changefreq></url>
-  <url><loc>https://www.muslimspath.app/inheritance</loc><priority>0.6</priority><changefreq>monthly</changefreq></url>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+
+  <!-- English URLs -->
+  <url><loc>https://www.muslimspath.app/en/</loc>            <priority>1.0</priority><changefreq>daily</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.muslimspath.app/en/"/>
+    <xhtml:link rel="alternate" hreflang="sq" href="https://www.muslimspath.app/sq/"/>
+  </url>
+  <url><loc>https://www.muslimspath.app/en/prayer</loc>      <priority>0.9</priority><changefreq>daily</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.muslimspath.app/en/prayer"/>
+    <xhtml:link rel="alternate" hreflang="sq" href="https://www.muslimspath.app/sq/namazi"/>
+  </url>
+  <url><loc>https://www.muslimspath.app/en/quran</loc>       <priority>0.9</priority><changefreq>weekly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.muslimspath.app/en/quran"/>
+    <xhtml:link rel="alternate" hreflang="sq" href="https://www.muslimspath.app/sq/kurani"/>
+  </url>
+  <url><loc>https://www.muslimspath.app/en/dua</loc>         <priority>0.9</priority><changefreq>weekly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.muslimspath.app/en/dua"/>
+    <xhtml:link rel="alternate" hreflang="sq" href="https://www.muslimspath.app/sq/dua"/>
+  </url>
+  <url><loc>https://www.muslimspath.app/en/qibla</loc>       <priority>0.8</priority><changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.muslimspath.app/en/qibla"/>
+    <xhtml:link rel="alternate" hreflang="sq" href="https://www.muslimspath.app/sq/kibla"/>
+  </url>
+  <url><loc>https://www.muslimspath.app/en/tasbeeh</loc>     <priority>0.8</priority><changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.muslimspath.app/en/tasbeeh"/>
+    <xhtml:link rel="alternate" hreflang="sq" href="https://www.muslimspath.app/sq/tesbihe"/>
+  </url>
+  <url><loc>https://www.muslimspath.app/en/asma</loc>        <priority>0.8</priority><changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.muslimspath.app/en/asma"/>
+    <xhtml:link rel="alternate" hreflang="sq" href="https://www.muslimspath.app/sq/emrat"/>
+  </url>
+  <url><loc>https://www.muslimspath.app/en/library</loc>     <priority>0.8</priority><changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.muslimspath.app/en/library"/>
+    <xhtml:link rel="alternate" hreflang="sq" href="https://www.muslimspath.app/sq/biblioteka"/>
+  </url>
+  <url><loc>https://www.muslimspath.app/en/audio</loc>       <priority>0.7</priority><changefreq>weekly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.muslimspath.app/en/audio"/>
+    <xhtml:link rel="alternate" hreflang="sq" href="https://www.muslimspath.app/sq/ligjerata"/>
+  </url>
+  <url><loc>https://www.muslimspath.app/en/zakat</loc>       <priority>0.7</priority><changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.muslimspath.app/en/zakat"/>
+    <xhtml:link rel="alternate" hreflang="sq" href="https://www.muslimspath.app/sq/zekati"/>
+  </url>
+  <url><loc>https://www.muslimspath.app/en/calendar</loc>    <priority>0.7</priority><changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.muslimspath.app/en/calendar"/>
+    <xhtml:link rel="alternate" hreflang="sq" href="https://www.muslimspath.app/sq/kalendari"/>
+  </url>
+  <url><loc>https://www.muslimspath.app/en/dates</loc>       <priority>0.6</priority><changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.muslimspath.app/en/dates"/>
+    <xhtml:link rel="alternate" hreflang="sq" href="https://www.muslimspath.app/sq/datat"/>
+  </url>
+  <url><loc>https://www.muslimspath.app/en/inheritance</loc> <priority>0.6</priority><changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.muslimspath.app/en/inheritance"/>
+    <xhtml:link rel="alternate" hreflang="sq" href="https://www.muslimspath.app/sq/trashegimia"/>
+  </url>
+
+  <!-- Albanian URLs -->
+  <url><loc>https://www.muslimspath.app/sq/</loc>            <priority>1.0</priority><changefreq>daily</changefreq></url>
+  <url><loc>https://www.muslimspath.app/sq/namazi</loc>      <priority>0.9</priority><changefreq>daily</changefreq></url>
+  <url><loc>https://www.muslimspath.app/sq/kurani</loc>      <priority>0.9</priority><changefreq>weekly</changefreq></url>
+  <url><loc>https://www.muslimspath.app/sq/dua</loc>         <priority>0.9</priority><changefreq>weekly</changefreq></url>
+  <url><loc>https://www.muslimspath.app/sq/kibla</loc>       <priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://www.muslimspath.app/sq/tesbihe</loc>     <priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://www.muslimspath.app/sq/emrat</loc>       <priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://www.muslimspath.app/sq/biblioteka</loc>  <priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://www.muslimspath.app/sq/ligjerata</loc>   <priority>0.7</priority><changefreq>weekly</changefreq></url>
+  <url><loc>https://www.muslimspath.app/sq/zekati</loc>      <priority>0.7</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://www.muslimspath.app/sq/kalendari</loc>   <priority>0.7</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://www.muslimspath.app/sq/datat</loc>       <priority>0.6</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://www.muslimspath.app/sq/trashegimia</loc> <priority>0.6</priority><changefreq>monthly</changefreq></url>
+
 </urlset>

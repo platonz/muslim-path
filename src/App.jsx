@@ -724,6 +724,7 @@ const LECTURES = [
 
 // ─── PRAYER TIMES ─────────────────────────────────────────────────
 function PrayerTimes({ savedLocation }) {
+  const { t } = useTranslation();
   const [city, setCity] = useState("");
   const [method, setMethod] = useState(1);
   const [school, setSchool] = useState(1);
@@ -827,7 +828,7 @@ function PrayerTimes({ savedLocation }) {
 
   return (
     <div style={{ maxWidth: 680, margin: "0 auto", padding: "40px 24px" }}>
-      <PageTitle icon="🕌" title="Prayer Times" sub="Enter your city to get today's prayer schedule" />
+      <PageTitle icon="🕌" title={t("pages.prayer.title")} sub={t("pages.prayer.sub")} />
       <Card style={{ marginBottom: 20 }}>
         <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
 
@@ -1552,6 +1553,7 @@ function DateConverter() {
 
 // ─── LIBRARY ──────────────────────────────────────────────────────
 function Library({ navigate }) {
+  const { t } = useTranslation();
   const [search, setSearch] = useState("");
   const [cat, setCat] = useState("All");
   const [books, setBooks] = useState(LIBRARY);
@@ -1580,7 +1582,7 @@ function Library({ navigate }) {
 
   return (
     <div style={{ maxWidth: 960, margin: "0 auto", padding: "40px 24px" }}>
-      <PageTitle icon="📚" title="Islamic Library" sub={loading ? "Loading…" : `${books.length} curated books and resources`} />
+      <PageTitle icon="📚" title={t("pages.library.title")} sub={loading ? "Loading…" : `${books.length} curated books and resources`} />
 
       <div style={{ display: "flex", gap: 10, marginBottom: 20, flexWrap: "wrap" }}>
         <input
@@ -1647,6 +1649,7 @@ const GREG_MONTHS_FULL = ["January","February","March","April","May","June","Jul
 const WEEKDAYS = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
 
 function IslamicCalendar() {
+  const { t } = useTranslation();
   const today = new Date();
   today.setHours(0,0,0,0);
   const [viewYear, setViewYear] = useState(today.getFullYear());
@@ -1682,7 +1685,7 @@ function IslamicCalendar() {
 
   return (
     <div style={{ maxWidth: 900, margin: "0 auto", padding: "40px 24px" }}>
-      <PageTitle icon="📆" title="Islamic Calendar" sub="Hijri dates, significant events, and White Days for every month" />
+      <PageTitle icon="📆" title={t("pages.calendar.title")} sub={t("pages.calendar.sub")} />
 
       {/* Today strip */}
       <Card style={{ background: "linear-gradient(145deg,#0E0C08,#161410)", border: `1px solid ${GOLD}30`, marginBottom: 20 }}>
@@ -2353,6 +2356,23 @@ function AuthModal({ onClose, onAuth }) {
 // ─── APP ──────────────────────────────────────────────────────────
 const VALID_PAGES = ["home","prayer","qibla","zakat","inheritance","calendar","dates","library","audio","tasbeeh","quran","dua","asma","admin"];
 
+// ── Language-prefixed URL slug mapping ────────────────────────────
+const PAGE_SLUGS = {
+  en: { home:"", prayer:"prayer", qibla:"qibla", zakat:"zakat", inheritance:"inheritance", calendar:"calendar", dates:"dates", library:"library", audio:"audio", tasbeeh:"tasbeeh", quran:"quran", dua:"dua", asma:"asma", admin:"admin" },
+  sq: { home:"", prayer:"namazi", qibla:"kibla", zakat:"zekati", inheritance:"trashegimia", calendar:"kalendari", dates:"datat", library:"biblioteka", audio:"ligjerata", tasbeeh:"tesbihe", quran:"kurani", dua:"dua", asma:"emrat", admin:"admin" },
+};
+function slugToPage(lang, slug) {
+  const map = PAGE_SLUGS[lang] || PAGE_SLUGS.en;
+  for (const [id, s] of Object.entries(map)) { if (s === slug) return id; }
+  // Fallback: try English slugs (backwards compat)
+  for (const [id, s] of Object.entries(PAGE_SLUGS.en)) { if (s === slug) return id; }
+  return null;
+}
+function pageToUrl(pageId, lang) {
+  const slug = (PAGE_SLUGS[lang] || PAGE_SLUGS.en)[pageId] ?? pageId;
+  return pageId === "home" ? `/${lang}/` : `/${lang}/${slug}`;
+}
+
 // ─── FLOATING MINI-PLAYER ─────────────────────────────────────────
 function FloatingPlayer({ current, playing, play, skip, stop, progress, duration, fmt, navigate }) {
   if (!current) return null;
@@ -2441,10 +2461,19 @@ function FloatingPlayer({ current, playing, play, skip, stop, progress, duration
 export default function App() {
   const { t } = useTranslation();
   const [page, setPage] = useState(() => {
-    // Support legacy hash URLs and new clean path URLs
+    // Support legacy hash URLs
     const hash = window.location.hash.replace("#", "");
     if (hash && VALID_PAGES.includes(hash)) return hash;
-    const path = window.location.pathname.replace(/^\//, "").split("?")[0];
+    // Parse /lang/slug or /lang/ (new format)
+    const parts = window.location.pathname.replace(/^\//, "").split("/").filter(Boolean);
+    if (parts[0] === "en" || parts[0] === "sq") {
+      const urlLang = parts[0];
+      i18n.changeLanguage(urlLang);
+      const pageId = slugToPage(urlLang, parts[1] || "");
+      return pageId || "home";
+    }
+    // Legacy: direct page ID
+    const path = parts[0] || "";
     return VALID_PAGES.includes(path) ? path : "home";
   });
   const [navHistory, setNavHistory] = useState([]);
@@ -2678,7 +2707,14 @@ export default function App() {
   // Browser back/forward button support
   useEffect(() => {
     function onPop() {
-      const path = window.location.pathname.replace(/^\//, "").split("?")[0];
+      const parts = window.location.pathname.replace(/^\//, "").split("/").filter(Boolean);
+      if (parts[0] === "en" || parts[0] === "sq") {
+        const urlLang = parts[0];
+        i18n.changeLanguage(urlLang);
+        setPage(slugToPage(urlLang, parts[1] || "") || "home");
+        return;
+      }
+      const path = parts[0] || "";
       setPage(VALID_PAGES.includes(path) ? path : "home");
     }
     window.addEventListener("popstate", onPop);
@@ -2712,13 +2748,15 @@ export default function App() {
     setMeta('meta[name="description"]',         "content", m.desc);
     setMeta('meta[property="og:title"]',        "content", m.title);
     setMeta('meta[property="og:description"]',  "content", m.desc);
-    setMeta('meta[property="og:url"]',          "content", `https://www.muslimspath.app${page === "home" ? "/" : "/" + page}`);
+    const lang = i18n.language?.startsWith("sq") ? "sq" : "en";
+    setMeta('meta[property="og:url"]',          "content", `https://www.muslimspath.app${pageToUrl(page, lang)}`);
   }, [page]);
 
   function navigate(p) {
     if (p !== page) setNavHistory(h => [...h, page]);
     setPage(p);
-    window.history.pushState({}, "", p === "home" ? "/" : `/${p}`);
+    const lang = i18n.language?.startsWith("sq") ? "sq" : "en";
+    window.history.pushState({}, "", pageToUrl(p, lang));
   }
 
   function goBack() {
@@ -2726,7 +2764,8 @@ export default function App() {
     const prev = navHistory[navHistory.length - 1];
     setNavHistory(h => h.slice(0, -1));
     setPage(prev);
-    window.history.pushState({}, "", prev === "home" ? "/" : `/${prev}`);
+    const lang = i18n.language?.startsWith("sq") ? "sq" : "en";
+    window.history.pushState({}, "", pageToUrl(prev, lang));
   }
 
   const audioProps = { lectures, current, playing, play: playLecture, skip: skipLecture, stop: stopAudio, seek: seekAudio, progress, duration, fmt: fmtTime, audioRef };
@@ -3502,14 +3541,18 @@ function QuranPage() {
       }
     } catch {}
 
-    fetch(`https://api.alquran.cloud/v1/surah/${current}/editions/quran-uthmani,${transEdition}`)
+    fetch(`https://api.alquran.cloud/v1/surah/${current}/editions/quran-uthmani,en.transliteration,${transEdition}`)
       .then(r => r.json())
       .then(d => {
-        const [ar, en] = d.data;
-        const parsed = ar.ayahs.map((a, i) => ({ n: a.numberInSurah, ar: a.text, en: en.ayahs[i].text }));
+        const [ar, translit, trans] = d.data;
+        const parsed = ar.ayahs.map((a, i) => ({
+          n: a.numberInSurah,
+          ar: a.text,
+          tr: translit.ayahs[i]?.text || "",
+          en: trans.ayahs[i]?.text || "",
+        }));
         setVerses(parsed);
         setLoadingRead(false);
-        // Save to localStorage for offline use
         try { localStorage.setItem(`qv_${current}_${transEdition}`, JSON.stringify(parsed)); } catch {}
         topRef.current?.scrollIntoView({ behavior: "smooth" });
       })
@@ -3534,7 +3577,7 @@ function QuranPage() {
       {/* Header */}
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 32, flexWrap: "wrap", gap: 12 }}>
         <button onClick={back} style={{ background: "none", border: `1px solid ${BORDER}`, borderRadius: 2, color: MUTED, padding: "7px 16px", cursor: "pointer", fontSize: 12, fontFamily: SANS, letterSpacing: "0.06em" }}>
-          ← All Surahs
+          {t("quran.back")}
         </button>
         <div style={{ textAlign: "center", flex: 1 }}>
           <div style={{ fontSize: 11, color: MUTED, letterSpacing: "0.14em", textTransform: "uppercase", marginBottom: 4 }}>
@@ -3545,11 +3588,11 @@ function QuranPage() {
           <div style={{ fontSize: 12, color: MUTED }}>{surah.englishNameTranslation}</div>
         </div>
         <div style={{ display: "flex", gap: 8 }}>
-          <button onClick={() => setShowTrans(t => !t)} style={{
+          <button onClick={() => setShowTrans(s => !s)} style={{
             background: showTrans ? GREEN_L : "transparent", border: `1px solid ${showTrans ? GOLD : BORDER}`,
             borderRadius: 2, color: showTrans ? GOLD : MUTED, padding: "7px 14px", cursor: "pointer",
             fontSize: 11, fontFamily: SANS, letterSpacing: "0.06em",
-          }}>Translation</button>
+          }}>{t("quran.showTrans")}</button>
         </div>
       </div>
 
@@ -3599,6 +3642,12 @@ function QuranPage() {
                 {v.ar}
               </div>
             </div>
+            {/* Transliteration */}
+            {showTrans && v.tr && (
+              <div style={{ fontSize: 12, color: GOLD + "aa", lineHeight: 1.8, paddingLeft: 48, fontFamily: SANS, letterSpacing: "0.04em", fontStyle: "italic" }}>
+                {v.tr}
+              </div>
+            )}
             {/* Translation */}
             {showTrans && (
               <div style={{ fontSize: 14, color: MUTED, lineHeight: 1.9, paddingLeft: 48, fontFamily: SERIF, letterSpacing: "0.02em" }}>
@@ -3634,7 +3683,7 @@ function QuranPage() {
   // ── SURAH LIST VIEW ────────────────────────────────────────────
   return (
     <div style={{ maxWidth: 860, margin: "0 auto", padding: "40px 24px" }}>
-      <PageTitle icon="📖" title="The Noble Quran" sub="114 surahs · Arabic with English translation" />
+      <PageTitle icon="📖" title={t("pages.quran.title")} sub={t("pages.quran.sub")} />
 
       {/* Bookmarks panel */}
       {bookmarks.length > 0 && (

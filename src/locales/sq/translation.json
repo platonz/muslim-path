@@ -109,6 +109,12 @@
     "clear": "Pastro",
     "language": "Gjuha"
   },
+  "pages": {
+    "prayer":      { "title": "Kohët e Namazit",    "sub": "Shkruani qytetin tuaj për kohët e namazit sot" },
+    "calendar":    { "title": "Kalendari Islamik",  "sub": "Datat hixhri, ngjarjet e rëndësishme dhe Ditët e Bardha çdo muaj" },
+    "library":     { "title": "Libraria Islamike",  "sub": "" },
+    "quran":       { "title": "Kurani Famëlartë",   "sub": "114 sure · Arabisht me transliterim dhe përkthim shqip" }
+  },
   "common": {
     "close": "Mbyll",
     "back": "Kthehu",
