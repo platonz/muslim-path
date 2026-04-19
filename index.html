@@ -3,7 +3,26 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Muslim's Path</title>
+    <title>Muslim's Path — Daily Islamic Companion</title>
+
+    <!-- SEO -->
+    <meta name="description" content="Prayer times, Qibla direction, Quran, Duas, Tasbeeh, Islamic calendar, Zakat calculator and more — all in one app." />
+    <meta name="keywords" content="prayer times, qibla, quran, dua, tasbeeh, zakat, islamic calendar, 99 names, muslim app, islamic app" />
+    <link rel="canonical" href="https://www.muslimspath.app/" />
+
+    <!-- Open Graph -->
+    <meta property="og:type"        content="website" />
+    <meta property="og:url"         content="https://www.muslimspath.app/" />
+    <meta property="og:title"       content="Muslim's Path — Daily Islamic Companion" />
+    <meta property="og:description" content="Prayer times, Qibla direction, Quran, Duas, Tasbeeh, Islamic calendar and more." />
+    <meta property="og:image"       content="https://www.muslimspath.app/icon-512.png" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card"        content="summary_large_image" />
+    <meta name="twitter:title"       content="Muslim's Path — Daily Islamic Companion" />
+    <meta name="twitter:description" content="Prayer times, Qibla direction, Quran, Duas, Tasbeeh and more." />
+    <meta name="twitter:image"       content="https://www.muslimspath.app/icon-512.png" />
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Amiri:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
@@ -15,6 +34,26 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="apple-mobile-web-app-title" content="Muslim's Path" />
     <link rel="apple-touch-icon" href="/icon-192.png" />
+
+    <!-- Skeleton: gold shimmer on top edge prevents blank-white flash while JS loads -->
+    <style>
+      body { background: #0A0A0A; margin: 0; }
+      #root:empty::after {
+        content: "";
+        display: block;
+        height: 3px;
+        background: linear-gradient(90deg, #0A0A0A 0%, #C9A84C 50%, #0A0A0A 100%);
+        background-size: 200% 100%;
+        animation: mp-shimmer 1.4s ease infinite;
+        position: fixed;
+        top: 0; left: 0; right: 0;
+      }
+      @keyframes mp-shimmer {
+        0%   { background-position: 200% 0; }
+        100% { background-position: -200% 0; }
+      }
+    </style>
+
     <script>
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {

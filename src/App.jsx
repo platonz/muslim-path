@@ -851,7 +851,7 @@ function Nav({ page, setPage, onSettings, hasLocation, onSearch, authUser, onAut
 
         {/* Search + Settings + mobile hamburger */}
         <div style={{ display: "flex", alignItems: "center", gap: 10, flexShrink: 0 }}>
-          <button onClick={onSearch} title="Search" style={{
+          <button onClick={onSearch} title="Search" aria-label="Search" style={{
             background: "transparent", border: `1px solid ${BORDER}`,
             borderRadius: 2, cursor: "pointer", color: MUTED,
             width: 36, height: 36, display: "flex", alignItems: "center", justifyContent: "center",
@@ -860,7 +860,7 @@ function Nav({ page, setPage, onSettings, hasLocation, onSearch, authUser, onAut
             onMouseEnter={e => { e.currentTarget.style.borderColor = GOLD; e.currentTarget.style.color = GOLD; }}
             onMouseLeave={e => { e.currentTarget.style.borderColor = BORDER; e.currentTarget.style.color = MUTED; }}
           >🔍</button>
-          <button onClick={onSettings} title="Settings" style={{
+          <button onClick={onSettings} title="Settings" aria-label="Settings" style={{
             background: "transparent",
             border: `1px solid ${hasLocation ? GOLD + "60" : BORDER}`,
             borderRadius: 2, cursor: "pointer", color: hasLocation ? GOLD : MUTED,
@@ -919,7 +919,7 @@ function Nav({ page, setPage, onSettings, hasLocation, onSearch, authUser, onAut
               onMouseLeave={e => e.currentTarget.style.opacity = "1"}
             >Sign In</button>
           )}
-          <button onClick={() => setMenuOpen(!menuOpen)} style={{
+          <button onClick={() => setMenuOpen(!menuOpen)} aria-label={menuOpen ? "Close menu" : "Open menu"} aria-expanded={menuOpen} style={{
             display: "none", background: "transparent", border: `1px solid ${BORDER}`,
             borderRadius: 2, cursor: "pointer", fontSize: 16, color: MUTED,
             width: 36, height: 36, alignItems: "center", justifyContent: "center",
@@ -2984,8 +2984,11 @@ function FloatingPlayer({ current, playing, play, skip, stop, progress, duration
 
 export default function App() {
   const [page, setPage] = useState(() => {
+    // Support legacy hash URLs and new clean path URLs
     const hash = window.location.hash.replace("#", "");
-    return VALID_PAGES.includes(hash) ? hash : "home";
+    if (hash && VALID_PAGES.includes(hash)) return hash;
+    const path = window.location.pathname.replace(/^\//, "").split("?")[0];
+    return VALID_PAGES.includes(path) ? path : "home";
   });
   const [navHistory, setNavHistory] = useState([]);
   const [quote] = useState(() => QUOTES[Math.floor(Math.random() * QUOTES.length)]);
@@ -3215,10 +3218,50 @@ export default function App() {
     return () => document.removeEventListener("keydown", onKey);
   }, []);
 
+  // Browser back/forward button support
+  useEffect(() => {
+    function onPop() {
+      const path = window.location.pathname.replace(/^\//, "").split("?")[0];
+      setPage(VALID_PAGES.includes(path) ? path : "home");
+    }
+    window.addEventListener("popstate", onPop);
+    return () => window.removeEventListener("popstate", onPop);
+  }, []);
+
+  // Dynamic <title> + <meta description> per page
+  const PAGE_META = {
+    home:        { title: "Muslim's Path — Daily Islamic Companion",          desc: "Prayer times, Qibla direction, Quran, Duas, Tasbeeh, Islamic calendar and more — all in one app." },
+    prayer:      { title: "Prayer Times — Muslim's Path",                      desc: "Accurate daily prayer times (Fajr, Dhuhr, Asr, Maghrib, Isha) for any city worldwide." },
+    qibla:       { title: "Qibla Direction — Muslim's Path",                   desc: "Find the direction of the Kaaba from anywhere using your device's live compass." },
+    quran:       { title: "Quran — Muslim's Path",                             desc: "Read the Holy Quran with Arabic text, transliteration and English translation." },
+    dua:         { title: "Dua & Dhikr — Muslim's Path",                       desc: "Morning & evening adhkar, daily supplications and situational remembrances." },
+    asma:        { title: "99 Names of Allah — Muslim's Path",                 desc: "Al-Asma ul-Husna — the 99 Beautiful Names of Allah with meanings and transliteration." },
+    tasbeeh:     { title: "Digital Tasbeeh Counter — Muslim's Path",           desc: "Digital dhikr counter for Subhanallah, Alhamdulillah, Allahu Akbar and custom phrases." },
+    zakat:       { title: "Zakat Calculator — Muslim's Path",                  desc: "Calculate your annual Zakat obligation based on nisab threshold and zakatable assets." },
+    inheritance: { title: "Islamic Inheritance Calculator — Muslim's Path",    desc: "Distribute estate according to Quranic inheritance rules (Faraidh)." },
+    calendar:    { title: "Islamic Calendar — Muslim's Path",                  desc: "Hijri calendar with Islamic dates, events and Gregorian cross-reference." },
+    dates:       { title: "Hijri ↔ Gregorian Date Converter — Muslim's Path", desc: "Convert dates between the Islamic Hijri calendar and the Gregorian calendar." },
+    library:     { title: "Islamic Library — Muslim's Path",                   desc: "Curated collection of essential Islamic books — Quran, Hadith, Seerah, Fiqh and Aqeedah." },
+    audio:       { title: "Islamic Lectures — Muslim's Path",                  desc: "Listen to Islamic lectures and audio content." },
+  };
+  useEffect(() => {
+    const m = PAGE_META[page] || PAGE_META.home;
+    document.title = m.title;
+    const setMeta = (sel, attr, val) => {
+      let el = document.querySelector(sel);
+      if (!el) { el = document.createElement("meta"); document.head.appendChild(el); }
+      el.setAttribute(attr, val);
+    };
+    setMeta('meta[name="description"]',         "content", m.desc);
+    setMeta('meta[property="og:title"]',        "content", m.title);
+    setMeta('meta[property="og:description"]',  "content", m.desc);
+    setMeta('meta[property="og:url"]',          "content", `https://www.muslimspath.app${page === "home" ? "/" : "/" + page}`);
+  }, [page]);
+
   function navigate(p) {
     if (p !== page) setNavHistory(h => [...h, page]);
     setPage(p);
-    window.location.hash = p === "home" ? "" : p;
+    window.history.pushState({}, "", p === "home" ? "/" : `/${p}`);
   }
 
   function goBack() {
@@ -3226,7 +3269,7 @@ export default function App() {
     const prev = navHistory[navHistory.length - 1];
     setNavHistory(h => h.slice(0, -1));
     setPage(prev);
-    window.location.hash = prev === "home" ? "" : prev;
+    window.history.pushState({}, "", prev === "home" ? "/" : `/${prev}`);
   }
 
   const audioProps = { lectures, current, playing, play: playLecture, skip: skipLecture, stop: stopAudio, seek: seekAudio, progress, duration, fmt: fmtTime, audioRef };
