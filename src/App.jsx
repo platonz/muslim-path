@@ -3650,7 +3650,7 @@ function QuranPage() {
             )}
             {/* Translation */}
             {showTrans && (
-              <div style={{ fontSize: 17, color: MUTED, lineHeight: 1.9, paddingLeft: 48, fontFamily: SERIF, letterSpacing: "0.02em" }}>
+              <div style={{ fontSize: 17, color: TEXT, lineHeight: 1.9, paddingLeft: 48, fontFamily: SERIF, letterSpacing: "0.02em" }}>
                 {v.en}
               </div>
             )}
