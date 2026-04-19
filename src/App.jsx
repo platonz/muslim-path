@@ -1684,7 +1684,7 @@ function Library({ navigate }) {
             </div>
           ) : (
             <iframe
-              src={`https://docs.google.com/viewer?url=${encodeURIComponent(pdfOpen.url)}&embedded=true`}
+              src={`${UPLOAD_WORKER_URL}/${pdfOpen.url.split("/").pop()}`}
               title={pdfOpen.title}
               style={{ flex: 1, border: "none", width: "100%", background: "#fff" }}
               onError={() => setPdfError(true)}
