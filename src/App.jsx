@@ -1091,7 +1091,22 @@ function Home({ quote, setPage, savedLocation }) {
     <div style={{ maxWidth: 900, margin: "0 auto", padding: "48px 24px" }}>
       {/* Quote */}
       <div style={{ textAlign: "center", marginBottom: 56 }}>
-        <div style={{ fontSize: 32, marginBottom: 20, opacity: 0.9 }}>☪️</div>
+        <div style={{ marginBottom: 20, opacity: 0.82 }}>
+          <svg width="42" height="42" viewBox="0 0 42 42" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            {/* Open book — left page */}
+            <path d="M21 35V11C17 9 10 9 5 11.5V35.5C10 33 17 33 21 35Z" stroke="white" strokeWidth="1.3" strokeLinejoin="round"/>
+            {/* Open book — right page */}
+            <path d="M21 35V11C25 9 32 9 37 11.5V35.5C32 33 25 33 21 35Z" stroke="white" strokeWidth="1.3" strokeLinejoin="round"/>
+            {/* Text lines — left page */}
+            <line x1="9"  y1="17" x2="19" y2="16.2" stroke="white" strokeWidth="0.9" strokeLinecap="round"/>
+            <line x1="9"  y1="21" x2="19" y2="20.2" stroke="white" strokeWidth="0.9" strokeLinecap="round"/>
+            <line x1="9"  y1="25" x2="19" y2="24.2" stroke="white" strokeWidth="0.9" strokeLinecap="round"/>
+            {/* Text lines — right page */}
+            <line x1="23" y1="16.2" x2="33" y2="17"  stroke="white" strokeWidth="0.9" strokeLinecap="round"/>
+            <line x1="23" y1="20.2" x2="33" y2="21"  stroke="white" strokeWidth="0.9" strokeLinecap="round"/>
+            <line x1="23" y1="24.2" x2="33" y2="25"  stroke="white" strokeWidth="0.9" strokeLinecap="round"/>
+          </svg>
+        </div>
         <h1 style={{ fontSize: 42, fontWeight: 500, color: TEXT, marginBottom: 6, fontFamily: SERIF, letterSpacing: "0.06em" }}>Muslim's Path</h1>
         <p style={{ color: MUTED, marginBottom: 40, fontSize: 12, letterSpacing: "0.18em", textTransform: "uppercase" }}>Tools &amp; Resources for Your Daily Islamic Life</p>
         <div style={{ maxWidth: 600, margin: "0 auto", position: "relative" }}>
