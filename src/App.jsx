@@ -1543,7 +1543,7 @@ function Library({ navigate }) {
     const matchCat = cat === "All" || b.cat === cat;
     const matchSearch = !search || b.title.toLowerCase().includes(search.toLowerCase()) || b.author.toLowerCase().includes(search.toLowerCase());
     return matchCat && matchSearch;
-  });
+  }).sort((a, b) => a.title.localeCompare(b.title, undefined, { sensitivity: "base" }));
 
   return (
     <div style={{ maxWidth: 960, margin: "0 auto", padding: "40px 24px" }}>
