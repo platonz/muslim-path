@@ -39,14 +39,8 @@ const LIBRARY = [
   // Quran & Translation
   { title: "Quran.com", author: "Multiple translations & audio", cat: "Quran", url: "https://quran.com" },
   { title: "The Clear Quran", author: "Dr. Mustafa Khattab", cat: "Quran", url: "https://theclearquran.org" },
-  { title: "The Meaning of the Holy Quran", author: "Abdullah Yusuf Ali", cat: "Quran", url: "#" },
-  { title: "The Message of the Quran", author: "Muhammad Asad", cat: "Quran", url: "#" },
   // Tafsir
-  { title: "Tafsir Ibn Kathir (4 vols)", author: "Ibn Kathir", cat: "Tafsir", url: "#" },
   { title: "Tafheem ul-Quran", author: "Abul Ala Maududi", cat: "Tafsir", url: "https://www.tafheem.net" },
-  { title: "In the Shade of the Quran", author: "Sayyid Qutb", cat: "Tafsir", url: "#" },
-  { title: "Tafsir al-Jalalain", author: "al-Suyuti & al-Mahalli", cat: "Tafsir", url: "#" },
-  { title: "Tafsir al-Sa'di", author: "Abdur Rahman al-Sa'di", cat: "Tafsir", url: "#" },
   // Hadith
   { title: "Sahih al-Bukhari", author: "Imam al-Bukhari", cat: "Hadith", url: "https://sunnah.com/bukhari" },
   { title: "Sahih Muslim", author: "Imam Muslim", cat: "Hadith", url: "https://sunnah.com/muslim" },
@@ -57,61 +51,8 @@ const LIBRARY = [
   { title: "40 Hadith of an-Nawawi", author: "Imam an-Nawawi", cat: "Hadith", url: "https://sunnah.com/nawawi40" },
   { title: "Al-Adab al-Mufrad", author: "Imam al-Bukhari", cat: "Hadith", url: "https://sunnah.com/adab" },
   { title: "Sunnah.com", author: "9 hadith collections online", cat: "Hadith", url: "https://sunnah.com" },
-  // Seerah
-  { title: "The Sealed Nectar", author: "Saifur Rahman al-Mubarakpuri", cat: "Seerah", url: "#" },
-  { title: "In the Footsteps of the Prophet", author: "Tariq Ramadan", cat: "Seerah", url: "#" },
-  { title: "Muhammad: His Life Based on the Earliest Sources", author: "Martin Lings", cat: "Seerah", url: "#" },
-  { title: "When the Moon Split", author: "Safiur Rahman Mubarakpuri", cat: "Seerah", url: "#" },
-  { title: "The Life of the Prophet Muhammad (4 vols)", author: "Ibn Kathir", cat: "Seerah", url: "#" },
-  { title: "Muhammad: A Prophet for Our Time", author: "Karen Armstrong", cat: "Seerah", url: "#" },
-  // Fiqh
-  { title: "Fiqh us-Sunnah", author: "Sayyid Sabiq", cat: "Fiqh", url: "#" },
-  { title: "Reliance of the Traveller (Umdat al-Salik)", author: "Ahmad ibn Naqib al-Misri", cat: "Fiqh", url: "#" },
-  { title: "Mukhtasar al-Quduri", author: "Imam al-Quduri (Hanafi)", cat: "Fiqh", url: "#" },
-  { title: "Minhaj al-Talibin", author: "Imam an-Nawawi (Shafi'i)", cat: "Fiqh", url: "#" },
-  { title: "Bidayat al-Mujtahid", author: "Ibn Rushd (Maliki)", cat: "Fiqh", url: "#" },
-  { title: "Principles of Islamic Jurisprudence", author: "Mohammad Hashim Kamali", cat: "Fiqh", url: "#" },
-  // Aqeedah
-  { title: "The Fundamentals of Tawheed", author: "Abu Ameenah Bilal Philips", cat: "Aqeedah", url: "#" },
-  { title: "Kitab al-Tawheed", author: "Muhammad ibn Abd al-Wahhab", cat: "Aqeedah", url: "#" },
-  { title: "The Creed of Imam al-Tahawi", author: "Imam al-Tahawi", cat: "Aqeedah", url: "#" },
-  { title: "Explanation of the Creed", author: "Imam al-Barbahari", cat: "Aqeedah", url: "#" },
-  { title: "The Divine Reality", author: "Hamza Andreas Tzortzis", cat: "Aqeedah", url: "#" },
-  // Spirituality
-  { title: "The Revival of the Religious Sciences (Ihya)", author: "Imam al-Ghazali", cat: "Spirituality", url: "#" },
-  { title: "The Alchemy of Happiness", author: "Imam al-Ghazali", cat: "Spirituality", url: "#" },
-  { title: "Remembrance of Death and the Afterlife", author: "Imam al-Ghazali", cat: "Spirituality", url: "#" },
-  { title: "The Book of Assistance", author: "Imam al-Haddad", cat: "Spirituality", url: "#" },
-  { title: "Don't Be Sad", author: "Aaidh al-Qarni", cat: "Spirituality", url: "#" },
-  { title: "Purification of the Heart", author: "Hamza Yusuf (trans.)", cat: "Spirituality", url: "#" },
-  { title: "Reclaim Your Heart", author: "Yasmin Mogahed", cat: "Spirituality", url: "#" },
-  { title: "The Ideal Muslim", author: "Dr. Muhammad Ali al-Hashimi", cat: "Spirituality", url: "#" },
-  { title: "Patience and Gratitude", author: "Ibn Qayyim al-Jawziyyah", cat: "Spirituality", url: "#" },
-  { title: "The Key to Paradise", author: "Ibn Rajab al-Hanbali", cat: "Spirituality", url: "#" },
-  { title: "Inner Dimensions of Islamic Worship", author: "Imam al-Ghazali", cat: "Spirituality", url: "#" },
-  { title: "The Garden of the Gnostics", author: "Ibn Qayyim al-Jawziyyah", cat: "Spirituality", url: "#" },
-  // Dua
+  // Dua & Dhikr
   { title: "Fortress of the Muslim (Hisnul Muslim)", author: "Said bin Ali al-Qahtani", cat: "Dua & Dhikr", url: "https://islamicstudies.info" },
-  { title: "The Accepted Whispers", author: "Ashraf Ali Thanawi", cat: "Dua & Dhikr", url: "#" },
-  { title: "Book of Remembrance (al-Adhkar)", author: "Imam an-Nawawi", cat: "Dua & Dhikr", url: "#" },
-  // History
-  { title: "Lost Islamic History", author: "Firas Alkhateeb", cat: "History", url: "#" },
-  { title: "The History of the Khalifahs", author: "Jalal ad-Din as-Suyuti", cat: "History", url: "#" },
-  { title: "The Venture of Islam (3 vols)", author: "Marshall Hodgson", cat: "History", url: "#" },
-  { title: "Islam: Empire of Faith", author: "Robert Gardiner", cat: "History", url: "#" },
-  { title: "A History of Islamic Societies", author: "Ira Lapidus", cat: "History", url: "#" },
-  // Modern Thought
-  { title: "The Road to Mecca", author: "Muhammad Asad", cat: "Modern Thought", url: "#" },
-  { title: "Islam: The Straight Path", author: "John L. Esposito", cat: "Modern Thought", url: "#" },
-  { title: "No god but God", author: "Reza Aslan", cat: "Modern Thought", url: "#" },
-  { title: "The Heart of Islam", author: "Seyyed Hossein Nasr", cat: "Modern Thought", url: "#" },
-  { title: "Islam and the Future of Tolerance", author: "Sam Harris & Maajid Nawaz", cat: "Modern Thought", url: "#" },
-  { title: "Being Muslim", author: "Haroon Moghul", cat: "Modern Thought", url: "#" },
-  { title: "Struggling to Surrender", author: "Jeffrey Lang", cat: "Modern Thought", url: "#" },
-  // Arabic Language
-  { title: "Madinah Arabic Reader (6 vols)", author: "Dr. V. Abdur Rahim", cat: "Arabic", url: "#" },
-  { title: "Gateway to Arabic", author: "Imran Alawiye", cat: "Arabic", url: "#" },
-  { title: "Arabic Between Your Hands", author: "Abdur Rahman Ibrahim", cat: "Arabic", url: "#" },
   // Online Resources
   { title: "IslamQA", author: "Sheikh Muhammad Saalih al-Munajjid", cat: "Online", url: "https://islamqa.info" },
   { title: "SeekersGuidance", author: "Online Islamic education", cat: "Online", url: "https://seekersguidance.org" },
