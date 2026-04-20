@@ -46,7 +46,7 @@ export default {
 
     // GET — serve a file from R2 with CORS + inline display headers
     if (request.method === "GET") {
-      const key = new URL(request.url).pathname.slice(1); // e.g. "KANDILI-I-RAMAZANIT.pdf"
+      const key = decodeURIComponent(new URL(request.url).pathname.slice(1));
       if (!key) return json({ error: "No key" }, 400);
       const obj = await env.BUCKET.get(key);
       if (!obj) return new Response("Not found", { status: 404 });
