@@ -115,16 +115,6 @@ function fracAdd(a, b) { return reduce(a[0]*b[1] + b[0]*a[1], a[1]*b[1]); }
 function fracVal(f) { return f[1] === 0 ? 0 : f[0]/f[1]; }
 function fmtFrac(f) { if (f[0]===0) return "0"; if (f[1]===1) return `${f[0]}`; return `${f[0]}/${f[1]}`; }
 
-function calcQibla(lat, lng) {
-  const mLat = 21.3891 * Math.PI / 180;
-  const mLng = 39.8579 * Math.PI / 180;
-  const uLat = lat * Math.PI / 180;
-  const dLng = mLng - lng * Math.PI / 180;
-  const y = Math.sin(dLng) * Math.cos(mLat);
-  const x = Math.cos(uLat) * Math.sin(mLat) - Math.sin(uLat) * Math.cos(mLat) * Math.cos(dLng);
-  return ((Math.atan2(y, x) * 180 / Math.PI) + 360) % 360;
-}
-
 // Tabular Islamic calendar: leap years in 30-yr cycle are 2,5,7,10,13,16,18,21,24,26,29
 const HIJRI_YEAR_LEN = [354,355,354,354,355,354,355,354,354,355,354,354,355,354,354,355,354,355,354,354,355,354,354,355,354,355,354,354,355,354];
 const HIJRI_EPOCH_JD = 1948439; // JD of 1 Muharram 1 AH
@@ -862,248 +852,6 @@ function PrayerTimes({ savedLocation }) {
                 </div>
               );
             })}
-          </div>
-        </Card>
-      )}
-    </div>
-  );
-}
-
-// ─── QIBLA ────────────────────────────────────────────────────────
-function Qibla({ savedLocation }) {
-  const [city, setCity] = useState("");
-  const [bearing, setBearing] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [err, setErr] = useState("");
-  const [locName, setLocName] = useState("");
-  const [deviceHeading, setDeviceHeading] = useState(null);
-  const [needsPermission, setNeedsPermission] = useState(false);
-  const handlerRef = useRef(null);
-
-  // Al-Adhan Qibla API — returns bearing in degrees from North
-  async function fetchQibla(lat, lon) {
-    const res = await fetch(`https://api.aladhan.com/v1/qibla/${lat}/${lon}`);
-    const json = await res.json();
-    if (json.code !== 200) throw new Error("API error");
-    return json.data.direction;
-  }
-
-  // Auto-load from saved location
-  useEffect(() => {
-    if (!savedLocation || bearing !== null) return;
-    setLocName(savedLocation.name);
-    setCity(savedLocation.name);
-    fetchQibla(savedLocation.lat, savedLocation.lon)
-      .then(dir => setBearing(dir))
-      .catch(() => setBearing(calcQibla(savedLocation.lat, savedLocation.lon)));
-  }, [savedLocation]);
-
-  // Set up device compass (magnetometer)
-  useEffect(() => {
-    if (typeof DeviceOrientationEvent === "undefined") return;
-    if (typeof DeviceOrientationEvent.requestPermission === "function") {
-      // iOS 13+ requires explicit user gesture to grant permission
-      setNeedsPermission(true);
-      return;
-    }
-    startCompass();
-    return stopCompass;
-  }, []);
-
-  function startCompass() {
-    if (handlerRef.current) return;
-    handlerRef.current = (e) => {
-      let h = null;
-      if (e.webkitCompassHeading != null && !isNaN(e.webkitCompassHeading)) {
-        // iOS: 0 = North, increases clockwise — most accurate
-        h = e.webkitCompassHeading;
-      } else if (e.alpha != null) {
-        // Android / fallback: alpha = CCW from North, so invert
-        h = (360 - e.alpha + 360) % 360;
-      }
-      if (h !== null) setDeviceHeading(h);
-    };
-    window.addEventListener("deviceorientationabsolute", handlerRef.current, true);
-    window.addEventListener("deviceorientation", handlerRef.current, true);
-  }
-
-  function stopCompass() {
-    if (handlerRef.current) {
-      window.removeEventListener("deviceorientationabsolute", handlerRef.current, true);
-      window.removeEventListener("deviceorientation", handlerRef.current, true);
-      handlerRef.current = null;
-    }
-  }
-
-  async function requestCompassPermission() {
-    try {
-      const result = await DeviceOrientationEvent.requestPermission();
-      if (result === "granted") { setNeedsPermission(false); startCompass(); }
-    } catch { setNeedsPermission(false); }
-  }
-
-  async function search() {
-    if (!city.trim()) return;
-    setLoading(true); setErr(""); setBearing(null);
-    try {
-      const res = await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(city)}&format=json&limit=1`, {
-        headers: { "Accept-Language": "en" }
-      });
-      const json = await res.json();
-      if (!json.length) throw new Error("City not found");
-      const { lat, lon, display_name } = json[0];
-      const dir = await fetchQibla(parseFloat(lat), parseFloat(lon))
-        .catch(() => calcQibla(parseFloat(lat), parseFloat(lon)));
-      setBearing(dir);
-      setLocName(display_name.split(",").slice(0,2).join(", "));
-    } catch { setErr("Location not found. Try a different city name."); }
-    setLoading(false);
-  }
-
-  function useMyLocation() {
-    if (!navigator.geolocation) return setErr("Geolocation not supported by your browser.");
-    navigator.geolocation.getCurrentPosition(
-      pos => {
-        fetchQibla(pos.coords.latitude, pos.coords.longitude)
-          .then(dir => { setBearing(dir); setLocName("Your Location"); })
-          .catch(() => { setBearing(calcQibla(pos.coords.latitude, pos.coords.longitude)); setLocName("Your Location"); });
-      },
-      () => setErr("Could not access location. Please try searching by city.")
-    );
-  }
-
-  const direction = bearing !== null ? (
-    bearing < 22.5 ? "N" : bearing < 67.5 ? "NE" : bearing < 112.5 ? "E" :
-    bearing < 157.5 ? "SE" : bearing < 202.5 ? "S" : bearing < 247.5 ? "SW" :
-    bearing < 292.5 ? "W" : bearing < 337.5 ? "NW" : "N"
-  ) : "";
-
-  // Live compass: rotate rose so N always aligns with physical North.
-  // Needle stays at absolute Qibla bearing relative to screen top would mean
-  // needle angle = bearing - deviceHeading (so it always points at Mecca).
-  const h = deviceHeading ?? 0;
-  const roseAngle   = deviceHeading !== null ? -h : 0;
-  const needleAngle = bearing !== null ? ((bearing - h) + 360) % 360 : 0;
-  const kaabaDeg    = needleAngle;
-
-  return (
-    <div style={{ maxWidth: 520, margin: "0 auto", padding: "40px 24px" }}>
-      <PageTitle icon="🧭" title="Qibla Direction" sub="Find the direction of the Kaaba from your location" />
-      <Card style={{ marginBottom: 20 }}>
-        <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-          <Input label="City" placeholder="e.g. London, New York, Jakarta" value={city} onChange={e => setCity(e.target.value)} onKeyDown={e => e.key === "Enter" && search()} />
-          <div style={{ display: "flex", gap: 10 }}>
-            <Btn onClick={search} disabled={loading} style={{ flex: 1 }}>{loading ? "Searching…" : "Search"}</Btn>
-            <Btn onClick={useMyLocation} variant="secondary">📍 My Location</Btn>
-          </div>
-        </div>
-      </Card>
-
-      {err && <p style={{ color: "#EF4444", fontSize: 12, letterSpacing: "0.03em" }}>{err}</p>}
-
-      {bearing !== null && (
-        <Card style={{ textAlign: "center" }}>
-          {locName && <p style={{ margin: "0 0 16px", color: MUTED, fontSize: 13 }}>📍 {locName}</p>}
-
-          {/* iOS compass permission prompt */}
-          {needsPermission && (
-            <button onClick={requestCompassPermission} style={{
-              display: "block", margin: "0 auto 20px",
-              background: "linear-gradient(135deg,#C9A84C,#A8883E)",
-              border: "none", padding: "10px 20px", cursor: "pointer",
-              fontSize: 12, fontWeight: 700, color: "#0A0A0A",
-              letterSpacing: "0.08em", textTransform: "uppercase", fontFamily: SANS,
-            }}>Enable Live Compass</button>
-          )}
-
-          {/* Compass — fluid, max 220px, fixed internals scale from 220px radius=110 */}
-          <div style={{
-            position: "relative",
-            width: "min(220px, calc(100vw - 110px))",
-            height: "min(220px, calc(100vw - 110px))",
-            margin: "0 auto 24px",
-          }}>
-            {/* Compass rose — rotates with device heading so N = physical North */}
-            <div style={{
-              position: "absolute", inset: 0, borderRadius: "50%",
-              border: `2px solid ${BORDER}`, background: SURFACE,
-              transform: `rotate(${roseAngle}deg)`,
-              transition: deviceHeading !== null ? "transform 0.1s linear" : "none",
-            }}>
-              {/* Cardinal labels — pixel offset matches 220px compass (radius 110) */}
-              {[{l:"N",r:0},{l:"E",r:90},{l:"S",r:180},{l:"W",r:270}].map(({l,r}) => (
-                <div key={l} style={{
-                  position: "absolute", top: "50%", left: "50%",
-                  transform: `rotate(${r}deg) translateY(-88px) rotate(-${r}deg) translate(-50%,-50%)`,
-                  fontSize: 11, fontWeight: 700,
-                  color: l === "N" ? "#EF4444" : MUTED,
-                  letterSpacing: "0.06em", pointerEvents: "none", userSelect: "none",
-                }}>{l}</div>
-              ))}
-              {/* Minor degree ticks — positioned at compass rim */}
-              {[0,45,90,135,180,225,270,315].map(r => (
-                <div key={r} style={{
-                  position: "absolute",
-                  top: r % 90 === 0 ? 4 : 6,
-                  left: "calc(50% - 1px)",
-                  width: r % 90 === 0 ? 2 : 1,
-                  height: r % 90 === 0 ? 10 : 6,
-                  background: r % 90 === 0 ? GOLD + "60" : BORDER,
-                  transformOrigin: `1px ${110 - (r % 90 === 0 ? 4 : 6)}px`,
-                  transform: `rotate(${r}deg)`,
-                }}/>
-              ))}
-            </div>
-
-            {/* Needle layer — separate from rose so it stays unaffected by rose rotation */}
-            <div style={{ position: "absolute", inset: 0, pointerEvents: "none" }}>
-              {/* Gold needle pointing at Qibla — rotates by (bearing − deviceHeading) */}
-              <div style={{
-                position: "absolute", top: "50%", left: "50%",
-                width: 4, height: 80,
-                transform: `translate(-50%, -100%) rotate(${needleAngle}deg)`,
-                transformOrigin: "bottom center",
-                background: `linear-gradient(to top, ${GREEN}70, ${GREEN})`,
-                borderRadius: "3px 3px 0 0",
-                boxShadow: `0 0 6px ${GREEN}55`,
-                transition: "transform 0.15s linear",
-              }} />
-              {/* Opposite counter-tail */}
-              <div style={{
-                position: "absolute", top: "50%", left: "50%",
-                width: 3, height: 30,
-                transform: `translate(-50%, 0%) rotate(${needleAngle}deg)`,
-                transformOrigin: "top center",
-                background: MUTED + "44",
-                borderRadius: "0 0 3px 3px",
-                transition: "transform 0.15s linear",
-              }} />
-              {/* Ka'aba emoji — fixed 82px offset matches needle tip on 220px compass */}
-              <div style={{
-                position: "absolute", top: "50%", left: "50%",
-                width: 22, height: 22,
-                transform: `translate(-50%,-50%) rotate(${kaabaDeg}deg) translateY(-82px) rotate(-${kaabaDeg}deg)`,
-                fontSize: 16, lineHeight: "22px", textAlign: "center",
-                transition: "transform 0.15s linear",
-              }}>🕋</div>
-              {/* Center pivot */}
-              <div style={{
-                position: "absolute", top: "50%", left: "50%",
-                width: 12, height: 12, borderRadius: "50%",
-                background: GREEN, border: `2px solid ${BG}`,
-                transform: "translate(-50%,-50%)", zIndex: 2,
-              }} />
-            </div>
-          </div>
-
-          <div style={{ fontSize: 36, fontWeight: 700, color: TEXT, fontFamily: SERIF }}>{Math.round(bearing)}°</div>
-          <div style={{ fontSize: 14, color: MUTED, marginTop: 4, letterSpacing: "0.06em", textTransform: "uppercase" }}>
-            {direction} — from North
-          </div>
-          <div style={{ marginTop: 10, fontSize: 11, color: MUTED, letterSpacing: "0.05em" }}>
-            {deviceHeading !== null
-              ? `🧭 Live compass active · facing ${Math.round(deviceHeading)}°`
-              : "Point your phone towards the compass needle to face the Qibla"}
           </div>
         </Card>
       )}
@@ -1954,7 +1702,7 @@ function SettingsModal({ onClose, savedLocation, onSave, notifEnabled, onNotifTo
         <div style={{ background:"linear-gradient(135deg,#0A0A08,#141210)", borderBottom:`1px solid ${GOLD}25`, padding:"22px 28px", display:"flex", justifyContent:"space-between", alignItems:"center" }}>
           <div>
             <div style={{ fontSize:20, fontWeight:400, color:TEXT, fontFamily:SERIF, letterSpacing:"0.06em" }}>Settings</div>
-            <div style={{ fontSize:11, color:MUTED, marginTop:4, letterSpacing:"0.08em" }}>Location · Prayer Times · Qibla</div>
+            <div style={{ fontSize:11, color:MUTED, marginTop:4, letterSpacing:"0.08em" }}>Location · Prayer Times</div>
           </div>
           <button onClick={onClose} style={{ background:"transparent", border:`1px solid ${BORDER}`, borderRadius:2, color:MUTED, width:32, height:32, cursor:"pointer", fontSize:14 }}>✕</button>
         </div>
@@ -2012,7 +1760,7 @@ function SettingsModal({ onClose, savedLocation, onSave, notifEnabled, onNotifTo
           </button>
 
           <p style={{ margin:"14px 0 0", fontSize:12, color:MUTED, textAlign:"center" }}>
-            Prayer times and Qibla will auto-load with this location on every visit.
+            Prayer times will auto-load with this location on every visit.
           </p>
 
           {/* Prayer Notification Toggle */}
@@ -2453,12 +2201,12 @@ function LangBar({ page }) {
 }
 
 // ─── APP ──────────────────────────────────────────────────────────
-const VALID_PAGES = ["home","prayer","qibla","zakat","inheritance","calendar","dates","library","audio","tasbeeh","quran","dua","asma","admin"];
+const VALID_PAGES = ["home","prayer","zakat","inheritance","calendar","dates","library","audio","tasbeeh","quran","dua","asma","admin"];
 
 // ── Language-prefixed URL slug mapping ────────────────────────────
 const PAGE_SLUGS = {
-  en: { home:"", prayer:"prayer", qibla:"qibla", zakat:"zakat", inheritance:"inheritance", calendar:"calendar", dates:"dates", library:"library", audio:"audio", tasbeeh:"tasbeeh", quran:"quran", dua:"dua", asma:"asma", admin:"admin" },
-  sq: { home:"", prayer:"namazi", qibla:"kibla", zakat:"zekati", inheritance:"trashegimia", calendar:"kalendari", dates:"datat", library:"biblioteka", audio:"ligjerata", tasbeeh:"tesbihe", quran:"kurani", dua:"dua", asma:"emrat", admin:"admin" },
+  en: { home:"", prayer:"prayer", zakat:"zakat", inheritance:"inheritance", calendar:"calendar", dates:"dates", library:"library", audio:"audio", tasbeeh:"tasbeeh", quran:"quran", dua:"dua", asma:"asma", admin:"admin" },
+  sq: { home:"", prayer:"namazi", zakat:"zekati", inheritance:"trashegimia", calendar:"kalendari", dates:"datat", library:"biblioteka", audio:"ligjerata", tasbeeh:"tesbihe", quran:"kurani", dua:"dua", asma:"emrat", admin:"admin" },
 };
 function slugToPage(lang, slug) {
   const map = PAGE_SLUGS[lang] || PAGE_SLUGS.en;
@@ -2822,9 +2570,9 @@ export default function App() {
 
   // Dynamic <title> + <meta description> per page
   const PAGE_META = {
-    home:        { title: "Muslim's Path — Daily Islamic Companion",          desc: "Prayer times, Qibla direction, Quran, Duas, Tasbeeh, Islamic calendar and more — all in one app." },
+    home:        { title: "Muslim's Path — Daily Islamic Companion",          desc: "Prayer times, Quran, Duas, Tasbeeh, Islamic calendar and more — all in one app." },
     prayer:      { title: "Prayer Times — Muslim's Path",                      desc: "Accurate daily prayer times (Fajr, Dhuhr, Asr, Maghrib, Isha) for any city worldwide." },
-    qibla:       { title: "Qibla Direction — Muslim's Path",                   desc: "Find the direction of the Kaaba from anywhere using your device's live compass." },
+
     quran:       { title: "Quran — Muslim's Path",                             desc: "Read the Holy Quran with Arabic text, transliteration and English translation." },
     dua:         { title: "Dua & Dhikr — Muslim's Path",                       desc: "Morning & evening adhkar, daily supplications and situational remembrances." },
     asma:        { title: "99 Names of Allah — Muslim's Path",                 desc: "Al-Asma ul-Husna — the 99 Beautiful Names of Allah with meanings and transliteration." },
@@ -2901,7 +2649,6 @@ export default function App() {
       <main>
         {page === "home" && <Home quote={quote} setPage={navigate} savedLocation={savedLocation} />}
         {page === "prayer" && <PrayerTimes savedLocation={savedLocation} />}
-        {page === "qibla" && <Qibla savedLocation={savedLocation} />}
         {page === "zakat" && <Zakat />}
         {page === "inheritance" && <Inheritance />}
         {page === "calendar" && <IslamicCalendar />}

@@ -25,6 +25,6 @@ export const NAV_ITEMS = [
 export const TOOLS_ITEMS = [
   { id: "zakat",       icon: "💰" },
   { id: "inheritance", icon: "⚖️" },
-  { id: "qibla",       icon: "🧭" },
+
   { id: "dates",       icon: "🔄" },
 ];
