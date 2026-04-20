@@ -121,35 +121,35 @@ const LIBRARY = [
   { title: "Duaa.app", author: "Daily supplications", cat: "Online", url: "https://duaa.app" },
 
   // Albanian / Shqip
-  { title: "10 Sfidat e Jetës", author: "Literaturë Islame", cat: "Shqip", url: "https://cdn.muslimspath.app/10-sfidat-e-jetes.pdf" },
-  { title: "99 Emrat e Allahut", author: "Literaturë Islame", cat: "Shqip", url: "https://cdn.muslimspath.app/99Names-2019.pdf" },
-  { title: "Kush është Profeti Muhamed ﷺ", author: "AIITC", cat: "Shqip", url: "https://cdn.muslimspath.app/AIITC-Ky-eshte-profeti-Muhamed-a.s..pdf" },
-  { title: "Madhërimi i Allahut", author: "Abdulaziz et-Tarifi", cat: "Shqip", url: "https://cdn.muslimspath.app/Abdulaziz-et-Tarifi-Madherimi-i-Allahut.pdf" },
-  { title: "Gjykimi ndaj Magjisë dhe Fallit", author: "Abdulaziz ibn Baz", cat: "Shqip", url: "https://cdn.muslimspath.app/Abdulaziz-ibn-Baz-Gjykimi-ndaj-magjes-dhe-fallit.pdf" },
-  { title: "Mbi Rrugën e të Parëve Tanë", author: "Abdulkadër Arnauti", cat: "Shqip", url: "https://cdn.muslimspath.app/Abdulkader-Arnauti-Mbi-rrugën-e-te-pareve-tane-selefit.pdf" },
-  { title: "Sahih el-Bukhari — Vëllimi 1", author: "Mehdi Polisi", cat: "Shqip", url: "https://cdn.muslimspath.app/Mehdi-Polisi-Sahih-el-Bukhari-Vellimi-01.pdf" },
-  { title: "Sahih el-Bukhari — Vëllimi 2", author: "Abdullah Hamiti", cat: "Shqip", url: "https://cdn.muslimspath.app/Abdullah-Hamiti-Sahih-el-Bukhari-Vellimi-02.pdf" },
-  { title: "Këshilla të Arta për Morale të Larta", author: "Abdulmelik Ramadani", cat: "Shqip", url: "https://cdn.muslimspath.app/Abdulmelik-Ramadani-Keshilla-te-arta.pdf" },
-  { title: "Rregulla rreth Tekfirit", author: "Abdulmunim Mustafa Halime", cat: "Shqip", url: "https://cdn.muslimspath.app/Abdulmunim-Mustafa-Halime-Rregulla-rreth-tekfirit.pdf" },
-  { title: "Realiteti i Besimit të Vërtetë", author: "Abdurrahman es-Sadij", cat: "Shqip", url: "https://cdn.muslimspath.app/Abdurrahman-es-Sadij-Realiteti-i-Besimit-te-Vertete.pdf" },
-  { title: "Hallalli dhe Harami në Islam", author: "Dr. Jusuf Kardavi", cat: "Shqip", url: "https://cdn.muslimspath.app/Dr.-Jusuf-Kardavi-Hallalli-dhe-harami-me-balline.pdf" },
-  { title: "Kandili i Ramazanit", author: "Literaturë Islame", cat: "Shqip", url: "https://cdn.muslimspath.app/KANDILI-I-RAMAZANIT.pdf" },
-  { title: "Kurani dhe Shkenca", author: "Literaturë Islame", cat: "Shqip", url: "https://cdn.muslimspath.app/Kurani-drejt-shkences-me-kopertine.pdf" },
-  { title: "Libri i Agjërimit", author: "Salih ibn Feuzan", cat: "Shqip", url: "https://cdn.muslimspath.app/Libri-i-Agjerimit-Salih-ibn-Feuzan-el-Feuzan-1.pdf" },
-  { title: "Forma e Namazit të të Dërguarit ﷺ", author: "Imam Albani", cat: "Shqip", url: "https://cdn.muslimspath.app/Muhammed-Nasiruddin-el-Albani-Forma-e-namazit-te-te-derguarit.pdf" },
-  { title: "Namazi i Natës — Teravitë në Ramazan", author: "Imam Albani", cat: "Shqip", url: "https://cdn.muslimspath.app/Namazi-i-nates-teravite-ne-Ramazan-Imam-Albani.pdf" },
-  { title: "Ndejat e Muajit Ramazan", author: "Literaturë Islame", cat: "Shqip", url: "https://cdn.muslimspath.app/Ndejat-e-Muajit-Ramazan.pdf" },
-  { title: "Pozita e Synetit në Islam", author: "Literaturë Islame", cat: "Shqip", url: "https://cdn.muslimspath.app/POZITA-E-SYNETIT-NE-ISLAM-ok.pdf" },
-  { title: "Përmendja — Dhikri dhe Lutjet", author: "Literaturë Islame", cat: "Shqip", url: "https://cdn.muslimspath.app/Permendja-finalja.pdf" },
-  { title: "Emrat dhe Cilësitë e Allahut", author: "Xhamia Mbret Fahd", cat: "Shqip", url: "https://cdn.muslimspath.app/Xhamia-Mbret-Emrat-dhe-Cilesit-e-Allahut.pdf" },
-  { title: "Historitë e Pejgamberëve", author: "Literaturë Islame", cat: "Shqip", url: "https://cdn.muslimspath.app/historite-e-pejgambereve-botim-1-1.pdf" },
-  { title: "Albislam — Nr. 63", author: "Revistë Islame Shqip", cat: "Shqip", url: "https://cdn.muslimspath.app/albislam63.pdf" },
-  { title: "Albislam — Nr. 64", author: "Revistë Islame Shqip", cat: "Shqip", url: "https://cdn.muslimspath.app/albislam64.pdf" },
-  { title: "Albislam — Nr. 65", author: "Revistë Islame Shqip", cat: "Shqip", url: "https://cdn.muslimspath.app/albislam65.pdf" },
-  { title: "Albislam — Nr. 66", author: "Revistë Islame Shqip", cat: "Shqip", url: "https://cdn.muslimspath.app/albislam66.pdf" },
-  { title: "Dituria Islame — Nr. 250", author: "Revistë Islame Shqip", cat: "Shqip", url: "https://cdn.muslimspath.app/dituria250.pdf" },
-  { title: "Dituria Islame — Nr. 282", author: "Revistë Islame Shqip", cat: "Shqip", url: "https://cdn.muslimspath.app/dituria282.pdf" },
-  { title: "Dituria Islame — Nr. 283", author: "Revistë Islame Shqip", cat: "Shqip", url: "https://cdn.muslimspath.app/dituria283.pdf" },
+  { title: "10 Sfidat e Jetës", author: "Literaturë Islame", cat: "Shqip", url: "https://cdn.muslimspath.app/books/10-sfidat-e-jetes.pdf" },
+  { title: "99 Emrat e Allahut", author: "Literaturë Islame", cat: "Shqip", url: "https://cdn.muslimspath.app/books/99Names-2019.pdf" },
+  { title: "Kush është Profeti Muhamed ﷺ", author: "AIITC", cat: "Shqip", url: "https://cdn.muslimspath.app/books/AIITC-Ky-eshte-profeti-Muhamed-a.s..pdf" },
+  { title: "Madhërimi i Allahut", author: "Abdulaziz et-Tarifi", cat: "Shqip", url: "https://cdn.muslimspath.app/books/Abdulaziz-et-Tarifi-Madherimi-i-Allahut.pdf" },
+  { title: "Gjykimi ndaj Magjisë dhe Fallit", author: "Abdulaziz ibn Baz", cat: "Shqip", url: "https://cdn.muslimspath.app/books/Abdulaziz-ibn-Baz-Gjykimi-ndaj-magjes-dhe-fallit.pdf" },
+  { title: "Mbi Rrugën e të Parëve Tanë", author: "Abdulkadër Arnauti", cat: "Shqip", url: "https://cdn.muslimspath.app/books/Abdulkader-Arnauti-Mbi-rrugën-e-te-pareve-tane-selefit.pdf" },
+  { title: "Sahih el-Bukhari — Vëllimi 1", author: "Mehdi Polisi", cat: "Shqip", url: "https://cdn.muslimspath.app/books/Mehdi-Polisi-Sahih-el-Bukhari-Vellimi-01.pdf" },
+  { title: "Sahih el-Bukhari — Vëllimi 2", author: "Abdullah Hamiti", cat: "Shqip", url: "https://cdn.muslimspath.app/books/Abdullah-Hamiti-Sahih-el-Bukhari-Vellimi-02.pdf" },
+  { title: "Këshilla të Arta për Morale të Larta", author: "Abdulmelik Ramadani", cat: "Shqip", url: "https://cdn.muslimspath.app/books/Abdulmelik-Ramadani-Keshilla-te-arta.pdf" },
+  { title: "Rregulla rreth Tekfirit", author: "Abdulmunim Mustafa Halime", cat: "Shqip", url: "https://cdn.muslimspath.app/books/Abdulmunim-Mustafa-Halime-Rregulla-rreth-tekfirit.pdf" },
+  { title: "Realiteti i Besimit të Vërtetë", author: "Abdurrahman es-Sadij", cat: "Shqip", url: "https://cdn.muslimspath.app/books/Abdurrahman-es-Sadij-Realiteti-i-Besimit-te-Vertete.pdf" },
+  { title: "Hallalli dhe Harami në Islam", author: "Dr. Jusuf Kardavi", cat: "Shqip", url: "https://cdn.muslimspath.app/books/Dr.-Jusuf-Kardavi-Hallalli-dhe-harami-me-balline.pdf" },
+  { title: "Kandili i Ramazanit", author: "Literaturë Islame", cat: "Shqip", url: "https://cdn.muslimspath.app/books/KANDILI-I-RAMAZANIT.pdf" },
+  { title: "Kurani dhe Shkenca", author: "Literaturë Islame", cat: "Shqip", url: "https://cdn.muslimspath.app/books/Kurani-drejt-shkences-me-kopertine.pdf" },
+  { title: "Libri i Agjërimit", author: "Salih ibn Feuzan", cat: "Shqip", url: "https://cdn.muslimspath.app/books/Libri-i-Agjerimit-Salih-ibn-Feuzan-el-Feuzan-1.pdf" },
+  { title: "Forma e Namazit të të Dërguarit ﷺ", author: "Imam Albani", cat: "Shqip", url: "https://cdn.muslimspath.app/books/Muhammed-Nasiruddin-el-Albani-Forma-e-namazit-te-te-derguarit.pdf" },
+  { title: "Namazi i Natës — Teravitë në Ramazan", author: "Imam Albani", cat: "Shqip", url: "https://cdn.muslimspath.app/books/Namazi-i-nates-teravite-ne-Ramazan-Imam-Albani.pdf" },
+  { title: "Ndejat e Muajit Ramazan", author: "Literaturë Islame", cat: "Shqip", url: "https://cdn.muslimspath.app/books/Ndejat-e-Muajit-Ramazan.pdf" },
+  { title: "Pozita e Synetit në Islam", author: "Literaturë Islame", cat: "Shqip", url: "https://cdn.muslimspath.app/books/POZITA-E-SYNETIT-NE-ISLAM-ok.pdf" },
+  { title: "Përmendja — Dhikri dhe Lutjet", author: "Literaturë Islame", cat: "Shqip", url: "https://cdn.muslimspath.app/books/Permendja-finalja.pdf" },
+  { title: "Emrat dhe Cilësitë e Allahut", author: "Xhamia Mbret Fahd", cat: "Shqip", url: "https://cdn.muslimspath.app/books/Xhamia-Mbret-Emrat-dhe-Cilesit-e-Allahut.pdf" },
+  { title: "Historitë e Pejgamberëve", author: "Literaturë Islame", cat: "Shqip", url: "https://cdn.muslimspath.app/books/historite-e-pejgambereve-botim-1-1.pdf" },
+  { title: "Albislam — Nr. 63", author: "Revistë Islame Shqip", cat: "Shqip", url: "https://cdn.muslimspath.app/books/albislam63.pdf" },
+  { title: "Albislam — Nr. 64", author: "Revistë Islame Shqip", cat: "Shqip", url: "https://cdn.muslimspath.app/books/albislam64.pdf" },
+  { title: "Albislam — Nr. 65", author: "Revistë Islame Shqip", cat: "Shqip", url: "https://cdn.muslimspath.app/books/albislam65.pdf" },
+  { title: "Albislam — Nr. 66", author: "Revistë Islame Shqip", cat: "Shqip", url: "https://cdn.muslimspath.app/books/albislam66.pdf" },
+  { title: "Dituria Islame — Nr. 250", author: "Revistë Islame Shqip", cat: "Shqip", url: "https://cdn.muslimspath.app/books/dituria250.pdf" },
+  { title: "Dituria Islame — Nr. 282", author: "Revistë Islame Shqip", cat: "Shqip", url: "https://cdn.muslimspath.app/books/dituria282.pdf" },
+  { title: "Dituria Islame — Nr. 283", author: "Revistë Islame Shqip", cat: "Shqip", url: "https://cdn.muslimspath.app/books/dituria283.pdf" },
 ];
 
 const CATEGORIES = ["All", ...Array.from(new Set(LIBRARY.map(b => b.cat)))];
@@ -1687,9 +1687,8 @@ function Library({ navigate }) {
           ) : (
             <iframe
               src={(() => {
-                const R2_BASE = "https://cdn.muslimspath.app/";
-                const path = pdfOpen.url.startsWith(R2_BASE) ? pdfOpen.url.slice(R2_BASE.length) : pdfOpen.url.split("/").pop();
-                const key = path.includes("/") ? path : `books/${path}`;
+                const CDN = "https://cdn.muslimspath.app/";
+                const key = pdfOpen.url.startsWith(CDN) ? pdfOpen.url.slice(CDN.length) : `books/${pdfOpen.url.split("/").pop()}`;
                 return `${UPLOAD_WORKER_URL}/${key}`;
               })()}
               title={pdfOpen.title}
