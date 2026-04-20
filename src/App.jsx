@@ -3563,6 +3563,17 @@ function AsmaPage() {
 
 // ─── QURAN ────────────────────────────────────────────────────────
 const ARABIC = "'Amiri', 'Traditional Arabic', serif";
+
+// Normalize text for fuzzy search: strip diacritics, apostrophes, hyphens
+// So "Ma'un" → "maun", "Raḥmān" → "rahman", "Al-Fātiḥah" → "alfatihah"
+function normSearch(s) {
+  return s
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")  // strip combining diacritics (ā→a, ḥ→h, etc.)
+    .replace(/[''ʿʾʻˀ`]/g, "")        // strip Arabic ʿayn, hamza, apostrophe variants
+    .replace(/[-]/g, "")               // strip hyphens (Al-Fatiha → Alfatiha)
+    .toLowerCase();
+}
 let _surahCache = null;
 // Full-Quran verse index for search — loaded once per session per edition
 let _fullVerseCache = null; // { edition: string, verses: [{surahNum,ayahNum,surahName,surahAr,ar,tr,en}] }
@@ -3591,10 +3602,10 @@ function QuranPage() {
 
   const verseResults = verseSearch.trim().length >= 3
     ? verses.filter(v => {
-        const q = verseSearch.toLowerCase();
+        const nq = normSearch(verseSearch);
         return v.ar.includes(verseSearch) ||
-               v.tr.toLowerCase().includes(q) ||
-               v.en.toLowerCase().includes(q);
+               normSearch(v.tr).includes(nq) ||
+               normSearch(v.en).includes(nq);
       }).slice(0, 30)
     : [];
 
@@ -3742,13 +3753,13 @@ function QuranPage() {
   const crossResults = useMemo(() => {
     if (search.trim().length < 3) return [];
     if (!_fullVerseCache || _fullVerseCache.edition !== transEdition) return [];
-    const q = search.toLowerCase();
+    const nq = normSearch(search);
     const results = [];
     for (const v of _fullVerseCache.verses) {
       if (
         v.ar.includes(search) ||
-        v.tr.toLowerCase().includes(q) ||
-        v.en.toLowerCase().includes(q)
+        normSearch(v.tr).includes(nq) ||
+        normSearch(v.en).includes(nq)
       ) {
         results.push({ surahNum: v.surahNum, surahName: v.surahName, surahAr: v.surahAr, verse: { n: v.ayahNum, ar: v.ar, tr: v.tr, en: v.en } });
         if (results.length >= 50) break;
@@ -3766,10 +3777,11 @@ function QuranPage() {
   function navSurah(dir)   { const n = Math.min(114, Math.max(1, current + dir)); openSurah(n); }
 
   const surah    = surahs.find(s => s.number === current);
+  const nSearch = normSearch(search);
   const filtered = surahs.filter(s =>
     !search ||
-    s.englishName.toLowerCase().includes(search.toLowerCase()) ||
-    s.englishNameTranslation.toLowerCase().includes(search.toLowerCase()) ||
+    normSearch(s.englishName).includes(nSearch) ||
+    normSearch(s.englishNameTranslation).includes(nSearch) ||
     String(s.number).includes(search)
   );
 
