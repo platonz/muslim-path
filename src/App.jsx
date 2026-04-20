@@ -1624,18 +1624,52 @@ function Library({ navigate }) {
               background: SURFACE, border: "none",
               borderRight: `1px solid ${BORDER}`, borderBottom: `1px solid ${BORDER}`,
               padding: "14px 16px", display: "flex", flexDirection: "column", gap: 6,
-              transition: "background 0.2s", cursor: "pointer",
+              transition: "background 0.2s",
             }}
-              onClick={() => { if (isPdf) { setPdfOpen({ url: b.url, title: b.title }); setPdfError(false); } else window.open(b.url, "_blank", "noreferrer"); }}
               onMouseEnter={e => e.currentTarget.style.background = GREEN_L}
               onMouseLeave={e => e.currentTarget.style.background = SURFACE}
             >
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 8 }}>
                 <span style={{ fontSize: 10, fontWeight: 600, color: GOLD, letterSpacing: "0.1em", textTransform: "uppercase", borderBottom: `1px solid ${GOLD}40`, paddingBottom: 2 }}>{b.cat}</span>
-                <span style={{ color: MUTED, fontSize: 11, letterSpacing: "0.04em" }}>{isPdf ? "📖 Read" : "↗ Visit"}</span>
               </div>
-              <div style={{ fontWeight: 500, fontSize: 14, color: TEXT, lineHeight: 1.5, fontFamily: SERIF }}>{b.title}</div>
+              <div style={{ fontWeight: 500, fontSize: 14, color: TEXT, lineHeight: 1.5, fontFamily: SERIF, cursor: isPdf ? "pointer" : "default" }}
+                onClick={() => { if (isPdf) { setPdfOpen({ url: b.url, title: b.title }); setPdfError(false); } else window.open(b.url, "_blank", "noreferrer"); }}
+              >{b.title}</div>
               <div style={{ fontSize: 12, color: MUTED, letterSpacing: "0.02em" }}>{b.author}</div>
+              {isPdf ? (
+                <div style={{ display: "flex", gap: 6, marginTop: 4 }}>
+                  <button onClick={() => { setPdfOpen({ url: b.url, title: b.title }); setPdfError(false); }} style={{
+                    flex: 1, padding: "5px 0", background: "transparent",
+                    border: `1px solid ${GOLD}50`, borderRadius: 2,
+                    color: GOLD, fontSize: 11, cursor: "pointer", fontFamily: SANS,
+                    letterSpacing: "0.06em", transition: "all 0.15s",
+                  }}
+                    onMouseEnter={e => { e.currentTarget.style.background = `${GOLD}18`; e.stopPropagation(); }}
+                    onMouseLeave={e => { e.currentTarget.style.background = "transparent"; }}
+                  >📖 Read</button>
+                  <a href={b.url} download target="_blank" rel="noreferrer" onClick={e => e.stopPropagation()} style={{
+                    flex: 1, padding: "5px 0", background: "transparent",
+                    border: `1px solid ${BORDER}`, borderRadius: 2,
+                    color: MUTED, fontSize: 11, cursor: "pointer", fontFamily: SANS,
+                    letterSpacing: "0.06em", textDecoration: "none", textAlign: "center",
+                    transition: "all 0.15s", display: "block",
+                  }}
+                    onMouseEnter={e => { e.currentTarget.style.borderColor = MUTED; e.currentTarget.style.color = TEXT; }}
+                    onMouseLeave={e => { e.currentTarget.style.borderColor = BORDER; e.currentTarget.style.color = MUTED; }}
+                  >↓ Download</a>
+                </div>
+              ) : (
+                <a href={b.url} target="_blank" rel="noreferrer" style={{
+                  marginTop: 4, padding: "5px 0", background: "transparent",
+                  border: `1px solid ${BORDER}`, borderRadius: 2,
+                  color: MUTED, fontSize: 11, fontFamily: SANS,
+                  letterSpacing: "0.06em", textDecoration: "none", textAlign: "center",
+                  display: "block", transition: "all 0.15s",
+                }}
+                  onMouseEnter={e => { e.currentTarget.style.borderColor = GOLD; e.currentTarget.style.color = GOLD; }}
+                  onMouseLeave={e => { e.currentTarget.style.borderColor = BORDER; e.currentTarget.style.color = MUTED; }}
+                >↗ Visit</a>
+              )}
             </div>
           );
         })}
