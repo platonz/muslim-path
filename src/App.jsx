@@ -1578,7 +1578,12 @@ function Library({ navigate }) {
       .finally(() => setLoading(false));
   }, []);
 
-  const filtered = books.filter(b => {
+  // Normalize any old R2 URLs still stored in Supabase
+  const normalizeUrl = url => url
+    .replace("https://pub-cdb1d5a2606a4ef68b5d888d9c684d9e.r2.dev/", "https://cdn.muslimspath.app/books/")
+    .replace(/^https:\/\/cdn\.muslimspath\.app\/(?!books\/)([^/]+\.pdf)$/, "https://cdn.muslimspath.app/books/$1");
+
+  const filtered = books.map(b => ({ ...b, url: normalizeUrl(b.url) })).filter(b => {
     if (!b.url || b.url === "#") return false; // hide books with no real content
     const matchCat = cat === "All" || b.cat === cat;
     const matchSearch = !search || b.title.toLowerCase().includes(search.toLowerCase()) || b.author.toLowerCase().includes(search.toLowerCase());
