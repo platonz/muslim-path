@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import i18n from "./i18n";
 import { BG, SURFACE, BORDER, GREEN, GREEN_L, GOLD, TEXT, MUTED, SERIF, SANS } from "./constants";
@@ -3563,7 +3563,9 @@ function AsmaPage() {
 
 // ─── QURAN ────────────────────────────────────────────────────────
 const ARABIC = "'Amiri', 'Traditional Arabic', serif";
-let _surahCache = null; // module-level cache shared with GlobalSearch
+let _surahCache = null;
+// Full-Quran verse index for search — loaded once per session per edition
+let _fullVerseCache = null; // { edition: string, verses: [{surahNum,ayahNum,surahName,surahAr,ar,tr,en}] }
 
 function QuranPage() {
   const { t } = useTranslation();
@@ -3580,7 +3582,30 @@ function QuranPage() {
   const [bookmarks,    setBookmarks]    = useState(() => {
     try { return JSON.parse(localStorage.getItem("mp-quran-bkm") || "[]"); } catch { return []; }
   });
+  const [fullLoading, setFullLoading] = useState(false);
   const topRef = useRef(null);
+  const vsInputRef = useRef(null);
+  const pendingVerseRef = useRef(null);
+  const [verseSearch, setVerseSearch] = useState("");
+  const [vsOpen, setVsOpen]           = useState(false);
+
+  const verseResults = verseSearch.trim().length >= 3
+    ? verses.filter(v => {
+        const q = verseSearch.toLowerCase();
+        return v.ar.includes(verseSearch) ||
+               v.tr.toLowerCase().includes(q) ||
+               v.en.toLowerCase().includes(q);
+      }).slice(0, 30)
+    : [];
+
+  function scrollToVerse(n) {
+    setVerseSearch("");
+    setVsOpen(false);
+    setTimeout(() => {
+      const el = document.getElementById(`verse-${n}`);
+      if (el) el.scrollIntoView({ behavior: "smooth", block: "center" });
+    }, 50);
+  }
 
   function toggleBookmark(verse) {
     setBookmarks(prev => {
@@ -3628,15 +3653,26 @@ function QuranPage() {
   useEffect(() => {
     if (!current) return;
     setLoadingRead(true); setVerses([]); setFromCache(false);
+    setVerseSearch(""); setVsOpen(false);
 
     // Try offline cache first
     try {
       const cached = localStorage.getItem(`qv_${current}_${transEdition}`);
       if (cached) {
-        setVerses(JSON.parse(cached));
+        const parsed = JSON.parse(cached);
+        setVerses(parsed);
         setLoadingRead(false);
         setFromCache(true);
-        topRef.current?.scrollIntoView({ behavior: "smooth" });
+        const pv = pendingVerseRef.current;
+        if (pv) {
+          pendingVerseRef.current = null;
+          setTimeout(() => {
+            const el = document.getElementById(`verse-${pv}`);
+            if (el) el.scrollIntoView({ behavior: "smooth", block: "center" });
+          }, 80);
+        } else {
+          topRef.current?.scrollIntoView({ behavior: "smooth" });
+        }
         return;
       }
     } catch {}
@@ -3654,12 +3690,78 @@ function QuranPage() {
         setVerses(parsed);
         setLoadingRead(false);
         try { localStorage.setItem(`qv_${current}_${transEdition}`, JSON.stringify(parsed)); } catch {}
-        topRef.current?.scrollIntoView({ behavior: "smooth" });
+        const pv = pendingVerseRef.current;
+        if (pv) {
+          pendingVerseRef.current = null;
+          setTimeout(() => {
+            const el = document.getElementById(`verse-${pv}`);
+            if (el) el.scrollIntoView({ behavior: "smooth", block: "center" });
+          }, 80);
+        } else {
+          topRef.current?.scrollIntoView({ behavior: "smooth" });
+        }
       })
       .catch(() => setLoadingRead(false));
   }, [current]);
 
-  function openSurah(num) { setCurrent(num); localStorage.setItem("quranSurah", num); }
+  // Load full Quran verse index when user starts typing (3+ chars)
+  useEffect(() => {
+    if (search.trim().length < 3) return;
+    if (_fullVerseCache?.edition === transEdition) return; // already loaded
+    if (fullLoading) return;
+    setFullLoading(true);
+    Promise.all([
+      fetch(`https://api.alquran.cloud/v1/quran/quran-uthmani`).then(r => r.json()),
+      fetch(`https://api.alquran.cloud/v1/quran/en.transliteration`).then(r => r.json()),
+      fetch(`https://api.alquran.cloud/v1/quran/${transEdition}`).then(r => r.json()),
+    ]).then(([arRes, trRes, enRes]) => {
+      const arSurahs = arRes.data?.surahs || [];
+      const trSurahs = trRes.data?.surahs || [];
+      const enSurahs = enRes.data?.surahs || [];
+      const verses = [];
+      arSurahs.forEach((surah, si) => {
+        const s = surahs.find(x => x.number === surah.number);
+        surah.ayahs.forEach((ayah, ai) => {
+          verses.push({
+            surahNum: surah.number,
+            ayahNum: ayah.numberInSurah,
+            surahName: s?.englishName || surah.englishName || `Surah ${surah.number}`,
+            surahAr: s?.name || surah.name || "",
+            ar: ayah.text,
+            tr: trSurahs[si]?.ayahs[ai]?.text || "",
+            en: enSurahs[si]?.ayahs[ai]?.text || "",
+          });
+        });
+      });
+      _fullVerseCache = { edition: transEdition, verses };
+      setFullLoading(false);
+    }).catch(() => setFullLoading(false));
+  }, [search, transEdition]);
+
+  // Cross-surah verse search — uses full Quran cache once loaded
+  const crossResults = useMemo(() => {
+    if (search.trim().length < 3) return [];
+    if (!_fullVerseCache || _fullVerseCache.edition !== transEdition) return [];
+    const q = search.toLowerCase();
+    const results = [];
+    for (const v of _fullVerseCache.verses) {
+      if (
+        v.ar.includes(search) ||
+        v.tr.toLowerCase().includes(q) ||
+        v.en.toLowerCase().includes(q)
+      ) {
+        results.push({ surahNum: v.surahNum, surahName: v.surahName, surahAr: v.surahAr, verse: { n: v.ayahNum, ar: v.ar, tr: v.tr, en: v.en } });
+        if (results.length >= 50) break;
+      }
+    }
+    return results;
+  }, [search, transEdition, fullLoading]);
+
+  function openSurah(num, verseN) {
+    if (verseN) pendingVerseRef.current = verseN;
+    setCurrent(num);
+    localStorage.setItem("quranSurah", num);
+  }
   function back()          { setCurrent(null); localStorage.removeItem("quranSurah"); }
   function navSurah(dir)   { const n = Math.min(114, Math.max(1, current + dir)); openSurah(n); }
 
@@ -3696,6 +3798,110 @@ function QuranPage() {
         </div>
       </div>
 
+      {/* Verse search */}
+      {verses.length > 0 && (
+        <div style={{ position: "relative", marginBottom: 28 }} ref={vsInputRef}>
+          <div style={{ position: "relative" }}>
+            <input
+              placeholder={isSq ? "Kërko fjalë apo varg… (min. 3 shkronja)" : "Search word or verse… (min. 3 letters)"}
+              value={verseSearch}
+              onChange={e => { setVerseSearch(e.target.value); setVsOpen(true); }}
+              onFocus={() => setVsOpen(true)}
+              onBlur={() => setTimeout(() => setVsOpen(false), 180)}
+              style={{
+                width: "100%", padding: "10px 40px 10px 16px",
+                background: "#0D0D0D", border: `1px solid ${verseSearch.length >= 3 ? GOLD + "80" : BORDER}`,
+                borderRadius: 2, color: TEXT, fontSize: 13, fontFamily: SANS,
+                outline: "none", boxSizing: "border-box", transition: "border-color 0.2s",
+              }}
+              onMouseEnter={e => { if (verseSearch.length < 3) e.target.style.borderColor = MUTED; }}
+              onMouseLeave={e => { if (verseSearch.length < 3) e.target.style.borderColor = BORDER; }}
+            />
+            {verseSearch && (
+              <button onClick={() => { setVerseSearch(""); setVsOpen(false); }} style={{
+                position: "absolute", right: 12, top: "50%", transform: "translateY(-50%)",
+                background: "none", border: "none", color: MUTED, cursor: "pointer", fontSize: 16, lineHeight: 1,
+              }}>×</button>
+            )}
+            {!verseSearch && (
+              <span style={{ position: "absolute", right: 14, top: "50%", transform: "translateY(-50%)", fontSize: 13, color: MUTED, pointerEvents: "none" }}>
+                &#x2315;
+              </span>
+            )}
+          </div>
+          {/* Results dropdown */}
+          {vsOpen && verseSearch.trim().length >= 3 && (
+            <div style={{
+              position: "absolute", top: "100%", left: 0, right: 0, zIndex: 100,
+              background: "#0F0F0F", border: `1px solid ${GOLD}40`,
+              borderTop: "none", maxHeight: 380, overflowY: "auto",
+              boxShadow: "0 8px 32px rgba(0,0,0,0.7)",
+            }}>
+              {verseResults.length === 0 ? (
+                <div style={{ padding: "14px 18px", color: MUTED, fontSize: 12, fontFamily: SANS, letterSpacing: "0.08em" }}>
+                  {isSq ? "Asnjë rezultat." : "No results found."}
+                </div>
+              ) : (
+                <>
+                  <div style={{ padding: "7px 14px", borderBottom: `1px solid ${BORDER}`, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                    <span style={{ fontSize: 10, color: GOLD, letterSpacing: "0.12em", textTransform: "uppercase", fontFamily: SANS }}>
+                      {verseResults.length}{verseResults.length === 30 ? "+" : ""} {isSq ? "ajete" : "verses"}
+                    </span>
+                    <span style={{ fontSize: 10, color: MUTED, fontFamily: SANS }}>
+                      {surah?.englishName}
+                    </span>
+                  </div>
+                  {verseResults.map(v => {
+                    const q = verseSearch.toLowerCase();
+                    // build a snippet from whichever field matched
+                    let snippet = v.en;
+                    if (v.ar.includes(verseSearch)) snippet = v.ar;
+                    else if (v.tr.toLowerCase().includes(q)) snippet = v.tr;
+                    // highlight
+                    const re = new RegExp(`(${verseSearch.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")})`, "gi");
+                    const parts = snippet.split(re);
+                    return (
+                      <div
+                        key={v.n}
+                        onMouseDown={() => scrollToVerse(v.n)}
+                        style={{
+                          display: "flex", alignItems: "flex-start", gap: 12,
+                          padding: "11px 14px", cursor: "pointer",
+                          borderBottom: `1px solid ${BORDER}`,
+                          transition: "background 0.12s",
+                        }}
+                        onMouseEnter={e => e.currentTarget.style.background = GREEN_L}
+                        onMouseLeave={e => e.currentTarget.style.background = "transparent"}
+                      >
+                        <div style={{
+                          flexShrink: 0, minWidth: 28, height: 28, border: `1px solid ${GOLD}50`,
+                          borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center",
+                          fontSize: 10, color: GOLD, fontFamily: SANS, fontWeight: 600,
+                        }}>{v.n}</div>
+                        <div style={{ flex: 1, minWidth: 0 }}>
+                          <div style={{
+                            fontSize: 12, color: TEXT, fontFamily: snippet === v.ar ? ARABIC : SANS,
+                            direction: snippet === v.ar ? "rtl" : "ltr",
+                            lineHeight: 1.7, overflow: "hidden",
+                            display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical",
+                          }}>
+                            {parts.map((p, i) =>
+                              re.test(p)
+                                ? <mark key={i} style={{ background: GOLD + "30", color: GOLD, borderRadius: 2 }}>{p}</mark>
+                                : p
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </>
+              )}
+            </div>
+          )}
+        </div>
+      )}
+
       {/* Arabic title */}
       <div style={{ textAlign: "center", marginBottom: 36 }}>
         <div style={{ fontSize: 34, fontFamily: ARABIC, color: GOLD, direction: "rtl", letterSpacing: "0.04em", lineHeight: 1.6 }}>
@@ -3718,7 +3924,7 @@ function QuranPage() {
       {/* Verses */}
       <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
         {verses.map((v, i) => (
-          <div key={v.n} style={{
+          <div key={v.n} id={`verse-${v.n}`} style={{
             padding: "28px 0", borderBottom: `1px solid ${BORDER}`,
             display: "flex", flexDirection: "column", gap: 14,
             background: isBookmarked(v.n) ? "rgba(201,168,76,0.04)" : "transparent",
@@ -3837,16 +4043,17 @@ function QuranPage() {
       )}
 
       <input
-        placeholder="Search surah by name or number…"
+        placeholder={isSq ? "Kërko sure ose përmbajtje Kurani… (3+ shkronja)" : "Search surah name or Quran content… (3+ letters)"}
         value={search} onChange={e => setSearch(e.target.value)}
         style={{
           width: "100%", padding: "11px 16px", background: "#0E0E0E",
-          border: `1px solid ${BORDER}`, borderRadius: 2, color: TEXT,
+          border: `1px solid ${search.trim().length >= 3 ? GOLD + "80" : BORDER}`,
+          borderRadius: 2, color: TEXT,
           fontSize: 13, fontFamily: SANS, outline: "none", marginBottom: 24,
-          boxSizing: "border-box",
+          boxSizing: "border-box", transition: "border-color 0.2s",
         }}
         onFocus={e => e.target.style.borderColor = GOLD}
-        onBlur={e => e.target.style.borderColor = BORDER}
+        onBlur={e => e.target.style.borderColor = search.trim().length >= 3 ? GOLD + "80" : BORDER}
       />
 
       {loadingList && (
@@ -3855,41 +4062,111 @@ function QuranPage() {
         </div>
       )}
 
-      <div style={{ border: `1px solid ${BORDER}` }}>
-        {filtered.map((s, i) => (
-          <div key={s.number} onClick={() => openSurah(s.number)}
-            style={{
-              display: "flex", alignItems: "center", gap: 16, padding: "14px 20px",
-              borderBottom: i < filtered.length - 1 ? `1px solid ${BORDER}` : "none",
-              cursor: "pointer", transition: "background 0.15s",
-              borderLeft: current === s.number ? `2px solid ${GOLD}` : "2px solid transparent",
-              background: "transparent",
-            }}
-            onMouseEnter={e => e.currentTarget.style.background = GREEN_L}
-            onMouseLeave={e => e.currentTarget.style.background = "transparent"}
-          >
-            {/* Number */}
-            <div style={{
-              width: 36, height: 36, border: `1px solid ${BORDER}`, borderRadius: 2, flexShrink: 0,
-              display: "flex", alignItems: "center", justifyContent: "center",
-              fontSize: 12, color: GOLD, fontFamily: SANS, fontWeight: 600,
-            }}>{s.number}</div>
-
-            {/* English info */}
-            <div style={{ flex: 1, minWidth: 0 }}>
-              <div style={{ fontSize: 14, color: TEXT, fontWeight: 500, fontFamily: SERIF, letterSpacing: "0.03em" }}>{s.englishName}</div>
-              <div style={{ fontSize: 11, color: MUTED, marginTop: 2 }}>
-                {s.englishNameTranslation} · {s.numberOfAyahs} verses · {s.revelationType}
+      {/* Surah name matches */}
+      {filtered.length > 0 && (
+        <div style={{ border: `1px solid ${BORDER}`, marginBottom: crossResults.length > 0 ? 28 : 0 }}>
+          {filtered.map((s, i) => (
+            <div key={s.number} onClick={() => openSurah(s.number)}
+              style={{
+                display: "flex", alignItems: "center", gap: 16, padding: "14px 20px",
+                borderBottom: i < filtered.length - 1 ? `1px solid ${BORDER}` : "none",
+                cursor: "pointer", transition: "background 0.15s",
+                borderLeft: current === s.number ? `2px solid ${GOLD}` : "2px solid transparent",
+                background: "transparent",
+              }}
+              onMouseEnter={e => e.currentTarget.style.background = GREEN_L}
+              onMouseLeave={e => e.currentTarget.style.background = "transparent"}
+            >
+              <div style={{
+                width: 36, height: 36, border: `1px solid ${BORDER}`, borderRadius: 2, flexShrink: 0,
+                display: "flex", alignItems: "center", justifyContent: "center",
+                fontSize: 12, color: GOLD, fontFamily: SANS, fontWeight: 600,
+              }}>{s.number}</div>
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <div style={{ fontSize: 14, color: TEXT, fontWeight: 500, fontFamily: SERIF, letterSpacing: "0.03em" }}>{s.englishName}</div>
+                <div style={{ fontSize: 11, color: MUTED, marginTop: 2 }}>
+                  {s.englishNameTranslation} · {s.numberOfAyahs} verses · {s.revelationType}
+                </div>
+              </div>
+              <div style={{ fontFamily: ARABIC, fontSize: 20, color: GOLD, direction: "rtl", flexShrink: 0, lineHeight: 1.6 }}>
+                {s.name}
               </div>
             </div>
+          ))}
+        </div>
+      )}
 
-            {/* Arabic name */}
-            <div style={{ fontFamily: ARABIC, fontSize: 20, color: GOLD, direction: "rtl", flexShrink: 0, lineHeight: 1.6 }}>
-              {s.name}
-            </div>
+      {/* Cross-surah verse content search results */}
+      {crossResults.length > 0 && (
+        <div style={{ border: `1px solid ${GOLD}30` }}>
+          <div style={{ padding: "9px 16px", borderBottom: `1px solid ${BORDER}`, display: "flex", alignItems: "center", gap: 10, background: "#0E0C08" }}>
+            <span style={{ fontSize: 10, color: GOLD, letterSpacing: "0.14em", textTransform: "uppercase", fontFamily: SANS, fontWeight: 600 }}>
+              {isSq ? "Rezultate në përmbajtje" : "Verse content matches"}
+            </span>
+            <span style={{ fontSize: 10, color: MUTED, background: BORDER, padding: "1px 7px", fontFamily: SANS }}>
+              {crossResults.length}{crossResults.length === 50 ? "+" : ""}
+            </span>
+            <span style={{ fontSize: 10, color: MUTED, fontFamily: SANS, marginLeft: "auto" }}>
+              {isSq ? "Të gjitha suret" : "All 114 surahs"}
+            </span>
           </div>
-        ))}
-      </div>
+          {crossResults.map((r, i) => {
+            const q = search.toLowerCase();
+            const v = r.verse;
+            let snippet = v.en;
+            if (v.ar.includes(search)) snippet = v.ar;
+            else if (v.tr.toLowerCase().includes(q)) snippet = v.tr;
+            const isAr = snippet === v.ar;
+            const re = new RegExp(`(${search.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")})`, "gi");
+            const parts = snippet.split(re);
+            return (
+              <div
+                key={`${r.surahNum}-${v.n}`}
+                onClick={() => openSurah(r.surahNum, v.n)}
+                style={{
+                  display: "flex", alignItems: "flex-start", gap: 14, padding: "13px 16px",
+                  borderBottom: i < crossResults.length - 1 ? `1px solid ${BORDER}` : "none",
+                  cursor: "pointer", transition: "background 0.12s",
+                }}
+                onMouseEnter={e => e.currentTarget.style.background = GREEN_L}
+                onMouseLeave={e => e.currentTarget.style.background = "transparent"}
+              >
+                {/* Surah + verse badge */}
+                <div style={{ flexShrink: 0, textAlign: "center", minWidth: 44 }}>
+                  <div style={{ fontSize: 11, color: GOLD, fontFamily: SANS, fontWeight: 600, lineHeight: 1.3 }}>{r.surahNum}:{v.n}</div>
+                  <div style={{ fontSize: 9, color: MUTED, fontFamily: SANS, marginTop: 2, letterSpacing: "0.05em" }}>{r.surahName}</div>
+                </div>
+                {/* Snippet */}
+                <div style={{
+                  flex: 1, minWidth: 0, fontSize: 13, color: TEXT,
+                  fontFamily: isAr ? ARABIC : SANS,
+                  direction: isAr ? "rtl" : "ltr",
+                  lineHeight: 1.7,
+                  overflow: "hidden", display: "-webkit-box",
+                  WebkitLineClamp: 2, WebkitBoxOrient: "vertical",
+                }}>
+                  {parts.map((p, j) =>
+                    re.test(p)
+                      ? <mark key={j} style={{ background: GOLD + "30", color: GOLD, borderRadius: 2 }}>{p}</mark>
+                      : p
+                  )}
+                </div>
+                {/* Arabic surah name */}
+                <div style={{ fontFamily: ARABIC, fontSize: 14, color: GOLD + "80", flexShrink: 0, direction: "rtl", lineHeight: 1.6 }}>{r.surahAr}</div>
+              </div>
+            );
+          })}
+        </div>
+      )}
+
+      {/* Loading / no-results state for verse search */}
+      {search.trim().length >= 3 && crossResults.length === 0 && (
+        <div style={{ padding: "18px 0", textAlign: "center", color: MUTED, fontSize: 12, fontFamily: SANS, letterSpacing: "0.08em" }}>
+          {fullLoading
+            ? (isSq ? "Duke ngarkuar indeksin e Kuranit…" : "Loading Quran index…")
+            : (filtered.length > 0 ? null : (isSq ? "Asnjë rezultat." : "No matches found."))}
+        </div>
+      )}
     </div>
   );
 }
