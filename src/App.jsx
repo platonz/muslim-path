@@ -1495,6 +1495,8 @@ function DateConverter() {
 }
 
 // ─── LIBRARY ──────────────────────────────────────────────────────
+const isMobile = () => /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent) || navigator.maxTouchPoints > 1;
+
 function Library({ navigate }) {
   const { t } = useTranslation();
   const [search, setSearch] = useState("");
@@ -1504,6 +1506,18 @@ function Library({ navigate }) {
   const [loading, setLoading] = useState(false);
   const [pdfOpen, setPdfOpen] = useState(null); // { url, title }
   const [pdfError, setPdfError] = useState(false);
+
+  function openPdf(book) {
+    const CDN = "https://cdn.muslimspath.app/";
+    const key = book.url.startsWith(CDN) ? book.url.slice(CDN.length) : `books/${book.url.split("/").pop()}`;
+    const workerUrl = `${UPLOAD_WORKER_URL}/${key}`;
+    if (isMobile()) {
+      window.open(workerUrl, "_blank", "noreferrer");
+    } else {
+      setPdfOpen({ url: book.url, title: book.title });
+      setPdfError(false);
+    }
+  }
 
   useEffect(() => {
     if (!SUPA_URL) return;
@@ -1579,12 +1593,12 @@ function Library({ navigate }) {
                 <span style={{ fontSize: 10, fontWeight: 600, color: GOLD, letterSpacing: "0.1em", textTransform: "uppercase", borderBottom: `1px solid ${GOLD}40`, paddingBottom: 2 }}>{b.cat}</span>
               </div>
               <div style={{ fontWeight: 500, fontSize: 14, color: TEXT, lineHeight: 1.5, fontFamily: SERIF, cursor: isPdf ? "pointer" : "default" }}
-                onClick={() => { if (isPdf) { setPdfOpen({ url: b.url, title: b.title }); setPdfError(false); } else window.open(b.url, "_blank", "noreferrer"); }}
+                onClick={() => { if (isPdf) openPdf(b); else window.open(b.url, "_blank", "noreferrer"); }}
               >{b.title}</div>
               <div style={{ fontSize: 12, color: MUTED, letterSpacing: "0.02em" }}>{b.author}</div>
               {isPdf ? (
                 <div style={{ display: "flex", gap: 6, marginTop: 4 }}>
-                  <button onClick={() => { setPdfOpen({ url: b.url, title: b.title }); setPdfError(false); }} style={{
+                  <button onClick={() => openPdf(b)} style={{
                     flex: 1, padding: "5px 0", background: "transparent",
                     border: `1px solid ${GOLD}50`, borderRadius: 2,
                     color: GOLD, fontSize: 11, cursor: "pointer", fontFamily: SANS,
