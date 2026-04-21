@@ -85,7 +85,7 @@ export default function Navbar({ page, setPage, onSettings, hasLocation, onSearc
                 fontFamily: SANS,
                 height: 64, borderRadius: 0, display: "flex", alignItems: "center", gap: 5,
               }}>
-              ðŸ›  {t("nav.tools")} <span style={{ fontSize: 9, opacity: 0.6 }}>â–¾</span>
+              🛠 {t("nav.tools")} <span style={{ fontSize: 9, opacity: 0.6 }}>▾</span>
             </button>
             {toolsOpen && (
               <div onMouseLeave={() => setToolsOpen(false)} style={{
@@ -125,7 +125,7 @@ export default function Navbar({ page, setPage, onSettings, hasLocation, onSearc
           }}
             onMouseEnter={e => { e.currentTarget.style.borderColor = navActv; e.currentTarget.style.color = navActv; }}
             onMouseLeave={e => { e.currentTarget.style.borderColor = isHome ? "rgba(201,168,76,0.25)" : BORDER; e.currentTarget.style.color = navText; }}
-          >ðŸ”</button>
+          >🔍</button>
           <button onClick={onSettings} title={t("nav.settings")} aria-label={t("nav.settings")} style={{
             background: "transparent",
             border: `1px solid rgba(201,168,76,${hasLocation ? "0.4" : "0.25"})`,
@@ -136,7 +136,7 @@ export default function Navbar({ page, setPage, onSettings, hasLocation, onSearc
             onMouseEnter={e => { e.currentTarget.style.borderColor = navActv; e.currentTarget.style.color = navActv; }}
             onMouseLeave={e => { e.currentTarget.style.borderColor = hasLocation ? (isHome ? "rgba(201,168,76,0.35)" : GOLD+"60") : (isHome ? "rgba(201,168,76,0.25)" : BORDER); e.currentTarget.style.color = hasLocation ? navActv : navText; }}
           >
-            âš™
+            ⚙
             {hasLocation && <span style={{ position: "absolute", top: 3, right: 3, width: 6, height: 6, borderRadius: "50%", background: GOLD }} />}
           </button>
 
@@ -195,7 +195,7 @@ export default function Navbar({ page, setPage, onSettings, hasLocation, onSearc
             display: "none", background: "transparent", border: `1px solid ${BORDER}`,
             borderRadius: 2, cursor: "pointer", fontSize: 16, color: MUTED,
             width: 36, height: 36, alignItems: "center", justifyContent: "center",
-          }} className="nav-mobile">{menuOpen ? "âœ•" : "â˜°"}</button>
+          }} className="nav-mobile">{menuOpen ? "✕" : "☰"}</button>
         </div>
       </div>
 
@@ -234,7 +234,7 @@ export default function Navbar({ page, setPage, onSettings, hasLocation, onSearc
             borderLeft: toolsActive ? `2px solid ${GOLD}` : "2px solid transparent",
             borderTop: `1px solid ${BORDER}`, marginTop: 4,
           }}>
-            <span>ðŸ› </span> {t("nav.tools")} <span style={{ marginLeft: "auto", fontSize: 10, opacity: 0.5 }}>{mobileToolsOpen ? "â–²" : "â–¼"}</span>
+            <span>🛠</span> {t("nav.tools")} <span style={{ marginLeft: "auto", fontSize: 10, opacity: 0.5 }}>{mobileToolsOpen ? "▲" : "▼"}</span>
           </button>
           {mobileToolsOpen && TOOLS_ITEMS.map(tool => (
             <button key={tool.id} onClick={() => { setPage(tool.id); setMenuOpen(false); }} style={{
@@ -256,7 +256,7 @@ export default function Navbar({ page, setPage, onSettings, hasLocation, onSearc
             letterSpacing: "0.08em", textTransform: "uppercase", fontFamily: SANS,
             borderLeft: "2px solid transparent",
           }}>
-            <span>ðŸ”</span> {t("nav.search")}
+            <span>🔍</span> {t("nav.search")}
           </button>
           <button onClick={() => { onSettings(); setMenuOpen(false); }} style={{
             background: "none", border: "none", cursor: "pointer", textAlign: "left",
@@ -265,7 +265,7 @@ export default function Navbar({ page, setPage, onSettings, hasLocation, onSearc
             letterSpacing: "0.08em", textTransform: "uppercase", fontFamily: SANS,
             borderLeft: "2px solid transparent",
           }}>
-            <span>âš™</span> {t("nav.settings")} {hasLocation && <span style={{ fontSize: 10, color: GOLD, border: `1px solid ${GOLD}60`, padding: "1px 7px", letterSpacing: "0.06em" }}>{t("nav.active")}</span>}
+            <span>⚙</span> {t("nav.settings")} {hasLocation && <span style={{ fontSize: 10, color: GOLD, border: `1px solid ${GOLD}60`, padding: "1px 7px", letterSpacing: "0.06em" }}>{t("nav.active")}</span>}
           </button>
 
           {authUser ? (
