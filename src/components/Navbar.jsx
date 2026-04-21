@@ -24,20 +24,18 @@ export default function Navbar({ page, setPage, onSettings, hasLocation, onSearc
   }, []);
 
   const isHome = page === "home";
-  const navBg   = isHome ? "rgba(247,240,228,0.82)" : "#080808";
-  const navBdr  = isHome ? "rgba(201,168,76,0.2)"   : BORDER;
-  const navShdw = isHome
-    ? "0 1px 0 rgba(201,168,76,0.15), 0 4px 24px rgba(160,120,50,0.08)"
-    : `0 1px 0 ${GOLD}18, 0 4px 40px rgba(0,0,0,0.8)`;
-  const navText = isHome ? "#3a2a10" : MUTED;
-  const navActv = isHome ? "#a07d3a" : GOLD;
+  const navBg   = "rgba(245,237,218,0.88)";
+  const navBdr  = "rgba(201,168,76,0.22)";
+  const navShdw = "0 1px 0 rgba(201,168,76,0.15), 0 2px 16px rgba(160,120,50,0.08)";
+  const navText = MUTED;
+  const navActv = "#a07d3a";
 
   return (
     <nav className="nav-bar" style={{
       position: "sticky", top: 0, zIndex: 100,
       background: navBg,
-      backdropFilter: isHome ? "blur(24px)" : "none",
-      WebkitBackdropFilter: isHome ? "blur(24px)" : "none",
+      backdropFilter: "blur(20px)",
+      WebkitBackdropFilter: "blur(20px)",
       borderBottom: `1px solid ${navBdr}`,
       boxShadow: navShdw,
       padding: "0 32px",
@@ -87,12 +85,12 @@ export default function Navbar({ page, setPage, onSettings, hasLocation, onSearc
                 fontFamily: SANS,
                 height: 64, borderRadius: 0, display: "flex", alignItems: "center", gap: 5,
               }}>
-              🛠 {t("nav.tools")} <span style={{ fontSize: 9, opacity: 0.6 }}>▾</span>
+              ðŸ›  {t("nav.tools")} <span style={{ fontSize: 9, opacity: 0.6 }}>â–¾</span>
             </button>
             {toolsOpen && (
               <div onMouseLeave={() => setToolsOpen(false)} style={{
                 position: "absolute", top: "100%", left: 0,
-                background: "#0D0D0D", border: `1px solid ${GOLD}25`,
+                background: "#faf5ec", border: `1px solid ${GOLD}25`,
                 boxShadow: `0 16px 48px rgba(0,0,0,0.9)`,
                 minWidth: 180, zIndex: 200,
               }}>
@@ -120,25 +118,25 @@ export default function Navbar({ page, setPage, onSettings, hasLocation, onSearc
         {/* Right side: search + settings + lang switcher + auth + hamburger */}
         <div style={{ display: "flex", alignItems: "center", gap: 10, flexShrink: 0 }}>
           <button onClick={onSearch} title={t("nav.search")} aria-label={t("nav.search")} style={{
-            background: "transparent", border: `1px solid ${isHome ? "rgba(201,168,76,0.25)" : BORDER}`,
-            borderRadius: isHome ? 10 : 2, cursor: "pointer", color: navText,
+            background: "transparent", border: `1px solid rgba(201,168,76,0.3)`,
+            borderRadius: 10, cursor: "pointer", color: navText,
             width: 36, height: 36, display: "flex", alignItems: "center", justifyContent: "center",
             fontSize: 15, transition: "all 0.2s",
           }}
             onMouseEnter={e => { e.currentTarget.style.borderColor = navActv; e.currentTarget.style.color = navActv; }}
             onMouseLeave={e => { e.currentTarget.style.borderColor = isHome ? "rgba(201,168,76,0.25)" : BORDER; e.currentTarget.style.color = navText; }}
-          >🔍</button>
+          >ðŸ”</button>
           <button onClick={onSettings} title={t("nav.settings")} aria-label={t("nav.settings")} style={{
             background: "transparent",
-            border: `1px solid ${hasLocation ? (isHome ? "rgba(201,168,76,0.35)" : GOLD+"60") : (isHome ? "rgba(201,168,76,0.25)" : BORDER)}`,
-            borderRadius: isHome ? 10 : 2, cursor: "pointer", color: hasLocation ? navActv : navText,
+            border: `1px solid rgba(201,168,76,${hasLocation ? "0.4" : "0.25"})`,
+            borderRadius: 10, cursor: "pointer", color: hasLocation ? navActv : navText,
             width: 36, height: 36, display: "flex", alignItems: "center", justifyContent: "center",
             fontSize: 14, transition: "all 0.2s", position: "relative",
           }}
             onMouseEnter={e => { e.currentTarget.style.borderColor = navActv; e.currentTarget.style.color = navActv; }}
             onMouseLeave={e => { e.currentTarget.style.borderColor = hasLocation ? (isHome ? "rgba(201,168,76,0.35)" : GOLD+"60") : (isHome ? "rgba(201,168,76,0.25)" : BORDER); e.currentTarget.style.color = hasLocation ? navActv : navText; }}
           >
-            ⚙
+            âš™
             {hasLocation && <span style={{ position: "absolute", top: 3, right: 3, width: 6, height: 6, borderRadius: "50%", background: GOLD }} />}
           </button>
 
@@ -152,7 +150,7 @@ export default function Navbar({ page, setPage, onSettings, hasLocation, onSearc
               }} style={{
                 background: "linear-gradient(135deg,#C9A84C,#A8883E)", border: "none",
                 borderRadius: "50%", width: 32, height: 32, cursor: "pointer",
-                fontSize: 12, fontWeight: 700, color: "#0A0A0A",
+                fontSize: 12, fontWeight: 700, color: "#3a2a10",
                 display: "flex", alignItems: "center", justifyContent: "center",
                 flexShrink: 0,
               }}>
@@ -160,22 +158,22 @@ export default function Navbar({ page, setPage, onSettings, hasLocation, onSearc
               </button>
               <div id="nav-user-menu" style={{
                 display: "none", position: "absolute", top: "calc(100% + 10px)", right: 0,
-                background: "#0D0D0D", border: "1px solid #2A2520",
+                background: "#faf5ec", border: "1px solid #2A2520",
                 boxShadow: "0 16px 48px rgba(0,0,0,0.9)",
                 minWidth: 200, zIndex: 300, padding: "8px 0",
               }}>
                 <div style={{ padding: "10px 16px 8px", borderBottom: "1px solid #242424" }}>
-                  <div style={{ fontSize: 12, color: "#EDE8DC", marginBottom: 2 }}>{authUser.user_metadata?.full_name || ""}</div>
-                  <div style={{ fontSize: 11, color: "#6B6358" }}>{authUser.email}</div>
+                  <div style={{ fontSize: 12, color: "#3a2a10", marginBottom: 2 }}>{authUser.user_metadata?.full_name || ""}</div>
+                  <div style={{ fontSize: 11, color: "#7a5c28" }}>{authUser.email}</div>
                 </div>
                 <button onClick={() => { onSignOut(); document.getElementById("nav-user-menu").style.display = "none"; }} style={{
                   width: "100%", background: "none", border: "none",
                   padding: "10px 16px", textAlign: "left", cursor: "pointer",
-                  fontSize: 11, color: "#6B6358", letterSpacing: "0.07em", textTransform: "uppercase",
+                  fontSize: 11, color: "#7a5c28", letterSpacing: "0.07em", textTransform: "uppercase",
                   fontFamily: "'Inter', sans-serif",
                 }}
                   onMouseEnter={e => { e.currentTarget.style.color = "#e74c3c"; }}
-                  onMouseLeave={e => { e.currentTarget.style.color = "#6B6358"; }}
+                  onMouseLeave={e => { e.currentTarget.style.color = "#7a5c28"; }}
                 >{t("nav.signOut")}</button>
               </div>
             </div>
@@ -184,8 +182,8 @@ export default function Navbar({ page, setPage, onSettings, hasLocation, onSearc
               background: "linear-gradient(135deg,#C9A84C,#A8883E)",
               border: "none", cursor: "pointer",
               padding: "7px 18px", fontSize: 12, fontWeight: 700,
-              color: isHome ? "#3a2a10" : "#0A0A0A",
-              borderRadius: isHome ? 20 : 2,
+              color: isHome ? "#3a2a10" : "#3a2a10",
+              borderRadius: 20,
               letterSpacing: "0.04em",
               fontFamily: "'Inter', sans-serif", transition: "opacity 0.2s",
             }}
@@ -197,7 +195,7 @@ export default function Navbar({ page, setPage, onSettings, hasLocation, onSearc
             display: "none", background: "transparent", border: `1px solid ${BORDER}`,
             borderRadius: 2, cursor: "pointer", fontSize: 16, color: MUTED,
             width: 36, height: 36, alignItems: "center", justifyContent: "center",
-          }} className="nav-mobile">{menuOpen ? "✕" : "☰"}</button>
+          }} className="nav-mobile">{menuOpen ? "âœ•" : "â˜°"}</button>
         </div>
       </div>
 
@@ -209,7 +207,8 @@ export default function Navbar({ page, setPage, onSettings, hasLocation, onSearc
           borderTop: `1px solid ${BORDER}`,
           padding: "8px 0 16px",
           display: "flex", flexDirection: "column",
-          background: "#080808",
+          background: "rgba(245,237,218,0.97)",
+          backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)",
           boxShadow: "0 8px 32px rgba(0,0,0,0.85)",
           maxHeight: "calc(100vh - 64px)", overflowY: "auto",
         }}>
@@ -235,7 +234,7 @@ export default function Navbar({ page, setPage, onSettings, hasLocation, onSearc
             borderLeft: toolsActive ? `2px solid ${GOLD}` : "2px solid transparent",
             borderTop: `1px solid ${BORDER}`, marginTop: 4,
           }}>
-            <span>🛠</span> {t("nav.tools")} <span style={{ marginLeft: "auto", fontSize: 10, opacity: 0.5 }}>{mobileToolsOpen ? "▲" : "▼"}</span>
+            <span>ðŸ› </span> {t("nav.tools")} <span style={{ marginLeft: "auto", fontSize: 10, opacity: 0.5 }}>{mobileToolsOpen ? "â–²" : "â–¼"}</span>
           </button>
           {mobileToolsOpen && TOOLS_ITEMS.map(tool => (
             <button key={tool.id} onClick={() => { setPage(tool.id); setMenuOpen(false); }} style={{
@@ -257,7 +256,7 @@ export default function Navbar({ page, setPage, onSettings, hasLocation, onSearc
             letterSpacing: "0.08em", textTransform: "uppercase", fontFamily: SANS,
             borderLeft: "2px solid transparent",
           }}>
-            <span>🔍</span> {t("nav.search")}
+            <span>ðŸ”</span> {t("nav.search")}
           </button>
           <button onClick={() => { onSettings(); setMenuOpen(false); }} style={{
             background: "none", border: "none", cursor: "pointer", textAlign: "left",
@@ -266,7 +265,7 @@ export default function Navbar({ page, setPage, onSettings, hasLocation, onSearc
             letterSpacing: "0.08em", textTransform: "uppercase", fontFamily: SANS,
             borderLeft: "2px solid transparent",
           }}>
-            <span>⚙</span> {t("nav.settings")} {hasLocation && <span style={{ fontSize: 10, color: GOLD, border: `1px solid ${GOLD}60`, padding: "1px 7px", letterSpacing: "0.06em" }}>{t("nav.active")}</span>}
+            <span>âš™</span> {t("nav.settings")} {hasLocation && <span style={{ fontSize: 10, color: GOLD, border: `1px solid ${GOLD}60`, padding: "1px 7px", letterSpacing: "0.06em" }}>{t("nav.active")}</span>}
           </button>
 
           {authUser ? (

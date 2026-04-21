@@ -5,36 +5,36 @@ import { BG, SURFACE, BORDER, GREEN, GREEN_L, GOLD, TEXT, MUTED, SERIF, SANS } f
 import Navbar from "./components/Navbar";
 import Home from "./components/Home";
 
-// ─── QUOTES ────────────────────────────────────────────────────────
+// â”€â”€â”€ QUOTES â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 const QUOTES = [
-  { text: "Indeed, with hardship will be ease.", src: "Quran 94:6", sq:"Me të vërtetë, me vështirësinë vjen lehtësia." },
-  { text: "Allah does not burden a soul beyond that it can bear.", src: "Quran 2:286", sq:"Allahu nuk ngarkon asnjë shpirt përtej mundësive të tij." },
-  { text: "The best of people are those most beneficial to people.", src: "al-Tabarani", sq:"Njerëzit më të mirë janë ata që u sjellin dobi më të madhe njerëzve.", ref: "al-Mu'jam al-Awsat 5787" },
-  { text: "Speak good or remain silent.", src: "Bukhari & Muslim", sq:"Thuaj mirë ose hesht.", ref: "Bukhari 6018 · Muslim 47" },
-  { text: "He who does not thank people does not thank Allah.", src: "Abu Dawud", sq:"Ai që nuk u falënderon njerëzve, nuk i falënderohet as Allahut.", ref: "Abu Dawud 4811" },
-  { text: "Take advantage of five before five: youth, health, wealth, free time, and life.", src: "Ibn Abbas (Shu'ab al-Iman)", sq:"Përfito nga pesë gjëra para pesë të tjera: rinia, shëndeti, pasuria, koha e lirë dhe jeta.", ref: "Shu'ab al-Iman 9575" },
-  { text: "Allah does not look at your appearance or wealth, but at your hearts and deeds.", src: "Muslim", sq:"Allahu nuk shikon pamjen tuaj apo pasurinë tuaj, por shikon zemrat dhe veprat tuaja.", ref: "Muslim 2564" },
-  { text: "The strongest among you is the one who controls his anger.", src: "Bukhari", sq:"Më i forti ndër ju është ai që kontrollon zemëratën e tij.", ref: "Bukhari 6114" },
-  { text: "Do not waste water even if you are on a flowing river.", src: "Ibn Majah", sq:"Mos shpërdoro ujin edhe nëse je pranë lumit.", ref: "Ibn Majah 425" },
-  { text: "A Muslim is one from whose tongue and hands other Muslims are safe.", src: "Bukhari", sq:"Muslimani është ai nga gjuha dhe dora e të cilit janë të sigurt muslimanët e tjerë.", ref: "Bukhari 10" },
-  { text: "Make things easy, do not make them difficult. Give glad tidings, do not repel.", src: "Bukhari", sq:"Lehtësoni, mos vështirësoni. Jepni lajme të gëzueshme, mos largoni njerëzit.", ref: "Bukhari 69" },
-  { text: "We have not sent you except as a mercy to the worlds.", src: "Quran 21:107", sq:"Ne të kemi dërguar vetëm si mëshirë për të gjitha botët." },
-  { text: "So remember Me; I will remember you.", src: "Quran 2:152", sq:"Kujtomëni Mua; edhe Unë do t'ju kujtoj." },
-  { text: "Indeed the most noble of you in the sight of Allah is the most righteous.", src: "Quran 49:13", sq:"Me të vërtetë, më i nderuari ndër ju tek Allahu është ai me devotshmërinë më të madhe." },
-  { text: "And He found you lost and guided you.", src: "Quran 93:7", sq:"Dhe Ai të gjeti të humbur e të udhëzoi." },
-  { text: "And when My servants ask you about Me — indeed I am near.", src: "Quran 2:186", sq:"Kur robërit e Mi të pyesin për Mua — me të vërtetë Unë jam afër." },
-  { text: "Verily, after difficulty there is relief.", src: "Quran 94:5", sq:"Me të vërtetë, pas vështirësisë vjen lehtësia." },
-  { text: "Your Lord has not taken leave of you, nor has He detested you.", src: "Quran 93:3", sq:"Zoti yt nuk të ka lënë e as nuk të urren." },
-  { text: "And your Lord is the Forgiving, Full of Mercy.", src: "Quran 18:58", sq:"Zoti yt është i Falshmi, Mëshirëploti." },
-  { text: "Whoever is patient, Allah will make him patient. No one is given a better gift than patience.", src: "Bukhari", sq:"Kush bën durim, Allahu e bën të durueshëm. Askujt nuk i është dhënë dhuratë më e mirë sesa durimi.", ref: "Bukhari 1469" },
-  { text: "The cure for ignorance is to question.", src: "Abu Dawud", sq:"Ilaçi i injorancës është pyetja.", ref: "Abu Dawud 336" },
-  { text: "Feed the hungry, visit the sick, and free the captive.", src: "Bukhari", sq:"Ushqejeni të uriurin, vizitoni të sëmurin dhe çlironi të robëruarin.", ref: "Bukhari 5373" },
-  { text: "None of you truly believes until he loves for his brother what he loves for himself.", src: "Bukhari & Muslim", sq:"Asnjë nga ju nuk beson me të vërtetë, deri sa të dojë për vëllain e tij atë çfarë do për veten e tij.", ref: "Bukhari 13 · Muslim 45" },
-  { text: "Smiling at your brother is charity.", src: "Tirmidhi", sq:"Buzëqeshja ndaj vëllait tënd është sadaka.", ref: "Tirmidhi 1956" },
-  { text: "The world is a prison for the believer and a paradise for the disbeliever.", src: "Muslim", sq:"Bota është burg për besimtarin dhe parajsë për jobesimtarin.", ref: "Muslim 2956" },
+  { text: "Indeed, with hardship will be ease.", src: "Quran 94:6", sq:"Me tÃ« vÃ«rtetÃ«, me vÃ«shtirÃ«sinÃ« vjen lehtÃ«sia." },
+  { text: "Allah does not burden a soul beyond that it can bear.", src: "Quran 2:286", sq:"Allahu nuk ngarkon asnjÃ« shpirt pÃ«rtej mundÃ«sive tÃ« tij." },
+  { text: "The best of people are those most beneficial to people.", src: "al-Tabarani", sq:"NjerÃ«zit mÃ« tÃ« mirÃ« janÃ« ata qÃ« u sjellin dobi mÃ« tÃ« madhe njerÃ«zve.", ref: "al-Mu'jam al-Awsat 5787" },
+  { text: "Speak good or remain silent.", src: "Bukhari & Muslim", sq:"Thuaj mirÃ« ose hesht.", ref: "Bukhari 6018 Â· Muslim 47" },
+  { text: "He who does not thank people does not thank Allah.", src: "Abu Dawud", sq:"Ai qÃ« nuk u falÃ«nderon njerÃ«zve, nuk i falÃ«nderohet as Allahut.", ref: "Abu Dawud 4811" },
+  { text: "Take advantage of five before five: youth, health, wealth, free time, and life.", src: "Ibn Abbas (Shu'ab al-Iman)", sq:"PÃ«rfito nga pesÃ« gjÃ«ra para pesÃ« tÃ« tjera: rinia, shÃ«ndeti, pasuria, koha e lirÃ« dhe jeta.", ref: "Shu'ab al-Iman 9575" },
+  { text: "Allah does not look at your appearance or wealth, but at your hearts and deeds.", src: "Muslim", sq:"Allahu nuk shikon pamjen tuaj apo pasurinÃ« tuaj, por shikon zemrat dhe veprat tuaja.", ref: "Muslim 2564" },
+  { text: "The strongest among you is the one who controls his anger.", src: "Bukhari", sq:"MÃ« i forti ndÃ«r ju Ã«shtÃ« ai qÃ« kontrollon zemÃ«ratÃ«n e tij.", ref: "Bukhari 6114" },
+  { text: "Do not waste water even if you are on a flowing river.", src: "Ibn Majah", sq:"Mos shpÃ«rdoro ujin edhe nÃ«se je pranÃ« lumit.", ref: "Ibn Majah 425" },
+  { text: "A Muslim is one from whose tongue and hands other Muslims are safe.", src: "Bukhari", sq:"Muslimani Ã«shtÃ« ai nga gjuha dhe dora e tÃ« cilit janÃ« tÃ« sigurt muslimanÃ«t e tjerÃ«.", ref: "Bukhari 10" },
+  { text: "Make things easy, do not make them difficult. Give glad tidings, do not repel.", src: "Bukhari", sq:"LehtÃ«soni, mos vÃ«shtirÃ«soni. Jepni lajme tÃ« gÃ«zueshme, mos largoni njerÃ«zit.", ref: "Bukhari 69" },
+  { text: "We have not sent you except as a mercy to the worlds.", src: "Quran 21:107", sq:"Ne tÃ« kemi dÃ«rguar vetÃ«m si mÃ«shirÃ« pÃ«r tÃ« gjitha botÃ«t." },
+  { text: "So remember Me; I will remember you.", src: "Quran 2:152", sq:"KujtomÃ«ni Mua; edhe UnÃ« do t'ju kujtoj." },
+  { text: "Indeed the most noble of you in the sight of Allah is the most righteous.", src: "Quran 49:13", sq:"Me tÃ« vÃ«rtetÃ«, mÃ« i nderuari ndÃ«r ju tek Allahu Ã«shtÃ« ai me devotshmÃ«rinÃ« mÃ« tÃ« madhe." },
+  { text: "And He found you lost and guided you.", src: "Quran 93:7", sq:"Dhe Ai tÃ« gjeti tÃ« humbur e tÃ« udhÃ«zoi." },
+  { text: "And when My servants ask you about Me â€” indeed I am near.", src: "Quran 2:186", sq:"Kur robÃ«rit e Mi tÃ« pyesin pÃ«r Mua â€” me tÃ« vÃ«rtetÃ« UnÃ« jam afÃ«r." },
+  { text: "Verily, after difficulty there is relief.", src: "Quran 94:5", sq:"Me tÃ« vÃ«rtetÃ«, pas vÃ«shtirÃ«sisÃ« vjen lehtÃ«sia." },
+  { text: "Your Lord has not taken leave of you, nor has He detested you.", src: "Quran 93:3", sq:"Zoti yt nuk tÃ« ka lÃ«nÃ« e as nuk tÃ« urren." },
+  { text: "And your Lord is the Forgiving, Full of Mercy.", src: "Quran 18:58", sq:"Zoti yt Ã«shtÃ« i Falshmi, MÃ«shirÃ«ploti." },
+  { text: "Whoever is patient, Allah will make him patient. No one is given a better gift than patience.", src: "Bukhari", sq:"Kush bÃ«n durim, Allahu e bÃ«n tÃ« durueshÃ«m. Askujt nuk i Ã«shtÃ« dhÃ«nÃ« dhuratÃ« mÃ« e mirÃ« sesa durimi.", ref: "Bukhari 1469" },
+  { text: "The cure for ignorance is to question.", src: "Abu Dawud", sq:"IlaÃ§i i injorancÃ«s Ã«shtÃ« pyetja.", ref: "Abu Dawud 336" },
+  { text: "Feed the hungry, visit the sick, and free the captive.", src: "Bukhari", sq:"Ushqejeni tÃ« uriurin, vizitoni tÃ« sÃ«murin dhe Ã§lironi tÃ« robÃ«ruarin.", ref: "Bukhari 5373" },
+  { text: "None of you truly believes until he loves for his brother what he loves for himself.", src: "Bukhari & Muslim", sq:"AsnjÃ« nga ju nuk beson me tÃ« vÃ«rtetÃ«, deri sa tÃ« dojÃ« pÃ«r vÃ«llain e tij atÃ« Ã§farÃ« do pÃ«r veten e tij.", ref: "Bukhari 13 Â· Muslim 45" },
+  { text: "Smiling at your brother is charity.", src: "Tirmidhi", sq:"BuzÃ«qeshja ndaj vÃ«llait tÃ«nd Ã«shtÃ« sadaka.", ref: "Tirmidhi 1956" },
+  { text: "The world is a prison for the believer and a paradise for the disbeliever.", src: "Muslim", sq:"Bota Ã«shtÃ« burg pÃ«r besimtarin dhe parajsÃ« pÃ«r jobesimtarin.", ref: "Muslim 2956" },
 ];
 
-// ─── LIBRARY ──────────────────────────────────────────────────────
+// â”€â”€â”€ LIBRARY â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 const LIBRARY = [
   // Quran & Translation
   { title: "Quran.com", author: "Multiple translations & audio", cat: "Quran", url: "https://quran.com" },
@@ -62,40 +62,40 @@ const LIBRARY = [
   { title: "Duaa.app", author: "Daily supplications", cat: "Online", url: "https://duaa.app" },
 
   // Albanian / Shqip
-  { title: "10 Sfidat e Jetës", author: "Literaturë Islame", cat: "Shqip", url: "https://cdn.muslimspath.app/books/10-sfidat-e-jetes.pdf" },
-  { title: "99 Emrat e Allahut", author: "Literaturë Islame", cat: "Shqip", url: "https://cdn.muslimspath.app/books/99Names-2019.pdf" },
-  { title: "Kush është Profeti Muhamed ﷺ", author: "AIITC", cat: "Shqip", url: "https://cdn.muslimspath.app/books/AIITC-Ky-eshte-profeti-Muhamed-a.s..pdf" },
-  { title: "Madhërimi i Allahut", author: "Abdulaziz et-Tarifi", cat: "Shqip", url: "https://cdn.muslimspath.app/books/Abdulaziz-et-Tarifi-Madherimi-i-Allahut.pdf" },
-  { title: "Gjykimi ndaj Magjisë dhe Fallit", author: "Abdulaziz ibn Baz", cat: "Shqip", url: "https://cdn.muslimspath.app/books/Abdulaziz-ibn-Baz-Gjykimi-ndaj-magjes-dhe-fallit.pdf" },
-  { title: "Mbi Rrugën e të Parëve Tanë", author: "Abdulkadër Arnauti", cat: "Shqip", url: "https://cdn.muslimspath.app/books/Abdulkader-Arnauti-Mbi-rrugën-e-te-pareve-tane-selefit.pdf" },
-  { title: "Sahih el-Bukhari — Vëllimi 1", author: "Mehdi Polisi", cat: "Shqip", url: "https://cdn.muslimspath.app/books/Mehdi-Polisi-Sahih-el-Bukhari-Vellimi-01.pdf" },
-  { title: "Sahih el-Bukhari — Vëllimi 2", author: "Abdullah Hamiti", cat: "Shqip", url: "https://cdn.muslimspath.app/books/Abdullah-Hamiti-Sahih-el-Bukhari-Vellimi-02.pdf" },
-  { title: "Këshilla të Arta për Morale të Larta", author: "Abdulmelik Ramadani", cat: "Shqip", url: "https://cdn.muslimspath.app/books/Abdulmelik-Ramadani-Keshilla-te-arta.pdf" },
+  { title: "10 Sfidat e JetÃ«s", author: "LiteraturÃ« Islame", cat: "Shqip", url: "https://cdn.muslimspath.app/books/10-sfidat-e-jetes.pdf" },
+  { title: "99 Emrat e Allahut", author: "LiteraturÃ« Islame", cat: "Shqip", url: "https://cdn.muslimspath.app/books/99Names-2019.pdf" },
+  { title: "Kush Ã«shtÃ« Profeti Muhamed ï·º", author: "AIITC", cat: "Shqip", url: "https://cdn.muslimspath.app/books/AIITC-Ky-eshte-profeti-Muhamed-a.s..pdf" },
+  { title: "MadhÃ«rimi i Allahut", author: "Abdulaziz et-Tarifi", cat: "Shqip", url: "https://cdn.muslimspath.app/books/Abdulaziz-et-Tarifi-Madherimi-i-Allahut.pdf" },
+  { title: "Gjykimi ndaj MagjisÃ« dhe Fallit", author: "Abdulaziz ibn Baz", cat: "Shqip", url: "https://cdn.muslimspath.app/books/Abdulaziz-ibn-Baz-Gjykimi-ndaj-magjes-dhe-fallit.pdf" },
+  { title: "Mbi RrugÃ«n e tÃ« ParÃ«ve TanÃ«", author: "AbdulkadÃ«r Arnauti", cat: "Shqip", url: "https://cdn.muslimspath.app/books/Abdulkader-Arnauti-Mbi-rrugÃ«n-e-te-pareve-tane-selefit.pdf" },
+  { title: "Sahih el-Bukhari â€” VÃ«llimi 1", author: "Mehdi Polisi", cat: "Shqip", url: "https://cdn.muslimspath.app/books/Mehdi-Polisi-Sahih-el-Bukhari-Vellimi-01.pdf" },
+  { title: "Sahih el-Bukhari â€” VÃ«llimi 2", author: "Abdullah Hamiti", cat: "Shqip", url: "https://cdn.muslimspath.app/books/Abdullah-Hamiti-Sahih-el-Bukhari-Vellimi-02.pdf" },
+  { title: "KÃ«shilla tÃ« Arta pÃ«r Morale tÃ« Larta", author: "Abdulmelik Ramadani", cat: "Shqip", url: "https://cdn.muslimspath.app/books/Abdulmelik-Ramadani-Keshilla-te-arta.pdf" },
   { title: "Rregulla rreth Tekfirit", author: "Abdulmunim Mustafa Halime", cat: "Shqip", url: "https://cdn.muslimspath.app/books/Abdulmunim-Mustafa-Halime-Rregulla-rreth-tekfirit.pdf" },
-  { title: "Realiteti i Besimit të Vërtetë", author: "Abdurrahman es-Sadij", cat: "Shqip", url: "https://cdn.muslimspath.app/books/Abdurrahman-es-Sadij-Realiteti-i-Besimit-te-Vertete.pdf" },
-  { title: "Hallalli dhe Harami në Islam", author: "Dr. Jusuf Kardavi", cat: "Shqip", url: "https://cdn.muslimspath.app/books/Dr.-Jusuf-Kardavi-Hallalli-dhe-harami-me-balline.pdf" },
-  { title: "Kandili i Ramazanit", author: "Literaturë Islame", cat: "Shqip", url: "https://cdn.muslimspath.app/books/KANDILI-I-RAMAZANIT.pdf" },
-  { title: "Kurani dhe Shkenca", author: "Literaturë Islame", cat: "Shqip", url: "https://cdn.muslimspath.app/books/Kurani-drejt-shkences-me-kopertine.pdf" },
-  { title: "Libri i Agjërimit", author: "Salih ibn Feuzan", cat: "Shqip", url: "https://cdn.muslimspath.app/books/Libri-i-Agjerimit-Salih-ibn-Feuzan-el-Feuzan-1.pdf" },
-  { title: "Forma e Namazit të të Dërguarit ﷺ", author: "Imam Albani", cat: "Shqip", url: "https://cdn.muslimspath.app/books/Muhammed-Nasiruddin-el-Albani-Forma-e-namazit-te-te-derguarit.pdf" },
-  { title: "Namazi i Natës — Teravitë në Ramazan", author: "Imam Albani", cat: "Shqip", url: "https://cdn.muslimspath.app/books/Namazi-i-nates-teravite-ne-Ramazan-Imam-Albani.pdf" },
-  { title: "Ndejat e Muajit Ramazan", author: "Literaturë Islame", cat: "Shqip", url: "https://cdn.muslimspath.app/books/Ndejat-e-Muajit-Ramazan.pdf" },
-  { title: "Pozita e Synetit në Islam", author: "Literaturë Islame", cat: "Shqip", url: "https://cdn.muslimspath.app/books/POZITA-E-SYNETIT-NE-ISLAM-ok.pdf" },
-  { title: "Përmendja — Dhikri dhe Lutjet", author: "Literaturë Islame", cat: "Shqip", url: "https://cdn.muslimspath.app/books/Permendja-finalja.pdf" },
-  { title: "Emrat dhe Cilësitë e Allahut", author: "Xhamia Mbret Fahd", cat: "Shqip", url: "https://cdn.muslimspath.app/books/Xhamia-Mbret-Emrat-dhe-Cilesit-e-Allahut.pdf" },
-  { title: "Historitë e Pejgamberëve", author: "Literaturë Islame", cat: "Shqip", url: "https://cdn.muslimspath.app/books/historite-e-pejgambereve-botim-1-1.pdf" },
-  { title: "Albislam — Nr. 63", author: "Revistë Islame Shqip", cat: "Shqip", url: "https://cdn.muslimspath.app/books/albislam63.pdf" },
-  { title: "Albislam — Nr. 64", author: "Revistë Islame Shqip", cat: "Shqip", url: "https://cdn.muslimspath.app/books/albislam64.pdf" },
-  { title: "Albislam — Nr. 65", author: "Revistë Islame Shqip", cat: "Shqip", url: "https://cdn.muslimspath.app/books/albislam65.pdf" },
-  { title: "Albislam — Nr. 66", author: "Revistë Islame Shqip", cat: "Shqip", url: "https://cdn.muslimspath.app/books/albislam66.pdf" },
-  { title: "Dituria Islame — Nr. 250", author: "Revistë Islame Shqip", cat: "Shqip", url: "https://cdn.muslimspath.app/books/dituria250.pdf" },
-  { title: "Dituria Islame — Nr. 282", author: "Revistë Islame Shqip", cat: "Shqip", url: "https://cdn.muslimspath.app/books/dituria282.pdf" },
-  { title: "Dituria Islame — Nr. 283", author: "Revistë Islame Shqip", cat: "Shqip", url: "https://cdn.muslimspath.app/books/dituria283.pdf" },
+  { title: "Realiteti i Besimit tÃ« VÃ«rtetÃ«", author: "Abdurrahman es-Sadij", cat: "Shqip", url: "https://cdn.muslimspath.app/books/Abdurrahman-es-Sadij-Realiteti-i-Besimit-te-Vertete.pdf" },
+  { title: "Hallalli dhe Harami nÃ« Islam", author: "Dr. Jusuf Kardavi", cat: "Shqip", url: "https://cdn.muslimspath.app/books/Dr.-Jusuf-Kardavi-Hallalli-dhe-harami-me-balline.pdf" },
+  { title: "Kandili i Ramazanit", author: "LiteraturÃ« Islame", cat: "Shqip", url: "https://cdn.muslimspath.app/books/KANDILI-I-RAMAZANIT.pdf" },
+  { title: "Kurani dhe Shkenca", author: "LiteraturÃ« Islame", cat: "Shqip", url: "https://cdn.muslimspath.app/books/Kurani-drejt-shkences-me-kopertine.pdf" },
+  { title: "Libri i AgjÃ«rimit", author: "Salih ibn Feuzan", cat: "Shqip", url: "https://cdn.muslimspath.app/books/Libri-i-Agjerimit-Salih-ibn-Feuzan-el-Feuzan-1.pdf" },
+  { title: "Forma e Namazit tÃ« tÃ« DÃ«rguarit ï·º", author: "Imam Albani", cat: "Shqip", url: "https://cdn.muslimspath.app/books/Muhammed-Nasiruddin-el-Albani-Forma-e-namazit-te-te-derguarit.pdf" },
+  { title: "Namazi i NatÃ«s â€” TeravitÃ« nÃ« Ramazan", author: "Imam Albani", cat: "Shqip", url: "https://cdn.muslimspath.app/books/Namazi-i-nates-teravite-ne-Ramazan-Imam-Albani.pdf" },
+  { title: "Ndejat e Muajit Ramazan", author: "LiteraturÃ« Islame", cat: "Shqip", url: "https://cdn.muslimspath.app/books/Ndejat-e-Muajit-Ramazan.pdf" },
+  { title: "Pozita e Synetit nÃ« Islam", author: "LiteraturÃ« Islame", cat: "Shqip", url: "https://cdn.muslimspath.app/books/POZITA-E-SYNETIT-NE-ISLAM-ok.pdf" },
+  { title: "PÃ«rmendja â€” Dhikri dhe Lutjet", author: "LiteraturÃ« Islame", cat: "Shqip", url: "https://cdn.muslimspath.app/books/Permendja-finalja.pdf" },
+  { title: "Emrat dhe CilÃ«sitÃ« e Allahut", author: "Xhamia Mbret Fahd", cat: "Shqip", url: "https://cdn.muslimspath.app/books/Xhamia-Mbret-Emrat-dhe-Cilesit-e-Allahut.pdf" },
+  { title: "HistoritÃ« e PejgamberÃ«ve", author: "LiteraturÃ« Islame", cat: "Shqip", url: "https://cdn.muslimspath.app/books/historite-e-pejgambereve-botim-1-1.pdf" },
+  { title: "Albislam â€” Nr. 63", author: "RevistÃ« Islame Shqip", cat: "Shqip", url: "https://cdn.muslimspath.app/books/albislam63.pdf" },
+  { title: "Albislam â€” Nr. 64", author: "RevistÃ« Islame Shqip", cat: "Shqip", url: "https://cdn.muslimspath.app/books/albislam64.pdf" },
+  { title: "Albislam â€” Nr. 65", author: "RevistÃ« Islame Shqip", cat: "Shqip", url: "https://cdn.muslimspath.app/books/albislam65.pdf" },
+  { title: "Albislam â€” Nr. 66", author: "RevistÃ« Islame Shqip", cat: "Shqip", url: "https://cdn.muslimspath.app/books/albislam66.pdf" },
+  { title: "Dituria Islame â€” Nr. 250", author: "RevistÃ« Islame Shqip", cat: "Shqip", url: "https://cdn.muslimspath.app/books/dituria250.pdf" },
+  { title: "Dituria Islame â€” Nr. 282", author: "RevistÃ« Islame Shqip", cat: "Shqip", url: "https://cdn.muslimspath.app/books/dituria282.pdf" },
+  { title: "Dituria Islame â€” Nr. 283", author: "RevistÃ« Islame Shqip", cat: "Shqip", url: "https://cdn.muslimspath.app/books/dituria283.pdf" },
 ];
 
 const CATEGORIES = ["All", ...Array.from(new Set(LIBRARY.map(b => b.cat)))];
 
-// ─── PRAYER METHODS ────────────────────────────────────────────────
+// â”€â”€â”€ PRAYER METHODS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 const METHODS = [
   { v: 1, l: "Muslim World League" },
   { v: 2, l: "ISNA (North America)" },
@@ -107,7 +107,7 @@ const METHODS = [
 const PRAYER_NAMES = ["Fajr","Sunrise","Dhuhr","Asr","Maghrib","Isha"];
 const HIJRI_MONTHS = ["Muharram","Safar","Rabi' al-Awwal","Rabi' al-Thani","Jumada al-Awwal","Jumada al-Thani","Rajab","Sha'ban","Ramadan","Shawwal","Dhu al-Qi'dah","Dhu al-Hijjah"];
 
-// ─── UTILITIES ─────────────────────────────────────────────────────
+// â”€â”€â”€ UTILITIES â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function gcd(a, b) { return b === 0 ? a : gcd(b, a % b); }
 function reduce(n, d) { if (d === 0) return [0,1]; const g = gcd(Math.abs(n), Math.abs(d)); return [Math.round(n/g), Math.round(d/g)]; }
@@ -227,7 +227,7 @@ function calcFaraid(h, madhab) {
       mF = [1,3];
     }
     const note = ((husband||wives>0) && father && !hasDesc && !hasManyBros && madhab !== "hanafi")
-      ? "1/3 of remainder (ʿUmariyyatain — Mālikī/Shāfiʿī/Ḥanbalī)" : "";
+      ? "1/3 of remainder (Ê¿Umariyyatain â€” MÄlikÄ«/ShÄfiÊ¿Ä«/á¸¤anbalÄ«)" : "";
     addShare("Mother", 1, mF, mF, note);
   }
 
@@ -262,19 +262,19 @@ function calcFaraid(h, madhab) {
     else addShare("Uterine Siblings", uterine, [1,3], reduce(1, 3*uterine));
   }
 
-  // ─── ASABAH (residuary) ───────────────────────────────
+  // â”€â”€â”€ ASABAH (residuary) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   const remFrac = reduce(totalFard[1] - totalFard[0], totalFard[1]);
   const hasRemainder = remFrac[0] > 0;
 
   // AWL check (total fard > 1)
   if (totalFard[0] > totalFard[1]) {
-    // Proportional reduction — recalculate all shares
+    // Proportional reduction â€” recalculate all shares
     const total = totalFard[0];
     const denom = totalFard[1];
     results.forEach(r => {
       r.frac = reduce(r.frac[0] * denom, total * r.frac[1]);
       r.each = reduce(r.each[0] * denom, total * r.each[1]);
-      r.note = (r.note ? r.note + " · " : "") + "ʿAwl applied";
+      r.note = (r.note ? r.note + " Â· " : "") + "Ê¿Awl applied";
     });
     return results;
   }
@@ -290,7 +290,7 @@ function calcFaraid(h, madhab) {
         results.splice(di, 1);
       }
       const newRem = reduce(totalFard[1]-totalFard[0], totalFard[1]);
-      results.push({ heir: "Sons", count: sons, frac: reduce(newRem[0]*2*sons, newRem[1]*parts), each: reduce(newRem[0]*2, newRem[1]*parts), note: "Residuary — each son = 2× daughter" });
+      results.push({ heir: "Sons", count: sons, frac: reduce(newRem[0]*2*sons, newRem[1]*parts), each: reduce(newRem[0]*2, newRem[1]*parts), note: "Residuary â€” each son = 2Ã— daughter" });
       results.push({ heir: "Daughters", count: daughters, frac: reduce(newRem[0]*daughters, newRem[1]*parts), each: reduce(newRem[0], newRem[1]*parts), note: "Residuary with sons" });
     } else {
       results.push({ heir: "Sons", count: sons, frac: remFrac, each: reduce(remFrac[0], remFrac[1]*sons), note: "Residuary" });
@@ -298,7 +298,7 @@ function calcFaraid(h, madhab) {
     return results;
   }
 
-  // Father asabah — gets remainder whenever no sons (even with daughters present)
+  // Father asabah â€” gets remainder whenever no sons (even with daughters present)
   if (father && sons === 0 && hasRemainder) {
     const fi = results.findIndex(r => r.heir === "Father");
     if (fi > -1) {
@@ -312,7 +312,7 @@ function calcFaraid(h, madhab) {
     return results;
   }
 
-  // Grandfather asabah — same rule as father when father is absent
+  // Grandfather asabah â€” same rule as father when father is absent
   if (pGFActive && sons === 0 && hasRemainder) {
     if (madhab === "maliki" && !fullSibsBlocked && (fullBrothers > 0 || fullSisters > 0)) {
       // Muqasama: GF counts as one male, brothers as males, sisters as half
@@ -324,13 +324,13 @@ function calcFaraid(h, madhab) {
       const useThird = fracVal(gfThird) > fracVal(gfMuq);
       const gfFrac = useThird ? gfThird : gfMuq;
       const sibRem = reduce(remFrac[0]*remFrac[1] - gfFrac[0]*remFrac[1], remFrac[1]*gfFrac[1]);
-      results.push({ heir: "Paternal Grandfather", count: 1, frac: gfFrac, each: gfFrac, note: "Muqasama (Mālikī)" });
+      results.push({ heir: "Paternal Grandfather", count: 1, frac: gfFrac, each: gfFrac, note: "Muqasama (MÄlikÄ«)" });
       if (fullBrothers > 0) {
         const bParts = fullBrothers*2 + fullSisters;
-        results.push({ heir: "Full Brothers", count: fullBrothers, frac: reduce(sibRem[0]*fullBrothers*2, sibRem[1]*bParts), each: reduce(sibRem[0]*2, sibRem[1]*bParts), note: "Residuary (Mālikī — not blocked by grandfather)" });
-        if (fullSisters > 0) results.push({ heir: "Full Sisters", count: fullSisters, frac: reduce(sibRem[0]*fullSisters, sibRem[1]*bParts), each: reduce(sibRem[0], sibRem[1]*bParts), note: "Residuary (Mālikī)" });
+        results.push({ heir: "Full Brothers", count: fullBrothers, frac: reduce(sibRem[0]*fullBrothers*2, sibRem[1]*bParts), each: reduce(sibRem[0]*2, sibRem[1]*bParts), note: "Residuary (MÄlikÄ« â€” not blocked by grandfather)" });
+        if (fullSisters > 0) results.push({ heir: "Full Sisters", count: fullSisters, frac: reduce(sibRem[0]*fullSisters, sibRem[1]*bParts), each: reduce(sibRem[0], sibRem[1]*bParts), note: "Residuary (MÄlikÄ«)" });
       } else if (fullSisters > 0) {
-        results.push({ heir: "Full Sisters", count: fullSisters, frac: sibRem, each: reduce(sibRem[0], sibRem[1]*fullSisters), note: "Residuary (Mālikī)" });
+        results.push({ heir: "Full Sisters", count: fullSisters, frac: sibRem, each: reduce(sibRem[0], sibRem[1]*fullSisters), note: "Residuary (MÄlikÄ«)" });
       }
     } else {
       results.push({ heir: "Paternal Grandfather", count: 1, frac: remFrac, each: remFrac, note: "Residuary (acts as father)" });
@@ -342,7 +342,7 @@ function calcFaraid(h, madhab) {
   if (!fullSibsBlocked && (fullBrothers > 0 || fullSisters > 0) && hasRemainder) {
     // If daughters present, sisters become asabah WITH daughters
     if (daughters > 0 && fullBrothers === 0 && fullSisters > 0) {
-      results.push({ heir: "Full Sisters", count: fullSisters, frac: remFrac, each: reduce(remFrac[0], remFrac[1]*fullSisters), note: "Asabah bil-Ghayr — with daughters" });
+      results.push({ heir: "Full Sisters", count: fullSisters, frac: remFrac, each: reduce(remFrac[0], remFrac[1]*fullSisters), note: "Asabah bil-Ghayr â€” with daughters" });
     } else if (fullBrothers > 0) {
       const parts = fullBrothers*2 + fullSisters;
       results.push({ heir: "Full Brothers", count: fullBrothers, frac: reduce(remFrac[0]*fullBrothers*2, remFrac[1]*parts), each: reduce(remFrac[0]*2, remFrac[1]*parts), note: "Residuary" });
@@ -361,8 +361,8 @@ function calcFaraid(h, madhab) {
     return results;
   }
 
-  // Radd — distribute remainder proportionally to fard heirs (excluding spouse)
-  // new_share = old_share × (raddTotal + remainder) / raddTotal
+  // Radd â€” distribute remainder proportionally to fard heirs (excluding spouse)
+  // new_share = old_share Ã— (raddTotal + remainder) / raddTotal
   if (hasRemainder) {
     const raddHeirs = results.filter(r => r.heir !== "Husband" && !r.heir.startsWith("Wife"));
     if (raddHeirs.length > 0) {
@@ -374,7 +374,7 @@ function calcFaraid(h, madhab) {
         const newFrac = reduce(r.frac[0] * mNum, r.frac[1] * mDen);
         r.frac = newFrac;
         r.each = r.count > 1 ? reduce(newFrac[0], newFrac[1] * r.count) : newFrac;
-        r.note = (r.note ? r.note + " · " : "") + "Radd applied";
+        r.note = (r.note ? r.note + " Â· " : "") + "Radd applied";
       });
     }
   }
@@ -382,14 +382,14 @@ function calcFaraid(h, madhab) {
   return results;
 }
 
-// ─── SHARED COMPONENTS ────────────────────────────────────────────
+// â”€â”€â”€ SHARED COMPONENTS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function Card({ children, style }) {
   return (
     <div style={{
-      background: `linear-gradient(145deg, ${SURFACE} 0%, #111111 100%)`,
+      background: SURFACE,
       border: `1px solid ${BORDER}`,
-      borderRadius: 2, padding: 28,
-      boxShadow: "0 1px 0 rgba(201,168,76,0.08), 0 8px 40px rgba(0,0,0,0.5)",
+      borderRadius: 16, padding: 28,
+      boxShadow: "0 2px 16px rgba(160,120,50,0.08), 0 1px 0 rgba(255,255,255,0.8) inset",
       ...style
     }}>
       {children}
@@ -419,7 +419,7 @@ function Input({ label, ...props }) {
         style={{
           padding: "11px 14px", borderRadius: 2,
           border: `1px solid ${BORDER}`,
-          fontSize: 14, color: TEXT, background: "#0E0E0E", outline: "none",
+          fontSize: 14, color: TEXT, background: "#faf5ec", outline: "none",
           transition: "border-color 0.2s, box-shadow 0.2s",
           fontFamily: SANS,
           ...props.style
@@ -439,12 +439,12 @@ function Select({ label, options, ...props }) {
         {...props}
         style={{
           padding: "11px 14px", borderRadius: 2, border: `1px solid ${BORDER}`,
-          fontSize: 14, color: TEXT, background: "#0E0E0E", outline: "none", cursor: "pointer",
+          fontSize: 14, color: TEXT, background: "#faf5ec", outline: "none", cursor: "pointer",
           fontFamily: SANS,
           ...props.style
         }}
       >
-        {options.map(o => <option key={o.v} value={o.v} style={{ background: "#141414" }}>{o.l}</option>)}
+        {options.map(o => <option key={o.v} value={o.v} style={{ background: "#faf5ec" }}>{o.l}</option>)}
       </select>
     </div>
   );
@@ -458,11 +458,11 @@ function Btn({ children, onClick, variant = "primary", disabled, style }) {
       style={{
         padding: "11px 24px", borderRadius: 2,
         border: variant === "primary" ? "none" : `1px solid ${BORDER}`,
-        background: disabled ? "#1A1A1A"
+        background: disabled ? "#e8d8b8"
           : variant === "primary"
             ? `linear-gradient(135deg, ${GOLD} 0%, #A8893C 100%)`
-            : "#0E0E0E",
-        color: disabled ? "#3A3A3A" : variant === "primary" ? "#0A0A0A" : TEXT,
+            : SURFACE,
+        color: disabled ? MUTED : variant === "primary" ? "#3a2a10" : TEXT,
         fontSize: 13, fontWeight: 700, cursor: disabled ? "not-allowed" : "pointer",
         letterSpacing: "0.08em", textTransform: "uppercase",
         transition: "opacity 0.2s, transform 0.15s",
@@ -477,75 +477,75 @@ function Btn({ children, onClick, variant = "primary", disabled, style }) {
   );
 }
 
-// ─── ISLAMIC EVENTS (observed/official dates) ─────────────────────
+// â”€â”€â”€ ISLAMIC EVENTS (observed/official dates) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 // Dates use JS month index (0=Jan). Ramadan range auto-highlights entire month.
 const ISLAMIC_EVENTS = [
-  // ── 2025 (1446–1447 AH) ──────────────────────────────────────────
-  { y:2025, m:0,  d:27, name:"Isra wal-Miʿraj",       emoji:"✨", type:"major",
-    desc:"The Night Journey and Ascension of the Prophet ﷺ. In a single night, he was taken from Makkah to Jerusalem (Al-Isra), then ascended through the heavens to the presence of Allah (Al-Miraj), where the five daily prayers were prescribed for all Muslims." },
-  { y:2025, m:1,  d:13, name:"Laylat al-Baraʿah",     emoji:"🌟", type:"notable",
+  // â”€â”€ 2025 (1446â€“1447 AH) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  { y:2025, m:0,  d:27, name:"Isra wal-MiÊ¿raj",       emoji:"âœ¨", type:"major",
+    desc:"The Night Journey and Ascension of the Prophet ï·º. In a single night, he was taken from Makkah to Jerusalem (Al-Isra), then ascended through the heavens to the presence of Allah (Al-Miraj), where the five daily prayers were prescribed for all Muslims." },
+  { y:2025, m:1,  d:13, name:"Laylat al-BaraÊ¿ah",     emoji:"ðŸŒŸ", type:"notable",
     desc:"The Night of Forgiveness, falling mid-Sha'ban. Many Muslims spend this night in extra prayer and seek Allah's forgiveness, believing that destinies for the coming year are recorded. It is a night of mercy and spiritual renewal before Ramadan." },
-  { y:2025, m:2,  d:1,  name:"Start of Ramadan",      emoji:"🌙", type:"ramadan", ramadanStart:true,
+  { y:2025, m:2,  d:1,  name:"Start of Ramadan",      emoji:"ðŸŒ™", type:"ramadan", ramadanStart:true,
     desc:"The blessed month of fasting begins. Muslims abstain from food, drink, and sins from Fajr to Maghrib each day. Ramadan is the month in which the Quran was revealed. It is a time of heightened worship, generosity, self-discipline, and closeness to Allah." },
-  { y:2025, m:2,  d:20, name:"Laylat al-Qadr",        emoji:"✨", type:"major",
-    desc:"The Night of Power — better than a thousand months (Quran 97:3). It falls in the last 10 nights of Ramadan, most likely on the 27th night. The Quran was first revealed on this night. Worship on this night earns the reward of over 83 years of worship." },
-  { y:2025, m:2,  d:30, name:"Eid al-Fitr",           emoji:"🎉", type:"eid",
+  { y:2025, m:2,  d:20, name:"Laylat al-Qadr",        emoji:"âœ¨", type:"major",
+    desc:"The Night of Power â€” better than a thousand months (Quran 97:3). It falls in the last 10 nights of Ramadan, most likely on the 27th night. The Quran was first revealed on this night. Worship on this night earns the reward of over 83 years of worship." },
+  { y:2025, m:2,  d:30, name:"Eid al-Fitr",           emoji:"ðŸŽ‰", type:"eid",
     desc:"The Festival of Breaking the Fast, celebrated on the first of Shawwal after Ramadan ends. Muslims pray the Eid prayer in congregation, give Zakat al-Fitr to the poor, wear their best clothes, and share meals and joy with family and community." },
-  { y:2025, m:5,  d:6,  name:"Eid al-Adha",           emoji:"🎉", type:"eid",
+  { y:2025, m:5,  d:6,  name:"Eid al-Adha",           emoji:"ðŸŽ‰", type:"eid",
     desc:"The Festival of Sacrifice, commemorating Prophet Ibrahim's willingness to sacrifice his son in obedience to Allah. Muslims worldwide offer an animal sacrifice (Udhiyah), distribute the meat to family, neighbors, and the poor, and celebrate with prayer and togetherness." },
-  { y:2025, m:5,  d:5,  name:"Day of Arafah",         emoji:"🕋", type:"major",
-    desc:"The pinnacle of Hajj — pilgrims gather on the plain of Arafah. For those not performing Hajj, fasting this day expiates sins of the past and coming year. The Prophet ﷺ said: 'There is no day on which Allah frees more people from the Fire than the Day of Arafah.'" },
-  { y:2025, m:5,  d:27, name:"Islamic New Year 1447", emoji:"🌙", type:"major",
-    desc:"The first day of Muharram marks the beginning of the new Hijri year. It commemorates the Prophet's migration (Hijra) from Makkah to Madinah in 622 CE — a pivotal moment that shaped the Muslim community." },
-  { y:2025, m:8,  d:4,  name:"Mawlid al-Nabi ﷺ",     emoji:"⭐", type:"major",
-    desc:"The birthday of Prophet Muhammad ﷺ, born in Makkah around 570 CE. Many Muslims mark this day with gatherings, prayers, and recitation of his life and character. It is a time to reflect on his teachings, mercy, and example." },
-  { y:2025, m:0,  d:15, name:"Day of Ashura",         emoji:"🤲", type:"major",
-    desc:"The 10th of Muharram is a day of great significance. Allah saved Prophet Musa (Moses) and the Children of Israel from Pharaoh on this day. The Prophet ﷺ fasted and encouraged fasting on this day. For Shia Muslims, it also commemorates the martyrdom of Imam Husayn at Karbala." },
+  { y:2025, m:5,  d:5,  name:"Day of Arafah",         emoji:"ðŸ•‹", type:"major",
+    desc:"The pinnacle of Hajj â€” pilgrims gather on the plain of Arafah. For those not performing Hajj, fasting this day expiates sins of the past and coming year. The Prophet ï·º said: 'There is no day on which Allah frees more people from the Fire than the Day of Arafah.'" },
+  { y:2025, m:5,  d:27, name:"Islamic New Year 1447", emoji:"ðŸŒ™", type:"major",
+    desc:"The first day of Muharram marks the beginning of the new Hijri year. It commemorates the Prophet's migration (Hijra) from Makkah to Madinah in 622 CE â€” a pivotal moment that shaped the Muslim community." },
+  { y:2025, m:8,  d:4,  name:"Mawlid al-Nabi ï·º",     emoji:"â­", type:"major",
+    desc:"The birthday of Prophet Muhammad ï·º, born in Makkah around 570 CE. Many Muslims mark this day with gatherings, prayers, and recitation of his life and character. It is a time to reflect on his teachings, mercy, and example." },
+  { y:2025, m:0,  d:15, name:"Day of Ashura",         emoji:"ðŸ¤²", type:"major",
+    desc:"The 10th of Muharram is a day of great significance. Allah saved Prophet Musa (Moses) and the Children of Israel from Pharaoh on this day. The Prophet ï·º fasted and encouraged fasting on this day. For Shia Muslims, it also commemorates the martyrdom of Imam Husayn at Karbala." },
 
-  // ── 2026 (1447–1448 AH) — official observed dates ────────────────
-  { y:2026, m:0,  d:16, name:"Isra wal-Miʿraj",       emoji:"✨", type:"major",
-    desc:"The Night Journey and Ascension of the Prophet ﷺ. In a single night, he was taken from Makkah to Jerusalem (Al-Isra), then ascended through the heavens to the presence of Allah (Al-Miraj), where the five daily prayers were prescribed for all Muslims." },
-  { y:2026, m:1,  d:3,  name:"Laylat al-Baraʿah",     emoji:"🌟", type:"notable",
+  // â”€â”€ 2026 (1447â€“1448 AH) â€” official observed dates â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  { y:2026, m:0,  d:16, name:"Isra wal-MiÊ¿raj",       emoji:"âœ¨", type:"major",
+    desc:"The Night Journey and Ascension of the Prophet ï·º. In a single night, he was taken from Makkah to Jerusalem (Al-Isra), then ascended through the heavens to the presence of Allah (Al-Miraj), where the five daily prayers were prescribed for all Muslims." },
+  { y:2026, m:1,  d:3,  name:"Laylat al-BaraÊ¿ah",     emoji:"ðŸŒŸ", type:"notable",
     desc:"The Night of Forgiveness, falling mid-Sha'ban. Many Muslims spend this night in extra prayer and seek Allah's forgiveness, believing that destinies for the coming year are recorded. It is a night of mercy and spiritual renewal before Ramadan." },
-  { y:2026, m:1,  d:18, name:"Start of Ramadan",      emoji:"🌙", type:"ramadan", ramadanStart:true,
+  { y:2026, m:1,  d:18, name:"Start of Ramadan",      emoji:"ðŸŒ™", type:"ramadan", ramadanStart:true,
     desc:"The blessed month of fasting begins. Muslims abstain from food, drink, and sins from Fajr to Maghrib each day. Ramadan is the month in which the Quran was revealed. It is a time of heightened worship, generosity, self-discipline, and closeness to Allah." },
-  { y:2026, m:2,  d:9,  name:"Laylat al-Qadr (21st Ramadan)", emoji:"✨", type:"major",
-    desc:"The Night of Power — better than a thousand months (Quran 97:3). Seek it on the odd nights of the last ten nights of Ramadan: 21st, 23rd, 25th, 27th, and 29th. The Quran was first revealed on this night. Worship on it earns the reward of over 83 years of worship." },
-  { y:2026, m:2,  d:11, name:"Laylat al-Qadr (23rd Ramadan)", emoji:"✨", type:"major",
-    desc:"The Night of Power — better than a thousand months (Quran 97:3). Seek it on the odd nights of the last ten nights of Ramadan: 21st, 23rd, 25th, 27th, and 29th. The Quran was first revealed on this night. Worship on it earns the reward of over 83 years of worship." },
-  { y:2026, m:2,  d:13, name:"Laylat al-Qadr (25th Ramadan)", emoji:"✨", type:"major",
-    desc:"The Night of Power — better than a thousand months (Quran 97:3). Seek it on the odd nights of the last ten nights of Ramadan: 21st, 23rd, 25th, 27th, and 29th. The Quran was first revealed on this night. Worship on it earns the reward of over 83 years of worship." },
-  { y:2026, m:2,  d:15, name:"Laylat al-Qadr (27th Ramadan)", emoji:"✨", type:"major",
-    desc:"The Night of Power — better than a thousand months (Quran 97:3). Seek it on the odd nights of the last ten nights of Ramadan: 21st, 23rd, 25th, 27th, and 29th. The Quran was first revealed on this night. Worship on it earns the reward of over 83 years of worship." },
-  { y:2026, m:2,  d:17, name:"Laylat al-Qadr (29th Ramadan)", emoji:"✨", type:"major",
-    desc:"The Night of Power — better than a thousand months (Quran 97:3). Seek it on the odd nights of the last ten nights of Ramadan: 21st, 23rd, 25th, 27th, and 29th. The Quran was first revealed on this night. Worship on it earns the reward of over 83 years of worship." },
-  { y:2026, m:2,  d:20, name:"Eid al-Fitr",           emoji:"🎉", type:"eid",
+  { y:2026, m:2,  d:9,  name:"Laylat al-Qadr (21st Ramadan)", emoji:"âœ¨", type:"major",
+    desc:"The Night of Power â€” better than a thousand months (Quran 97:3). Seek it on the odd nights of the last ten nights of Ramadan: 21st, 23rd, 25th, 27th, and 29th. The Quran was first revealed on this night. Worship on it earns the reward of over 83 years of worship." },
+  { y:2026, m:2,  d:11, name:"Laylat al-Qadr (23rd Ramadan)", emoji:"âœ¨", type:"major",
+    desc:"The Night of Power â€” better than a thousand months (Quran 97:3). Seek it on the odd nights of the last ten nights of Ramadan: 21st, 23rd, 25th, 27th, and 29th. The Quran was first revealed on this night. Worship on it earns the reward of over 83 years of worship." },
+  { y:2026, m:2,  d:13, name:"Laylat al-Qadr (25th Ramadan)", emoji:"âœ¨", type:"major",
+    desc:"The Night of Power â€” better than a thousand months (Quran 97:3). Seek it on the odd nights of the last ten nights of Ramadan: 21st, 23rd, 25th, 27th, and 29th. The Quran was first revealed on this night. Worship on it earns the reward of over 83 years of worship." },
+  { y:2026, m:2,  d:15, name:"Laylat al-Qadr (27th Ramadan)", emoji:"âœ¨", type:"major",
+    desc:"The Night of Power â€” better than a thousand months (Quran 97:3). Seek it on the odd nights of the last ten nights of Ramadan: 21st, 23rd, 25th, 27th, and 29th. The Quran was first revealed on this night. Worship on it earns the reward of over 83 years of worship." },
+  { y:2026, m:2,  d:17, name:"Laylat al-Qadr (29th Ramadan)", emoji:"âœ¨", type:"major",
+    desc:"The Night of Power â€” better than a thousand months (Quran 97:3). Seek it on the odd nights of the last ten nights of Ramadan: 21st, 23rd, 25th, 27th, and 29th. The Quran was first revealed on this night. Worship on it earns the reward of over 83 years of worship." },
+  { y:2026, m:2,  d:20, name:"Eid al-Fitr",           emoji:"ðŸŽ‰", type:"eid",
     desc:"The Festival of Breaking the Fast, celebrated on the first of Shawwal after Ramadan ends. Muslims pray the Eid prayer in congregation, give Zakat al-Fitr to the poor, wear their best clothes, and share meals and joy with family and community." },
-  { y:2026, m:4,  d:18, name:"Start of Dhul Hijjah",  emoji:"🕋", type:"notable",
-    desc:"The first 10 days of Dhul Hijjah are the most virtuous days of the year according to the Prophet ﷺ. Pilgrims begin the Hajj journey. Muslims worldwide are encouraged to fast, increase dhikr, give charity, and perform good deeds during these blessed days." },
-  { y:2026, m:4,  d:25, name:"Hajj Begins",           emoji:"🕋", type:"notable",
-    desc:"Pilgrims officially begin the Hajj rites on the 8th of Dhul Hijjah (Yawm al-Tarwiyah). They travel to Mina, prepare spiritually, and await the Day of Arafah — the pinnacle of Hajj and one of the greatest days in the Islamic calendar." },
-  { y:2026, m:4,  d:26, name:"Day of Arafah",         emoji:"🕋", type:"major",
-    desc:"The pinnacle of Hajj — pilgrims gather on the plain of Arafah. For those not performing Hajj, fasting this day expiates sins of the past and coming year. The Prophet ﷺ said: 'There is no day on which Allah frees more people from the Fire than the Day of Arafah.'" },
-  { y:2026, m:4,  d:27, name:"Eid al-Adha",           emoji:"🎉", type:"eid",
+  { y:2026, m:4,  d:18, name:"Start of Dhul Hijjah",  emoji:"ðŸ•‹", type:"notable",
+    desc:"The first 10 days of Dhul Hijjah are the most virtuous days of the year according to the Prophet ï·º. Pilgrims begin the Hajj journey. Muslims worldwide are encouraged to fast, increase dhikr, give charity, and perform good deeds during these blessed days." },
+  { y:2026, m:4,  d:25, name:"Hajj Begins",           emoji:"ðŸ•‹", type:"notable",
+    desc:"Pilgrims officially begin the Hajj rites on the 8th of Dhul Hijjah (Yawm al-Tarwiyah). They travel to Mina, prepare spiritually, and await the Day of Arafah â€” the pinnacle of Hajj and one of the greatest days in the Islamic calendar." },
+  { y:2026, m:4,  d:26, name:"Day of Arafah",         emoji:"ðŸ•‹", type:"major",
+    desc:"The pinnacle of Hajj â€” pilgrims gather on the plain of Arafah. For those not performing Hajj, fasting this day expiates sins of the past and coming year. The Prophet ï·º said: 'There is no day on which Allah frees more people from the Fire than the Day of Arafah.'" },
+  { y:2026, m:4,  d:27, name:"Eid al-Adha",           emoji:"ðŸŽ‰", type:"eid",
     desc:"The Festival of Sacrifice, commemorating Prophet Ibrahim's willingness to sacrifice his son in obedience to Allah. Muslims worldwide offer an animal sacrifice (Udhiyah), distribute the meat to family, neighbors, and the poor, and celebrate with prayer and togetherness." },
-  { y:2026, m:5,  d:16, name:"Islamic New Year 1448", emoji:"🌙", type:"major",
-    desc:"The first day of Muharram 1448 marks the beginning of a new Hijri year. It commemorates the Prophet's migration (Hijra) from Makkah to Madinah in 622 CE — a pivotal moment that shaped the Muslim community." },
+  { y:2026, m:5,  d:16, name:"Islamic New Year 1448", emoji:"ðŸŒ™", type:"major",
+    desc:"The first day of Muharram 1448 marks the beginning of a new Hijri year. It commemorates the Prophet's migration (Hijra) from Makkah to Madinah in 622 CE â€” a pivotal moment that shaped the Muslim community." },
 ];
 
 const EVENT_COLORS = {
-  eid:      { bg: "#221C08", border: "#C9A84C", text: "#F0D080" },
-  major:    { bg: "#160E2A", border: "#7C3AED", text: "#C4B5FD" },
-  notable:  { bg: "#0A1628", border: "#2563EB", text: "#93C5FD" },
-  ramadan:  { bg: "#220A0A", border: "#DC2626", text: "#FCA5A5" },
-  white:    { bg: "#0E1420", border: "#3B5998", text: "#93C5FD" },
+  eid:      { bg: "#faf5ec", border: "#C9A84C", text: "#a07d3a" },
+  major:    { bg: "#f0ebfa", border: "#7C3AED", text: "#5b3fa0" },
+  notable:  { bg: "#eaf2fc", border: "#2563EB", text: "#1a4a9e" },
+  ramadan:  { bg: "#fdf0f0", border: "#DC2626", text: "#9b1c1c" },
+  white:    { bg: "#eef4fc", border: "#3B82F6", text: "#1e4fad" },
 };
 
 const WHITE_DAYS_INFO = {
-  name: "White Days (Ayyām al-Bīḍ)",
-  emoji: "⚪",
+  name: "White Days (AyyÄm al-BÄ«á¸)",
+  emoji: "âšª",
   type: "white",
-  desc: "The 13th, 14th, and 15th of every Hijri month are called the White Days because the nights are lit by a full moon. The Prophet ﷺ used to fast these three days every month and encouraged his companions to do the same. Fasting them is a highly recommended Sunnah, equivalent to fasting the whole month."
+  desc: "The 13th, 14th, and 15th of every Hijri month are called the White Days because the nights are lit by a full moon. The Prophet ï·º used to fast these three days every month and encouraged his companions to do the same. Fasting them is a highly recommended Sunnah, equivalent to fasting the whole month."
 };
 
 // Popup modal component
@@ -560,8 +560,8 @@ function EventPopup({ event, onClose }) {
       padding: 24,
     }}>
       <div onClick={e => e.stopPropagation()} style={{
-        background: "#0E0E0E", borderRadius: 0, maxWidth: 480, width: "100%",
-        boxShadow: `0 20px 80px rgba(0,0,0,0.8), 0 0 0 1px ${col.border}40`,
+        background: "#faf5ec", borderRadius: 0, maxWidth: 480, width: "100%",
+        boxShadow: `0 12px 48px rgba(160,120,50,0.18), 0 0 0 1px ${col.border}40`,
         border: `1px solid ${col.border}`,
         overflow: "hidden",
         animation: "popIn 0.2s ease",
@@ -607,18 +607,18 @@ function isRamadanDay(date) {
   return diff >= 0 && diff < 30;
 }
 
-// ─── SUPABASE CONFIG ──────────────────────────────────────────────
-// Fill these in after creating your Supabase project (Settings → API)
+// â”€â”€â”€ SUPABASE CONFIG â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// Fill these in after creating your Supabase project (Settings â†’ API)
 const SUPA_URL      = import.meta.env.VITE_SUPA_URL      || "";
 const SUPA_ANON_KEY = import.meta.env.VITE_SUPA_ANON_KEY || "";
 
-// Cloudflare Worker URL (public — used for reading files via GET)
+// Cloudflare Worker URL (public â€” used for reading files via GET)
 const UPLOAD_WORKER_URL = import.meta.env.VITE_UPLOAD_WORKER_URL || "";
 
-// Uploads go through /api/upload (Vercel serverless) — key never reaches browser
+// Uploads go through /api/upload (Vercel serverless) â€” key never reaches browser
 const UPLOAD_API = "/api/upload";
 
-// Emails allowed to access /admin — add yours here
+// Emails allowed to access /admin â€” add yours here
 const ADMIN_EMAILS = ["platoni@live.com"];
 
 async function supaFetch(table, opts = "") {
@@ -630,32 +630,32 @@ async function supaFetch(table, opts = "") {
   return res.json();
 }
 
-// ─── NAV ──────────────────────────────────────────────────────────
+// â”€â”€â”€ NAV â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 const R2 = "https://cdn.muslimspath.app";
 
 const LECTURES = [
-  { id:1,  title:"Butësia",                                        file:"Butësia.mp3" },
-  { id:2,  title:"Cili është Çelësi i Fitores?",                  file:"Cili eshte çelesi i fitores.mp3" },
-  { id:3,  title:"Dije dhe Vetëm Dije",                           file:"Dije dhe vetem Dije.mp3" },
-  { id:4,  title:"Dije dhe Vetëm Dije — Pjesa 2",                 file:"Dije dhe vetem Dije 2.mp3" },
+  { id:1,  title:"ButÃ«sia",                                        file:"ButÃ«sia.mp3" },
+  { id:2,  title:"Cili Ã«shtÃ« Ã‡elÃ«si i Fitores?",                  file:"Cili eshte Ã§elesi i fitores.mp3" },
+  { id:3,  title:"Dije dhe VetÃ«m Dije",                           file:"Dije dhe vetem Dije.mp3" },
+  { id:4,  title:"Dije dhe VetÃ«m Dije â€” Pjesa 2",                 file:"Dije dhe vetem Dije 2.mp3" },
   { id:5,  title:"Edukata e Dijes",                               file:"Edukata e Dijes.mp3" },
-  { id:6,  title:"Furnizimi — Si ta Shtojmë Atë",                 file:"Furnizimi, Si ta shtojme ate .mp3" },
-  { id:7,  title:"Hadithe për Hallalin, Haramin dhe Ndalesat",    file:"Hadithe per Hallalin, Haramin dhe ndalesat ne Islam.mp3" },
-  { id:8,  title:"Libri i Urtësive 48 — Pastrimi i Vetvetes",    file:"Libri i Urtesive 48 _ Pastrimi i vetvetes.mp3" },
+  { id:6,  title:"Furnizimi â€” Si ta ShtojmÃ« AtÃ«",                 file:"Furnizimi, Si ta shtojme ate .mp3" },
+  { id:7,  title:"Hadithe pÃ«r Hallalin, Haramin dhe Ndalesat",    file:"Hadithe per Hallalin, Haramin dhe ndalesat ne Islam.mp3" },
+  { id:8,  title:"Libri i UrtÃ«sive 48 â€” Pastrimi i Vetvetes",    file:"Libri i Urtesive 48 _ Pastrimi i vetvetes.mp3" },
   { id:9,  title:"Mendjelehti",                                   file:"Mendjelehti.mp3" },
-  { id:10, title:"Mos u Pikëllo, Por Dëgjoji Këto Rregulla",     file:"Mos u pikëllo por dëgjoji këto rregulla...mp3" },
-  { id:11, title:"Njeriu — Krijesa e Fisnikëruar",               file:"Njeriu Krijesa e Fisnikeruar.mp3" },
-  { id:12, title:"Padrejtësia",                                   file:"Padrejtësia.mp3" },
-  { id:13, title:"Përhapja e Optimizmit dhe Rëndësia e Tij",    file:"Perhapja e Optimizmit dhe rendesia e tij.mp3" },
-  { id:14, title:"Rëndësia e Optimizmit dhe Mendimit të Mirë",  file:"Rendesia e Optimizmit dhe mendimit te mire.mp3" },
-  { id:15, title:"Rëndësia e Optimizmit — Pjesa 2",             file:"Rendesia e optimizmit dhe mendimit te mire - Pjesa 2.mp3" },
-  { id:16, title:"Shiko Veten dhe Vlerësoje Atë",               file:"Shiko veten dhe vlerësoje atë.mp3" },
-  { id:17, title:"Vendimi dhe Përcaktimi",                       file:"Vendimi dhe percaktimi.mp3" },
-  { id:18, title:"Vendimi dhe Përcaktimi — Pjesa 2",            file:"vendimi dhe përcaktimi-2.mp3" },
+  { id:10, title:"Mos u PikÃ«llo, Por DÃ«gjoji KÃ«to Rregulla",     file:"Mos u pikÃ«llo por dÃ«gjoji kÃ«to rregulla...mp3" },
+  { id:11, title:"Njeriu â€” Krijesa e FisnikÃ«ruar",               file:"Njeriu Krijesa e Fisnikeruar.mp3" },
+  { id:12, title:"PadrejtÃ«sia",                                   file:"PadrejtÃ«sia.mp3" },
+  { id:13, title:"PÃ«rhapja e Optimizmit dhe RÃ«ndÃ«sia e Tij",    file:"Perhapja e Optimizmit dhe rendesia e tij.mp3" },
+  { id:14, title:"RÃ«ndÃ«sia e Optimizmit dhe Mendimit tÃ« MirÃ«",  file:"Rendesia e Optimizmit dhe mendimit te mire.mp3" },
+  { id:15, title:"RÃ«ndÃ«sia e Optimizmit â€” Pjesa 2",             file:"Rendesia e optimizmit dhe mendimit te mire - Pjesa 2.mp3" },
+  { id:16, title:"Shiko Veten dhe VlerÃ«soje AtÃ«",               file:"Shiko veten dhe vlerÃ«soje atÃ«.mp3" },
+  { id:17, title:"Vendimi dhe PÃ«rcaktimi",                       file:"Vendimi dhe percaktimi.mp3" },
+  { id:18, title:"Vendimi dhe PÃ«rcaktimi â€” Pjesa 2",            file:"vendimi dhe pÃ«rcaktimi-2.mp3" },
 ].map(l => ({ ...l, url: R2 + "/audio/Ligjerata/" + encodeURIComponent(l.file) }));
 
 
-// ─── PRAYER TIMES ─────────────────────────────────────────────────
+// â”€â”€â”€ PRAYER TIMES â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function PrayerTimes({ savedLocation }) {
   const { t } = useTranslation();
   const [city, setCity] = useState("");
@@ -724,7 +724,7 @@ function PrayerTimes({ savedLocation }) {
       const d = `${date.getDate()}-${date.getMonth()+1}-${date.getFullYear()}`;
       let url;
       if (coords) {
-        // Use coordinates — works for every city worldwide
+        // Use coordinates â€” works for every city worldwide
         url = `https://api.aladhan.com/v1/timings/${d}?latitude=${coords.lat}&longitude=${coords.lon}&method=${method}&school=${school}`;
       } else {
         // Fallback: geocode first, then use coordinates
@@ -761,7 +761,7 @@ function PrayerTimes({ savedLocation }) {
 
   return (
     <div style={{ maxWidth: 680, margin: "0 auto", padding: "40px 24px" }}>
-      <PageTitle icon="🕌" title={t("pages.prayer.title")} sub={t("pages.prayer.sub")} />
+      <PageTitle icon="ðŸ•Œ" title={t("pages.prayer.title")} sub={t("pages.prayer.sub")} />
       <Card style={{ marginBottom: 20 }}>
         <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
 
@@ -785,7 +785,7 @@ function PrayerTimes({ savedLocation }) {
                   onBlur={e => e.target.style.borderColor = BORDER}
                 />
                 {suggLoading && (
-                  <div style={{ position: "absolute", right: 10, top: "50%", transform: "translateY(-50%)", fontSize: 14, color: MUTED }}>⏳</div>
+                  <div style={{ position: "absolute", right: 10, top: "50%", transform: "translateY(-50%)", fontSize: 14, color: MUTED }}>â³</div>
                 )}
               </div>
             </div>
@@ -810,7 +810,7 @@ function PrayerTimes({ savedLocation }) {
                     onMouseEnter={e => e.currentTarget.style.background = GREEN_L}
                     onMouseLeave={e => e.currentTarget.style.background = "none"}
                   >
-                    <span style={{ marginRight: 8 }}>📍</span>{s.name}
+                    <span style={{ marginRight: 8 }}>ðŸ“</span>{s.name}
                   </button>
                 ))}
               </div>
@@ -818,8 +818,8 @@ function PrayerTimes({ savedLocation }) {
           </div>
 
           <Select label="Calculation Method" value={method} onChange={e => setMethod(e.target.value)} options={METHODS} />
-          <Select label="Asr Calculation" value={school} onChange={e => setSchool(e.target.value)} options={[{ v: 1, l: "Ḥanafī — later Asr (BIK Kosovo)" }, { v: 0, l: "Shāfiʿī / Standard — earlier Asr" }]} />
-          <Btn onClick={() => search()} disabled={loading}>{loading ? "Searching…" : "Get Prayer Times"}</Btn>
+          <Select label="Asr Calculation" value={school} onChange={e => setSchool(e.target.value)} options={[{ v: 1, l: "á¸¤anafÄ« â€” later Asr (BIK Kosovo)" }, { v: 0, l: "ShÄfiÊ¿Ä« / Standard â€” earlier Asr" }]} />
+          <Btn onClick={() => search()} disabled={loading}>{loading ? "Searchingâ€¦" : "Get Prayer Times"}</Btn>
         </div>
       </Card>
 
@@ -830,7 +830,7 @@ function PrayerTimes({ savedLocation }) {
           <div style={{ marginBottom: 16 }}>
             <h3 style={{ margin: 0, fontWeight: 700, color: TEXT }}>{displayCity}</h3>
             <p style={{ margin: "4px 0 0", fontSize: 13, color: MUTED }}>
-              {times.date.readable} · {countryCode === "XK" ? "Europe/Pristina" : times.meta.timezone}
+              {times.date.readable} Â· {countryCode === "XK" ? "Europe/Pristina" : times.meta.timezone}
             </p>
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
@@ -859,10 +859,10 @@ function PrayerTimes({ savedLocation }) {
   );
 }
 
-// ─── ZAKAT ────────────────────────────────────────────────────────
+// â”€â”€â”€ ZAKAT â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function Zakat() {
   const [currency, setCurrency] = useState("USD");
-  const goldPrice = 60; // USD per gram (approximate — user can override)
+  const goldPrice = 60; // USD per gram (approximate â€” user can override)
   const [goldPriceInput, setGoldPriceInput] = useState("60");
   const [fields, setFields] = useState({
     cash: "", savings: "", gold: "", silver: "",
@@ -901,11 +901,11 @@ function Zakat() {
 
   return (
     <div style={{ maxWidth: 680, margin: "0 auto", padding: "40px 24px" }}>
-      <PageTitle icon="💰" title="Zakat Calculator" sub="2.5% of net zakatable wealth above nisab, held for one lunar year" />
+      <PageTitle icon="ðŸ’°" title="Zakat Calculator" sub="2.5% of net zakatable wealth above nisab, held for one lunar year" />
       <Card style={{ marginBottom: 20 }}>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14, marginBottom: 20 }}>
           <Select label="Currency" value={currency} onChange={e => setCurrency(e.target.value)}
-            options={[{v:"USD",l:"USD — US Dollar"},{v:"GBP",l:"GBP — British Pound"},{v:"EUR",l:"EUR — Euro"},{v:"AED",l:"AED — Emirati Dirham"},{v:"PKR",l:"PKR — Pakistani Rupee"},{v:"BDT",l:"BDT — Bangladeshi Taka"},{v:"MYR",l:"MYR — Malaysian Ringgit"}]} />
+            options={[{v:"USD",l:"USD â€” US Dollar"},{v:"GBP",l:"GBP â€” British Pound"},{v:"EUR",l:"EUR â€” Euro"},{v:"AED",l:"AED â€” Emirati Dirham"},{v:"PKR",l:"PKR â€” Pakistani Rupee"},{v:"BDT",l:"BDT â€” Bangladeshi Taka"},{v:"MYR",l:"MYR â€” Malaysian Ringgit"}]} />
           <Input label="Gold Price (per gram)" type="number" value={goldPriceInput} onChange={e => setGoldPriceInput(e.target.value)} />
         </div>
 
@@ -941,7 +941,7 @@ function Zakat() {
             <div style={{ display: "flex", justifyContent: "space-between", padding: "16px 0", marginTop: 4 }}>
               <span style={{ fontSize: 16, fontWeight: 700, color: TEXT }}>Zakat Due (2.5%)</span>
               <span style={{ fontSize: 20, fontWeight: 400, color: result.meetsNisab ? GOLD : MUTED, fontFamily: SERIF, letterSpacing: "0.04em" }}>
-                {result.meetsNisab ? fmt(result.zakatDue) : "Below Nisab — No Zakat Due"}
+                {result.meetsNisab ? fmt(result.zakatDue) : "Below Nisab â€” No Zakat Due"}
               </span>
             </div>
             {!result.meetsNisab && (
@@ -954,12 +954,12 @@ function Zakat() {
   );
 }
 
-// ─── INHERITANCE ──────────────────────────────────────────────────
+// â”€â”€â”€ INHERITANCE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 const MADHABS = [
-  { v: "hanafi", l: "Ḥanafī" },
-  { v: "maliki", l: "Mālikī" },
-  { v: "shafii", l: "Shāfiʿī" },
-  { v: "hanbali", l: "Ḥanbalī" },
+  { v: "hanafi", l: "á¸¤anafÄ«" },
+  { v: "maliki", l: "MÄlikÄ«" },
+  { v: "shafii", l: "ShÄfiÊ¿Ä«" },
+  { v: "hanbali", l: "á¸¤anbalÄ«" },
 ];
 
 function Inheritance() {
@@ -991,9 +991,9 @@ function Inheritance() {
     <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "10px 0", borderBottom: `1px solid ${BORDER}` }}>
       <span style={{ fontSize: 13, color: TEXT, letterSpacing: "0.02em" }}>{label}</span>
       <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-        <button onClick={() => set(key, Math.max(0, h[key]-1))} style={{ width: 28, height: 28, borderRadius: 2, border: `1px solid ${BORDER}`, background: "#0E0E0E", cursor: "pointer", fontSize: 16, lineHeight: 1, color: TEXT }}>−</button>
+        <button onClick={() => set(key, Math.max(0, h[key]-1))} style={{ width: 28, height: 28, borderRadius: 2, border: `1px solid ${BORDER}`, background: "#faf5ec", cursor: "pointer", fontSize: 16, lineHeight: 1, color: TEXT }}>âˆ’</button>
         <span style={{ width: 22, textAlign: "center", fontWeight: 600, color: h[key] > 0 ? GOLD : MUTED, fontFamily: SERIF, fontSize: 16 }}>{h[key]}</span>
-        <button onClick={() => set(key, Math.min(max||99, h[key]+1))} style={{ width: 28, height: 28, borderRadius: 2, border: `1px solid ${BORDER}`, background: "#0E0E0E", cursor: "pointer", fontSize: 16, lineHeight: 1, color: TEXT }}>+</button>
+        <button onClick={() => set(key, Math.min(max||99, h[key]+1))} style={{ width: 28, height: 28, borderRadius: 2, border: `1px solid ${BORDER}`, background: "#faf5ec", cursor: "pointer", fontSize: 16, lineHeight: 1, color: TEXT }}>+</button>
       </div>
     </div>
   );
@@ -1003,7 +1003,7 @@ function Inheritance() {
       <span style={{ fontSize: 13, color: TEXT, letterSpacing: "0.02em" }}>{label}</span>
       <button onClick={() => set(key, !h[key])} style={{
         width: 42, height: 22, borderRadius: 0, border: `1px solid ${h[key] ? GOLD + "80" : BORDER}`,
-        cursor: "pointer", background: h[key] ? GREEN_L : "#0A0A0A",
+        cursor: "pointer", background: h[key] ? GREEN_L : "#f0e6ce",
         position: "relative", transition: "all 0.2s"
       }}>
         <div style={{
@@ -1020,16 +1020,16 @@ function Inheritance() {
 
   return (
     <div style={{ maxWidth: 720, margin: "0 auto", padding: "40px 24px" }}>
-      <PageTitle icon="⚖️" title="Inheritance Calculator" sub="Calculate Islamic inheritance shares (Farāʾiḍ) according to your madhab" />
+      <PageTitle icon="âš–ï¸" title="Inheritance Calculator" sub="Calculate Islamic inheritance shares (FarÄÊ¾iá¸) according to your madhab" />
 
       <div className="inherit-top-grid">
         <Card>
           <Select label="Madhab" value={madhab} onChange={e => setMadhab(e.target.value)} options={MADHABS} />
           <div style={{ marginTop: 8, fontSize: 12, color: MUTED }}>
-            {madhab === "maliki" ? "Grandfather does not block full siblings (muqāsama)." :
-             madhab === "hanafi" ? "Grandfather treated as father — blocks full siblings." :
-             madhab === "shafii" ? "ʿUmariyyatain: mother gets 1/3 of remainder. Grandfather blocks siblings." :
-             "Same as Shāfiʿī for most cases. Grandfather blocks siblings."}
+            {madhab === "maliki" ? "Grandfather does not block full siblings (muqÄsama)." :
+             madhab === "hanafi" ? "Grandfather treated as father â€” blocks full siblings." :
+             madhab === "shafii" ? "Ê¿Umariyyatain: mother gets 1/3 of remainder. Grandfather blocks siblings." :
+             "Same as ShÄfiÊ¿Ä« for most cases. Grandfather blocks siblings."}
           </div>
         </Card>
         <Card>
@@ -1077,13 +1077,13 @@ function Inheritance() {
         <Card>
           <div style={{ marginBottom: 16 }}>
             <h3 style={{ margin: "0 0 4px", fontWeight: 700 }}>Results</h3>
-            <span style={{ fontSize: 12, color: MUTED }}>{currency} {fmt(results.estate)} estate · {MADHABS.find(m=>m.v===madhab)?.l}</span>
+            <span style={{ fontSize: 12, color: MUTED }}>{currency} {fmt(results.estate)} estate Â· {MADHABS.find(m=>m.v===madhab)?.l}</span>
           </div>
           {results.shares.length === 0 ? (
             <p style={{ color: MUTED }}>No recognised heirs. Please add at least one heir.</p>
           ) : (
             <div>
-              {/* Desktop header row — hidden on mobile */}
+              {/* Desktop header row â€” hidden on mobile */}
               <div className="inherit-results-header">
                 {["Heir","Share","Each","Amount"].map(h => (
                   <span key={h} style={{ fontSize: 11, fontWeight: 700, color: MUTED, textTransform: "uppercase", letterSpacing: "0.08em" }}>{h}</span>
@@ -1098,7 +1098,7 @@ function Inheritance() {
                     <div className="inherit-results-row">
                       <div>
                         <div style={{ fontWeight: 600, fontSize: 14, color: TEXT }}>{s.heir}</div>
-                        {s.count > 1 && <div style={{ fontSize: 12, color: MUTED }}>× {s.count}</div>}
+                        {s.count > 1 && <div style={{ fontSize: 12, color: MUTED }}>Ã— {s.count}</div>}
                       </div>
                       <span style={{ fontFamily: "monospace", color: GREEN, fontWeight: 600, fontSize: 14 }}>{fmtFrac(s.frac)}</span>
                       <span style={{ fontFamily: "monospace", fontSize: 14, color: MUTED }}>{fmtFrac(s.each)}</span>
@@ -1109,7 +1109,7 @@ function Inheritance() {
                       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
                         <div>
                           <div style={{ fontWeight: 600, fontSize: 14, color: TEXT }}>{s.heir}</div>
-                          {s.count > 1 && <div style={{ fontSize: 11, color: MUTED }}>× {s.count} persons</div>}
+                          {s.count > 1 && <div style={{ fontSize: 11, color: MUTED }}>Ã— {s.count} persons</div>}
                         </div>
                         <span style={{ fontFamily: "monospace", color: GREEN, fontWeight: 700, fontSize: 15 }}>{fmtFrac(s.frac)}</span>
                       </div>
@@ -1140,7 +1140,7 @@ function Inheritance() {
   );
 }
 
-// ─── DATE CONVERTER ───────────────────────────────────────────────
+// â”€â”€â”€ DATE CONVERTER â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function DateConverter() {
   const today = new Date();
   const hijriToday = gregorianToHijri(today.getFullYear(), today.getMonth()+1, today.getDate());
@@ -1172,7 +1172,7 @@ function DateConverter() {
 
   return (
     <div style={{ maxWidth: 560, margin: "0 auto", padding: "40px 24px" }}>
-      <PageTitle icon="📅" title="Date Converter" sub="Convert between Hijri (Islamic) and Gregorian calendars" />
+      <PageTitle icon="ðŸ“…" title="Date Converter" sub="Convert between Hijri (Islamic) and Gregorian calendars" />
 
       {/* Today banner */}
       <Card style={{ background: GREEN_L, border: `1px solid ${GOLD}30`, marginBottom: 20, textAlign: "center" }}>
@@ -1188,8 +1188,8 @@ function DateConverter() {
 
       <Card>
         {/* Mode toggle */}
-        <div style={{ display: "flex", background: "#0A0A0A", border: `1px solid ${BORDER}`, borderRadius: 2, padding: 3, marginBottom: 20 }}>
-          {[{v:"gToH",l:"Gregorian → Hijri"},{v:"hToG",l:"Hijri → Gregorian"}].map(opt => (
+        <div style={{ display: "flex", background: "#f0e6ce", border: `1px solid ${BORDER}`, borderRadius: 2, padding: 3, marginBottom: 20 }}>
+          {[{v:"gToH",l:"Gregorian â†’ Hijri"},{v:"hToG",l:"Hijri â†’ Gregorian"}].map(opt => (
             <button key={opt.v} onClick={() => setMode(opt.v)} style={{
               flex: 1, padding: "8px", borderRadius: 2, border: "none", cursor: "pointer",
               background: mode === opt.v ? SURFACE : "transparent",
@@ -1242,7 +1242,7 @@ function DateConverter() {
   );
 }
 
-// ─── LIBRARY ──────────────────────────────────────────────────────
+// â”€â”€â”€ LIBRARY â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 const isMobile = () => /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent) || navigator.maxTouchPoints > 1;
 
 function Library({ navigate }) {
@@ -1295,34 +1295,34 @@ function Library({ navigate }) {
 
   return (
     <div style={{ maxWidth: 960, margin: "0 auto", padding: "40px 24px" }}>
-      <PageTitle icon="📚" title={t("pages.library.title")} sub={loading ? "Loading…" : `${books.length} curated books and resources`} />
+      <PageTitle icon="ðŸ“š" title={t("pages.library.title")} sub={loading ? "Loadingâ€¦" : `${books.length} curated books and resources`} />
 
       <div style={{ display: "flex", gap: 10, marginBottom: 20, flexWrap: "wrap" }}>
         <input
-          placeholder="Search by title or author…"
+          placeholder="Search by title or authorâ€¦"
           value={search}
           onChange={e => setSearch(e.target.value)}
           style={{
             flex: "1 1 200px", padding: "9px 14px", borderRadius: 2,
             border: `1px solid ${BORDER}`, fontSize: 13, color: TEXT,
-            background: "#0E0E0E", outline: "none", fontFamily: SANS,
+            background: "#faf5ec", outline: "none", fontFamily: SANS,
           }}
           onFocus={e => e.target.style.borderColor = GOLD}
           onBlur={e => e.target.style.borderColor = BORDER}
         />
-        <select value={cat} onChange={e => { if (e.target.value === "🎙️ Lectures") navigate("audio"); else setCat(e.target.value); }} style={{
+        <select value={cat} onChange={e => { if (e.target.value === "ðŸŽ™ï¸ Lectures") navigate("audio"); else setCat(e.target.value); }} style={{
           padding: "9px 14px", borderRadius: 2, border: `1px solid ${BORDER}`,
-          fontSize: 12, color: TEXT, background: "#0E0E0E", cursor: "pointer",
+          fontSize: 12, color: TEXT, background: "#faf5ec", cursor: "pointer",
           flex: "0 0 160px", letterSpacing: "0.04em", fontFamily: SANS, outline: "none",
         }}>
-          {cats.map(c => <option key={c} style={{ background: "#141414" }}>{c}</option>)}
-          <option style={{ background: "#141414", color: GOLD }}>🎙️ Lectures</option>
+          {cats.map(c => <option key={c} style={{ background: "#faf5ec" }}>{c}</option>)}
+          <option style={{ background: "#faf5ec", color: GOLD }}>ðŸŽ™ï¸ Lectures</option>
         </select>
       </div>
 
       <div style={{ marginBottom: 12, color: MUTED, fontSize: 13 }}>{filtered.length} results</div>
 
-      {loading && <div style={{ textAlign: "center", padding: 32, color: MUTED, letterSpacing: "0.08em", fontSize: 13 }}>Loading library…</div>}
+      {loading && <div style={{ textAlign: "center", padding: 32, color: MUTED, letterSpacing: "0.08em", fontSize: 13 }}>Loading libraryâ€¦</div>}
 
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: 1, border: `1px solid ${BORDER}` }}>
         {filtered.map((b, i) => {
@@ -1354,7 +1354,7 @@ function Library({ navigate }) {
                   }}
                     onMouseEnter={e => { e.currentTarget.style.background = `${GOLD}18`; e.stopPropagation(); }}
                     onMouseLeave={e => { e.currentTarget.style.background = "transparent"; }}
-                  >📖 Read</button>
+                  >ðŸ“– Read</button>
                   <a href={b.url} download target="_blank" rel="noreferrer" onClick={e => e.stopPropagation()} style={{
                     flex: 1, padding: "5px 0", background: "transparent",
                     border: `1px solid ${BORDER}`, borderRadius: 2,
@@ -1364,7 +1364,7 @@ function Library({ navigate }) {
                   }}
                     onMouseEnter={e => { e.currentTarget.style.borderColor = MUTED; e.currentTarget.style.color = TEXT; }}
                     onMouseLeave={e => { e.currentTarget.style.borderColor = BORDER; e.currentTarget.style.color = MUTED; }}
-                  >↓ Download</a>
+                  >â†“ Download</a>
                 </div>
               ) : (
                 <a href={b.url} target="_blank" rel="noreferrer" style={{
@@ -1376,7 +1376,7 @@ function Library({ navigate }) {
                 }}
                   onMouseEnter={e => { e.currentTarget.style.borderColor = GOLD; e.currentTarget.style.color = GOLD; }}
                   onMouseLeave={e => { e.currentTarget.style.borderColor = BORDER; e.currentTarget.style.color = MUTED; }}
-                >↗ Visit</a>
+                >â†— Visit</a>
               )}
             </div>
           );
@@ -1385,7 +1385,7 @@ function Library({ navigate }) {
 
       {filtered.length === 0 && (
         <div style={{ textAlign: "center", padding: "48px 0", color: MUTED }}>
-          <div style={{ fontSize: 36, marginBottom: 12 }}>📭</div>
+          <div style={{ fontSize: 36, marginBottom: 12 }}>ðŸ“­</div>
           <div>No results for "{search}"</div>
         </div>
       )}
@@ -1395,36 +1395,36 @@ function Library({ navigate }) {
         <div style={{ position: "fixed", inset: 0, zIndex: 900, background: "rgba(0,0,0,0.97)", display: "flex", flexDirection: "column" }}>
           <div style={{
             display: "flex", justifyContent: "space-between", alignItems: "center",
-            padding: "12px 20px", background: "#080808", borderBottom: `1px solid ${BORDER}`,
+            padding: "12px 20px", background: "#f0e6ce", borderBottom: `1px solid ${BORDER}`,
             flexShrink: 0,
           }}>
             <span style={{ fontSize: 13, color: TEXT, fontFamily: SERIF, fontWeight: 500, maxWidth: "70%", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-              📖 {pdfOpen.title}
+              ðŸ“– {pdfOpen.title}
             </span>
             <div style={{ display: "flex", gap: 8 }}>
               <a href={pdfOpen.url} download target="_blank" rel="noreferrer" style={{
                 background: "transparent", border: `1px solid ${BORDER}`, borderRadius: 2,
                 color: MUTED, padding: "6px 14px", cursor: "pointer", fontSize: 11,
                 fontFamily: SANS, letterSpacing: "0.06em", textDecoration: "none",
-              }}>↓ Download</a>
+              }}>â†“ Download</a>
               <button onClick={() => setPdfOpen(null)} style={{
                 background: "transparent", border: `1px solid ${BORDER}`, borderRadius: 2,
                 color: MUTED, padding: "6px 14px", cursor: "pointer", fontSize: 11,
                 fontFamily: SANS, letterSpacing: "0.06em",
-              }}>✕ Close</button>
+              }}>âœ• Close</button>
             </div>
           </div>
           {pdfError ? (
             <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 16, padding: 40 }}>
-              <div style={{ fontSize: 40 }}>📄</div>
+              <div style={{ fontSize: 40 }}>ðŸ“„</div>
               <div style={{ fontSize: 15, color: TEXT, fontFamily: SERIF, textAlign: "center" }}>Could not load this PDF in the browser.</div>
               <div style={{ fontSize: 13, color: MUTED, textAlign: "center", maxWidth: 360 }}>The file may not be publicly accessible yet. Use the Download button to open it directly.</div>
               <a href={pdfOpen.url} target="_blank" rel="noreferrer" style={{
                 marginTop: 8, padding: "10px 28px", borderRadius: 2,
                 background: `linear-gradient(135deg, ${GOLD}, #A8893C)`,
-                color: "#0A0A0A", fontWeight: 700, fontSize: 13,
+                color: "#f0e6ce", fontWeight: 700, fontSize: 13,
                 fontFamily: SANS, letterSpacing: "0.08em", textDecoration: "none",
-              }}>↓ Open / Download PDF</a>
+              }}>â†“ Open / Download PDF</a>
             </div>
           ) : (
             <iframe
@@ -1444,7 +1444,7 @@ function Library({ navigate }) {
   );
 }
 
-// ─── CALENDAR ─────────────────────────────────────────────────────
+// â”€â”€â”€ CALENDAR â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 const GREG_MONTHS_FULL = ["January","February","March","April","May","June","July","August","September","October","November","December"];
 const WEEKDAYS = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
 
@@ -1485,10 +1485,10 @@ function IslamicCalendar() {
 
   return (
     <div style={{ maxWidth: 900, margin: "0 auto", padding: "40px 24px" }}>
-      <PageTitle icon="📆" title={t("pages.calendar.title")} sub={t("pages.calendar.sub")} />
+      <PageTitle icon="ðŸ“†" title={t("pages.calendar.title")} sub={t("pages.calendar.sub")} />
 
       {/* Today strip */}
-      <Card style={{ background: "linear-gradient(145deg,#0E0C08,#161410)", border: `1px solid ${GOLD}30`, marginBottom: 20 }}>
+      <Card style={{ background: `linear-gradient(145deg,${SURFACE},#f5edda)`, border: `1px solid ${GOLD}40`, marginBottom: 20 }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 12 }}>
           <div>
             <div style={{ fontSize: 10, color: MUTED, textTransform: "uppercase", letterSpacing: "0.14em" }}>Today</div>
@@ -1507,7 +1507,7 @@ function IslamicCalendar() {
               </div>
               <div style={{ fontSize: 12, color: GOLD, marginTop: 4, letterSpacing: "0.04em" }}>
                 {upcoming[0].daysLeft === 0 ? "Today" : upcoming[0].daysLeft === 1 ? "Tomorrow" : `In ${upcoming[0].daysLeft} days`}
-                {" · "}{upcoming[0].date.getDate()} {GREG_MONTHS_FULL[upcoming[0].date.getMonth()]}
+                {" Â· "}{upcoming[0].date.getDate()} {GREG_MONTHS_FULL[upcoming[0].date.getMonth()]}
               </div>
             </div>
           )}
@@ -1545,14 +1545,14 @@ function IslamicCalendar() {
       <Card>
         {/* Month nav */}
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
-          <button onClick={prevMonth} style={{ background: "none", border: `1px solid ${BORDER}`, borderRadius: 2, width: 34, height: 34, cursor: "pointer", fontSize: 18, color: MUTED }}>‹</button>
+          <button onClick={prevMonth} style={{ background: "none", border: `1px solid ${BORDER}`, borderRadius: 2, width: 34, height: 34, cursor: "pointer", fontSize: 18, color: MUTED }}>â€¹</button>
           <div style={{ textAlign: "center" }}>
             <div style={{ fontWeight: 400, fontSize: 20, fontFamily: SERIF, letterSpacing: "0.06em", color: TEXT }}>{GREG_MONTHS_FULL[viewMonth]} {viewYear}</div>
             <div style={{ fontSize: 11, color: MUTED, letterSpacing: "0.08em", marginTop: 2 }}>
               {(() => { const h = gregorianToHijri(viewYear, viewMonth+1, 15); return `${HIJRI_MONTHS[h.month-1]} ${h.year} AH`; })()}
             </div>
           </div>
-          <button onClick={nextMonth} style={{ background: "none", border: `1px solid ${BORDER}`, borderRadius: 2, width: 34, height: 34, cursor: "pointer", fontSize: 18, color: MUTED }}>›</button>
+          <button onClick={nextMonth} style={{ background: "none", border: `1px solid ${BORDER}`, borderRadius: 2, width: 34, height: 34, cursor: "pointer", fontSize: 18, color: MUTED }}>â€º</button>
         </div>
 
         {/* Weekday headers */}
@@ -1577,7 +1577,7 @@ function IslamicCalendar() {
             let borderColor = "transparent";
             let textColor = TEXT;
 
-            if (isToday) { bg = GOLD; textColor = "#0A0A0A"; borderColor = GOLD; }
+            if (isToday) { bg = GOLD; textColor = "#f0e6ce"; borderColor = GOLD; }
             else if (hasEvent) { bg = eventColor.bg; borderColor = eventColor.border; textColor = eventColor.text; }
             else if (isWhite) { bg = EVENT_COLORS.white.bg; borderColor = EVENT_COLORS.white.border; }
             else if (isRamadan) { bg = EVENT_COLORS.ramadan.bg; borderColor = EVENT_COLORS.ramadan.border + "60"; }
@@ -1597,7 +1597,7 @@ function IslamicCalendar() {
                 <span style={{ fontSize: 15, fontWeight: isToday ? 700 : 400, color: textColor }}>{d}</span>
                 <span style={{ fontSize: 10, color: isToday ? "rgba(255,255,255,0.8)" : MUTED }}>{h.day}</span>
                 {isWhite && !hasEvent && !isToday && (
-                  <span title="White Day — voluntary fast">⚪</span>
+                  <span title="White Day â€” voluntary fast">âšª</span>
                 )}
                 {hasEvent && <span style={{ fontSize: 12 }}>{events[0].emoji}</span>}
               </div>
@@ -1609,7 +1609,7 @@ function IslamicCalendar() {
         <div style={{ display: "flex", flexWrap: "wrap", gap: 14, marginTop: 20, paddingTop: 16, borderTop: `1px solid ${BORDER}` }}>
           {[
             { bg: GREEN, border: GREEN, label: "Today", info: null },
-            { bg: WHITE_DAYS_INFO.type ? EVENT_COLORS.white.bg : "#EFF6FF", border: EVENT_COLORS.white.border, label: "White Days (13–15 Hijri)", info: WHITE_DAYS_INFO },
+            { bg: WHITE_DAYS_INFO.type ? EVENT_COLORS.white.bg : "#EFF6FF", border: EVENT_COLORS.white.border, label: "White Days (13â€“15 Hijri)", info: WHITE_DAYS_INFO },
             { bg: EVENT_COLORS.ramadan.bg, border: EVENT_COLORS.ramadan.border, label: "Ramadan", info: ISLAMIC_EVENTS.find(e => e.ramadanStart) },
             { bg: EVENT_COLORS.eid.bg, border: EVENT_COLORS.eid.border, label: "Eid", info: ISLAMIC_EVENTS.find(e => e.type==="eid") },
             { bg: EVENT_COLORS.major.bg, border: EVENT_COLORS.major.border, label: "Major Event", info: ISLAMIC_EVENTS.find(e => e.type==="major") },
@@ -1623,13 +1623,13 @@ function IslamicCalendar() {
             >
               <div style={{ width: 14, height: 14, borderRadius: 4, background: l.bg, border: `1.5px solid ${l.border}`, flexShrink: 0 }} />
               <span style={{ fontSize: 12, color: MUTED }}>{l.label}</span>
-              {l.info && <span style={{ fontSize: 10, color: MUTED }}>ℹ️</span>}
+              {l.info && <span style={{ fontSize: 10, color: MUTED }}>â„¹ï¸</span>}
             </div>
           ))}
         </div>
 
         <p style={{ margin: "12px 0 0", fontSize: 12, color: MUTED }}>
-          Small numbers = Hijri date · Click any highlighted day or legend item to learn more.
+          Small numbers = Hijri date Â· Click any highlighted day or legend item to learn more.
         </p>
       </Card>
 
@@ -1638,7 +1638,7 @@ function IslamicCalendar() {
   );
 }
 
-// ─── SETTINGS HELPERS ─────────────────────────────────────────────
+// â”€â”€â”€ SETTINGS HELPERS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function loadSavedLocation() {
   try { return JSON.parse(localStorage.getItem("mp-location") || "null"); } catch { return null; }
 }
@@ -1646,7 +1646,7 @@ function saveSavedLocation(loc) {
   try { localStorage.setItem("mp-location", JSON.stringify(loc)); } catch {}
 }
 
-// ─── SETTINGS MODAL ───────────────────────────────────────────────
+// â”€â”€â”€ SETTINGS MODAL â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function SettingsModal({ onClose, savedLocation, onSave, notifEnabled, onNotifToggle }) {
   const [city, setCity] = useState(savedLocation?.name || "");
   const [suggestions, setSuggestions] = useState([]);
@@ -1696,15 +1696,15 @@ function SettingsModal({ onClose, savedLocation, onSave, notifEnabled, onNotifTo
 
   return (
     <div onClick={onClose} style={{ position:"fixed", inset:0, zIndex:1000, background:"rgba(0,0,0,0.45)", backdropFilter:"blur(4px)", display:"flex", alignItems:"center", justifyContent:"center", padding:24 }}>
-      <div onClick={e => e.stopPropagation()} style={{ background:"#0E0E0E", borderRadius:0, maxWidth:460, width:"100%", boxShadow:`0 24px 80px rgba(0,0,0,0.9), 0 0 0 1px ${GOLD}20`, overflow:"hidden" }}>
+      <div onClick={e => e.stopPropagation()} style={{ background:"#faf5ec", borderRadius:16, maxWidth:460, width:"100%", boxShadow:`0 16px 60px rgba(160,120,50,0.22), 0 0 0 1px ${GOLD}20`, overflow:"hidden" }}>
 
         {/* Header */}
-        <div style={{ background:"linear-gradient(135deg,#0A0A08,#141210)", borderBottom:`1px solid ${GOLD}25`, padding:"22px 28px", display:"flex", justifyContent:"space-between", alignItems:"center" }}>
+        <div style={{ background:`linear-gradient(135deg,${SURFACE},#f0e8d0)`, borderBottom:`1px solid ${GOLD}30`, padding:"22px 28px", display:"flex", justifyContent:"space-between", alignItems:"center" }}>
           <div>
             <div style={{ fontSize:20, fontWeight:400, color:TEXT, fontFamily:SERIF, letterSpacing:"0.06em" }}>Settings</div>
-            <div style={{ fontSize:11, color:MUTED, marginTop:4, letterSpacing:"0.08em" }}>Location · Prayer Times</div>
+            <div style={{ fontSize:11, color:MUTED, marginTop:4, letterSpacing:"0.08em" }}>Location Â· Prayer Times</div>
           </div>
-          <button onClick={onClose} style={{ background:"transparent", border:`1px solid ${BORDER}`, borderRadius:2, color:MUTED, width:32, height:32, cursor:"pointer", fontSize:14 }}>✕</button>
+          <button onClick={onClose} style={{ background:"transparent", border:`1px solid ${BORDER}`, borderRadius:2, color:MUTED, width:32, height:32, cursor:"pointer", fontSize:14 }}>âœ•</button>
         </div>
 
         <div style={{ padding:24 }}>
@@ -1713,7 +1713,7 @@ function SettingsModal({ onClose, savedLocation, onSave, notifEnabled, onNotifTo
             <div style={{ background:GREEN_L, border:`1px solid ${GOLD}40`, borderRadius:2, padding:"14px 18px", marginBottom:20, display:"flex", justifyContent:"space-between", alignItems:"center" }}>
               <div>
                 <div style={{ fontSize:10, fontWeight:600, color:GOLD, textTransform:"uppercase", letterSpacing:"0.12em" }}>Active Location</div>
-                <div style={{ fontSize:14, fontWeight:500, color:TEXT, marginTop:4, letterSpacing:"0.03em" }}>📍 {savedLocation.name}</div>
+                <div style={{ fontSize:14, fontWeight:500, color:TEXT, marginTop:4, letterSpacing:"0.03em" }}>ðŸ“ {savedLocation.name}</div>
               </div>
               <button onClick={clear} style={{ background:"none", border:`1px solid ${BORDER}`, borderRadius:2, padding:"5px 12px", fontSize:11, color:MUTED, cursor:"pointer", letterSpacing:"0.06em", textTransform:"uppercase" }}>Remove</button>
             </div>
@@ -1724,7 +1724,7 @@ function SettingsModal({ onClose, savedLocation, onSave, notifEnabled, onNotifTo
             <label style={{ fontSize:13, fontWeight:600, color:TEXT, display:"block", marginBottom:6 }}>Search City</label>
             <div style={{ position:"relative" }}>
               <input
-                placeholder="e.g. London, Prishtina, Dubai…"
+                placeholder="e.g. London, Prishtina, Dubaiâ€¦"
                 value={city}
                 onChange={e => { setCity(e.target.value); setSelected(null); }}
                 onFocus={() => suggestions.length > 0 && setShowSugg(true)}
@@ -1732,7 +1732,7 @@ function SettingsModal({ onClose, savedLocation, onSave, notifEnabled, onNotifTo
                 onFocusCapture={e => e.target.style.borderColor = GREEN}
                 onBlur={e => e.target.style.borderColor = BORDER}
               />
-              {suggLoading && <div style={{ position:"absolute", right:10, top:"50%", transform:"translateY(-50%)", fontSize:12, color:MUTED }}>⏳</div>}
+              {suggLoading && <div style={{ position:"absolute", right:10, top:"50%", transform:"translateY(-50%)", fontSize:12, color:MUTED }}>â³</div>}
             </div>
 
             {showSugg && suggestions.length > 0 && (
@@ -1742,7 +1742,7 @@ function SettingsModal({ onClose, savedLocation, onSave, notifEnabled, onNotifTo
                     onMouseEnter={e => e.currentTarget.style.background=GREEN_L}
                     onMouseLeave={e => e.currentTarget.style.background="none"}
                   >
-                    <span style={{ marginRight:8 }}>📍</span>{s.name}
+                    <span style={{ marginRight:8 }}>ðŸ“</span>{s.name}
                   </button>
                 ))}
               </div>
@@ -1751,12 +1751,12 @@ function SettingsModal({ onClose, savedLocation, onSave, notifEnabled, onNotifTo
 
           {selected && (
             <div style={{ background:GREEN_L, border:`1px solid ${GOLD}30`, borderRadius:2, padding:"10px 14px", marginBottom:16, fontSize:12, color:GOLD, letterSpacing:"0.04em" }}>
-              ✦ {selected.name} &nbsp;·&nbsp; {selected.lat.toFixed(3)}°N {selected.lon.toFixed(3)}°E
+              âœ¦ {selected.name} &nbsp;Â·&nbsp; {selected.lat.toFixed(3)}Â°N {selected.lon.toFixed(3)}Â°E
             </div>
           )}
 
-          <button onClick={save} disabled={!selected || saved} style={{ width:"100%", padding:"13px", borderRadius:2, border:`1px solid ${selected && !saved ? GOLD : BORDER}`, background: saved ? GREEN_L : selected ? `linear-gradient(135deg,${GOLD},#A8893C)` : "#0E0E0E", color: saved ? GOLD : selected ? "#0A0A0A" : MUTED, fontSize:12, fontWeight:700, cursor: selected && !saved ? "pointer" : "not-allowed", transition:"all 0.2s", letterSpacing:"0.12em", textTransform:"uppercase", fontFamily:SANS }}>
-            {saved ? "✅ Saved!" : "Save Location"}
+          <button onClick={save} disabled={!selected || saved} style={{ width:"100%", padding:"13px", borderRadius:2, border:`1px solid ${selected && !saved ? GOLD : BORDER}`, background: saved ? GREEN_L : selected ? `linear-gradient(135deg,${GOLD},#A8893C)` : "#faf5ec", color: saved ? GOLD : selected ? "#f0e6ce" : MUTED, fontSize:12, fontWeight:700, cursor: selected && !saved ? "pointer" : "not-allowed", transition:"all 0.2s", letterSpacing:"0.12em", textTransform:"uppercase", fontFamily:SANS }}>
+            {saved ? "âœ… Saved!" : "Save Location"}
           </button>
 
           <p style={{ margin:"14px 0 0", fontSize:12, color:MUTED, textAlign:"center" }}>
@@ -1770,7 +1770,7 @@ function SettingsModal({ onClose, savedLocation, onSave, notifEnabled, onNotifTo
                 <div style={{ fontSize:13, fontWeight:600, color:TEXT }}>Prayer Notifications</div>
                 <div style={{ fontSize:11, color:MUTED, marginTop:3, letterSpacing:"0.03em" }}>
                   Browser alert at each prayer time
-                  {!savedLocation && <span style={{ color:GOLD }}> — save a location first</span>}
+                  {!savedLocation && <span style={{ color:GOLD }}> â€” save a location first</span>}
                 </div>
               </div>
               <button
@@ -1787,14 +1787,14 @@ function SettingsModal({ onClose, savedLocation, onSave, notifEnabled, onNotifTo
                 <span style={{
                   position:"absolute", top:3, left: notifEnabled ? 23 : 3,
                   width:20, height:20, borderRadius:"50%",
-                  background: notifEnabled ? "#0A0A0A" : MUTED,
+                  background: notifEnabled ? "#f0e6ce" : MUTED,
                   transition:"left 0.25s",
                 }} />
               </button>
             </div>
             {notifEnabled && savedLocation && (
               <div style={{ marginTop:10, fontSize:11, color:GOLD, background:GREEN_L, border:`1px solid ${GOLD}30`, borderRadius:2, padding:"8px 12px" }}>
-                🔔 Notifications scheduled for today's prayers in {savedLocation.name}
+                ðŸ”” Notifications scheduled for today's prayers in {savedLocation.name}
               </div>
             )}
           </div>
@@ -1804,7 +1804,7 @@ function SettingsModal({ onClose, savedLocation, onSave, notifEnabled, onNotifTo
   );
 }
 
-// ─── GLOBAL SEARCH ────────────────────────────────────────────────
+// â”€â”€â”€ GLOBAL SEARCH â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function GlobalSearch({ onClose, navigate, lectures }) {
   const [query, setQuery] = useState("");
   const inputRef = useRef(null);
@@ -1854,16 +1854,16 @@ function GlobalSearch({ onClose, navigate, lectures }) {
 
   return (
     <div onClick={onClose} style={{ position:"fixed", inset:0, zIndex:1100, background:"rgba(0,0,0,0.65)", backdropFilter:"blur(6px)", display:"flex", alignItems:"flex-start", justifyContent:"center", paddingTop:80, padding:"80px 24px 24px" }}>
-      <div onClick={e => e.stopPropagation()} style={{ background:"#0E0E0E", borderRadius:0, maxWidth:600, width:"100%", border:`1px solid ${GOLD}25`, boxShadow:`0 32px 80px rgba(0,0,0,0.95)`, overflow:"hidden" }}>
+      <div onClick={e => e.stopPropagation()} style={{ background:"#faf5ec", borderRadius:16, maxWidth:600, width:"100%", border:`1px solid ${GOLD}30`, boxShadow:`0 16px 60px rgba(160,120,50,0.2)`, overflow:"hidden" }}>
 
         {/* Search input */}
         <div style={{ display:"flex", alignItems:"center", gap:12, padding:"18px 20px", borderBottom:`1px solid ${BORDER}` }}>
-          <span style={{ fontSize:18, opacity:0.5 }}>🔍</span>
+          <span style={{ fontSize:18, opacity:0.5 }}>ðŸ”</span>
           <input
             ref={inputRef}
             value={query}
             onChange={e => setQuery(e.target.value)}
-            placeholder="Search surahs, books, lectures…"
+            placeholder="Search surahs, books, lecturesâ€¦"
             style={{ flex:1, background:"none", border:"none", outline:"none", fontSize:16, color:TEXT, fontFamily:SANS }}
           />
           <button onClick={onClose} style={{ background:"none", border:`1px solid ${BORDER}`, borderRadius:2, color:MUTED, padding:"4px 10px", cursor:"pointer", fontSize:11, letterSpacing:"0.06em", fontFamily:SANS }}>ESC</button>
@@ -1873,7 +1873,7 @@ function GlobalSearch({ onClose, navigate, lectures }) {
         <div style={{ maxHeight:420, overflowY:"auto" }}>
           {!q && (
             <div style={{ padding:"40px 20px", textAlign:"center", color:MUTED, fontSize:13 }}>
-              Start typing to search across the Quran, library, and lectures…
+              Start typing to search across the Quran, library, and lecturesâ€¦
             </div>
           )}
 
@@ -1885,7 +1885,7 @@ function GlobalSearch({ onClose, navigate, lectures }) {
 
           {surahResults.length > 0 && (
             <div>
-              <div style={{ padding:"10px 20px 6px", fontSize:9, fontWeight:700, color:GOLD, letterSpacing:"0.18em", textTransform:"uppercase", borderBottom:`1px solid ${BORDER}` }}>Quran — Surahs</div>
+              <div style={{ padding:"10px 20px 6px", fontSize:9, fontWeight:700, color:GOLD, letterSpacing:"0.18em", textTransform:"uppercase", borderBottom:`1px solid ${BORDER}` }}>Quran â€” Surahs</div>
               {surahResults.map(s => (
                 <button key={s.number} onClick={() => goSurah(s)} style={{ display:"flex", width:"100%", textAlign:"left", padding:"12px 20px", background:"none", border:"none", borderBottom:`1px solid ${BORDER}`, cursor:"pointer", alignItems:"center", gap:14, transition:"background 0.1s" }}
                   onMouseEnter={e => e.currentTarget.style.background=GREEN_L}
@@ -1894,7 +1894,7 @@ function GlobalSearch({ onClose, navigate, lectures }) {
                   <span style={{ fontSize:11, color:GOLD, fontVariantNumeric:"tabular-nums", minWidth:24, fontFamily:SANS }}>{s.number}</span>
                   <div style={{ flex:1 }}>
                     <div style={{ fontSize:14, color:TEXT, fontFamily:SERIF }}>{s.englishName}</div>
-                    <div style={{ fontSize:11, color:MUTED }}>{s.englishNameTranslation} · {s.numberOfAyahs} verses · {s.revelationType}</div>
+                    <div style={{ fontSize:11, color:MUTED }}>{s.englishNameTranslation} Â· {s.numberOfAyahs} verses Â· {s.revelationType}</div>
                   </div>
                   <span style={{ fontSize:18, fontFamily:"'Amiri','Traditional Arabic',serif", color:GOLD, direction:"rtl" }}>{s.name}</span>
                 </button>
@@ -1904,16 +1904,16 @@ function GlobalSearch({ onClose, navigate, lectures }) {
 
           {bookResults.length > 0 && (
             <div>
-              <div style={{ padding:"10px 20px 6px", fontSize:9, fontWeight:700, color:GOLD, letterSpacing:"0.18em", textTransform:"uppercase", borderBottom:`1px solid ${BORDER}` }}>Library — Books</div>
+              <div style={{ padding:"10px 20px 6px", fontSize:9, fontWeight:700, color:GOLD, letterSpacing:"0.18em", textTransform:"uppercase", borderBottom:`1px solid ${BORDER}` }}>Library â€” Books</div>
               {bookResults.map((b, i) => (
                 <button key={i} onClick={() => goBook(b)} style={{ display:"flex", width:"100%", textAlign:"left", padding:"12px 20px", background:"none", border:"none", borderBottom:`1px solid ${BORDER}`, cursor:"pointer", alignItems:"center", gap:14, transition:"background 0.1s" }}
                   onMouseEnter={e => e.currentTarget.style.background=GREEN_L}
                   onMouseLeave={e => e.currentTarget.style.background="none"}
                 >
-                  <span style={{ fontSize:16 }}>📚</span>
+                  <span style={{ fontSize:16 }}>ðŸ“š</span>
                   <div style={{ flex:1 }}>
                     <div style={{ fontSize:14, color:TEXT, fontFamily:SERIF }}>{b.title}</div>
-                    <div style={{ fontSize:11, color:MUTED }}>{b.author} · {b.cat}</div>
+                    <div style={{ fontSize:11, color:MUTED }}>{b.author} Â· {b.cat}</div>
                   </div>
                   {b.url && b.url !== "#" && <span style={{ fontSize:10, color:GOLD, border:`1px solid ${GOLD}40`, padding:"2px 7px", letterSpacing:"0.06em" }}>PDF</span>}
                 </button>
@@ -1923,13 +1923,13 @@ function GlobalSearch({ onClose, navigate, lectures }) {
 
           {lectureResults.length > 0 && (
             <div>
-              <div style={{ padding:"10px 20px 6px", fontSize:9, fontWeight:700, color:GOLD, letterSpacing:"0.18em", textTransform:"uppercase", borderBottom:`1px solid ${BORDER}` }}>Lectures — Audio</div>
+              <div style={{ padding:"10px 20px 6px", fontSize:9, fontWeight:700, color:GOLD, letterSpacing:"0.18em", textTransform:"uppercase", borderBottom:`1px solid ${BORDER}` }}>Lectures â€” Audio</div>
               {lectureResults.map(l => (
                 <button key={l.id} onClick={() => goLecture(l)} style={{ display:"flex", width:"100%", textAlign:"left", padding:"12px 20px", background:"none", border:"none", borderBottom:`1px solid ${BORDER}`, cursor:"pointer", alignItems:"center", gap:14, transition:"background 0.1s" }}
                   onMouseEnter={e => e.currentTarget.style.background=GREEN_L}
                   onMouseLeave={e => e.currentTarget.style.background="none"}
                 >
-                  <span style={{ fontSize:16 }}>🎙️</span>
+                  <span style={{ fontSize:16 }}>ðŸŽ™ï¸</span>
                   <div style={{ flex:1 }}>
                     <div style={{ fontSize:14, color:TEXT, fontFamily:SERIF }}>{l.title}</div>
                   </div>
@@ -1942,7 +1942,7 @@ function GlobalSearch({ onClose, navigate, lectures }) {
 
         <div style={{ padding:"10px 20px", borderTop:`1px solid ${BORDER}`, display:"flex", justifyContent:"space-between", fontSize:11, color:MUTED }}>
           <span>{q ? `${total} result${total !== 1 ? "s" : ""}` : "Tip: search by name, author, or surah number"}</span>
-          <span>↑↓ navigate · Enter open · Esc close</span>
+          <span>â†‘â†“ navigate Â· Enter open Â· Esc close</span>
         </div>
       </div>
     </div>
@@ -1950,7 +1950,7 @@ function GlobalSearch({ onClose, navigate, lectures }) {
 }
 
 
-// ─── AUTH HELPERS ─────────────────────────────────────────────────
+// â”€â”€â”€ AUTH HELPERS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 const SESSION_KEY = "mp-session";
 
 function loadSession() {
@@ -1974,7 +1974,7 @@ async function supaAuthFetch(path, body) {
   return data;
 }
 
-// ─── AUTH MODAL ────────────────────────────────────────────────────
+// â”€â”€â”€ AUTH MODAL â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function AuthModal({ onClose, onAuth }) {
   const { t } = useTranslation();
   const [tab, setTab] = useState("signin");          // "signin" | "signup" | "lang"
@@ -2031,24 +2031,24 @@ function AuthModal({ onClose, onAuth }) {
       display: "flex", alignItems: "center", justifyContent: "center", padding: 20,
     }}>
       <div onClick={e => e.stopPropagation()} style={{
-        background: "linear-gradient(135deg,#0E0C08,#161210)",
-        border: "1px solid #2A2520",
-        boxShadow: "0 32px 80px rgba(0,0,0,0.95)",
+        background: `linear-gradient(135deg,${SURFACE},#f0e8d0)`,
+        border: `1px solid ${BORDER}`,
+        boxShadow: "0 32px 80px rgba(160,120,50,0.18), 0 2px 0 rgba(255,255,255,0.8) inset",
         width: "100%", maxWidth: 400, padding: "36px 32px",
         position: "relative",
       }}>
         <button onClick={onClose} style={{
           position: "absolute", top: 14, right: 14,
-          background: "none", border: "1px solid #242424",
-          color: "#6B6358", width: 28, height: 28, cursor: "pointer",
+          background: "none", border: `1px solid ${BORDER}`,
+          color: "#7a5c28", width: 28, height: 28, cursor: "pointer",
           fontSize: 13, display: "flex", alignItems: "center", justifyContent: "center",
         }}>&#x2715;</button>
 
         {/* Logo + title */}
         <div style={{ textAlign: "center", marginBottom: 28 }}>
           <img src="/logo.png" alt="" style={{ width: 44, height: 44, objectFit: "contain", marginBottom: 12 }} />
-          <div style={{ fontSize: 18, color: "#EDE8DC", fontFamily: "'Cormorant Garamond', Georgia, serif", letterSpacing: "0.05em" }}>Muslim&#x2019;s Path</div>
-          <div style={{ fontSize: 11, color: "#6B6358", letterSpacing: "0.12em", textTransform: "uppercase", marginTop: 4 }}>{t("auth.companion")}</div>
+          <div style={{ fontSize: 18, color: "#3a2a10", fontFamily: "'Cormorant Garamond', Georgia, serif", letterSpacing: "0.05em" }}>Muslim&#x2019;s Path</div>
+          <div style={{ fontSize: 11, color: "#7a5c28", letterSpacing: "0.12em", textTransform: "uppercase", marginTop: 4 }}>{t("auth.companion")}</div>
         </div>
 
         {/* Language selection step (after signup) */}
@@ -2058,13 +2058,13 @@ function AuthModal({ onClose, onAuth }) {
             <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
               {[["en", t("lang.english")], ["sq", t("lang.albanian")]].map(([code, label]) => (
                 <button key={code} onClick={() => handleLangChoice(code)} style={{
-                  padding: "14px 20px", background: "#141414", border: "1px solid #2A2520",
-                  color: "#EDE8DC", fontSize: 13, cursor: "pointer",
+                  padding: "14px 20px", background: "#faf5ec", border: "1px solid #2A2520",
+                  color: "#3a2a10", fontSize: 13, cursor: "pointer",
                   fontFamily: "'Inter', sans-serif", letterSpacing: "0.06em",
                   transition: "border-color 0.2s",
                 }}
                   onMouseEnter={e => e.currentTarget.style.borderColor = "#C9A84C"}
-                  onMouseLeave={e => e.currentTarget.style.borderColor = "#2A2520"}
+                  onMouseLeave={e => e.currentTarget.style.borderColor = "#d8c090"}
                 >{label}</button>
               ))}
             </div>
@@ -2077,7 +2077,7 @@ function AuthModal({ onClose, onAuth }) {
                 <button key={tabId} onClick={() => { setTab(tabId); setErr(""); setDone(""); }} style={{
                   flex: 1, background: "none", border: "none",
                   borderBottom: tab === tabId ? "2px solid #C9A84C" : "2px solid transparent",
-                  color: tab === tabId ? "#C9A84C" : "#6B6358",
+                  color: tab === tabId ? "#C9A84C" : "#7a5c28",
                   padding: "10px 0", fontSize: 11, cursor: "pointer",
                   letterSpacing: "0.1em", textTransform: "uppercase",
                   fontFamily: "'Inter', sans-serif", fontWeight: tab === tabId ? 600 : 400,
@@ -2093,27 +2093,27 @@ function AuthModal({ onClose, onAuth }) {
                 {tab === "signup" && (
                   <input value={name} onChange={e => setName(e.target.value)}
                     placeholder={t("auth.fullName")}
-                    style={{ padding: "10px 14px", background: "#141414", border: "1px solid #242424", color: "#EDE8DC", fontSize: 13, outline: "none", fontFamily: "'Inter', sans-serif" }}
+                    style={{ padding: "10px 14px", background: "#faf5ec", border: "1px solid #242424", color: "#3a2a10", fontSize: 13, outline: "none", fontFamily: "'Inter', sans-serif" }}
                     onFocus={e => e.target.style.borderColor = "#C9A84C"}
-                    onBlur={e => e.target.style.borderColor = "#242424"}
+                    onBlur={e => e.target.style.borderColor = "#e2cfa4"}
                   />
                 )}
                 <input type="email" value={email} onChange={e => setEmail(e.target.value)}
                   placeholder={t("auth.email")} required
-                  style={{ padding: "10px 14px", background: "#141414", border: "1px solid #242424", color: "#EDE8DC", fontSize: 13, outline: "none", fontFamily: "'Inter', sans-serif" }}
+                  style={{ padding: "10px 14px", background: "#faf5ec", border: "1px solid #242424", color: "#3a2a10", fontSize: 13, outline: "none", fontFamily: "'Inter', sans-serif" }}
                   onFocus={e => e.target.style.borderColor = "#C9A84C"}
-                  onBlur={e => e.target.style.borderColor = "#242424"}
+                  onBlur={e => e.target.style.borderColor = "#e2cfa4"}
                 />
                 <input type="password" value={pass} onChange={e => setPass(e.target.value)}
                   placeholder={t("auth.password")} required minLength={6}
-                  style={{ padding: "10px 14px", background: "#141414", border: "1px solid #242424", color: "#EDE8DC", fontSize: 13, outline: "none", fontFamily: "'Inter', sans-serif" }}
+                  style={{ padding: "10px 14px", background: "#faf5ec", border: "1px solid #242424", color: "#3a2a10", fontSize: 13, outline: "none", fontFamily: "'Inter', sans-serif" }}
                   onFocus={e => e.target.style.borderColor = "#C9A84C"}
-                  onBlur={e => e.target.style.borderColor = "#242424"}
+                  onBlur={e => e.target.style.borderColor = "#e2cfa4"}
                 />
                 {err && <div style={{ fontSize: 12, color: "#e74c3c", lineHeight: 1.5 }}>{err}</div>}
                 <button type="submit" disabled={busy} style={{
-                  marginTop: 4, padding: "11px 0", background: busy ? "#1A1710" : "linear-gradient(135deg,#C9A84C,#A8883E)",
-                  border: "none", color: busy ? "#6B6358" : "#0A0A0A",
+                  marginTop: 4, padding: "11px 0", background: busy ? "#f5edd8" : "linear-gradient(135deg,#C9A84C,#A8883E)",
+                  border: "none", color: busy ? "#7a5c28" : "#f0e6ce",
                   fontSize: 12, fontWeight: 700, cursor: busy ? "default" : "pointer",
                   letterSpacing: "0.1em", textTransform: "uppercase",
                   fontFamily: "'Inter', sans-serif", transition: "all 0.2s",
@@ -2123,20 +2123,20 @@ function AuthModal({ onClose, onAuth }) {
 
             {/* Divider */}
             <div style={{ display: "flex", alignItems: "center", gap: 12, margin: "20px 0 16px" }}>
-              <div style={{ flex: 1, height: 1, background: "#242424" }} />
-              <span style={{ fontSize: 10, color: "#6B6358", letterSpacing: "0.1em" }}>{t("auth.or")}</span>
-              <div style={{ flex: 1, height: 1, background: "#242424" }} />
+              <div style={{ flex: 1, height: 1, background: "#e2cfa4" }} />
+              <span style={{ fontSize: 10, color: "#7a5c28", letterSpacing: "0.1em" }}>{t("auth.or")}</span>
+              <div style={{ flex: 1, height: 1, background: "#e2cfa4" }} />
             </div>
 
             {/* Google */}
             <button onClick={googleSignIn} style={{
               width: "100%", padding: "10px 0", background: "none",
-              border: "1px solid #2A2520", color: "#EDE8DC",
+              border: "1px solid #2A2520", color: "#3a2a10",
               fontSize: 12, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 10,
               fontFamily: "'Inter', sans-serif", letterSpacing: "0.06em", transition: "border-color 0.2s",
             }}
               onMouseEnter={e => e.currentTarget.style.borderColor = "#C9A84C"}
-              onMouseLeave={e => e.currentTarget.style.borderColor = "#2A2520"}
+              onMouseLeave={e => e.currentTarget.style.borderColor = "#d8c090"}
             >
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
                 <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
@@ -2153,7 +2153,7 @@ function AuthModal({ onClose, onAuth }) {
   );
 }
 
-// ─── LANGUAGE BAR ─────────────────────────────────────────────────
+// â”€â”€â”€ LANGUAGE BAR â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function LangBar({ page }) {
   const { i18n } = useTranslation();
   const current = i18n.language?.startsWith("sq") ? "sq" : "en";
@@ -2194,16 +2194,16 @@ function LangBar({ page }) {
 
   return (
     <div style={{ display: "flex", justifyContent: "center", gap: 8, padding: "8px 16px" }}>
-      {btn("en", "🇬🇧", "EN")}
-      {btn("sq", "🇦🇱", "SQ")}
+      {btn("en", "ðŸ‡¬ðŸ‡§", "EN")}
+      {btn("sq", "ðŸ‡¦ðŸ‡±", "SQ")}
     </div>
   );
 }
 
-// ─── APP ──────────────────────────────────────────────────────────
+// â”€â”€â”€ APP â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 const VALID_PAGES = ["home","prayer","zakat","inheritance","calendar","dates","library","audio","tasbeeh","quran","dua","asma","admin"];
 
-// ── Language-prefixed URL slug mapping ────────────────────────────
+// â”€â”€ Language-prefixed URL slug mapping â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 const PAGE_SLUGS = {
   en: { home:"", prayer:"prayer", zakat:"zakat", inheritance:"inheritance", calendar:"calendar", dates:"dates", library:"library", audio:"audio", tasbeeh:"tasbeeh", quran:"quran", dua:"dua", asma:"asma", admin:"admin" },
   sq: { home:"", prayer:"namazi", zakat:"zekati", inheritance:"trashegimia", calendar:"kalendari", dates:"datat", library:"biblioteka", audio:"ligjerata", tasbeeh:"tesbihe", quran:"kurani", dua:"dua", asma:"emrat", admin:"admin" },
@@ -2220,21 +2220,21 @@ function pageToUrl(pageId, lang) {
   return pageId === "home" ? `/${lang}/` : `/${lang}/${slug}`;
 }
 
-// ─── FLOATING MINI-PLAYER ─────────────────────────────────────────
+// â”€â”€â”€ FLOATING MINI-PLAYER â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function FloatingPlayer({ current, playing, play, skip, stop, progress, duration, fmt, navigate }) {
   if (!current) return null;
   const pct = duration ? (progress / duration) * 100 : 0;
   return (
     <div style={{
       position: "fixed", bottom: 0, left: 0, right: 0, zIndex: 300,
-      background: "linear-gradient(135deg,#0D0B07,#161410)",
-      borderTop: `1px solid ${playing ? GOLD + "50" : BORDER}`,
-      boxShadow: `0 -4px 40px rgba(0,0,0,0.85)`,
+      background: `linear-gradient(135deg,${SURFACE},#f0e8d0)`,
+      borderTop: `1px solid ${playing ? GOLD + "70" : BORDER}`,
+      boxShadow: `0 -4px 24px rgba(160,120,50,0.15)`,
       padding: "0 24px",
       animation: "slideUp 0.28s cubic-bezier(0.22,1,0.36,1)",
       transition: "border-color 0.3s",
     }}>
-      {/* Progress bar at top — only animates when playing */}
+      {/* Progress bar at top â€” only animates when playing */}
       <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 2, background: BORDER }}>
         <div style={{ height: "100%", width: `${pct}%`, background: playing ? GOLD : MUTED, transition: "width 0.4s linear, background 0.3s" }} />
       </div>
@@ -2263,7 +2263,7 @@ function FloatingPlayer({ current, playing, play, skip, stop, progress, duration
 
         {/* Controls */}
         <div style={{ display: "flex", alignItems: "center", gap: 8, flexShrink: 0 }}>
-          <button onClick={() => skip(-1)} title="Previous" style={{ background: "none", border: "none", cursor: "pointer", color: MUTED, fontSize: 16, padding: 4 }}>⏮</button>
+          <button onClick={() => skip(-1)} title="Previous" style={{ background: "none", border: "none", cursor: "pointer", color: MUTED, fontSize: 16, padding: 4 }}>â®</button>
 
           {/* Pause / Resume */}
           <button
@@ -2273,18 +2273,18 @@ function FloatingPlayer({ current, playing, play, skip, stop, progress, duration
               width: 42, height: 42, borderRadius: "50%",
               border: `1px solid ${GOLD}`,
               background: playing ? GOLD : "transparent",
-              color: playing ? "#0A0A0A" : GOLD,
+              color: playing ? "#f0e6ce" : GOLD,
               cursor: "pointer", fontSize: playing ? 18 : 16,
               display: "flex", alignItems: "center", justifyContent: "center",
               transition: "all 0.2s",
             }}
             onMouseEnter={e => e.currentTarget.style.transform = "scale(1.08)"}
             onMouseLeave={e => e.currentTarget.style.transform = "scale(1)"}
-          >{playing ? "⏸" : "▶"}</button>
+          >{playing ? "â¸" : "â–¶"}</button>
 
-          <button onClick={() => skip(1)} title="Next" style={{ background: "none", border: "none", cursor: "pointer", color: MUTED, fontSize: 16, padding: 4 }}>⏭</button>
+          <button onClick={() => skip(1)} title="Next" style={{ background: "none", border: "none", cursor: "pointer", color: MUTED, fontSize: 16, padding: 4 }}>â­</button>
 
-          {/* Stop — closes player */}
+          {/* Stop â€” closes player */}
           <button
             onClick={stop}
             title="Stop"
@@ -2296,7 +2296,7 @@ function FloatingPlayer({ current, playing, play, skip, stop, progress, duration
             }}
             onMouseEnter={e => { e.currentTarget.style.borderColor = "#c0392b"; e.currentTarget.style.color = "#c0392b"; }}
             onMouseLeave={e => { e.currentTarget.style.borderColor = BORDER; e.currentTarget.style.color = MUTED; }}
-          >■</button>
+          >â– </button>
         </div>
       </div>
 
@@ -2343,7 +2343,7 @@ export default function App() {
   }
   const notifTimers = useRef([]);
 
-  // ── PWA install prompt ────────────────────────────────────────
+  // â”€â”€ PWA install prompt â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   const deferredPrompt = useRef(null);
   const [showInstall, setShowInstall] = useState(false);
 
@@ -2372,7 +2372,7 @@ export default function App() {
     try { localStorage.setItem("mp-pwa-dismissed", "1"); } catch {}
   }
 
-  // ── Auth state ─────────────────────────────────────────────────
+  // â”€â”€ Auth state â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   const [authSession, setAuthSession] = useState(() => loadSession());
   const [showAuth, setShowAuth] = useState(false);
   const authUser = authSession?.user;
@@ -2414,7 +2414,7 @@ export default function App() {
     setAuthSession(null);
   }
 
-  // ── Global audio state ─────────────────────────────────────────
+  // â”€â”€ Global audio state â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   const [lectures, setLectures] = useState(LECTURES);
   const [current, setCurrent] = useState(null);
   const [playing, setPlaying] = useState(false);
@@ -2492,9 +2492,9 @@ export default function App() {
     const m = Math.floor(s / 60), sec = Math.floor(s % 60);
     return `${m}:${sec.toString().padStart(2, "0")}`;
   }
-  // ──────────────────────────────────────────────────────────────
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
-  // ── Prayer notifications ───────────────────────────────────────
+  // â”€â”€ Prayer notifications â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   async function schedulePrayerNotifs(loc) {
     if (!loc || !("Notification" in window)) return;
     let perm = Notification.permission;
@@ -2518,7 +2518,7 @@ export default function App() {
         const ms = pDate.getTime() - now;
         if (ms > 0) {
           const t = setTimeout(() => {
-            new Notification(`🕌 ${name} — Time to Pray`, {
+            new Notification(`ðŸ•Œ ${name} â€” Time to Pray`, {
               body: `${name} prayer time has begun in ${loc.name}`,
               icon: "/logo.png",
             });
@@ -2538,7 +2538,7 @@ export default function App() {
     setNotifEnabled(val);
     try { localStorage.setItem("mp-notifs", val ? "1" : "0"); } catch {}
   }
-  // ──────────────────────────────────────────────────────────────
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
   function handleSaveLocation(loc) { setSavedLocation(loc); }
 
@@ -2570,19 +2570,19 @@ export default function App() {
 
   // Dynamic <title> + <meta description> per page
   const PAGE_META = {
-    home:        { title: "Muslim's Path — Daily Islamic Companion",          desc: "Prayer times, Quran, Duas, Tasbeeh, Islamic calendar and more — all in one app." },
-    prayer:      { title: "Prayer Times — Muslim's Path",                      desc: "Accurate daily prayer times (Fajr, Dhuhr, Asr, Maghrib, Isha) for any city worldwide." },
+    home:        { title: "Muslim's Path â€” Daily Islamic Companion",          desc: "Prayer times, Quran, Duas, Tasbeeh, Islamic calendar and more â€” all in one app." },
+    prayer:      { title: "Prayer Times â€” Muslim's Path",                      desc: "Accurate daily prayer times (Fajr, Dhuhr, Asr, Maghrib, Isha) for any city worldwide." },
 
-    quran:       { title: "Quran — Muslim's Path",                             desc: "Read the Holy Quran with Arabic text, transliteration and English translation." },
-    dua:         { title: "Dua & Dhikr — Muslim's Path",                       desc: "Morning & evening adhkar, daily supplications and situational remembrances." },
-    asma:        { title: "99 Names of Allah — Muslim's Path",                 desc: "Al-Asma ul-Husna — the 99 Beautiful Names of Allah with meanings and transliteration." },
-    tasbeeh:     { title: "Digital Tasbeeh Counter — Muslim's Path",           desc: "Digital dhikr counter for Subhanallah, Alhamdulillah, Allahu Akbar and custom phrases." },
-    zakat:       { title: "Zakat Calculator — Muslim's Path",                  desc: "Calculate your annual Zakat obligation based on nisab threshold and zakatable assets." },
-    inheritance: { title: "Islamic Inheritance Calculator — Muslim's Path",    desc: "Distribute estate according to Quranic inheritance rules (Faraidh)." },
-    calendar:    { title: "Islamic Calendar — Muslim's Path",                  desc: "Hijri calendar with Islamic dates, events and Gregorian cross-reference." },
-    dates:       { title: "Hijri ↔ Gregorian Date Converter — Muslim's Path", desc: "Convert dates between the Islamic Hijri calendar and the Gregorian calendar." },
-    library:     { title: "Islamic Library — Muslim's Path",                   desc: "Curated collection of essential Islamic books — Quran, Hadith, Seerah, Fiqh and Aqeedah." },
-    audio:       { title: "Islamic Lectures — Muslim's Path",                  desc: "Listen to Islamic lectures and audio content." },
+    quran:       { title: "Quran â€” Muslim's Path",                             desc: "Read the Holy Quran with Arabic text, transliteration and English translation." },
+    dua:         { title: "Dua & Dhikr â€” Muslim's Path",                       desc: "Morning & evening adhkar, daily supplications and situational remembrances." },
+    asma:        { title: "99 Names of Allah â€” Muslim's Path",                 desc: "Al-Asma ul-Husna â€” the 99 Beautiful Names of Allah with meanings and transliteration." },
+    tasbeeh:     { title: "Digital Tasbeeh Counter â€” Muslim's Path",           desc: "Digital dhikr counter for Subhanallah, Alhamdulillah, Allahu Akbar and custom phrases." },
+    zakat:       { title: "Zakat Calculator â€” Muslim's Path",                  desc: "Calculate your annual Zakat obligation based on nisab threshold and zakatable assets." },
+    inheritance: { title: "Islamic Inheritance Calculator â€” Muslim's Path",    desc: "Distribute estate according to Quranic inheritance rules (Faraidh)." },
+    calendar:    { title: "Islamic Calendar â€” Muslim's Path",                  desc: "Hijri calendar with Islamic dates, events and Gregorian cross-reference." },
+    dates:       { title: "Hijri â†” Gregorian Date Converter â€” Muslim's Path", desc: "Convert dates between the Islamic Hijri calendar and the Gregorian calendar." },
+    library:     { title: "Islamic Library â€” Muslim's Path",                   desc: "Curated collection of essential Islamic books â€” Quran, Hadith, Seerah, Fiqh and Aqeedah." },
+    audio:       { title: "Islamic Lectures â€” Muslim's Path",                  desc: "Listen to Islamic lectures and audio content." },
   };
   useEffect(() => {
     const m = PAGE_META[page] || PAGE_META.home;
@@ -2618,16 +2618,17 @@ export default function App() {
   const audioProps = { lectures, current, playing, play: playLecture, skip: skipLecture, stop: stopAudio, seek: seekAudio, progress, duration, fmt: fmtTime, audioRef };
 
   return (
-    <div style={{ minHeight: "100vh", background: BG, fontFamily: SANS, color: TEXT, paddingBottom: current ? 68 : 0 }}>
+    <div style={{ minHeight: "100vh", background: `linear-gradient(160deg,#f7f0e4 0%,#efe3ca 55%,#e6d4ae 100%)`, backgroundAttachment: "fixed", fontFamily: SANS, color: TEXT, paddingBottom: current ? 68 : 0 }}>
       <style>{`
         h1,h2,h3 { font-family: ${SERIF}; }
         * { box-sizing: border-box; }
         ::selection { background: ${GOLD}33; color: ${TEXT}; }
-        ::-webkit-scrollbar { width: 5px; background: ${BG}; }
-        ::-webkit-scrollbar-thumb { background: ${BORDER}; border-radius: 0; }
-        input::placeholder, textarea::placeholder { color: ${MUTED}; opacity: 0.6; }
-        option { background: #141414; color: ${TEXT}; }
-        body { background: ${BG}; }
+        ::-webkit-scrollbar { width: 5px; background: #f0e6ce; }
+        ::-webkit-scrollbar-thumb { background: #d4b87a; border-radius: 4px; }
+        input::placeholder, textarea::placeholder { color: ${MUTED}; opacity: 0.7; }
+        option { background: #faf5ec; color: ${TEXT}; }
+        body { background: #f0e6ce; margin: 0; }
+        input, select, textarea { color-scheme: light; }
 
         /* Inheritance responsive layouts */
         .inherit-top-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
@@ -2677,14 +2678,14 @@ export default function App() {
           lectures={lectures}
         />
       )}
-      {/* Back button — fixed bottom-left, only when there's history */}
+      {/* Back button â€” fixed bottom-left, only when there's history */}
       {navHistory.length > 0 && (
         <button onClick={goBack} title="Go back" style={{
           position: "fixed",
           bottom: current ? 80 : 24,
           left: 16,
           zIndex: 450,
-          background: "#141414",
+          background: "#faf5ec",
           border: `1px solid ${BORDER}`,
           borderRadius: 2,
           color: MUTED,
@@ -2692,12 +2693,12 @@ export default function App() {
           width: 40, height: 40,
           display: "flex", alignItems: "center", justifyContent: "center",
           fontSize: 20, lineHeight: 1,
-          boxShadow: "0 4px 20px rgba(0,0,0,0.7)",
+          boxShadow: "0 2px 12px rgba(160,120,50,0.12)",
           transition: "border-color 0.2s, color 0.2s",
         }}
           onMouseEnter={e => { e.currentTarget.style.borderColor = GOLD; e.currentTarget.style.color = GOLD; }}
           onMouseLeave={e => { e.currentTarget.style.borderColor = BORDER; e.currentTarget.style.color = MUTED; }}
-        >‹</button>
+        >â€¹</button>
       )}
       <FloatingPlayer {...audioProps} navigate={navigate} />
 
@@ -2705,9 +2706,9 @@ export default function App() {
       {showInstall && (
         <div style={{
           position: "fixed", bottom: 8, left: 8, right: 8, zIndex: 400,
-          background: "linear-gradient(135deg,#0E0C08,#161210)",
-          border: "1px solid " + GOLD + "50",
-          boxShadow: "0 8px 40px rgba(0,0,0,0.8)",
+          background: `linear-gradient(135deg,${SURFACE},#f0e8d0)`,
+          border: `1px solid ${GOLD}60`,
+          boxShadow: "0 8px 40px rgba(160,120,50,0.18)",
           padding: "14px 18px",
           display: "flex", alignItems: "center", gap: 14,
           maxWidth: 480, margin: "0 auto",
@@ -2720,14 +2721,14 @@ export default function App() {
           <button onClick={handleInstall} style={{
             background: "linear-gradient(135deg,#C9A84C,#A8883E)",
             border: "none", padding: "8px 16px", cursor: "pointer",
-            fontSize: 11, fontWeight: 700, color: "#0A0A0A",
+            fontSize: 11, fontWeight: 700, color: "#f0e6ce",
             letterSpacing: "0.08em", textTransform: "uppercase",
             fontFamily: SANS, flexShrink: 0,
           }}>{t("common.install")}</button>
           <button onClick={dismissInstall} style={{
             background: "none", border: "none", cursor: "pointer",
             color: MUTED, fontSize: 18, padding: "0 4px", flexShrink: 0, lineHeight: 1,
-          }}>×</button>
+          }}>Ã—</button>
         </div>
       )}
 
@@ -2741,209 +2742,209 @@ export default function App() {
   );
 }
 
-// ─── DUA DATA ─────────────────────────────────────────────────────
+// â”€â”€â”€ DUA DATA â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 const DUA_CATS = ["All","Morning","Evening","Prayer","Meals","Home","Sleep","Travel","Protection","Distress","General"];
 
 const DUAS = [
-  // ── MORNING ──────────────────────────────────────────────────────
+  // â”€â”€ MORNING â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   { cat:"Morning", title:"Waking Up",
-    ar:"الْحَمْدُ لِلَّهِ الَّذِي أَحْيَانَا بَعْدَ مَا أَمَاتَنَا وَإِلَيْهِ النُّشُورُ",
-    tr:"Alḥamdu lillāhi alladhī aḥyānā baʿda mā amātanā wa-ilayhi al-nushūr",
+    ar:"Ø§Ù„Ù’Ø­ÙŽÙ…Ù’Ø¯Ù Ù„ÙÙ„ÙŽÙ‘Ù‡Ù Ø§Ù„ÙŽÙ‘Ø°ÙÙŠ Ø£ÙŽØ­Ù’ÙŠÙŽØ§Ù†ÙŽØ§ Ø¨ÙŽØ¹Ù’Ø¯ÙŽ Ù…ÙŽØ§ Ø£ÙŽÙ…ÙŽØ§ØªÙŽÙ†ÙŽØ§ ÙˆÙŽØ¥ÙÙ„ÙŽÙŠÙ’Ù‡Ù Ø§Ù„Ù†ÙÙ‘Ø´ÙÙˆØ±Ù",
+    tr:"Alá¸¥amdu lillÄhi alladhÄ« aá¸¥yÄnÄ baÊ¿da mÄ amÄtanÄ wa-ilayhi al-nushÅ«r",
     en:"All praise is for Allah who gave us life after having taken it from us, and unto Him is the resurrection.",
-    sqTitle:"Zgjimi nga Gjumi", sq:"Gjithë falënderimi i takon Allahut i cili na dha jetë pasi na mori atë, dhe tek Ai është ringjallja.", src:"Bukhari 6312" },
+    sqTitle:"Zgjimi nga Gjumi", sq:"GjithÃ« falÃ«nderimi i takon Allahut i cili na dha jetÃ« pasi na mori atÃ«, dhe tek Ai Ã«shtÃ« ringjallja.", src:"Bukhari 6312" },
   { cat:"Morning", title:"Morning Remembrance",
-    ar:"أَصْبَحْنَا وَأَصْبَحَ الْمُلْكُ لِلَّهِ، وَالْحَمْدُ لِلَّهِ، لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ",
-    tr:"Aṣbaḥnā wa-aṣbaḥa al-mulku lillāh, wal-ḥamdu lillāh, lā ilāha illā Allāhu waḥdahu lā sharīka lah, lahu al-mulku wa-lahu al-ḥamdu wa-huwa ʿalā kulli shayʾin qadīr",
+    ar:"Ø£ÙŽØµÙ’Ø¨ÙŽØ­Ù’Ù†ÙŽØ§ ÙˆÙŽØ£ÙŽØµÙ’Ø¨ÙŽØ­ÙŽ Ø§Ù„Ù’Ù…ÙÙ„Ù’ÙƒÙ Ù„ÙÙ„ÙŽÙ‘Ù‡ÙØŒ ÙˆÙŽØ§Ù„Ù’Ø­ÙŽÙ…Ù’Ø¯Ù Ù„ÙÙ„ÙŽÙ‘Ù‡ÙØŒ Ù„ÙŽØ§ Ø¥ÙÙ„ÙŽÙ‡ÙŽ Ø¥ÙÙ„ÙŽÙ‘Ø§ Ø§Ù„Ù„ÙŽÙ‘Ù‡Ù ÙˆÙŽØ­Ù’Ø¯ÙŽÙ‡Ù Ù„ÙŽØ§ Ø´ÙŽØ±ÙÙŠÙƒÙŽ Ù„ÙŽÙ‡ÙØŒ Ù„ÙŽÙ‡Ù Ø§Ù„Ù’Ù…ÙÙ„Ù’ÙƒÙ ÙˆÙŽÙ„ÙŽÙ‡Ù Ø§Ù„Ù’Ø­ÙŽÙ…Ù’Ø¯Ù ÙˆÙŽÙ‡ÙÙˆÙŽ Ø¹ÙŽÙ„ÙŽÙ‰ ÙƒÙÙ„ÙÙ‘ Ø´ÙŽÙŠÙ’Ø¡Ù Ù‚ÙŽØ¯ÙÙŠØ±ÙŒ",
+    tr:"Aá¹£baá¸¥nÄ wa-aá¹£baá¸¥a al-mulku lillÄh, wal-á¸¥amdu lillÄh, lÄ ilÄha illÄ AllÄhu waá¸¥dahu lÄ sharÄ«ka lah, lahu al-mulku wa-lahu al-á¸¥amdu wa-huwa Ê¿alÄ kulli shayÊ¾in qadÄ«r",
     en:"We have entered the morning and at this very time unto Allah belongs all sovereignty, and all praise is for Allah. None is worthy of worship except Allah, alone, without partner, to Him belongs all sovereignty and praise and He is over all things omnipotent.",
-    sqTitle:"Dhikri i Mëngjesit", sq:"Hyrëm në mëngjes dhe sundimi i Allahut hyri me ne; gjithë lavdia i takon Allahut. Nuk ka të adhuruar tjetër me të drejtë pos Allahut, Të Vetmit, pa ortak — Atij i takon sundimi dhe lavdia, Ai mbi çdo gjë është i Fuqishëm.", src:"Abu Dawud 5076" },
+    sqTitle:"Dhikri i MÃ«ngjesit", sq:"HyrÃ«m nÃ« mÃ«ngjes dhe sundimi i Allahut hyri me ne; gjithÃ« lavdia i takon Allahut. Nuk ka tÃ« adhuruar tjetÃ«r me tÃ« drejtÃ« pos Allahut, TÃ« Vetmit, pa ortak â€” Atij i takon sundimi dhe lavdia, Ai mbi Ã§do gjÃ« Ã«shtÃ« i FuqishÃ«m.", src:"Abu Dawud 5076" },
   { cat:"Morning", title:"Sayyid al-Istighfar",
-    ar:"اللَّهُمَّ أَنْتَ رَبِّي لَا إِلَهَ إِلَّا أَنْتَ، خَلَقْتَنِي وَأَنَا عَبْدُكَ، وَأَنَا عَلَى عَهْدِكَ وَوَعْدِكَ مَا اسْتَطَعْتُ، أَعُوذُ بِكَ مِنْ شَرِّ مَا صَنَعْتُ، أَبُوءُ لَكَ بِنِعْمَتِكَ عَلَيَّ، وَأَبُوءُ بِذَنْبِي فَاغْفِرْ لِي فَإِنَّهُ لَا يَغْفِرُ الذُّنُوبَ إِلَّا أَنْتَ",
-    tr:"Allāhumma anta rabbī lā ilāha illā anta, khalaqtanī wa-anā ʿabduk, wa-anā ʿalā ʿahdika wa-waʿdika mā istaṭaʿtu, aʿūdhu bika min sharri mā ṣanaʿtu, abūʾu laka biniʿmatika ʿalayya, wa-abūʾu bidhanbī faghfir lī fa-innahū lā yaghfiru al-dhunūba illā anta",
-    en:"O Allah, You are my Lord, none is worthy of worship but You. You created me and I am Your servant, abiding by Your covenant and promise as best I can. I seek refuge in You from the evil I have done. I acknowledge Your blessings upon me, and I acknowledge my sin, so forgive me — for none forgives sins except You.",
-    sqTitle:"Sayyid el-Istigfar", sq:"O Allah, Ti je Zoti im — nuk ka të adhuruar tjetër me të drejtë pos Teje. Ti me krijove dhe unë jam robi Yt, duke qëndruar në besën dhe premtimin Tënd sipas mundësisë sime. Kërkoj strehim tek Ti nga e keqja e asaj që kam bërë. Pranoj mirësinë Tënde ndaj meje dhe pranoj mëkatin tim — pra më fal, sepse askush nuk fal mëkatet përveç Teje.", sqNote:"Kush e thotë me bindje në mëngjes dhe vdes atë ditë hyn në Xhenet. Po ashtu për mbrëmjen. — Bukhāri", src:"Bukhari 6306",
-    note:"Whoever says this with certainty in the morning and dies that day shall enter Paradise. Same for evening. — Bukhari" },
+    ar:"Ø§Ù„Ù„ÙŽÙ‘Ù‡ÙÙ…ÙŽÙ‘ Ø£ÙŽÙ†Ù’ØªÙŽ Ø±ÙŽØ¨ÙÙ‘ÙŠ Ù„ÙŽØ§ Ø¥ÙÙ„ÙŽÙ‡ÙŽ Ø¥ÙÙ„ÙŽÙ‘Ø§ Ø£ÙŽÙ†Ù’ØªÙŽØŒ Ø®ÙŽÙ„ÙŽÙ‚Ù’ØªÙŽÙ†ÙÙŠ ÙˆÙŽØ£ÙŽÙ†ÙŽØ§ Ø¹ÙŽØ¨Ù’Ø¯ÙÙƒÙŽØŒ ÙˆÙŽØ£ÙŽÙ†ÙŽØ§ Ø¹ÙŽÙ„ÙŽÙ‰ Ø¹ÙŽÙ‡Ù’Ø¯ÙÙƒÙŽ ÙˆÙŽÙˆÙŽØ¹Ù’Ø¯ÙÙƒÙŽ Ù…ÙŽØ§ Ø§Ø³Ù’ØªÙŽØ·ÙŽØ¹Ù’ØªÙØŒ Ø£ÙŽØ¹ÙÙˆØ°Ù Ø¨ÙÙƒÙŽ Ù…ÙÙ†Ù’ Ø´ÙŽØ±ÙÙ‘ Ù…ÙŽØ§ ØµÙŽÙ†ÙŽØ¹Ù’ØªÙØŒ Ø£ÙŽØ¨ÙÙˆØ¡Ù Ù„ÙŽÙƒÙŽ Ø¨ÙÙ†ÙØ¹Ù’Ù…ÙŽØªÙÙƒÙŽ Ø¹ÙŽÙ„ÙŽÙŠÙŽÙ‘ØŒ ÙˆÙŽØ£ÙŽØ¨ÙÙˆØ¡Ù Ø¨ÙØ°ÙŽÙ†Ù’Ø¨ÙÙŠ ÙÙŽØ§ØºÙ’ÙÙØ±Ù’ Ù„ÙÙŠ ÙÙŽØ¥ÙÙ†ÙŽÙ‘Ù‡Ù Ù„ÙŽØ§ ÙŠÙŽØºÙ’ÙÙØ±Ù Ø§Ù„Ø°ÙÙ‘Ù†ÙÙˆØ¨ÙŽ Ø¥ÙÙ„ÙŽÙ‘Ø§ Ø£ÙŽÙ†Ù’ØªÙŽ",
+    tr:"AllÄhumma anta rabbÄ« lÄ ilÄha illÄ anta, khalaqtanÄ« wa-anÄ Ê¿abduk, wa-anÄ Ê¿alÄ Ê¿ahdika wa-waÊ¿dika mÄ istaá¹­aÊ¿tu, aÊ¿Å«dhu bika min sharri mÄ á¹£anaÊ¿tu, abÅ«Ê¾u laka biniÊ¿matika Ê¿alayya, wa-abÅ«Ê¾u bidhanbÄ« faghfir lÄ« fa-innahÅ« lÄ yaghfiru al-dhunÅ«ba illÄ anta",
+    en:"O Allah, You are my Lord, none is worthy of worship but You. You created me and I am Your servant, abiding by Your covenant and promise as best I can. I seek refuge in You from the evil I have done. I acknowledge Your blessings upon me, and I acknowledge my sin, so forgive me â€” for none forgives sins except You.",
+    sqTitle:"Sayyid el-Istigfar", sq:"O Allah, Ti je Zoti im â€” nuk ka tÃ« adhuruar tjetÃ«r me tÃ« drejtÃ« pos Teje. Ti me krijove dhe unÃ« jam robi Yt, duke qÃ«ndruar nÃ« besÃ«n dhe premtimin TÃ«nd sipas mundÃ«sisÃ« sime. KÃ«rkoj strehim tek Ti nga e keqja e asaj qÃ« kam bÃ«rÃ«. Pranoj mirÃ«sinÃ« TÃ«nde ndaj meje dhe pranoj mÃ«katin tim â€” pra mÃ« fal, sepse askush nuk fal mÃ«katet pÃ«rveÃ§ Teje.", sqNote:"Kush e thotÃ« me bindje nÃ« mÃ«ngjes dhe vdes atÃ« ditÃ« hyn nÃ« Xhenet. Po ashtu pÃ«r mbrÃ«mjen. â€” BukhÄri", src:"Bukhari 6306",
+    note:"Whoever says this with certainty in the morning and dies that day shall enter Paradise. Same for evening. â€” Bukhari" },
   { cat:"Morning", title:"Morning Protection",
-    ar:"بِسْمِ اللَّهِ الَّذِي لَا يَضُرُّ مَعَ اسْمِهِ شَيْءٌ فِي الْأَرْضِ وَلَا فِي السَّمَاءِ وَهُوَ السَّمِيعُ الْعَلِيمُ",
-    tr:"Bismillāhi alladhī lā yaḍurru maʿa ismihi shayʾun fī al-arḍi wa-lā fī al-samāʾ, wa-huwa al-samīʿu al-ʿalīm",
+    ar:"Ø¨ÙØ³Ù’Ù…Ù Ø§Ù„Ù„ÙŽÙ‘Ù‡Ù Ø§Ù„ÙŽÙ‘Ø°ÙÙŠ Ù„ÙŽØ§ ÙŠÙŽØ¶ÙØ±ÙÙ‘ Ù…ÙŽØ¹ÙŽ Ø§Ø³Ù’Ù…ÙÙ‡Ù Ø´ÙŽÙŠÙ’Ø¡ÙŒ ÙÙÙŠ Ø§Ù„Ù’Ø£ÙŽØ±Ù’Ø¶Ù ÙˆÙŽÙ„ÙŽØ§ ÙÙÙŠ Ø§Ù„Ø³ÙŽÙ‘Ù…ÙŽØ§Ø¡Ù ÙˆÙŽÙ‡ÙÙˆÙŽ Ø§Ù„Ø³ÙŽÙ‘Ù…ÙÙŠØ¹Ù Ø§Ù„Ù’Ø¹ÙŽÙ„ÙÙŠÙ…Ù",
+    tr:"BismillÄhi alladhÄ« lÄ yaá¸urru maÊ¿a ismihi shayÊ¾un fÄ« al-ará¸i wa-lÄ fÄ« al-samÄÊ¾, wa-huwa al-samÄ«Ê¿u al-Ê¿alÄ«m",
     en:"In the name of Allah with Whose name nothing on earth or in heaven can cause harm, and He is the All-Hearing, the All-Knowing.",
-    sqTitle:"Mbrojtja e Mëngjesit", sq:"Me emrin e Allahut me emrin e të Cilit asgjë nuk dëmton — as në tokë as në qiell — dhe Ai është Dëgjuesi i Gjithëdijshmi.", sqNote:"Recito 3 herë në mëngjes dhe mbrëmje — asgjë nuk do të dëmtojë gjatë asaj dite.", src:"Abu Dawud 5088",
-    note:"Recite 3 times in the morning and evening — nothing will harm you that day." },
+    sqTitle:"Mbrojtja e MÃ«ngjesit", sq:"Me emrin e Allahut me emrin e tÃ« Cilit asgjÃ« nuk dÃ«mton â€” as nÃ« tokÃ« as nÃ« qiell â€” dhe Ai Ã«shtÃ« DÃ«gjuesi i GjithÃ«dijshmi.", sqNote:"Recito 3 herÃ« nÃ« mÃ«ngjes dhe mbrÃ«mje â€” asgjÃ« nuk do tÃ« dÃ«mtojÃ« gjatÃ« asaj dite.", src:"Abu Dawud 5088",
+    note:"Recite 3 times in the morning and evening â€” nothing will harm you that day." },
 
-  // ── EVENING ──────────────────────────────────────────────────────
+  // â”€â”€ EVENING â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   { cat:"Evening", title:"Evening Remembrance",
-    ar:"أَمْسَيْنَا وَأَمْسَى الْمُلْكُ لِلَّهِ، وَالْحَمْدُ لِلَّهِ، لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ",
-    tr:"Amsaynā wa-amsā al-mulku lillāh, wal-ḥamdu lillāh, lā ilāha illā Allāhu waḥdahu lā sharīka lah, lahu al-mulku wa-lahu al-ḥamdu wa-huwa ʿalā kulli shayʾin qadīr",
+    ar:"Ø£ÙŽÙ…Ù’Ø³ÙŽÙŠÙ’Ù†ÙŽØ§ ÙˆÙŽØ£ÙŽÙ…Ù’Ø³ÙŽÙ‰ Ø§Ù„Ù’Ù…ÙÙ„Ù’ÙƒÙ Ù„ÙÙ„ÙŽÙ‘Ù‡ÙØŒ ÙˆÙŽØ§Ù„Ù’Ø­ÙŽÙ…Ù’Ø¯Ù Ù„ÙÙ„ÙŽÙ‘Ù‡ÙØŒ Ù„ÙŽØ§ Ø¥ÙÙ„ÙŽÙ‡ÙŽ Ø¥ÙÙ„ÙŽÙ‘Ø§ Ø§Ù„Ù„ÙŽÙ‘Ù‡Ù ÙˆÙŽØ­Ù’Ø¯ÙŽÙ‡Ù Ù„ÙŽØ§ Ø´ÙŽØ±ÙÙŠÙƒÙŽ Ù„ÙŽÙ‡ÙØŒ Ù„ÙŽÙ‡Ù Ø§Ù„Ù’Ù…ÙÙ„Ù’ÙƒÙ ÙˆÙŽÙ„ÙŽÙ‡Ù Ø§Ù„Ù’Ø­ÙŽÙ…Ù’Ø¯Ù ÙˆÙŽÙ‡ÙÙˆÙŽ Ø¹ÙŽÙ„ÙŽÙ‰ ÙƒÙÙ„ÙÙ‘ Ø´ÙŽÙŠÙ’Ø¡Ù Ù‚ÙŽØ¯ÙÙŠØ±ÙŒ",
+    tr:"AmsaynÄ wa-amsÄ al-mulku lillÄh, wal-á¸¥amdu lillÄh, lÄ ilÄha illÄ AllÄhu waá¸¥dahu lÄ sharÄ«ka lah, lahu al-mulku wa-lahu al-á¸¥amdu wa-huwa Ê¿alÄ kulli shayÊ¾in qadÄ«r",
     en:"We have entered the evening and at this very time unto Allah belongs all sovereignty, all praise is for Allah. None is worthy of worship except Allah, alone, without partner, to Him belongs all sovereignty and praise, and He is over all things omnipotent.",
-    sqTitle:"Dhikri i Mbrëmjes", sq:"Hyrëm në mbrëmje dhe sundimi i Allahut hyri me ne; gjithë lavdia i takon Allahut. Nuk ka të adhuruar tjetër me të drejtë pos Allahut, Të Vetmit, pa ortak — Atij i takon sundimi dhe lavdia, Ai mbi çdo gjë është i Fuqishëm.", src:"Abu Dawud 5076" },
+    sqTitle:"Dhikri i MbrÃ«mjes", sq:"HyrÃ«m nÃ« mbrÃ«mje dhe sundimi i Allahut hyri me ne; gjithÃ« lavdia i takon Allahut. Nuk ka tÃ« adhuruar tjetÃ«r me tÃ« drejtÃ« pos Allahut, TÃ« Vetmit, pa ortak â€” Atij i takon sundimi dhe lavdia, Ai mbi Ã§do gjÃ« Ã«shtÃ« i FuqishÃ«m.", src:"Abu Dawud 5076" },
   { cat:"Evening", title:"Sayyid al-Istighfar (Evening)",
-    ar:"اللَّهُمَّ أَنْتَ رَبِّي لَا إِلَهَ إِلَّا أَنْتَ، خَلَقْتَنِي وَأَنَا عَبْدُكَ، وَأَنَا عَلَى عَهْدِكَ وَوَعْدِكَ مَا اسْتَطَعْتُ، أَعُوذُ بِكَ مِنْ شَرِّ مَا صَنَعْتُ، أَبُوءُ لَكَ بِنِعْمَتِكَ عَلَيَّ، وَأَبُوءُ بِذَنْبِي فَاغْفِرْ لِي فَإِنَّهُ لَا يَغْفِرُ الذُّنُوبَ إِلَّا أَنْتَ",
-    tr:"Allāhumma anta rabbī lā ilāha illā anta, khalaqtanī wa-anā ʿabduk…",
-    en:"O Allah, You are my Lord, none is worthy of worship but You. You created me and I am Your servant, abiding by Your covenant and promise as best I can. I seek refuge in You from the evil I have done. I acknowledge Your blessings upon me, and I acknowledge my sin, so forgive me — for none forgives sins except You.",
-    sqTitle:"Sayyid el-Istigfar (Mbrëmja)", sq:"O Allah, Ti je Zoti im — nuk ka të adhuruar tjetër me të drejtë pos Teje. Ti me krijove dhe unë jam robi Yt, duke qëndruar në besën dhe premtimin Tënd sipas mundësisë sime. Kërkoj strehim tek Ti nga e keqja e asaj që kam bërë. Pranoj mirësinë Tënde ndaj meje dhe pranoj mëkatin tim — pra më fal, sepse askush nuk fal mëkatet përveç Teje.", src:"Bukhari 6306" },
+    ar:"Ø§Ù„Ù„ÙŽÙ‘Ù‡ÙÙ…ÙŽÙ‘ Ø£ÙŽÙ†Ù’ØªÙŽ Ø±ÙŽØ¨ÙÙ‘ÙŠ Ù„ÙŽØ§ Ø¥ÙÙ„ÙŽÙ‡ÙŽ Ø¥ÙÙ„ÙŽÙ‘Ø§ Ø£ÙŽÙ†Ù’ØªÙŽØŒ Ø®ÙŽÙ„ÙŽÙ‚Ù’ØªÙŽÙ†ÙÙŠ ÙˆÙŽØ£ÙŽÙ†ÙŽØ§ Ø¹ÙŽØ¨Ù’Ø¯ÙÙƒÙŽØŒ ÙˆÙŽØ£ÙŽÙ†ÙŽØ§ Ø¹ÙŽÙ„ÙŽÙ‰ Ø¹ÙŽÙ‡Ù’Ø¯ÙÙƒÙŽ ÙˆÙŽÙˆÙŽØ¹Ù’Ø¯ÙÙƒÙŽ Ù…ÙŽØ§ Ø§Ø³Ù’ØªÙŽØ·ÙŽØ¹Ù’ØªÙØŒ Ø£ÙŽØ¹ÙÙˆØ°Ù Ø¨ÙÙƒÙŽ Ù…ÙÙ†Ù’ Ø´ÙŽØ±ÙÙ‘ Ù…ÙŽØ§ ØµÙŽÙ†ÙŽØ¹Ù’ØªÙØŒ Ø£ÙŽØ¨ÙÙˆØ¡Ù Ù„ÙŽÙƒÙŽ Ø¨ÙÙ†ÙØ¹Ù’Ù…ÙŽØªÙÙƒÙŽ Ø¹ÙŽÙ„ÙŽÙŠÙŽÙ‘ØŒ ÙˆÙŽØ£ÙŽØ¨ÙÙˆØ¡Ù Ø¨ÙØ°ÙŽÙ†Ù’Ø¨ÙÙŠ ÙÙŽØ§ØºÙ’ÙÙØ±Ù’ Ù„ÙÙŠ ÙÙŽØ¥ÙÙ†ÙŽÙ‘Ù‡Ù Ù„ÙŽØ§ ÙŠÙŽØºÙ’ÙÙØ±Ù Ø§Ù„Ø°ÙÙ‘Ù†ÙÙˆØ¨ÙŽ Ø¥ÙÙ„ÙŽÙ‘Ø§ Ø£ÙŽÙ†Ù’ØªÙŽ",
+    tr:"AllÄhumma anta rabbÄ« lÄ ilÄha illÄ anta, khalaqtanÄ« wa-anÄ Ê¿abdukâ€¦",
+    en:"O Allah, You are my Lord, none is worthy of worship but You. You created me and I am Your servant, abiding by Your covenant and promise as best I can. I seek refuge in You from the evil I have done. I acknowledge Your blessings upon me, and I acknowledge my sin, so forgive me â€” for none forgives sins except You.",
+    sqTitle:"Sayyid el-Istigfar (MbrÃ«mja)", sq:"O Allah, Ti je Zoti im â€” nuk ka tÃ« adhuruar tjetÃ«r me tÃ« drejtÃ« pos Teje. Ti me krijove dhe unÃ« jam robi Yt, duke qÃ«ndruar nÃ« besÃ«n dhe premtimin TÃ«nd sipas mundÃ«sisÃ« sime. KÃ«rkoj strehim tek Ti nga e keqja e asaj qÃ« kam bÃ«rÃ«. Pranoj mirÃ«sinÃ« TÃ«nde ndaj meje dhe pranoj mÃ«katin tim â€” pra mÃ« fal, sepse askush nuk fal mÃ«katet pÃ«rveÃ§ Teje.", src:"Bukhari 6306" },
   { cat:"Evening", title:"Al-Ikhlas, Al-Falaq, An-Nas",
-    ar:"قُلْ هُوَ اللَّهُ أَحَدٌ ۝ قُلْ أَعُوذُ بِرَبِّ الْفَلَقِ ۝ قُلْ أَعُوذُ بِرَبِّ النَّاسِ",
-    tr:"Qul huwa Allāhu Aḥad · Qul aʿūdhu bi-rabbi al-falaq · Qul aʿūdhu bi-rabbi al-nās",
-    en:"Recite Surah Al-Ikhlas, Al-Falaq, and An-Nas — each three times in the morning and evening for complete protection.",
-    sqTitle:"El-Ikhlas, El-Felek, En-Nas", sq:"Lexo Suren El-Ikhlas, El-Felek dhe En-Nas — secilën tri herë në mëngjes dhe mbrëmje për mbrojtje të plotë.", sqNote:"Mjaftojnë për çdo gjë. — Ebu Daud", src:"Abu Dawud 5082",
-    note:"Sufficient for everything. — Abu Dawud" },
+    ar:"Ù‚ÙÙ„Ù’ Ù‡ÙÙˆÙŽ Ø§Ù„Ù„ÙŽÙ‘Ù‡Ù Ø£ÙŽØ­ÙŽØ¯ÙŒ Û Ù‚ÙÙ„Ù’ Ø£ÙŽØ¹ÙÙˆØ°Ù Ø¨ÙØ±ÙŽØ¨ÙÙ‘ Ø§Ù„Ù’ÙÙŽÙ„ÙŽÙ‚Ù Û Ù‚ÙÙ„Ù’ Ø£ÙŽØ¹ÙÙˆØ°Ù Ø¨ÙØ±ÙŽØ¨ÙÙ‘ Ø§Ù„Ù†ÙŽÙ‘Ø§Ø³Ù",
+    tr:"Qul huwa AllÄhu Aá¸¥ad Â· Qul aÊ¿Å«dhu bi-rabbi al-falaq Â· Qul aÊ¿Å«dhu bi-rabbi al-nÄs",
+    en:"Recite Surah Al-Ikhlas, Al-Falaq, and An-Nas â€” each three times in the morning and evening for complete protection.",
+    sqTitle:"El-Ikhlas, El-Felek, En-Nas", sq:"Lexo Suren El-Ikhlas, El-Felek dhe En-Nas â€” secilÃ«n tri herÃ« nÃ« mÃ«ngjes dhe mbrÃ«mje pÃ«r mbrojtje tÃ« plotÃ«.", sqNote:"MjaftojnÃ« pÃ«r Ã§do gjÃ«. â€” Ebu Daud", src:"Abu Dawud 5082",
+    note:"Sufficient for everything. â€” Abu Dawud" },
 
-  // ── AFTER PRAYER ────────────────────────────────────────────────
+  // â”€â”€ AFTER PRAYER â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   { cat:"Prayer", title:"Tasbih, Tahmid, Takbir",
-    ar:"سُبْحَانَ اللَّهِ (٣٣×) ۝ الْحَمْدُ لِلَّهِ (٣٣×) ۝ اللَّهُ أَكْبَرُ (٣٣×)",
-    tr:"Subḥāna Allāh (33×) · Al-ḥamdu lillāh (33×) · Allāhu akbar (33×)",
-    en:"Glory be to Allah (33×) · All praise be to Allah (33×) · Allah is the Greatest (33×). Complete to 100: 'Lā ilāha illā Allāhu waḥdahu lā sharīka lah, lahu al-mulku wa-lahu al-ḥamd, wa-huwa ʿalā kulli shayʾin qadīr.'",
-    sqTitle:"Tesbih, Tehmid, Tekbir", sq:"Subhanallah (33×) · Elhamdulilah (33×) · Allahu Ekber (33×). Plotëso 100: 'La ilahe il-Allah uahdehu la sherike leh, lehul-mulku ue lehul-hamdu ue hue ala kul-li shejin kadir.'", src:"Muslim 597" },
+    ar:"Ø³ÙØ¨Ù’Ø­ÙŽØ§Ù†ÙŽ Ø§Ù„Ù„ÙŽÙ‘Ù‡Ù (Ù£Ù£Ã—) Û Ø§Ù„Ù’Ø­ÙŽÙ…Ù’Ø¯Ù Ù„ÙÙ„ÙŽÙ‘Ù‡Ù (Ù£Ù£Ã—) Û Ø§Ù„Ù„ÙŽÙ‘Ù‡Ù Ø£ÙŽÙƒÙ’Ø¨ÙŽØ±Ù (Ù£Ù£Ã—)",
+    tr:"Subá¸¥Äna AllÄh (33Ã—) Â· Al-á¸¥amdu lillÄh (33Ã—) Â· AllÄhu akbar (33Ã—)",
+    en:"Glory be to Allah (33Ã—) Â· All praise be to Allah (33Ã—) Â· Allah is the Greatest (33Ã—). Complete to 100: 'LÄ ilÄha illÄ AllÄhu waá¸¥dahu lÄ sharÄ«ka lah, lahu al-mulku wa-lahu al-á¸¥amd, wa-huwa Ê¿alÄ kulli shayÊ¾in qadÄ«r.'",
+    sqTitle:"Tesbih, Tehmid, Tekbir", sq:"Subhanallah (33Ã—) Â· Elhamdulilah (33Ã—) Â· Allahu Ekber (33Ã—). PlotÃ«so 100: 'La ilahe il-Allah uahdehu la sherike leh, lehul-mulku ue lehul-hamdu ue hue ala kul-li shejin kadir.'", src:"Muslim 597" },
   { cat:"Prayer", title:"Ayatul Kursi",
-    ar:"اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ ۚ لَا تَأْخُذُهُ سِنَةٌ وَلَا نَوْمٌ ۚ لَهُ مَا فِي السَّمَاوَاتِ وَمَا فِي الْأَرْضِ ۗ مَنْ ذَا الَّذِي يَشْفَعُ عِنْدَهُ إِلَّا بِإِذْنِهِ ۚ يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ ۖ وَلَا يُحِيطُونَ بِشَيْءٍ مِنْ عِلْمِهِ إِلَّا بِمَا شَاءَ ۚ وَسِعَ كُرْسِيُّهُ السَّمَاوَاتِ وَالْأَرْضَ ۖ وَلَا يَئُودُهُ حِفْظُهُمَا ۚ وَهُوَ الْعَلِيُّ الْعَظِيمُ",
-    tr:"Allāhu lā ilāha illā huwa al-ḥayyu al-qayyūm, lā taʾkhudhuhū sinatun wa-lā nawm…",
-    en:"Allah — there is no deity except Him, the Ever-Living, the Sustainer of existence. Neither drowsiness nor sleep overtakes Him. To Him belongs whatever is in the heavens and earth… He is the Most High, the Most Great.",
-    sqTitle:"Ajeti Kursij", sq:"Allahu — nuk ka të adhuruar tjetër me të drejtë pos Tij, të Gjallë e të Vetëmbajtësit. Nuk e kap kotsia e as gjumi. I Tij është gjithçka në qiej dhe tokë… Ai është i Larti, Madhërishmi.", sqNote:"Kush e lexon pas çdo namazi — asgjë nuk e pengon të hyjë në Xhenet përveç vdekjes. — Nesai 9928", src:"Quran 2:255",
-    note:"Whoever recites this after every prayer — nothing prevents him from entering Paradise except death. — Nasai 9928" },
+    ar:"Ø§Ù„Ù„ÙŽÙ‘Ù‡Ù Ù„ÙŽØ§ Ø¥ÙÙ„ÙŽÙ°Ù‡ÙŽ Ø¥ÙÙ„ÙŽÙ‘Ø§ Ù‡ÙÙˆÙŽ Ø§Ù„Ù’Ø­ÙŽÙŠÙÙ‘ Ø§Ù„Ù’Ù‚ÙŽÙŠÙÙ‘ÙˆÙ…Ù Ûš Ù„ÙŽØ§ ØªÙŽØ£Ù’Ø®ÙØ°ÙÙ‡Ù Ø³ÙÙ†ÙŽØ©ÙŒ ÙˆÙŽÙ„ÙŽØ§ Ù†ÙŽÙˆÙ’Ù…ÙŒ Ûš Ù„ÙŽÙ‡Ù Ù…ÙŽØ§ ÙÙÙŠ Ø§Ù„Ø³ÙŽÙ‘Ù…ÙŽØ§ÙˆÙŽØ§ØªÙ ÙˆÙŽÙ…ÙŽØ§ ÙÙÙŠ Ø§Ù„Ù’Ø£ÙŽØ±Ù’Ø¶Ù Û— Ù…ÙŽÙ†Ù’ Ø°ÙŽØ§ Ø§Ù„ÙŽÙ‘Ø°ÙÙŠ ÙŠÙŽØ´Ù’ÙÙŽØ¹Ù Ø¹ÙÙ†Ù’Ø¯ÙŽÙ‡Ù Ø¥ÙÙ„ÙŽÙ‘Ø§ Ø¨ÙØ¥ÙØ°Ù’Ù†ÙÙ‡Ù Ûš ÙŠÙŽØ¹Ù’Ù„ÙŽÙ…Ù Ù…ÙŽØ§ Ø¨ÙŽÙŠÙ’Ù†ÙŽ Ø£ÙŽÙŠÙ’Ø¯ÙÙŠÙ‡ÙÙ…Ù’ ÙˆÙŽÙ…ÙŽØ§ Ø®ÙŽÙ„Ù’ÙÙŽÙ‡ÙÙ…Ù’ Û– ÙˆÙŽÙ„ÙŽØ§ ÙŠÙØ­ÙÙŠØ·ÙÙˆÙ†ÙŽ Ø¨ÙØ´ÙŽÙŠÙ’Ø¡Ù Ù…ÙÙ†Ù’ Ø¹ÙÙ„Ù’Ù…ÙÙ‡Ù Ø¥ÙÙ„ÙŽÙ‘Ø§ Ø¨ÙÙ…ÙŽØ§ Ø´ÙŽØ§Ø¡ÙŽ Ûš ÙˆÙŽØ³ÙØ¹ÙŽ ÙƒÙØ±Ù’Ø³ÙÙŠÙÙ‘Ù‡Ù Ø§Ù„Ø³ÙŽÙ‘Ù…ÙŽØ§ÙˆÙŽØ§ØªÙ ÙˆÙŽØ§Ù„Ù’Ø£ÙŽØ±Ù’Ø¶ÙŽ Û– ÙˆÙŽÙ„ÙŽØ§ ÙŠÙŽØ¦ÙÙˆØ¯ÙÙ‡Ù Ø­ÙÙÙ’Ø¸ÙÙ‡ÙÙ…ÙŽØ§ Ûš ÙˆÙŽÙ‡ÙÙˆÙŽ Ø§Ù„Ù’Ø¹ÙŽÙ„ÙÙŠÙÙ‘ Ø§Ù„Ù’Ø¹ÙŽØ¸ÙÙŠÙ…Ù",
+    tr:"AllÄhu lÄ ilÄha illÄ huwa al-á¸¥ayyu al-qayyÅ«m, lÄ taÊ¾khudhuhÅ« sinatun wa-lÄ nawmâ€¦",
+    en:"Allah â€” there is no deity except Him, the Ever-Living, the Sustainer of existence. Neither drowsiness nor sleep overtakes Him. To Him belongs whatever is in the heavens and earthâ€¦ He is the Most High, the Most Great.",
+    sqTitle:"Ajeti Kursij", sq:"Allahu â€” nuk ka tÃ« adhuruar tjetÃ«r me tÃ« drejtÃ« pos Tij, tÃ« GjallÃ« e tÃ« VetÃ«mbajtÃ«sit. Nuk e kap kotsia e as gjumi. I Tij Ã«shtÃ« gjithÃ§ka nÃ« qiej dhe tokÃ«â€¦ Ai Ã«shtÃ« i Larti, MadhÃ«rishmi.", sqNote:"Kush e lexon pas Ã§do namazi â€” asgjÃ« nuk e pengon tÃ« hyjÃ« nÃ« Xhenet pÃ«rveÃ§ vdekjes. â€” Nesai 9928", src:"Quran 2:255",
+    note:"Whoever recites this after every prayer â€” nothing prevents him from entering Paradise except death. â€” Nasai 9928" },
   { cat:"Prayer", title:"Dua After Prayer",
-    ar:"اللَّهُمَّ أَعِنِّي عَلَى ذِكْرِكَ وَشُكْرِكَ وَحُسْنِ عِبَادَتِكَ",
-    tr:"Allāhumma aʿinnī ʿalā dhikrika wa-shukrika wa-ḥusni ʿibādatik",
+    ar:"Ø§Ù„Ù„ÙŽÙ‘Ù‡ÙÙ…ÙŽÙ‘ Ø£ÙŽØ¹ÙÙ†ÙÙ‘ÙŠ Ø¹ÙŽÙ„ÙŽÙ‰ Ø°ÙÙƒÙ’Ø±ÙÙƒÙŽ ÙˆÙŽØ´ÙÙƒÙ’Ø±ÙÙƒÙŽ ÙˆÙŽØ­ÙØ³Ù’Ù†Ù Ø¹ÙØ¨ÙŽØ§Ø¯ÙŽØªÙÙƒÙŽ",
+    tr:"AllÄhumma aÊ¿innÄ« Ê¿alÄ dhikrika wa-shukrika wa-á¸¥usni Ê¿ibÄdatik",
     en:"O Allah, help me to remember You, to give thanks to You, and to worship You in the best manner.",
-    sqTitle:"Dua pas Namazit", sq:"O Allah, më ndihmo të të kujtoj Ty, të të falënderoj Ty dhe të të adhuroj Ty në mënyrën më të mirë.", sqNote:"Profeti ﷺ ia këshilloi Muadh ibn Xhebelit ta thotë pas çdo namazi.", src:"Abu Dawud 1522",
-    note:"The Prophet ﷺ advised Muadh ibn Jabal to say this after every prayer." },
+    sqTitle:"Dua pas Namazit", sq:"O Allah, mÃ« ndihmo tÃ« tÃ« kujtoj Ty, tÃ« tÃ« falÃ«nderoj Ty dhe tÃ« tÃ« adhuroj Ty nÃ« mÃ«nyrÃ«n mÃ« tÃ« mirÃ«.", sqNote:"Profeti ï·º ia kÃ«shilloi Muadh ibn Xhebelit ta thotÃ« pas Ã§do namazi.", src:"Abu Dawud 1522",
+    note:"The Prophet ï·º advised Muadh ibn Jabal to say this after every prayer." },
 
-  // ── MEALS ────────────────────────────────────────────────────────
+  // â”€â”€ MEALS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   { cat:"Meals", title:"Before Eating",
-    ar:"بِسْمِ اللَّهِ",
-    tr:"Bismillāh",
+    ar:"Ø¨ÙØ³Ù’Ù…Ù Ø§Ù„Ù„ÙŽÙ‘Ù‡Ù",
+    tr:"BismillÄh",
     en:"In the name of Allah.",
-    sqTitle:"Para Ngrënies", sq:"Me emrin e Allahut.", sqNote:"Nëse harron, kur ta kujtosh thuaj: 'Bismil-lahi fi evel-lihi ue ahirihi' — Me emrin e Allahut në fillim dhe fund.", src:"Abu Dawud 3767",
-    note:"If you forget, say when you remember: 'Bismillāhi fī awwalihi wa-ākhirih' — In the name of Allah at its beginning and end." },
+    sqTitle:"Para NgrÃ«nies", sq:"Me emrin e Allahut.", sqNote:"NÃ«se harron, kur ta kujtosh thuaj: 'Bismil-lahi fi evel-lihi ue ahirihi' â€” Me emrin e Allahut nÃ« fillim dhe fund.", src:"Abu Dawud 3767",
+    note:"If you forget, say when you remember: 'BismillÄhi fÄ« awwalihi wa-Äkhirih' â€” In the name of Allah at its beginning and end." },
   { cat:"Meals", title:"After Eating",
-    ar:"الْحَمْدُ لِلَّهِ الَّذِي أَطْعَمَنِي هَذَا وَرَزَقَنِيهِ مِنْ غَيْرِ حَوْلٍ مِنِّي وَلَا قُوَّةٍ",
-    tr:"Al-ḥamdu lillāhi alladhī aṭʿamanī hādhā wa-razaqanīhi min ghayri ḥawlin minnī wa-lā quwwa",
+    ar:"Ø§Ù„Ù’Ø­ÙŽÙ…Ù’Ø¯Ù Ù„ÙÙ„ÙŽÙ‘Ù‡Ù Ø§Ù„ÙŽÙ‘Ø°ÙÙŠ Ø£ÙŽØ·Ù’Ø¹ÙŽÙ…ÙŽÙ†ÙÙŠ Ù‡ÙŽØ°ÙŽØ§ ÙˆÙŽØ±ÙŽØ²ÙŽÙ‚ÙŽÙ†ÙÙŠÙ‡Ù Ù…ÙÙ†Ù’ ØºÙŽÙŠÙ’Ø±Ù Ø­ÙŽÙˆÙ’Ù„Ù Ù…ÙÙ†ÙÙ‘ÙŠ ÙˆÙŽÙ„ÙŽØ§ Ù‚ÙÙˆÙŽÙ‘Ø©Ù",
+    tr:"Al-á¸¥amdu lillÄhi alladhÄ« aá¹­Ê¿amanÄ« hÄdhÄ wa-razaqanÄ«hi min ghayri á¸¥awlin minnÄ« wa-lÄ quwwa",
     en:"All praise is for Allah who fed me this and provided it for me without any might or power from myself.",
-    sqTitle:"Pas Ngrënies", sq:"Gjithë falënderimi i takon Allahut i cili më ushqeu këtë dhe ma siguroi pa asnjë fuqi e forcë nga ana ime.", sqNote:"Do ti falen mëkatet e kaluara. — Tirmidhi", src:"Tirmidhi 3458",
-    note:"His past sins will be forgiven. — Tirmidhi" },
+    sqTitle:"Pas NgrÃ«nies", sq:"GjithÃ« falÃ«nderimi i takon Allahut i cili mÃ« ushqeu kÃ«tÃ« dhe ma siguroi pa asnjÃ« fuqi e forcÃ« nga ana ime.", sqNote:"Do ti falen mÃ«katet e kaluara. â€” Tirmidhi", src:"Tirmidhi 3458",
+    note:"His past sins will be forgiven. â€” Tirmidhi" },
   { cat:"Meals", title:"When Invited to a Meal",
-    ar:"اللَّهُمَّ أَطْعِمْ مَنْ أَطْعَمَنِي وَاسْقِ مَنْ سَقَانِي",
-    tr:"Allāhumma aṭʿim man aṭʿamanī wa-sqī man saqānī",
+    ar:"Ø§Ù„Ù„ÙŽÙ‘Ù‡ÙÙ…ÙŽÙ‘ Ø£ÙŽØ·Ù’Ø¹ÙÙ…Ù’ Ù…ÙŽÙ†Ù’ Ø£ÙŽØ·Ù’Ø¹ÙŽÙ…ÙŽÙ†ÙÙŠ ÙˆÙŽØ§Ø³Ù’Ù‚Ù Ù…ÙŽÙ†Ù’ Ø³ÙŽÙ‚ÙŽØ§Ù†ÙÙŠ",
+    tr:"AllÄhumma aá¹­Ê¿im man aá¹­Ê¿amanÄ« wa-sqÄ« man saqÄnÄ«",
     en:"O Allah, feed the one who fed me and give drink to the one who gave me drink.",
-    sqTitle:"Kur Ftoheris në Darkë", sq:"O Allah, ushqeje atë që me ushqeu dhe jepi të pijë atij që me dha të pija.", src:"Muslim 2055" },
+    sqTitle:"Kur Ftoheris nÃ« DarkÃ«", sq:"O Allah, ushqeje atÃ« qÃ« me ushqeu dhe jepi tÃ« pijÃ« atij qÃ« me dha tÃ« pija.", src:"Muslim 2055" },
 
-  // ── HOME ─────────────────────────────────────────────────────────
+  // â”€â”€ HOME â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   { cat:"Home", title:"Entering the Home",
-    ar:"بِسْمِ اللَّهِ وَلَجْنَا، وَبِسْمِ اللَّهِ خَرَجْنَا، وَعَلَى اللَّهِ رَبِّنَا تَوَكَّلْنَا",
-    tr:"Bismillāhi walajna, wa-bismillāhi kharajnā, wa-ʿalā Allāhi rabbinā tawakkalnā",
+    ar:"Ø¨ÙØ³Ù’Ù…Ù Ø§Ù„Ù„ÙŽÙ‘Ù‡Ù ÙˆÙŽÙ„ÙŽØ¬Ù’Ù†ÙŽØ§ØŒ ÙˆÙŽØ¨ÙØ³Ù’Ù…Ù Ø§Ù„Ù„ÙŽÙ‘Ù‡Ù Ø®ÙŽØ±ÙŽØ¬Ù’Ù†ÙŽØ§ØŒ ÙˆÙŽØ¹ÙŽÙ„ÙŽÙ‰ Ø§Ù„Ù„ÙŽÙ‘Ù‡Ù Ø±ÙŽØ¨ÙÙ‘Ù†ÙŽØ§ ØªÙŽÙˆÙŽÙƒÙŽÙ‘Ù„Ù’Ù†ÙŽØ§",
+    tr:"BismillÄhi walajna, wa-bismillÄhi kharajnÄ, wa-Ê¿alÄ AllÄhi rabbinÄ tawakkalnÄ",
     en:"In the name of Allah we enter, in the name of Allah we leave, and upon our Lord we rely.",
-    sqTitle:"Hyrja në Shtëpi", sq:"Me emrin e Allahut hyrëm, me emrin e Allahut dolëm, dhe tek Zoti ynë mbështetemi.", src:"Abu Dawud 5096" },
+    sqTitle:"Hyrja nÃ« ShtÃ«pi", sq:"Me emrin e Allahut hyrÃ«m, me emrin e Allahut dolÃ«m, dhe tek Zoti ynÃ« mbÃ«shtetemi.", src:"Abu Dawud 5096" },
   { cat:"Home", title:"Leaving the Home",
-    ar:"بِسْمِ اللَّهِ، تَوَكَّلْتُ عَلَى اللَّهِ، وَلَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللَّهِ",
-    tr:"Bismillāh, tawakkaltu ʿalā Allāh, wa-lā ḥawla wa-lā quwwata illā billāh",
+    ar:"Ø¨ÙØ³Ù’Ù…Ù Ø§Ù„Ù„ÙŽÙ‘Ù‡ÙØŒ ØªÙŽÙˆÙŽÙƒÙŽÙ‘Ù„Ù’ØªÙ Ø¹ÙŽÙ„ÙŽÙ‰ Ø§Ù„Ù„ÙŽÙ‘Ù‡ÙØŒ ÙˆÙŽÙ„ÙŽØ§ Ø­ÙŽÙˆÙ’Ù„ÙŽ ÙˆÙŽÙ„ÙŽØ§ Ù‚ÙÙˆÙŽÙ‘Ø©ÙŽ Ø¥ÙÙ„ÙŽÙ‘Ø§ Ø¨ÙØ§Ù„Ù„ÙŽÙ‘Ù‡Ù",
+    tr:"BismillÄh, tawakkaltu Ê¿alÄ AllÄh, wa-lÄ á¸¥awla wa-lÄ quwwata illÄ billÄh",
     en:"In the name of Allah, I place my trust in Allah, and there is no might nor power except with Allah.",
-    sqTitle:"Dalja nga Shtëpia", sq:"Me emrin e Allahut, u mbështeta tek Allahu, dhe nuk ka fuqi e force vetëm se me Allahun.", sqNote:"Do ti thuhet: 'Ti je i udhëzuar, i mbrojtur dhe i ruajtur.' Djalli nuk do ti afrohet. — Ebu Daud", src:"Abu Dawud 5095",
-    note:"It will be said: 'You are guided, defended and protected.' The devil will not come near him. — Abu Dawud" },
+    sqTitle:"Dalja nga ShtÃ«pia", sq:"Me emrin e Allahut, u mbÃ«shteta tek Allahu, dhe nuk ka fuqi e force vetÃ«m se me Allahun.", sqNote:"Do ti thuhet: 'Ti je i udhÃ«zuar, i mbrojtur dhe i ruajtur.' Djalli nuk do ti afrohet. â€” Ebu Daud", src:"Abu Dawud 5095",
+    note:"It will be said: 'You are guided, defended and protected.' The devil will not come near him. â€” Abu Dawud" },
 
-  // ── SLEEP ─────────────────────────────────────────────────────────
+  // â”€â”€ SLEEP â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   { cat:"Sleep", title:"Before Sleeping",
-    ar:"بِاسْمِكَ اللَّهُمَّ أَمُوتُ وَأَحْيَا",
-    tr:"Bismika Allāhumma amūtu wa-aḥyā",
+    ar:"Ø¨ÙØ§Ø³Ù’Ù…ÙÙƒÙŽ Ø§Ù„Ù„ÙŽÙ‘Ù‡ÙÙ…ÙŽÙ‘ Ø£ÙŽÙ…ÙÙˆØªÙ ÙˆÙŽØ£ÙŽØ­Ù’ÙŠÙŽØ§",
+    tr:"Bismika AllÄhumma amÅ«tu wa-aá¸¥yÄ",
     en:"In Your name, O Allah, I die and I live.",
-    sqTitle:"Para Gjumit", sq:"Me emrin Tënd, o Allah, vdes dhe jetoj.", src:"Bukhari 6324" },
+    sqTitle:"Para Gjumit", sq:"Me emrin TÃ«nd, o Allah, vdes dhe jetoj.", src:"Bukhari 6324" },
   { cat:"Sleep", title:"Protection Before Sleep",
-    ar:"اللَّهُمَّ قِنِي عَذَابَكَ يَوْمَ تَبْعَثُ عِبَادَكَ",
-    tr:"Allāhumma qinī ʿadhābaka yawma tabʿathu ʿibādak",
+    ar:"Ø§Ù„Ù„ÙŽÙ‘Ù‡ÙÙ…ÙŽÙ‘ Ù‚ÙÙ†ÙÙŠ Ø¹ÙŽØ°ÙŽØ§Ø¨ÙŽÙƒÙŽ ÙŠÙŽÙˆÙ’Ù…ÙŽ ØªÙŽØ¨Ù’Ø¹ÙŽØ«Ù Ø¹ÙØ¨ÙŽØ§Ø¯ÙŽÙƒÙŽ",
+    tr:"AllÄhumma qinÄ« Ê¿adhÄbaka yawma tabÊ¿athu Ê¿ibÄdak",
     en:"O Allah, protect me from Your punishment on the Day You resurrect Your servants.",
-    sqTitle:"Mbrojtja Para Gjumit", sq:"O Allah, ruaj ma nga dënimi Yt ditën kur do t'i ringjallësh robërit e Tu.", sqNote:"Thuaje 3 herë kur shtrihesh mbi anën e djathtë.", src:"Abu Dawud 5045",
+    sqTitle:"Mbrojtja Para Gjumit", sq:"O Allah, ruaj ma nga dÃ«nimi Yt ditÃ«n kur do t'i ringjallÃ«sh robÃ«rit e Tu.", sqNote:"Thuaje 3 herÃ« kur shtrihesh mbi anÃ«n e djathtÃ«.", src:"Abu Dawud 5045",
     note:"Say 3 times when lying down on your right side." },
   { cat:"Sleep", title:"Tasbeeh Before Sleep",
-    ar:"سُبْحَانَ اللَّهِ (٣٣×) ۝ الْحَمْدُ لِلَّهِ (٣٣×) ۝ اللَّهُ أَكْبَرُ (٣٤×)",
-    tr:"Subḥāna Allāh (33×) · Al-ḥamdu lillāh (33×) · Allāhu akbar (34×)",
-    en:"Glory be to Allah 33 times, All Praise to Allah 33 times, Allah is Greatest 34 times — before sleeping.",
-    sqTitle:"Tesbih Para Gjumit", sq:"Subhanallah 33 herë, Elhamdulilah 33 herë, Allahu Ekber 34 herë — para gjumit.", sqNote:"Kjo është me e mirë për ty sesa një shërbëtor. — Bukhāri", src:"Bukhari 5362",
-    note:"This is better for you than a servant. — Bukhari" },
+    ar:"Ø³ÙØ¨Ù’Ø­ÙŽØ§Ù†ÙŽ Ø§Ù„Ù„ÙŽÙ‘Ù‡Ù (Ù£Ù£Ã—) Û Ø§Ù„Ù’Ø­ÙŽÙ…Ù’Ø¯Ù Ù„ÙÙ„ÙŽÙ‘Ù‡Ù (Ù£Ù£Ã—) Û Ø§Ù„Ù„ÙŽÙ‘Ù‡Ù Ø£ÙŽÙƒÙ’Ø¨ÙŽØ±Ù (Ù£Ù¤Ã—)",
+    tr:"Subá¸¥Äna AllÄh (33Ã—) Â· Al-á¸¥amdu lillÄh (33Ã—) Â· AllÄhu akbar (34Ã—)",
+    en:"Glory be to Allah 33 times, All Praise to Allah 33 times, Allah is Greatest 34 times â€” before sleeping.",
+    sqTitle:"Tesbih Para Gjumit", sq:"Subhanallah 33 herÃ«, Elhamdulilah 33 herÃ«, Allahu Ekber 34 herÃ« â€” para gjumit.", sqNote:"Kjo Ã«shtÃ« me e mirÃ« pÃ«r ty sesa njÃ« shÃ«rbÃ«tor. â€” BukhÄri", src:"Bukhari 5362",
+    note:"This is better for you than a servant. â€” Bukhari" },
 
-  // ── TRAVEL ───────────────────────────────────────────────────────
+  // â”€â”€ TRAVEL â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   { cat:"Travel", title:"Entering a Vehicle",
-    ar:"سُبْحَانَ الَّذِي سَخَّرَ لَنَا هَذَا وَمَا كُنَّا لَهُ مُقْرِنِينَ وَإِنَّا إِلَى رَبِّنَا لَمُنْقَلِبُونَ",
-    tr:"Subḥāna alladhī sakhkhara lanā hādhā wa-mā kunnā lahu muqrinīna wa-innā ilā rabbinā lamunqalibūn",
+    ar:"Ø³ÙØ¨Ù’Ø­ÙŽØ§Ù†ÙŽ Ø§Ù„ÙŽÙ‘Ø°ÙÙŠ Ø³ÙŽØ®ÙŽÙ‘Ø±ÙŽ Ù„ÙŽÙ†ÙŽØ§ Ù‡ÙŽØ°ÙŽØ§ ÙˆÙŽÙ…ÙŽØ§ ÙƒÙÙ†ÙŽÙ‘Ø§ Ù„ÙŽÙ‡Ù Ù…ÙÙ‚Ù’Ø±ÙÙ†ÙÙŠÙ†ÙŽ ÙˆÙŽØ¥ÙÙ†ÙŽÙ‘Ø§ Ø¥ÙÙ„ÙŽÙ‰ Ø±ÙŽØ¨ÙÙ‘Ù†ÙŽØ§ Ù„ÙŽÙ…ÙÙ†Ù’Ù‚ÙŽÙ„ÙØ¨ÙÙˆÙ†ÙŽ",
+    tr:"Subá¸¥Äna alladhÄ« sakhkhara lanÄ hÄdhÄ wa-mÄ kunnÄ lahu muqrinÄ«na wa-innÄ ilÄ rabbinÄ lamunqalibÅ«n",
     en:"Glory to Him Who subjected this to us, for we could never have done so by our own power. And indeed, to our Lord we shall return.",
-    sqTitle:"Hyrja në Mjet", sq:"Lëvduar qoftë Ai i Cili na e nënshtroi këtë — ne nuk do të kishim mundur ta ndoshim vetë — dhe me të vërtetë ne tek Zoti ynë do të kthehemi.", src:"Quran 43:13–14 · Abu Dawud 2602" },
+    sqTitle:"Hyrja nÃ« Mjet", sq:"LÃ«vduar qoftÃ« Ai i Cili na e nÃ«nshtroi kÃ«tÃ« â€” ne nuk do tÃ« kishim mundur ta ndoshim vetÃ« â€” dhe me tÃ« vÃ«rtetÃ« ne tek Zoti ynÃ« do tÃ« kthehemi.", src:"Quran 43:13â€“14 Â· Abu Dawud 2602" },
   { cat:"Travel", title:"Dua for a Journey",
-    ar:"اللَّهُمَّ إِنَّا نَسْأَلُكَ فِي سَفَرِنَا هَذَا الْبِرَّ وَالتَّقْوَى، وَمِنَ الْعَمَلِ مَا تَرْضَى، اللَّهُمَّ هَوِّنْ عَلَيْنَا سَفَرَنَا هَذَا وَاطْوِ عَنَّا بُعْدَهُ، اللَّهُمَّ أَنْتَ الصَّاحِبُ فِي السَّفَرِ وَالْخَلِيفَةُ فِي الْأَهْلِ",
-    tr:"Allāhumma innā nasʾaluka fī safarinā hādhā al-birra wa-l-taqwā, wa-mina al-ʿamali mā tarḍā, Allāhumma hawwin ʿalaynā safaranā hādhā waṭwi ʿannā buʿdah, Allāhumma anta al-ṣāḥibu fī al-safar wal-khalīfatu fī al-ahl",
+    ar:"Ø§Ù„Ù„ÙŽÙ‘Ù‡ÙÙ…ÙŽÙ‘ Ø¥ÙÙ†ÙŽÙ‘Ø§ Ù†ÙŽØ³Ù’Ø£ÙŽÙ„ÙÙƒÙŽ ÙÙÙŠ Ø³ÙŽÙÙŽØ±ÙÙ†ÙŽØ§ Ù‡ÙŽØ°ÙŽØ§ Ø§Ù„Ù’Ø¨ÙØ±ÙŽÙ‘ ÙˆÙŽØ§Ù„ØªÙŽÙ‘Ù‚Ù’ÙˆÙŽÙ‰ØŒ ÙˆÙŽÙ…ÙÙ†ÙŽ Ø§Ù„Ù’Ø¹ÙŽÙ…ÙŽÙ„Ù Ù…ÙŽØ§ ØªÙŽØ±Ù’Ø¶ÙŽÙ‰ØŒ Ø§Ù„Ù„ÙŽÙ‘Ù‡ÙÙ…ÙŽÙ‘ Ù‡ÙŽÙˆÙÙ‘Ù†Ù’ Ø¹ÙŽÙ„ÙŽÙŠÙ’Ù†ÙŽØ§ Ø³ÙŽÙÙŽØ±ÙŽÙ†ÙŽØ§ Ù‡ÙŽØ°ÙŽØ§ ÙˆÙŽØ§Ø·Ù’ÙˆÙ Ø¹ÙŽÙ†ÙŽÙ‘Ø§ Ø¨ÙØ¹Ù’Ø¯ÙŽÙ‡ÙØŒ Ø§Ù„Ù„ÙŽÙ‘Ù‡ÙÙ…ÙŽÙ‘ Ø£ÙŽÙ†Ù’ØªÙŽ Ø§Ù„ØµÙŽÙ‘Ø§Ø­ÙØ¨Ù ÙÙÙŠ Ø§Ù„Ø³ÙŽÙ‘ÙÙŽØ±Ù ÙˆÙŽØ§Ù„Ù’Ø®ÙŽÙ„ÙÙŠÙÙŽØ©Ù ÙÙÙŠ Ø§Ù„Ù’Ø£ÙŽÙ‡Ù’Ù„Ù",
+    tr:"AllÄhumma innÄ nasÊ¾aluka fÄ« safarinÄ hÄdhÄ al-birra wa-l-taqwÄ, wa-mina al-Ê¿amali mÄ tará¸Ä, AllÄhumma hawwin Ê¿alaynÄ safaranÄ hÄdhÄ waá¹­wi Ê¿annÄ buÊ¿dah, AllÄhumma anta al-á¹£Äá¸¥ibu fÄ« al-safar wal-khalÄ«fatu fÄ« al-ahl",
     en:"O Allah, we ask You on this journey for righteousness, piety, and deeds that please You. O Allah, make this journey easy for us and shorten its distance. O Allah, You are the Companion in travel and the Guardian of the family.",
-    sqTitle:"Dua për Udhëtim", sq:"O Allah, ne po të lusim në këtë udhëtim tonin për mirësi dhe devotshmëri, dhe vepra që Ti i ke të kënaqura. O Allah, lehtësoje udhëtimin tonë dhe shkurtoje distancën e tij. O Allah, Ti je shoku në udhëtim dhe kujdestari i familjes.", src:"Muslim 1342" },
+    sqTitle:"Dua pÃ«r UdhÃ«tim", sq:"O Allah, ne po tÃ« lusim nÃ« kÃ«tÃ« udhÃ«tim tonin pÃ«r mirÃ«si dhe devotshmÃ«ri, dhe vepra qÃ« Ti i ke tÃ« kÃ«naqura. O Allah, lehtÃ«soje udhÃ«timin tonÃ« dhe shkurtoje distancÃ«n e tij. O Allah, Ti je shoku nÃ« udhÃ«tim dhe kujdestari i familjes.", src:"Muslim 1342" },
 
-  // ── PROTECTION ───────────────────────────────────────────────────
+  // â”€â”€ PROTECTION â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   { cat:"Protection", title:"Against the Evil Eye",
-    ar:"أَعُوذُ بِكَلِمَاتِ اللَّهِ التَّامَّاتِ مِنْ كُلِّ شَيْطَانٍ وَهَامَّةٍ وَمِنْ كُلِّ عَيْنٍ لَامَّةٍ",
-    tr:"Aʿūdhu bi-kalimāti Allāhi al-tāmmāti min kulli shayṭānin wa-hāmmatin wa-min kulli ʿaynin lāmmah",
+    ar:"Ø£ÙŽØ¹ÙÙˆØ°Ù Ø¨ÙÙƒÙŽÙ„ÙÙ…ÙŽØ§ØªÙ Ø§Ù„Ù„ÙŽÙ‘Ù‡Ù Ø§Ù„ØªÙŽÙ‘Ø§Ù…ÙŽÙ‘Ø§ØªÙ Ù…ÙÙ†Ù’ ÙƒÙÙ„ÙÙ‘ Ø´ÙŽÙŠÙ’Ø·ÙŽØ§Ù†Ù ÙˆÙŽÙ‡ÙŽØ§Ù…ÙŽÙ‘Ø©Ù ÙˆÙŽÙ…ÙÙ†Ù’ ÙƒÙÙ„ÙÙ‘ Ø¹ÙŽÙŠÙ’Ù†Ù Ù„ÙŽØ§Ù…ÙŽÙ‘Ø©Ù",
+    tr:"AÊ¿Å«dhu bi-kalimÄti AllÄhi al-tÄmmÄti min kulli shayá¹­Änin wa-hÄmmatin wa-min kulli Ê¿aynin lÄmmah",
     en:"I seek refuge in the perfect words of Allah from every devil and harmful creature, and from every evil eye.",
-    sqTitle:"Kundër Syrit të Keq", sq:"Kërkoj strehim tek fjalët e Allahut të plota nga çdo djall dhe krijesë e dëmshme, dhe nga çdo sy i keq.", sqNote:"Profeti ﷺ e lexonte për Hasanin dhe Husejnin me këto fjalë.", src:"Bukhari 3371",
-    note:"The Prophet ﷺ used to seek Allah's protection for al-Hasan and al-Husain with these words." },
+    sqTitle:"KundÃ«r Syrit tÃ« Keq", sq:"KÃ«rkoj strehim tek fjalÃ«t e Allahut tÃ« plota nga Ã§do djall dhe krijesÃ« e dÃ«mshme, dhe nga Ã§do sy i keq.", sqNote:"Profeti ï·º e lexonte pÃ«r Hasanin dhe Husejnin me kÃ«to fjalÃ«.", src:"Bukhari 3371",
+    note:"The Prophet ï·º used to seek Allah's protection for al-Hasan and al-Husain with these words." },
   { cat:"Protection", title:"Morning & Evening Shield",
-    ar:"حَسْبِيَ اللَّهُ لَا إِلَهَ إِلَّا هُوَ عَلَيْهِ تَوَكَّلْتُ وَهُوَ رَبُّ الْعَرْشِ الْعَظِيمِ",
-    tr:"Ḥasbiya Allāhu lā ilāha illā huwa ʿalayhi tawakkaltu wa-huwa rabbu al-ʿarshi al-ʿaẓīm",
+    ar:"Ø­ÙŽØ³Ù’Ø¨ÙÙŠÙŽ Ø§Ù„Ù„ÙŽÙ‘Ù‡Ù Ù„ÙŽØ§ Ø¥ÙÙ„ÙŽÙ‡ÙŽ Ø¥ÙÙ„ÙŽÙ‘Ø§ Ù‡ÙÙˆÙŽ Ø¹ÙŽÙ„ÙŽÙŠÙ’Ù‡Ù ØªÙŽÙˆÙŽÙƒÙŽÙ‘Ù„Ù’ØªÙ ÙˆÙŽÙ‡ÙÙˆÙŽ Ø±ÙŽØ¨ÙÙ‘ Ø§Ù„Ù’Ø¹ÙŽØ±Ù’Ø´Ù Ø§Ù„Ù’Ø¹ÙŽØ¸ÙÙŠÙ…Ù",
+    tr:"á¸¤asbiya AllÄhu lÄ ilÄha illÄ huwa Ê¿alayhi tawakkaltu wa-huwa rabbu al-Ê¿arshi al-Ê¿aáº“Ä«m",
     en:"Sufficient for me is Allah; there is no deity except Him. On Him I have relied, and He is the Lord of the Great Throne.",
-    sqTitle:"Mburojë Mëngjesi e Mbrëmje", sq:"Më mjafton Allahu — nuk ka të adhuruar tjetër me të drejtë pos Tij. Tek Ai u mbështeta dhe Ai është Zoti i Arshit të Madhërishëm.", sqNote:"Mjafton për atë që e thotë 7 herë në mëngjes dhe mbrëmje. — Ebu Daud", src:"Quran 9:129 · Abu Dawud 5081",
-    note:"Sufficient for whoever says it 7 times morning and evening. — Abu Dawud" },
+    sqTitle:"MburojÃ« MÃ«ngjesi e MbrÃ«mje", sq:"MÃ« mjafton Allahu â€” nuk ka tÃ« adhuruar tjetÃ«r me tÃ« drejtÃ« pos Tij. Tek Ai u mbÃ«shteta dhe Ai Ã«shtÃ« Zoti i Arshit tÃ« MadhÃ«rishÃ«m.", sqNote:"Mjafton pÃ«r atÃ« qÃ« e thotÃ« 7 herÃ« nÃ« mÃ«ngjes dhe mbrÃ«mje. â€” Ebu Daud", src:"Quran 9:129 Â· Abu Dawud 5081",
+    note:"Sufficient for whoever says it 7 times morning and evening. â€” Abu Dawud" },
   { cat:"Protection", title:"Seeking Refuge from Four Things",
-    ar:"اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الْهَمِّ وَالْحَزَنِ، وَأَعُوذُ بِكَ مِنَ الْعَجْزِ وَالْكَسَلِ، وَأَعُوذُ بِكَ مِنَ الْجُبْنِ وَالْبُخْلِ، وَأَعُوذُ بِكَ مِنْ غَلَبَةِ الدَّيْنِ وَقَهْرِ الرِّجَالِ",
-    tr:"Allāhumma innī aʿūdhu bika mina al-hammi wal-ḥazani, wa-aʿūdhu bika mina al-ʿajzi wal-kasali, wa-aʿūdhu bika mina al-jubni wal-bukhli, wa-aʿūdhu bika min ghalabati al-dayni wa-qahri al-rijāl",
+    ar:"Ø§Ù„Ù„ÙŽÙ‘Ù‡ÙÙ…ÙŽÙ‘ Ø¥ÙÙ†ÙÙ‘ÙŠ Ø£ÙŽØ¹ÙÙˆØ°Ù Ø¨ÙÙƒÙŽ Ù…ÙÙ†ÙŽ Ø§Ù„Ù’Ù‡ÙŽÙ…ÙÙ‘ ÙˆÙŽØ§Ù„Ù’Ø­ÙŽØ²ÙŽÙ†ÙØŒ ÙˆÙŽØ£ÙŽØ¹ÙÙˆØ°Ù Ø¨ÙÙƒÙŽ Ù…ÙÙ†ÙŽ Ø§Ù„Ù’Ø¹ÙŽØ¬Ù’Ø²Ù ÙˆÙŽØ§Ù„Ù’ÙƒÙŽØ³ÙŽÙ„ÙØŒ ÙˆÙŽØ£ÙŽØ¹ÙÙˆØ°Ù Ø¨ÙÙƒÙŽ Ù…ÙÙ†ÙŽ Ø§Ù„Ù’Ø¬ÙØ¨Ù’Ù†Ù ÙˆÙŽØ§Ù„Ù’Ø¨ÙØ®Ù’Ù„ÙØŒ ÙˆÙŽØ£ÙŽØ¹ÙÙˆØ°Ù Ø¨ÙÙƒÙŽ Ù…ÙÙ†Ù’ ØºÙŽÙ„ÙŽØ¨ÙŽØ©Ù Ø§Ù„Ø¯ÙŽÙ‘ÙŠÙ’Ù†Ù ÙˆÙŽÙ‚ÙŽÙ‡Ù’Ø±Ù Ø§Ù„Ø±ÙÙ‘Ø¬ÙŽØ§Ù„Ù",
+    tr:"AllÄhumma innÄ« aÊ¿Å«dhu bika mina al-hammi wal-á¸¥azani, wa-aÊ¿Å«dhu bika mina al-Ê¿ajzi wal-kasali, wa-aÊ¿Å«dhu bika mina al-jubni wal-bukhli, wa-aÊ¿Å«dhu bika min ghalabati al-dayni wa-qahri al-rijÄl",
     en:"O Allah, I seek refuge in You from worry and grief, from incapacity and laziness, from cowardice and miserliness, and from the burden of debt and the domination of men.",
-    sqTitle:"Strehim nga Katër Gjëra", sq:"O Allah, kërkoj strehim tek Ti nga pikëllimi dhe trishtimi, nga paaftësia dhe përtacia, nga frika dhe kopracia, dhe nga barrësia e borxhit dhe sundimi i njerëzve.", src:"Bukhari 6369" },
+    sqTitle:"Strehim nga KatÃ«r GjÃ«ra", sq:"O Allah, kÃ«rkoj strehim tek Ti nga pikÃ«llimi dhe trishtimi, nga paaftÃ«sia dhe pÃ«rtacia, nga frika dhe kopracia, dhe nga barrÃ«sia e borxhit dhe sundimi i njerÃ«zve.", src:"Bukhari 6369" },
 
-  // ── DISTRESS ─────────────────────────────────────────────────────
-  { cat:"Distress", title:"Dua of Prophet Yunus ﷺ",
-    ar:"لَا إِلَهَ إِلَّا أَنْتَ سُبْحَانَكَ إِنِّي كُنْتُ مِنَ الظَّالِمِينَ",
-    tr:"Lā ilāha illā anta subḥānaka innī kuntu mina al-ẓālimīn",
+  // â”€â”€ DISTRESS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  { cat:"Distress", title:"Dua of Prophet Yunus ï·º",
+    ar:"Ù„ÙŽØ§ Ø¥ÙÙ„ÙŽÙ‡ÙŽ Ø¥ÙÙ„ÙŽÙ‘Ø§ Ø£ÙŽÙ†Ù’ØªÙŽ Ø³ÙØ¨Ù’Ø­ÙŽØ§Ù†ÙŽÙƒÙŽ Ø¥ÙÙ†ÙÙ‘ÙŠ ÙƒÙÙ†Ù’ØªÙ Ù…ÙÙ†ÙŽ Ø§Ù„Ø¸ÙŽÙ‘Ø§Ù„ÙÙ…ÙÙŠÙ†ÙŽ",
+    tr:"LÄ ilÄha illÄ anta subá¸¥Änaka innÄ« kuntu mina al-áº“ÄlimÄ«n",
     en:"There is none worthy of worship except You, glory be to You. Indeed, I have been among the wrongdoers.",
-    sqTitle:"Dua e Profetit Junus ﷺ", sq:"Nuk ka të adhuruar tjetër me të drejtë pos Teje — lëvduar qoftë Ti! Me të vërtetë unë qeshë nga të padrejtët.", sqNote:"Asnjë musliman nuk i lutet Allahut me këto fjalë në asnjë çështje vetëm se Allahu i përgjigjet. — Tirmidhi", src:"Quran 21:87 · Tirmidhi 3505",
-    note:"No Muslim calls upon Allah with these words in any matter except that Allah responds to him. — Tirmidhi" },
+    sqTitle:"Dua e Profetit Junus ï·º", sq:"Nuk ka tÃ« adhuruar tjetÃ«r me tÃ« drejtÃ« pos Teje â€” lÃ«vduar qoftÃ« Ti! Me tÃ« vÃ«rtetÃ« unÃ« qeshÃ« nga tÃ« padrejtÃ«t.", sqNote:"AsnjÃ« musliman nuk i lutet Allahut me kÃ«to fjalÃ« nÃ« asnjÃ« Ã§Ã«shtje vetÃ«m se Allahu i pÃ«rgjigjet. â€” Tirmidhi", src:"Quran 21:87 Â· Tirmidhi 3505",
+    note:"No Muslim calls upon Allah with these words in any matter except that Allah responds to him. â€” Tirmidhi" },
   { cat:"Distress", title:"Dua for Anxiety and Grief",
-    ar:"اللَّهُمَّ إِنِّي عَبْدُكَ وَابْنُ عَبْدِكَ وَابْنُ أَمَتِكَ، نَاصِيَتِي بِيَدِكَ، مَاضٍ فِيَّ حُكْمُكَ، عَدْلٌ فِيَّ قَضَاؤُكَ، أَسْأَلُكَ بِكُلِّ اسْمٍ هُوَ لَكَ... أَنْ تَجْعَلَ الْقُرْآنَ رَبِيعَ قَلْبِي وَنُورَ صَدْرِي وَجِلَاءَ حُزْنِي وَذَهَابَ هَمِّي",
-    tr:"Allāhumma innī ʿabduka wa-bnu ʿabdika wa-bnu amatik, nāṣiyatī bi-yadik… an tajʿala al-Qurʾāna rabīʿa qalbī wa-nūra ṣadrī wa-jalāʾa ḥuznī wa-dhahāba hammī",
-    en:"O Allah, I am Your servant, son of Your servant, son of Your female servant. My forelock is in Your hand… I ask You by every name belonging to You to make the Quran the spring of my heart, the light of my chest, the reliever of my distress, and the remover of my anxiety.",
-    sqTitle:"Dua për Ankth dhe Trishtim", sq:"O Allah, unë jam robi Yt dhe biri i robit Tënd dhe i robëreshës Tënde. Balli im është në dorën Tënde… të lutem me çdo emër që Ti e ke — ta bësh Kuranin pranverën e zemrës sime, dritën e gjoksit tim, largimin e trishtimit tim dhe heqjen e brengës sime.", sqNote:"Allahu do ta largojë pikëllimin dhe trishtimin e tij dhe do ta zëvendësojë me gëzim. — Ahmad", src:"Ahmad 3712",
-    note:"Allah will remove his distress and grief and replace it with joy. — Ahmad" },
+    ar:"Ø§Ù„Ù„ÙŽÙ‘Ù‡ÙÙ…ÙŽÙ‘ Ø¥ÙÙ†ÙÙ‘ÙŠ Ø¹ÙŽØ¨Ù’Ø¯ÙÙƒÙŽ ÙˆÙŽØ§Ø¨Ù’Ù†Ù Ø¹ÙŽØ¨Ù’Ø¯ÙÙƒÙŽ ÙˆÙŽØ§Ø¨Ù’Ù†Ù Ø£ÙŽÙ…ÙŽØªÙÙƒÙŽØŒ Ù†ÙŽØ§ØµÙÙŠÙŽØªÙÙŠ Ø¨ÙÙŠÙŽØ¯ÙÙƒÙŽØŒ Ù…ÙŽØ§Ø¶Ù ÙÙÙŠÙŽÙ‘ Ø­ÙÙƒÙ’Ù…ÙÙƒÙŽØŒ Ø¹ÙŽØ¯Ù’Ù„ÙŒ ÙÙÙŠÙŽÙ‘ Ù‚ÙŽØ¶ÙŽØ§Ø¤ÙÙƒÙŽØŒ Ø£ÙŽØ³Ù’Ø£ÙŽÙ„ÙÙƒÙŽ Ø¨ÙÙƒÙÙ„ÙÙ‘ Ø§Ø³Ù’Ù…Ù Ù‡ÙÙˆÙŽ Ù„ÙŽÙƒÙŽ... Ø£ÙŽÙ†Ù’ ØªÙŽØ¬Ù’Ø¹ÙŽÙ„ÙŽ Ø§Ù„Ù’Ù‚ÙØ±Ù’Ø¢Ù†ÙŽ Ø±ÙŽØ¨ÙÙŠØ¹ÙŽ Ù‚ÙŽÙ„Ù’Ø¨ÙÙŠ ÙˆÙŽÙ†ÙÙˆØ±ÙŽ ØµÙŽØ¯Ù’Ø±ÙÙŠ ÙˆÙŽØ¬ÙÙ„ÙŽØ§Ø¡ÙŽ Ø­ÙØ²Ù’Ù†ÙÙŠ ÙˆÙŽØ°ÙŽÙ‡ÙŽØ§Ø¨ÙŽ Ù‡ÙŽÙ…ÙÙ‘ÙŠ",
+    tr:"AllÄhumma innÄ« Ê¿abduka wa-bnu Ê¿abdika wa-bnu amatik, nÄá¹£iyatÄ« bi-yadikâ€¦ an tajÊ¿ala al-QurÊ¾Äna rabÄ«Ê¿a qalbÄ« wa-nÅ«ra á¹£adrÄ« wa-jalÄÊ¾a á¸¥uznÄ« wa-dhahÄba hammÄ«",
+    en:"O Allah, I am Your servant, son of Your servant, son of Your female servant. My forelock is in Your handâ€¦ I ask You by every name belonging to You to make the Quran the spring of my heart, the light of my chest, the reliever of my distress, and the remover of my anxiety.",
+    sqTitle:"Dua pÃ«r Ankth dhe Trishtim", sq:"O Allah, unÃ« jam robi Yt dhe biri i robit TÃ«nd dhe i robÃ«reshÃ«s TÃ«nde. Balli im Ã«shtÃ« nÃ« dorÃ«n TÃ«ndeâ€¦ tÃ« lutem me Ã§do emÃ«r qÃ« Ti e ke â€” ta bÃ«sh Kuranin pranverÃ«n e zemrÃ«s sime, dritÃ«n e gjoksit tim, largimin e trishtimit tim dhe heqjen e brengÃ«s sime.", sqNote:"Allahu do ta largojÃ« pikÃ«llimin dhe trishtimin e tij dhe do ta zÃ«vendÃ«sojÃ« me gÃ«zim. â€” Ahmad", src:"Ahmad 3712",
+    note:"Allah will remove his distress and grief and replace it with joy. â€” Ahmad" },
   { cat:"Distress", title:"Dua When Overwhelmed",
-    ar:"حَسْبُنَا اللَّهُ وَنِعْمَ الْوَكِيلُ",
-    tr:"Ḥasbunā Allāhu wa-niʿma al-wakīl",
+    ar:"Ø­ÙŽØ³Ù’Ø¨ÙÙ†ÙŽØ§ Ø§Ù„Ù„ÙŽÙ‘Ù‡Ù ÙˆÙŽÙ†ÙØ¹Ù’Ù…ÙŽ Ø§Ù„Ù’ÙˆÙŽÙƒÙÙŠÙ„Ù",
+    tr:"á¸¤asbunÄ AllÄhu wa-niÊ¿ma al-wakÄ«l",
     en:"Allah is sufficient for us, and He is the best Disposer of affairs.",
-    sqTitle:"Dua kur Rëndon Barra", sq:"Na mjafton Allahu dhe sa i mrekullueshëm është Kujdestari.", sqNote:"Kjo ishte fjala e Ibrahimit ﷺ kur u hodh në zjarr, dhe e Muhamedit ﷺ kur iu tregua se një ushtri e madhe ishte mbledhur kundër tij.", src:"Quran 3:173",
-    note:"This was the saying of Ibrahim ﷺ when cast into the fire, and Muhammad ﷺ when told a great army had gathered against him." },
+    sqTitle:"Dua kur RÃ«ndon Barra", sq:"Na mjafton Allahu dhe sa i mrekullueshÃ«m Ã«shtÃ« Kujdestari.", sqNote:"Kjo ishte fjala e Ibrahimit ï·º kur u hodh nÃ« zjarr, dhe e Muhamedit ï·º kur iu tregua se njÃ« ushtri e madhe ishte mbledhur kundÃ«r tij.", src:"Quran 3:173",
+    note:"This was the saying of Ibrahim ï·º when cast into the fire, and Muhammad ï·º when told a great army had gathered against him." },
 
-  // ── GENERAL ─────────────────────────────────────────────────────
+  // â”€â”€ GENERAL â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   { cat:"General", title:"Istighfar",
-    ar:"أَسْتَغْفِرُ اللَّهَ الَّذِي لَا إِلَهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ وَأَتُوبُ إِلَيْهِ",
-    tr:"Astaghfiru Allāha alladhī lā ilāha illā huwa al-ḥayyu al-qayyūmu wa-atūbu ilayh",
+    ar:"Ø£ÙŽØ³Ù’ØªÙŽØºÙ’ÙÙØ±Ù Ø§Ù„Ù„ÙŽÙ‘Ù‡ÙŽ Ø§Ù„ÙŽÙ‘Ø°ÙÙŠ Ù„ÙŽØ§ Ø¥ÙÙ„ÙŽÙ‡ÙŽ Ø¥ÙÙ„ÙŽÙ‘Ø§ Ù‡ÙÙˆÙŽ Ø§Ù„Ù’Ø­ÙŽÙŠÙÙ‘ Ø§Ù„Ù’Ù‚ÙŽÙŠÙÙ‘ÙˆÙ…Ù ÙˆÙŽØ£ÙŽØªÙÙˆØ¨Ù Ø¥ÙÙ„ÙŽÙŠÙ’Ù‡Ù",
+    tr:"Astaghfiru AllÄha alladhÄ« lÄ ilÄha illÄ huwa al-á¸¥ayyu al-qayyÅ«mu wa-atÅ«bu ilayh",
     en:"I seek forgiveness from Allah, there is none worthy of worship but He, the Ever-Living, the Self-Subsisting, and I turn to Him in repentance.",
-    sqTitle:"Istigfar", sq:"I kërkoj falje Allahut — nuk ka të adhuruar tjetër me të drejtë pos Tij, të Gjallë e të Vetëmbajtësit — dhe kthehem tek Ai me pendim.", sqNote:"Mëkatet do ti falen edhe nëse do të ishin si shkuma e detit. — Ebu Daud", src:"Abu Dawud 1517",
-    note:"Sins will be forgiven even if they were like the foam of the sea. — Abu Dawud" },
-  { cat:"General", title:"Salawat upon the Prophet ﷺ",
-    ar:"اللَّهُمَّ صَلِّ عَلَى مُحَمَّدٍ وَعَلَى آلِ مُحَمَّدٍ كَمَا صَلَّيْتَ عَلَى إِبْرَاهِيمَ وَعَلَى آلِ إِبْرَاهِيمَ إِنَّكَ حَمِيدٌ مَجِيدٌ",
-    tr:"Allāhumma ṣalli ʿalā Muḥammad wa-ʿalā āli Muḥammad kamā ṣallayta ʿalā Ibrāhīm wa-ʿalā āli Ibrāhīm, innaka ḥamīdun majīd",
+    sqTitle:"Istigfar", sq:"I kÃ«rkoj falje Allahut â€” nuk ka tÃ« adhuruar tjetÃ«r me tÃ« drejtÃ« pos Tij, tÃ« GjallÃ« e tÃ« VetÃ«mbajtÃ«sit â€” dhe kthehem tek Ai me pendim.", sqNote:"MÃ«katet do ti falen edhe nÃ«se do tÃ« ishin si shkuma e detit. â€” Ebu Daud", src:"Abu Dawud 1517",
+    note:"Sins will be forgiven even if they were like the foam of the sea. â€” Abu Dawud" },
+  { cat:"General", title:"Salawat upon the Prophet ï·º",
+    ar:"Ø§Ù„Ù„ÙŽÙ‘Ù‡ÙÙ…ÙŽÙ‘ ØµÙŽÙ„ÙÙ‘ Ø¹ÙŽÙ„ÙŽÙ‰ Ù…ÙØ­ÙŽÙ…ÙŽÙ‘Ø¯Ù ÙˆÙŽØ¹ÙŽÙ„ÙŽÙ‰ Ø¢Ù„Ù Ù…ÙØ­ÙŽÙ…ÙŽÙ‘Ø¯Ù ÙƒÙŽÙ…ÙŽØ§ ØµÙŽÙ„ÙŽÙ‘ÙŠÙ’ØªÙŽ Ø¹ÙŽÙ„ÙŽÙ‰ Ø¥ÙØ¨Ù’Ø±ÙŽØ§Ù‡ÙÙŠÙ…ÙŽ ÙˆÙŽØ¹ÙŽÙ„ÙŽÙ‰ Ø¢Ù„Ù Ø¥ÙØ¨Ù’Ø±ÙŽØ§Ù‡ÙÙŠÙ…ÙŽ Ø¥ÙÙ†ÙŽÙ‘ÙƒÙŽ Ø­ÙŽÙ…ÙÙŠØ¯ÙŒ Ù…ÙŽØ¬ÙÙŠØ¯ÙŒ",
+    tr:"AllÄhumma á¹£alli Ê¿alÄ Muá¸¥ammad wa-Ê¿alÄ Äli Muá¸¥ammad kamÄ á¹£allayta Ê¿alÄ IbrÄhÄ«m wa-Ê¿alÄ Äli IbrÄhÄ«m, innaka á¸¥amÄ«dun majÄ«d",
     en:"O Allah, send blessings upon Muhammad and upon the family of Muhammad as You sent blessings upon Ibrahim and the family of Ibrahim. Indeed, You are Praiseworthy and Glorious.",
-    sqTitle:"Salavati mbi Profetin ﷺ", sq:"O Allah, dërgo bekime mbi Muhamedin dhe mbi familjen e Muhamedit siç dërgove bekime mbi Ibrahimin dhe mbi familjen e Ibrahimit. Me të vërtetë, Ti je i Lavdëruari, i Nderuari.", src:"Bukhari 3370" },
+    sqTitle:"Salavati mbi Profetin ï·º", sq:"O Allah, dÃ«rgo bekime mbi Muhamedin dhe mbi familjen e Muhamedit siÃ§ dÃ«rgove bekime mbi Ibrahimin dhe mbi familjen e Ibrahimit. Me tÃ« vÃ«rtetÃ«, Ti je i LavdÃ«ruari, i Nderuari.", src:"Bukhari 3370" },
   { cat:"General", title:"For Parents",
-    ar:"رَبِّ اغْفِرْ لِي وَلِوَالِدَيَّ وَلِمَنْ دَخَلَ بَيْتِيَ مُؤْمِنًا وَلِلْمُؤْمِنِينَ وَالْمُؤْمِنَاتِ",
-    tr:"Rabbi ighfir lī wa-liwālidayya wa-liman dakhala baytiya muʾminan wa-lil-muʾminīna wal-muʾmināt",
+    ar:"Ø±ÙŽØ¨ÙÙ‘ Ø§ØºÙ’ÙÙØ±Ù’ Ù„ÙÙŠ ÙˆÙŽÙ„ÙÙˆÙŽØ§Ù„ÙØ¯ÙŽÙŠÙŽÙ‘ ÙˆÙŽÙ„ÙÙ…ÙŽÙ†Ù’ Ø¯ÙŽØ®ÙŽÙ„ÙŽ Ø¨ÙŽÙŠÙ’ØªÙÙŠÙŽ Ù…ÙØ¤Ù’Ù…ÙÙ†Ù‹Ø§ ÙˆÙŽÙ„ÙÙ„Ù’Ù…ÙØ¤Ù’Ù…ÙÙ†ÙÙŠÙ†ÙŽ ÙˆÙŽØ§Ù„Ù’Ù…ÙØ¤Ù’Ù…ÙÙ†ÙŽØ§ØªÙ",
+    tr:"Rabbi ighfir lÄ« wa-liwÄlidayya wa-liman dakhala baytiya muÊ¾minan wa-lil-muÊ¾minÄ«na wal-muÊ¾minÄt",
     en:"My Lord, forgive me and my parents and whoever enters my house as a believer and all the believing men and women.",
-    sqTitle:"Për Prindërit", sq:"Zoti im, më fal mua dhe prindërit e mi dhe atë që hyn në shtëpinë time si besimtar, dhe të gjithë besimtarët dhe besimtaret.", src:"Quran 71:28" },
+    sqTitle:"PÃ«r PrindÃ«rit", sq:"Zoti im, mÃ« fal mua dhe prindÃ«rit e mi dhe atÃ« qÃ« hyn nÃ« shtÃ«pinÃ« time si besimtar, dhe tÃ« gjithÃ« besimtarÃ«t dhe besimtaret.", src:"Quran 71:28" },
   { cat:"General", title:"Good in This Life and the Next",
-    ar:"رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً وَفِي الْآخِرَةِ حَسَنَةً وَقِنَا عَذَابَ النَّارِ",
-    tr:"Rabbanā ātinā fī al-dunyā ḥasanatan wa-fī al-ākhirati ḥasanatan wa-qinā ʿadhāba al-nār",
+    ar:"Ø±ÙŽØ¨ÙŽÙ‘Ù†ÙŽØ§ Ø¢ØªÙÙ†ÙŽØ§ ÙÙÙŠ Ø§Ù„Ø¯ÙÙ‘Ù†Ù’ÙŠÙŽØ§ Ø­ÙŽØ³ÙŽÙ†ÙŽØ©Ù‹ ÙˆÙŽÙÙÙŠ Ø§Ù„Ù’Ø¢Ø®ÙØ±ÙŽØ©Ù Ø­ÙŽØ³ÙŽÙ†ÙŽØ©Ù‹ ÙˆÙŽÙ‚ÙÙ†ÙŽØ§ Ø¹ÙŽØ°ÙŽØ§Ø¨ÙŽ Ø§Ù„Ù†ÙŽÙ‘Ø§Ø±Ù",
+    tr:"RabbanÄ ÄtinÄ fÄ« al-dunyÄ á¸¥asanatan wa-fÄ« al-Äkhirati á¸¥asanatan wa-qinÄ Ê¿adhÄba al-nÄr",
     en:"Our Lord, give us good in this world and good in the Hereafter, and protect us from the punishment of the Fire.",
-    sqTitle:"Mirësia në Dy Botë", sq:"Zoti ynë, na jep mirësi në këtë botë dhe mirësi në Botën Tjetër, dhe na ruaj nga dënimi i Zjarrit.", sqNote:"Profeti ﷺ lutej me këtë me shpesh. — Bukhāri", src:"Quran 2:201 · Bukhari 6389",
-    note:"The Prophet ﷺ supplicated with this most frequently. — Bukhari" },
+    sqTitle:"MirÃ«sia nÃ« Dy BotÃ«", sq:"Zoti ynÃ«, na jep mirÃ«si nÃ« kÃ«tÃ« botÃ« dhe mirÃ«si nÃ« BotÃ«n TjetÃ«r, dhe na ruaj nga dÃ«nimi i Zjarrit.", sqNote:"Profeti ï·º lutej me kÃ«tÃ« me shpesh. â€” BukhÄri", src:"Quran 2:201 Â· Bukhari 6389",
+    note:"The Prophet ï·º supplicated with this most frequently. â€” Bukhari" },
   { cat:"General", title:"For Knowledge",
-    ar:"رَبِّ زِدْنِي عِلْمًا",
-    tr:"Rabbi zidnī ʿilmā",
+    ar:"Ø±ÙŽØ¨ÙÙ‘ Ø²ÙØ¯Ù’Ù†ÙÙŠ Ø¹ÙÙ„Ù’Ù…Ù‹Ø§",
+    tr:"Rabbi zidnÄ« Ê¿ilmÄ",
     en:"My Lord, increase me in knowledge.",
-    sqTitle:"Për Dije", sq:"Zoti im, më shto dituri.", src:"Quran 20:114" },
+    sqTitle:"PÃ«r Dije", sq:"Zoti im, mÃ« shto dituri.", src:"Quran 20:114" },
   { cat:"General", title:"For Guidance and Steadfastness",
-    ar:"اللَّهُمَّ اهْدِنِي وَسَدِّدْنِي",
-    tr:"Allāhumma ihdinī wa-saddidnī",
+    ar:"Ø§Ù„Ù„ÙŽÙ‘Ù‡ÙÙ…ÙŽÙ‘ Ø§Ù‡Ù’Ø¯ÙÙ†ÙÙŠ ÙˆÙŽØ³ÙŽØ¯ÙÙ‘Ø¯Ù’Ù†ÙÙŠ",
+    tr:"AllÄhumma ihdinÄ« wa-saddidnÄ«",
     en:"O Allah, guide me and make me steadfast.",
-    sqTitle:"Për Udhëzim dhe Qëndrueshmëri", sq:"O Allah, udhëzomëni dhe bëni mëi vendosur.", src:"Muslim 2725" },
+    sqTitle:"PÃ«r UdhÃ«zim dhe QÃ«ndrueshmÃ«ri", sq:"O Allah, udhÃ«zomÃ«ni dhe bÃ«ni mÃ«i vendosur.", src:"Muslim 2725" },
 ];
 
-// ─── DUA PAGE ──────────────────────────────────────────────────────
+// â”€â”€â”€ DUA PAGE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function DuaPage({ favs = new Set(), onFav = () => {} }) {
   const { t } = useTranslation();
   const isSq = i18n.language?.startsWith("sq");
@@ -2958,7 +2959,7 @@ function DuaPage({ favs = new Set(), onFav = () => {} }) {
 
   function copy(dua, id) {
     const translation = isSq && dua.sq ? dua.sq : dua.en;
-    const text = `${dua.ar}\n\n${dua.tr}\n\n${translation}\n— ${dua.src}`;
+    const text = `${dua.ar}\n\n${dua.tr}\n\n${translation}\nâ€” ${dua.src}`;
     navigator.clipboard?.writeText(text).then(() => {
       setCopied(id); setTimeout(() => setCopied(null), 1600);
     }).catch(() => {});
@@ -2968,7 +2969,7 @@ function DuaPage({ favs = new Set(), onFav = () => {} }) {
 
   return (
     <div style={{ maxWidth: 720, margin: "0 auto", padding: "40px 24px" }}>
-      <PageTitle icon="🤲" title={t("dua.title")} sub={t("dua.sub")} />
+      <PageTitle icon="ðŸ¤²" title={t("dua.title")} sub={t("dua.sub")} />
 
       {/* Category filter */}
       <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 28 }}>
@@ -2992,7 +2993,7 @@ function DuaPage({ favs = new Set(), onFav = () => {} }) {
           const isFav = favs.has(favId);
           const isOpen = open === id;
           return (
-            <div key={id} style={{ border: `1px solid ${isOpen ? GOLD+"40" : BORDER}`, background: isOpen ? "#0E0C08" : SURFACE, transition: "all 0.2s" }}>
+            <div key={id} style={{ border: `1px solid ${isOpen ? GOLD+"40" : BORDER}`, background: isOpen ? "#faf5ec" : SURFACE, transition: "all 0.2s" }}>
               <button onClick={() => setOpen(isOpen ? null : id)} style={{
                 width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between",
                 padding: "14px 18px", background: "none", border: "none", cursor: "pointer", textAlign: "left",
@@ -3001,7 +3002,7 @@ function DuaPage({ favs = new Set(), onFav = () => {} }) {
                   <div style={{ fontSize: 10, color: isOpen ? GOLD : MUTED, letterSpacing: "0.12em", textTransform: "uppercase", marginBottom: 3 }}>{isSq ? (catLabels[dua.cat] || dua.cat) : dua.cat}</div>
                   <div style={{ fontSize: 15, color: TEXT, fontFamily: SERIF, letterSpacing: "0.02em" }}>{isSq && dua.sqTitle ? dua.sqTitle : dua.title}</div>
                 </div>
-                <span style={{ color: MUTED, fontSize: 11, flexShrink: 0, marginLeft: 12 }}>{isOpen ? "▲" : "▼"}</span>
+                <span style={{ color: MUTED, fontSize: 11, flexShrink: 0, marginLeft: 12 }}>{isOpen ? "â–²" : "â–¼"}</span>
               </button>
               {isOpen && (
                 <div style={{ padding: "0 18px 20px" }}>
@@ -3021,18 +3022,18 @@ function DuaPage({ favs = new Set(), onFav = () => {} }) {
                   {/* Note */}
                   {(isSq ? (dua.sqNote || dua.note) : dua.note) && (
                     <div style={{ fontSize: 12, color: GOLD, background: GREEN_L, border: `1px solid ${GOLD}30`, padding: "9px 14px", marginBottom: 14, lineHeight: 1.65 }}>
-                      ✦ {isSq && dua.sqNote ? dua.sqNote : dua.note}
+                      âœ¦ {isSq && dua.sqNote ? dua.sqNote : dua.note}
                     </div>
                   )}
                   {/* Footer */}
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                    <span style={{ fontSize: 11, color: MUTED, letterSpacing: "0.04em" }}>📖 {dua.src}</span>
+                    <span style={{ fontSize: 11, color: MUTED, letterSpacing: "0.04em" }}>ðŸ“– {dua.src}</span>
                     <div style={{ display: "flex", gap: 8 }}>
                       <button onClick={() => onFav(favId)} title={isFav ? "Remove from saved" : "Save"} style={{
                         background: "none", border: "1px solid " + (isFav ? GOLD + "60" : BORDER),
                         padding: "4px 10px", fontSize: 14, color: isFav ? GOLD : MUTED,
                         cursor: "pointer", transition: "all 0.15s",
-                      }}>{isFav ? "♥" : "♡"}</button>
+                      }}>{isFav ? "â™¥" : "â™¡"}</button>
                       <button onClick={() => copy(dua, id)} style={{
                         background: "none", border: "1px solid " + (copied===id ? GOLD : BORDER),
                         padding: "4px 14px", fontSize: 11, color: copied===id ? GOLD : MUTED,
@@ -3048,7 +3049,7 @@ function DuaPage({ favs = new Set(), onFav = () => {} }) {
       </div>
       {cat === "Saved" && filtered.length === 0 && (
         <div style={{ textAlign: "center", padding: "48px 0", color: MUTED }}>
-          <div style={{ fontSize: 28, marginBottom: 12 }}>♡</div>
+          <div style={{ fontSize: 28, marginBottom: 12 }}>â™¡</div>
           <div style={{ fontSize: 13, letterSpacing: "0.04em" }}>{t("dua.noSaved")}</div>
         </div>
       )}
@@ -3059,110 +3060,110 @@ function DuaPage({ favs = new Set(), onFav = () => {} }) {
   );
 }
 
-// ─── 99 NAMES DATA ────────────────────────────────────────────────
+// â”€â”€â”€ 99 NAMES DATA â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 const ASMA = [
-  {n:1,  ar:"ٱللَّهُ",                         tr:"Allāh",          en:"Allah", sq:"Emri me i Madhërishëm — i vetmi që meriton gjithë adhurim dhe devotshmëri.",                    m:"The Greatest Name — the only one deserving all worship and devotion."},
-  {n:2,  ar:"ٱلرَّحْمَٰنُ",                     tr:"Ar-Raḥmān",     en:"The Most Gracious", sq:"Ai Meshira e të Cilit përfshin gjithë krijimin në këtë botë.",        m:"The One whose mercy encompasses all creation in this world."},
-  {n:3,  ar:"ٱلرَّحِيمُ",                       tr:"Ar-Raḥīm",      en:"The Most Merciful", sq:"Ai Meshira e të Cilit e veçantë është rezervuar për besimtarët në Botën Tjetër.",        m:"The One whose special mercy is reserved for the believers in the Hereafter."},
-  {n:4,  ar:"ٱلْمَلِكُ",                        tr:"Al-Malik",       en:"The King", sq:"Zotëruesi Sovran që zotëron gjithë krijimin dhe nuk i detyrohet askujt.",                 m:"The Sovereign Lord who owns all creation and owes nothing to anyone."},
-  {n:5,  ar:"ٱلْقُدُّوسُ",                       tr:"Al-Quddūs",     en:"The Holy", sq:"Ai që është plotësisht i lirë nga të gjitha të metat, defektet dhe papërsosmëritë.",                 m:"The One utterly free from all faults, defects and imperfections."},
-  {n:6,  ar:"ٱلسَّلَامُ",                        tr:"As-Salām",       en:"The Source of Peace", sq:"Ai nga i cili zbret paqja dhe i cili dhuron siguri të vërtetë.",      m:"The One from whom peace descends, and who bestows true security."},
-  {n:7,  ar:"ٱلْمُؤْمِنُ",                       tr:"Al-Muʾmin",     en:"The Guardian of Faith", sq:"Ai që jep siguri dhe konfirmon robërit e Tij në besim.",    m:"The One who grants security and affirms His servants in faith."},
-  {n:8,  ar:"ٱلْمُهَيْمِنُ",                      tr:"Al-Muhaymin",   en:"The Protector", sq:"Ai që mbikëqyr, ruan dhe mbron gjithë krijimin.",            m:"The One who watches over, guards and protects all creation."},
-  {n:9,  ar:"ٱلْعَزِيزُ",                        tr:"Al-ʿAzīz",      en:"The Almighty", sq:"I Papërzishmi i Madhërishëm, i pamposhtur dhe i pamundur të ngadhënjehet.",             m:"The Incomparably Great, invincible and impossible to overpower."},
-  {n:10, ar:"ٱلْجَبَّارُ",                       tr:"Al-Jabbār",     en:"The Compeller", sq:"Ai që detyron, rivendos të thyerin dhe nënshtron gjithçka.",            m:"The One who compels, restores the broken and subdues all."},
-  {n:11, ar:"ٱلْمُتَكَبِّرُ",                     tr:"Al-Mutakabbir", en:"The Supreme", sq:"Ai që është Madhërishëm dhe mbi gjithë krijimin e Tij.",              m:"The One who is supremely great and above all His creation."},
-  {n:12, ar:"ٱلْخَالِقُ",                        tr:"Al-Khāliq",     en:"The Creator", sq:"Ai që sjell ekzistencën nga joekzistenca.",              m:"The One who brings existence out of non-existence."},
-  {n:13, ar:"ٱلْبَارِئُ",                        tr:"Al-Bāriʾ",      en:"The Originator", sq:"Ai që krijon qeniet e formuara saktë dhe të përsosura.",           m:"The One who creates beings distinctly fashioned and perfectly formed."},
-  {n:14, ar:"ٱلْمُصَوِّرُ",                       tr:"Al-Muṣawwir",  en:"The Fashioner", sq:"Ai që i jep çdo krijimi formën e tij unike dhe dalluese.",            m:"The One who gives every creation its unique and distinct form."},
-  {n:15, ar:"ٱلْغَفَّارُ",                        tr:"Al-Ghaffār",    en:"The Forgiving", sq:"Ai që fal vazhdimisht — duke mbuluar mëkatet herë pas here.",            m:"The One who forgives repeatedly — covering sins time after time."},
-  {n:16, ar:"ٱلْقَهَّارُ",                        tr:"Al-Qahhār",     en:"The Subduer", sq:"Ai që sundon çdo gjë dhe nuk mund të ngadhënjehet.",              m:"The One who dominates everything and cannot be overcome."},
-  {n:17, ar:"ٱلْوَهَّابُ",                        tr:"Al-Wahhāb",     en:"The Bestower", sq:"Ai që jep bujarisht pa pritur asgjë në këmbim.",             m:"The One who gives generously without expecting anything in return."},
-  {n:18, ar:"ٱلرَّزَّاقُ",                        tr:"Ar-Razzāq",     en:"The Provider", sq:"Ai që siguron gjithë ushqimin — të dukshëm dhe të padukshëm.",             m:"The One who provides all sustenance — seen and unseen."},
-  {n:19, ar:"ٱلْفَتَّاحُ",                        tr:"Al-Fattāḥ",     en:"The Opener", sq:"Ai që hap gjithçka që është e mbyllur — dyer, zemra dhe fitore.",               m:"The One who opens all that is closed — doors, hearts and victories."},
-  {n:20, ar:"ٱلْعَلِيمُ",                         tr:"Al-ʿAlīm",      en:"The All-Knowing", sq:"Ai dija e të Cilit përfshin çdo gjë të dukshme dhe të fshehur.",          m:"The One whose knowledge encompasses every manifest and hidden thing."},
-  {n:21, ar:"ٱلْقَابِضُ",                         tr:"Al-Qābiḍ",      en:"The Restrainer", sq:"Ai që ndalon, kufizon dhe merr siç do.",           m:"The One who withholds, constricts and seizes as He wills."},
-  {n:22, ar:"ٱلْبَاسِطُ",                         tr:"Al-Bāsiṭ",      en:"The Expander", sq:"Ai që zgjeron, pasuron dhe hap siç do.",             m:"The One who expands, enriches and opens as He wills."},
-  {n:23, ar:"ٱلْخَافِضُ",                         tr:"Al-Khāfiḍ",     en:"The Abaser", sq:"Ai që poshtëron dhe përul kë do.",               m:"The One who lowers and humbles whom He wills."},
-  {n:24, ar:"ٱلرَّافِعُ",                          tr:"Ar-Rāfiʿ",      en:"The Exalter", sq:"Ai që ngre dhe nderoi kë do.",              m:"The One who raises and elevates to honour whom He wills."},
-  {n:25, ar:"ٱلْمُعِزُّ",                          tr:"Al-Muʿizz",     en:"The Bestower of Honour", sq:"Ai që jep nder, dinjitet dhe forcë kë do.",   m:"The One who gives honour, dignity and strength to whom He wills."},
-  {n:26, ar:"ٱلْمُذِلُّ",                          tr:"Al-Mudhill",    en:"The Humiliator", sq:"Ai që poshtëron dhe nënshtron të kryelartët dhe të padrejtët.",           m:"The One who abases and humiliates the arrogant and unjust."},
-  {n:27, ar:"ٱلسَّمِيعُ",                          tr:"As-Samīʿ",      en:"The All-Hearing", sq:"Ai që dëgjon çdo zë — afër dhe larg, me zë dhe me fshehurazi.",          m:"The One who hears every sound — near and far, loud and whispered."},
-  {n:28, ar:"ٱلْبَصِيرُ",                          tr:"Al-Baṣīr",      en:"The All-Seeing", sq:"Ai që sheh të gjitha gjërat — të dukshme dhe të fshehura, të mëdha dhe të vogla.",           m:"The One who sees all things — manifest and hidden, large and small."},
-  {n:29, ar:"ٱلْحَكَمُ",                           tr:"Al-Ḥakam",      en:"The Judge", sq:"Ai që gjykon midis krijimit me drejtësi absolute.",                m:"The One who judges between creation with absolute justice."},
-  {n:30, ar:"ٱلْعَدْلُ",                           tr:"Al-ʿAdl",       en:"The Just", sq:"Ai që është plotësisht i drejtë në të gjitha dekretet dhe gjykimet e Tij.",                 m:"The One who is perfectly equitable in all His decrees and judgements."},
-  {n:31, ar:"ٱللَّطِيفُ",                          tr:"Al-Laṭīf",      en:"The Subtle", sq:"Ai që është i butë, zemërmirë dhe i ndërgjegjshëm për detajet me të hollë të krijimit.",               m:"The One who is kind, gentle and aware of the finest details of creation."},
-  {n:32, ar:"ٱلْخَبِيرُ",                          tr:"Al-Khabīr",     en:"The All-Aware", sq:"Ai i plotpajisur me njohuri për të gjitha punët e brendshme dhe hollësitë e fshehura.",            m:"The One fully aware of all inner affairs and hidden subtleties."},
-  {n:33, ar:"ٱلْحَلِيمُ",                          tr:"Al-Ḥalīm",      en:"The Forbearing", sq:"Ai që nuk nxiton ndëshkimin pavarësisht se ka fuqi të plotë për ta bërë.",           m:"The One who does not hasten punishment despite having full power to do so."},
-  {n:34, ar:"ٱلْعَظِيمُ",                          tr:"Al-ʿAẓīm",      en:"The Magnificent", sq:"Ai Madhërishëm i suprematisë në të gjitha atributet — përtej çdo kuptimi.",          m:"The One supremely great in all attributes — beyond any comprehension."},
-  {n:35, ar:"ٱلْغَفُورُ",                          tr:"Al-Ghafūr",     en:"The All-Forgiving", sq:"Ai që fal plotësisht mëkatet e të gjithë atyre që pendohen sinqerisht.",        m:"The One who completely forgives the sins of all who sincerely repent."},
-  {n:36, ar:"ٱلشَّكُورُ",                          tr:"Ash-Shakūr",    en:"The Appreciative", sq:"Ai që shpërblen shumë edhe veprat e vogla me shpërblim të madh.",         m:"The One who greatly rewards even small deeds with immense recompense."},
-  {n:37, ar:"ٱلْعَلِيُّ",                          tr:"Al-ʿAliyy",     en:"The Most High", sq:"Ai i ngritur mbi çdo gjë në thelbin dhe atributet e Tij.",            m:"The One exalted above everything in His essence and attributes."},
-  {n:38, ar:"ٱلْكَبِيرُ",                          tr:"Al-Kabīr",      en:"The Most Great", sq:"Ai Madhësia e të Cilit është e pafundme dhe përtej çdo kuptimi.",           m:"The One whose greatness is infinite and beyond all comprehension."},
-  {n:39, ar:"ٱلْحَفِيظُ",                          tr:"Al-Ḥafīẓ",     en:"The Preserver", sq:"Ai që mbron, ruan dhe kujdes gjithë krijimin e Tij.",            m:"The One who protects, preserves and guards all His creation."},
-  {n:40, ar:"ٱلْمُقِيتُ",                          tr:"Al-Muqīt",      en:"The Nourisher", sq:"Ai që siguron ushqimin dhe ruan jetën për të gjithë.",            m:"The One who provides sustenance and maintains life for all."},
-  {n:41, ar:"ٱلْحَسِيبُ",                          tr:"Al-Ḥasīb",      en:"The Reckoner", sq:"Ai që llogaris të gjitha veprat dhe është plotësisht i mjaftueshëm.",             m:"The One who takes account of all deeds and is completely sufficient."},
-  {n:42, ar:"ٱلْجَلِيلُ",                          tr:"Al-Jalīl",      en:"The Majestic", sq:"Ai që zotëron madhështi, shkëlqim dhe supremaci.",             m:"The One who possesses grandeur, magnificence and supremacy."},
-  {n:43, ar:"ٱلْكَرِيمُ",                          tr:"Al-Karīm",      en:"The Generous", sq:"Ai që jep bujarisht dhe bollshëm pa marrë parasysh meritën.",             m:"The One who gives generously and abundantly without regard to merit."},
-  {n:44, ar:"ٱلرَّقِيبُ",                          tr:"Ar-Raqīb",      en:"The Watchful", sq:"Ai që mbikëqyr të gjitha punët e krijimit gjatë gjithë kohës.",             m:"The One who watches over all affairs of creation at all times."},
-  {n:45, ar:"ٱلْمُجِيبُ",                          tr:"Al-Mujīb",      en:"The Responsive", sq:"Ai që u përgjigjet dhe i pranon çdo lutjeje të sinqertë.",           m:"The One who answers and responds to every sincere supplication."},
-  {n:46, ar:"ٱلْوَاسِعُ",                          tr:"Al-Wāsiʿ",      en:"The Vast", sq:"Ai Meshira, dija dhe bujaria e të Cilit janë të pakufishme dhe të pafundme.",                 m:"The One whose mercy, knowledge and generosity are boundless and infinite."},
-  {n:47, ar:"ٱلْحَكِيمُ",                          tr:"Al-Ḥakīm",      en:"The All-Wise", sq:"Ai Urtësia e të Cilit në krijim dhe dekret është absolutisht e përsosur.",             m:"The One whose wisdom in creation and decree is absolutely perfect."},
-  {n:48, ar:"ٱلْوَدُودُ",                          tr:"Al-Wadūd",      en:"The Loving", sq:"Ai që i do robërit e Tij të drejtë dhe i cili është i dashur nga ata.",               m:"The One who loves His righteous servants and is loved by them."},
-  {n:49, ar:"ٱلْمَجِيدُ",                          tr:"Al-Majīd",      en:"The Glorious", sq:"Ai Gjithëlavdishëm, që zotëron çdo cilësi të përsosjes dhe nderit.",             m:"The One all-glorious, possessing every quality of perfection and honour."},
-  {n:50, ar:"ٱلْبَاعِثُ",                          tr:"Al-Bāʿith",     en:"The Resurrector", sq:"Ai që ngre krijimin nga vdekja në Ditën e Ringjalljes.",          m:"The One who raises creation from the dead on the Day of Resurrection."},
-  {n:51, ar:"ٱلشَّهِيدُ",                          tr:"Ash-Shahīd",    en:"The Witness", sq:"Ai që dëshmon të gjitha gjërat — asgjë nuk i fshihet.",              m:"The One who witnesses all things — nothing is concealed from Him."},
-  {n:52, ar:"ٱلْحَقُّ",                            tr:"Al-Ḥaqq",       en:"The Truth", sq:"Ai që ekziston vërtet dhe domosdoshmërisht — fjala e të Cilit është e vërteta absolute.",                m:"The One who truly and necessarily exists — whose word is absolute truth."},
-  {n:53, ar:"ٱلْوَكِيلُ",                          tr:"Al-Wakīl",      en:"The Trustee", sq:"Ai në të cilin vihet besimi i plotë dhe i cili mjafton për të gjitha punët.",              m:"The One in whom full trust is placed and who suffices for all affairs."},
-  {n:54, ar:"ٱلْقَوِيُّ",                          tr:"Al-Qawiyy",     en:"The All-Powerful", sq:"Ai që është i përsosur në fuqi — kurrë i dobët apo i lodhur.",         m:"The One who is perfect in strength — never weak or fatigued."},
-  {n:55, ar:"ٱلْمَتِينُ",                          tr:"Al-Matīn",      en:"The Firm", sq:"Ai Forca dhe Fuqia e të Cilit nuk shpenzohen apo zvogëlohen kurrë.",                 m:"The One whose strength and might are never exhausted or diminished."},
-  {n:56, ar:"ٱلْوَلِيُّ",                          tr:"Al-Waliyy",     en:"The Protecting Friend", sq:"Ai që është aleat dhe mbrojtës i besimtarëve.",    m:"The One who is the ally and protector of the believers."},
-  {n:57, ar:"ٱلْحَمِيدُ",                          tr:"Al-Ḥamīd",      en:"The Praiseworthy", sq:"Ai që meriton gjithë lavdërim me thelbin e Tij dhe të gjitha veprimet e Tij.",         m:"The One who deserves all praise by His very essence and all His actions."},
-  {n:58, ar:"ٱلْمُحْصِي",                          tr:"Al-Muḥṣī",      en:"The Counter", sq:"Ai që numëron dhe regjistron të gjitha gjërat me saktësi të përsosur.",              m:"The One who counts and records all things with perfect precision."},
-  {n:59, ar:"ٱلْمُبْدِئُ",                         tr:"Al-Mubdiʾ",     en:"The Originator", sq:"Ai që filloi krijimin nga hiçi, pa precedent.",           m:"The One who started creation from nothing, without precedent."},
-  {n:60, ar:"ٱلْمُعِيدُ",                          tr:"Al-Muʿīd",      en:"The Restorer", sq:"Ai që do ti rivendosë dhe riketë gjithë krijimin pas vdekjes.",             m:"The One who will restore and recreate all creation after death."},
-  {n:61, ar:"ٱلْمُحْيِي",                          tr:"Al-Muḥyī",      en:"The Giver of Life", sq:"Ai që u jep jetë gjithçkaje që jeton.",        m:"The One who grants life to everything that lives."},
-  {n:62, ar:"ٱلْمُمِيتُ",                          tr:"Al-Mumīt",      en:"The Taker of Life", sq:"Ai që merr shpirtrat e krijimit në kohën e tyre të caktuar.",        m:"The One who takes the souls of creation at their appointed time."},
-  {n:63, ar:"ٱلْحَيُّ",                            tr:"Al-Ḥayy",       en:"The Ever-Living", sq:"Ai Jeta e të Cilit nuk ka fillim, fund apo ndërprerje.",          m:"The One whose life has no beginning, no end, and no interruption."},
-  {n:64, ar:"ٱلْقَيُّومُ",                         tr:"Al-Qayyūm",     en:"The Self-Subsisting", sq:"Ai nga i cili varet gjithë ekzistenca, ndërkohë që Ai nuk varet nga asgjë.",      m:"The One upon whom all existence depends, yet who depends on nothing."},
-  {n:65, ar:"ٱلْوَاجِدُ",                          tr:"Al-Wājid",      en:"The Finder", sq:"Ai që gjen dhe percepton gjithçka që dëshiron sipas vullnetit të Tij.",               m:"The One who finds and perceives everything He wishes at will."},
-  {n:66, ar:"ٱلْمَاجِدُ",                          tr:"Al-Mājid",      en:"The Noble", sq:"Ai fisnik dhe bujar, plot nder dhe lavdi.",                m:"The One noble and generous, full of honour and glory."},
-  {n:67, ar:"ٱلْوَاحِدُ",                          tr:"Al-Wāḥid",      en:"The One", sq:"Ai që është unik dhe pa asnjë partner apo të barabartë.",                  m:"The One who is unique and without any partner or equal."},
-  {n:68, ar:"ٱلْأَحَدُ",                           tr:"Al-Aḥad",       en:"The Unique", sq:"Ai që është absolutisht singular, i pandashëm dhe i pakrahasueshëm.",               m:"The One who is absolutely singular, indivisible and incomparable."},
-  {n:69, ar:"ٱلصَّمَدُ",                           tr:"Aṣ-Ṣamad",     en:"The Eternal", sq:"Ai nga i cili varen të gjithë, por Ai Vetë nuk varet nga asgjë.",              m:"The One upon whom all depend, but who Himself depends on nothing."},
-  {n:70, ar:"ٱلْقَادِرُ",                          tr:"Al-Qādir",      en:"The Capable", sq:"Ai që ka fuqi të plotë mbi çdo gjë pa asnjë kufi.",              m:"The One who has complete power over everything without any limit."},
-  {n:71, ar:"ٱلْمُقْتَدِرُ",                       tr:"Al-Muqtadir",   en:"The All-Powerful", sq:"Ai i autoritetit të plotë i cili ekzekuton vullnetin e Tij me fuqi absolute.",         m:"The One of full authority who executes His will with absolute power."},
-  {n:72, ar:"ٱلْمُقَدِّمُ",                        tr:"Al-Muqaddim",   en:"The Expediter", sq:"Ai që çon përpara dhe jep përparësi kujt dhe çfarë do.",            m:"The One who brings forward and prioritises whom and what He wills."},
-  {n:73, ar:"ٱلْمُؤَخِّرُ",                        tr:"Al-Muʾakhkhir", en:"The Delayer", sq:"Ai që vonon dhe shtyn prapa kujt dhe çfarë do.",              m:"The One who delays and puts back whom and what He wills."},
-  {n:74, ar:"ٱلْأَوَّلُ",                          tr:"Al-Awwal",      en:"The First", sq:"Ai Ekzistenca e të Cilit nuk ka fillim — Ai i paraprin gjithçkaje.",                m:"The One whose existence has no beginning — He precedes everything."},
-  {n:75, ar:"ٱلْآخِرُ",                            tr:"Al-Ākhir",      en:"The Last", sq:"Ai Ekzistenca e të Cilit nuk ka fund — Ai mbetet pas gjithçkaje.",                 m:"The One whose existence has no end — He remains after everything."},
-  {n:76, ar:"ٱلظَّاهِرُ",                          tr:"Aẓ-Ẓāhir",     en:"The Manifest", sq:"Ai që është i dukshëm dhe evident nëpërmjet shenjave dhe krijimit të Tij.",             m:"The One who is apparent and evident through His signs and creation."},
-  {n:77, ar:"ٱلْبَاطِنُ",                          tr:"Al-Bāṭin",      en:"The Hidden", sq:"Ai i fshehur nga shikimi dhe shqisat e gjithë krijimit të Tij.",               m:"The One hidden from the sight and senses of all His creation."},
-  {n:78, ar:"ٱلْوَالِي",                           tr:"Al-Wālī",       en:"The Governor", sq:"Ai që qeveris dhe administron të gjitha punët e universit.",             m:"The One who governs and manages all affairs of the universe."},
-  {n:79, ar:"ٱلْمُتَعَالِي",                       tr:"Al-Mutaʿālī",   en:"The Most Exalted", sq:"Ai i lartë mbi gjithë krijimin dhe çdo përshkrim në Madhërinë e Tij.",         m:"The One far above all creation and any description in His greatness."},
-  {n:80, ar:"ٱلْبَرُّ",                            tr:"Al-Barr",       en:"The Source of Goodness", sq:"Ai që është i pafund në mirësi, i drejtë dhe besnik ndaj të gjitha premtimeve të Tij.",   m:"The One who is infinitely kind, righteous and true to all His promises."},
-  {n:81, ar:"ٱلتَّوَّابُ",                         tr:"At-Tawwāb",     en:"The Acceptor of Repentance", sq:"Ai që pranon me gëzim dhe vazhdimisht pendimin e robërve të Tij.",m:"The One who repeatedly and joyfully accepts the repentance of His servants."},
-  {n:82, ar:"ٱلْمُنْتَقِمُ",                       tr:"Al-Muntaqim",   en:"The Avenger", sq:"Ai që ndëshkon shtypësit dhe keqbërësit me drejtësi të përsosur.",              m:"The One who punishes the oppressors and wrongdoers with perfect justice."},
-  {n:83, ar:"ٱلْعَفُوُّ",                          tr:"Al-ʿAfuww",     en:"The Pardoner", sq:"Ai që fshin plotësisht mëkatet — sikur nuk kanë ndodhur kurrë.",             m:"The One who erases sins entirely — as if they never occurred."},
-  {n:84, ar:"ٱلرَّءُوفُ",                          tr:"Ar-Raʾūf",      en:"The Most Kind", sq:"Ai plot dhembshuri dhe butësi të thellë për robërit e Tij.",            m:"The One full of the deepest compassion and tenderness for His servants."},
-  {n:85, ar:"مَالِكُ ٱلْمُلْكِ",                   tr:"Mālik al-Mulk", en:"Owner of Sovereignty", sq:"Ai që zotëron pronësi absolute dhe ekskluzive të gjithë sundimit.",     m:"The One who possesses absolute and exclusive ownership of all dominion."},
-  {n:86, ar:"ذُو ٱلْجَلَالِ وَٱلْإِكْرَامِ",       tr:"Dhul-Jalāli wal-Ikrām", en:"Lord of Majesty and Bounty", sq:"Ai që kombinon në mënyrë unike madhësi supreme me bujarim të pafund.", m:"The One who uniquely combines supreme greatness with infinite generosity."},
-  {n:87, ar:"ٱلْمُقْسِطُ",                         tr:"Al-Muqsiṭ",     en:"The Equitable", sq:"Ai që është plotësisht i drejtë në të gjitha gjykimet dhe marrëveshjet e Tij.",            m:"The One who is perfectly just in all His judgements and dealings."},
-  {n:88, ar:"ٱلْجَامِعُ",                          tr:"Al-Jāmiʿ",      en:"The Gatherer", sq:"Ai që do të mbledhë gjithë krijimin në Ditën e Gjykimit.",             m:"The One who will gather all of creation on the Day of Judgement."},
-  {n:89, ar:"ٱلْغَنِيُّ",                          tr:"Al-Ghaniyy",    en:"The Self-Sufficient", sq:"Ai që nuk ka nevojë absolute për asnjë nga krijimi i Tij.",      m:"The One who needs absolutely nothing from any of His creation."},
-  {n:90, ar:"ٱلْمُغْنِي",                          tr:"Al-Mughnī",     en:"The Enricher", sq:"Ai që pasuron dhe ngop me bujarinë e Tij kë do.",             m:"The One who enriches and satisfies with His bounty whoever He wills."},
-  {n:91, ar:"ٱلْمَانِعُ",                          tr:"Al-Māniʿ",      en:"The Preventer", sq:"Ai që ndalon dhe mbron — duke vendosur çfarë u arrin robërve të Tij.",            m:"The One who withholds and protects — deciding what reaches His servants."},
-  {n:92, ar:"ٱلضَّارُّ",                           tr:"Aḍ-Ḍārr",      en:"The Distresser", sq:"Ai që ka fuqi të shkaktojë dëm kur do si pjesë e urtësisë së Tij.",           m:"The One who has power to cause harm when He wills as part of His wisdom."},
-  {n:93, ar:"ٱلنَّافِعُ",                          tr:"An-Nāfiʿ",      en:"The Benefiter", sq:"Ai që krijon gjithë dobinë dhe mirësinë për krijimin e Tij siç do.",            m:"The One who creates all benefit and good for His creation as He wills."},
-  {n:94, ar:"ٱلنُّورُ",                            tr:"An-Nūr",        en:"The Light", sq:"Ai që është burimi i fundit i gjithë dritës, udhëzimit dhe ndriçimit.",                m:"The One who is the ultimate source of all light, guidance and illumination."},
-  {n:95, ar:"ٱلْهَادِي",                           tr:"Al-Hādī",       en:"The Guide", sq:"Ai që udhëzon krijimin e Tij drejt rrugës së drejtë dhe diturisë së vërtetë.",                m:"The One who guides His creation to the right path and true knowledge."},
-  {n:96, ar:"ٱلْبَدِيعُ",                          tr:"Al-Badīʿ",      en:"The Incomparable", sq:"Ai që krijoi universin në mënyrë krejt të re dhe të paprecedentë.",         m:"The One who created the universe in a wholly new and unprecedented way."},
-  {n:97, ar:"ٱلْبَاقِي",                           tr:"Al-Bāqī",       en:"The Everlasting", sq:"Ai që mbetet përgjithmonë kur gjithçka tjetër pushon dhe shkatërrohet.",          m:"The One who remains forever when all else ceases and perishes."},
-  {n:98, ar:"ٱلْوَارِثُ",                          tr:"Al-Wārith",     en:"The Inheritor", sq:"Ai që trashëgon tokën dhe gjithçka mbi të pasi krijimi mbaron.",            m:"The One who inherits the earth and all that is upon it after creation ends."},
-  {n:99, ar:"ٱلصَّبُورُ",                          tr:"Aṣ-Ṣabūr",     en:"The Patient", sq:"Ai që është i pafund në durim — kurrë nuk nxiton ndëshkimin përtej afatit të tij.",              m:"The One who is infinitely patient — never rushing punishment beyond its due time."},
+  {n:1,  ar:"Ù±Ù„Ù„ÙŽÙ‘Ù‡Ù",                         tr:"AllÄh",          en:"Allah", sq:"Emri me i MadhÃ«rishÃ«m â€” i vetmi qÃ« meriton gjithÃ« adhurim dhe devotshmÃ«ri.",                    m:"The Greatest Name â€” the only one deserving all worship and devotion."},
+  {n:2,  ar:"Ù±Ù„Ø±ÙŽÙ‘Ø­Ù’Ù…ÙŽÙ°Ù†Ù",                     tr:"Ar-Raá¸¥mÄn",     en:"The Most Gracious", sq:"Ai Meshira e tÃ« Cilit pÃ«rfshin gjithÃ« krijimin nÃ« kÃ«tÃ« botÃ«.",        m:"The One whose mercy encompasses all creation in this world."},
+  {n:3,  ar:"Ù±Ù„Ø±ÙŽÙ‘Ø­ÙÙŠÙ…Ù",                       tr:"Ar-Raá¸¥Ä«m",      en:"The Most Merciful", sq:"Ai Meshira e tÃ« Cilit e veÃ§antÃ« Ã«shtÃ« rezervuar pÃ«r besimtarÃ«t nÃ« BotÃ«n TjetÃ«r.",        m:"The One whose special mercy is reserved for the believers in the Hereafter."},
+  {n:4,  ar:"Ù±Ù„Ù’Ù…ÙŽÙ„ÙÙƒÙ",                        tr:"Al-Malik",       en:"The King", sq:"ZotÃ«ruesi Sovran qÃ« zotÃ«ron gjithÃ« krijimin dhe nuk i detyrohet askujt.",                 m:"The Sovereign Lord who owns all creation and owes nothing to anyone."},
+  {n:5,  ar:"Ù±Ù„Ù’Ù‚ÙØ¯ÙÙ‘ÙˆØ³Ù",                       tr:"Al-QuddÅ«s",     en:"The Holy", sq:"Ai qÃ« Ã«shtÃ« plotÃ«sisht i lirÃ« nga tÃ« gjitha tÃ« metat, defektet dhe papÃ«rsosmÃ«ritÃ«.",                 m:"The One utterly free from all faults, defects and imperfections."},
+  {n:6,  ar:"Ù±Ù„Ø³ÙŽÙ‘Ù„ÙŽØ§Ù…Ù",                        tr:"As-SalÄm",       en:"The Source of Peace", sq:"Ai nga i cili zbret paqja dhe i cili dhuron siguri tÃ« vÃ«rtetÃ«.",      m:"The One from whom peace descends, and who bestows true security."},
+  {n:7,  ar:"Ù±Ù„Ù’Ù…ÙØ¤Ù’Ù…ÙÙ†Ù",                       tr:"Al-MuÊ¾min",     en:"The Guardian of Faith", sq:"Ai qÃ« jep siguri dhe konfirmon robÃ«rit e Tij nÃ« besim.",    m:"The One who grants security and affirms His servants in faith."},
+  {n:8,  ar:"Ù±Ù„Ù’Ù…ÙÙ‡ÙŽÙŠÙ’Ù…ÙÙ†Ù",                      tr:"Al-Muhaymin",   en:"The Protector", sq:"Ai qÃ« mbikÃ«qyr, ruan dhe mbron gjithÃ« krijimin.",            m:"The One who watches over, guards and protects all creation."},
+  {n:9,  ar:"Ù±Ù„Ù’Ø¹ÙŽØ²ÙÙŠØ²Ù",                        tr:"Al-Ê¿AzÄ«z",      en:"The Almighty", sq:"I PapÃ«rzishmi i MadhÃ«rishÃ«m, i pamposhtur dhe i pamundur tÃ« ngadhÃ«njehet.",             m:"The Incomparably Great, invincible and impossible to overpower."},
+  {n:10, ar:"Ù±Ù„Ù’Ø¬ÙŽØ¨ÙŽÙ‘Ø§Ø±Ù",                       tr:"Al-JabbÄr",     en:"The Compeller", sq:"Ai qÃ« detyron, rivendos tÃ« thyerin dhe nÃ«nshtron gjithÃ§ka.",            m:"The One who compels, restores the broken and subdues all."},
+  {n:11, ar:"Ù±Ù„Ù’Ù…ÙØªÙŽÙƒÙŽØ¨ÙÙ‘Ø±Ù",                     tr:"Al-Mutakabbir", en:"The Supreme", sq:"Ai qÃ« Ã«shtÃ« MadhÃ«rishÃ«m dhe mbi gjithÃ« krijimin e Tij.",              m:"The One who is supremely great and above all His creation."},
+  {n:12, ar:"Ù±Ù„Ù’Ø®ÙŽØ§Ù„ÙÙ‚Ù",                        tr:"Al-KhÄliq",     en:"The Creator", sq:"Ai qÃ« sjell ekzistencÃ«n nga joekzistenca.",              m:"The One who brings existence out of non-existence."},
+  {n:13, ar:"Ù±Ù„Ù’Ø¨ÙŽØ§Ø±ÙØ¦Ù",                        tr:"Al-BÄriÊ¾",      en:"The Originator", sq:"Ai qÃ« krijon qeniet e formuara saktÃ« dhe tÃ« pÃ«rsosura.",           m:"The One who creates beings distinctly fashioned and perfectly formed."},
+  {n:14, ar:"Ù±Ù„Ù’Ù…ÙØµÙŽÙˆÙÙ‘Ø±Ù",                       tr:"Al-Muá¹£awwir",  en:"The Fashioner", sq:"Ai qÃ« i jep Ã§do krijimi formÃ«n e tij unike dhe dalluese.",            m:"The One who gives every creation its unique and distinct form."},
+  {n:15, ar:"Ù±Ù„Ù’ØºÙŽÙÙŽÙ‘Ø§Ø±Ù",                        tr:"Al-GhaffÄr",    en:"The Forgiving", sq:"Ai qÃ« fal vazhdimisht â€” duke mbuluar mÃ«katet herÃ« pas here.",            m:"The One who forgives repeatedly â€” covering sins time after time."},
+  {n:16, ar:"Ù±Ù„Ù’Ù‚ÙŽÙ‡ÙŽÙ‘Ø§Ø±Ù",                        tr:"Al-QahhÄr",     en:"The Subduer", sq:"Ai qÃ« sundon Ã§do gjÃ« dhe nuk mund tÃ« ngadhÃ«njehet.",              m:"The One who dominates everything and cannot be overcome."},
+  {n:17, ar:"Ù±Ù„Ù’ÙˆÙŽÙ‡ÙŽÙ‘Ø§Ø¨Ù",                        tr:"Al-WahhÄb",     en:"The Bestower", sq:"Ai qÃ« jep bujarisht pa pritur asgjÃ« nÃ« kÃ«mbim.",             m:"The One who gives generously without expecting anything in return."},
+  {n:18, ar:"Ù±Ù„Ø±ÙŽÙ‘Ø²ÙŽÙ‘Ø§Ù‚Ù",                        tr:"Ar-RazzÄq",     en:"The Provider", sq:"Ai qÃ« siguron gjithÃ« ushqimin â€” tÃ« dukshÃ«m dhe tÃ« padukshÃ«m.",             m:"The One who provides all sustenance â€” seen and unseen."},
+  {n:19, ar:"Ù±Ù„Ù’ÙÙŽØªÙŽÙ‘Ø§Ø­Ù",                        tr:"Al-FattÄá¸¥",     en:"The Opener", sq:"Ai qÃ« hap gjithÃ§ka qÃ« Ã«shtÃ« e mbyllur â€” dyer, zemra dhe fitore.",               m:"The One who opens all that is closed â€” doors, hearts and victories."},
+  {n:20, ar:"Ù±Ù„Ù’Ø¹ÙŽÙ„ÙÙŠÙ…Ù",                         tr:"Al-Ê¿AlÄ«m",      en:"The All-Knowing", sq:"Ai dija e tÃ« Cilit pÃ«rfshin Ã§do gjÃ« tÃ« dukshme dhe tÃ« fshehur.",          m:"The One whose knowledge encompasses every manifest and hidden thing."},
+  {n:21, ar:"Ù±Ù„Ù’Ù‚ÙŽØ§Ø¨ÙØ¶Ù",                         tr:"Al-QÄbiá¸",      en:"The Restrainer", sq:"Ai qÃ« ndalon, kufizon dhe merr siÃ§ do.",           m:"The One who withholds, constricts and seizes as He wills."},
+  {n:22, ar:"Ù±Ù„Ù’Ø¨ÙŽØ§Ø³ÙØ·Ù",                         tr:"Al-BÄsiá¹­",      en:"The Expander", sq:"Ai qÃ« zgjeron, pasuron dhe hap siÃ§ do.",             m:"The One who expands, enriches and opens as He wills."},
+  {n:23, ar:"Ù±Ù„Ù’Ø®ÙŽØ§ÙÙØ¶Ù",                         tr:"Al-KhÄfiá¸",     en:"The Abaser", sq:"Ai qÃ« poshtÃ«ron dhe pÃ«rul kÃ« do.",               m:"The One who lowers and humbles whom He wills."},
+  {n:24, ar:"Ù±Ù„Ø±ÙŽÙ‘Ø§ÙÙØ¹Ù",                          tr:"Ar-RÄfiÊ¿",      en:"The Exalter", sq:"Ai qÃ« ngre dhe nderoi kÃ« do.",              m:"The One who raises and elevates to honour whom He wills."},
+  {n:25, ar:"Ù±Ù„Ù’Ù…ÙØ¹ÙØ²ÙÙ‘",                          tr:"Al-MuÊ¿izz",     en:"The Bestower of Honour", sq:"Ai qÃ« jep nder, dinjitet dhe forcÃ« kÃ« do.",   m:"The One who gives honour, dignity and strength to whom He wills."},
+  {n:26, ar:"Ù±Ù„Ù’Ù…ÙØ°ÙÙ„ÙÙ‘",                          tr:"Al-Mudhill",    en:"The Humiliator", sq:"Ai qÃ« poshtÃ«ron dhe nÃ«nshtron tÃ« kryelartÃ«t dhe tÃ« padrejtÃ«t.",           m:"The One who abases and humiliates the arrogant and unjust."},
+  {n:27, ar:"Ù±Ù„Ø³ÙŽÙ‘Ù…ÙÙŠØ¹Ù",                          tr:"As-SamÄ«Ê¿",      en:"The All-Hearing", sq:"Ai qÃ« dÃ«gjon Ã§do zÃ« â€” afÃ«r dhe larg, me zÃ« dhe me fshehurazi.",          m:"The One who hears every sound â€” near and far, loud and whispered."},
+  {n:28, ar:"Ù±Ù„Ù’Ø¨ÙŽØµÙÙŠØ±Ù",                          tr:"Al-Baá¹£Ä«r",      en:"The All-Seeing", sq:"Ai qÃ« sheh tÃ« gjitha gjÃ«rat â€” tÃ« dukshme dhe tÃ« fshehura, tÃ« mÃ«dha dhe tÃ« vogla.",           m:"The One who sees all things â€” manifest and hidden, large and small."},
+  {n:29, ar:"Ù±Ù„Ù’Ø­ÙŽÙƒÙŽÙ…Ù",                           tr:"Al-á¸¤akam",      en:"The Judge", sq:"Ai qÃ« gjykon midis krijimit me drejtÃ«si absolute.",                m:"The One who judges between creation with absolute justice."},
+  {n:30, ar:"Ù±Ù„Ù’Ø¹ÙŽØ¯Ù’Ù„Ù",                           tr:"Al-Ê¿Adl",       en:"The Just", sq:"Ai qÃ« Ã«shtÃ« plotÃ«sisht i drejtÃ« nÃ« tÃ« gjitha dekretet dhe gjykimet e Tij.",                 m:"The One who is perfectly equitable in all His decrees and judgements."},
+  {n:31, ar:"Ù±Ù„Ù„ÙŽÙ‘Ø·ÙÙŠÙÙ",                          tr:"Al-Laá¹­Ä«f",      en:"The Subtle", sq:"Ai qÃ« Ã«shtÃ« i butÃ«, zemÃ«rmirÃ« dhe i ndÃ«rgjegjshÃ«m pÃ«r detajet me tÃ« hollÃ« tÃ« krijimit.",               m:"The One who is kind, gentle and aware of the finest details of creation."},
+  {n:32, ar:"Ù±Ù„Ù’Ø®ÙŽØ¨ÙÙŠØ±Ù",                          tr:"Al-KhabÄ«r",     en:"The All-Aware", sq:"Ai i plotpajisur me njohuri pÃ«r tÃ« gjitha punÃ«t e brendshme dhe hollÃ«sitÃ« e fshehura.",            m:"The One fully aware of all inner affairs and hidden subtleties."},
+  {n:33, ar:"Ù±Ù„Ù’Ø­ÙŽÙ„ÙÙŠÙ…Ù",                          tr:"Al-á¸¤alÄ«m",      en:"The Forbearing", sq:"Ai qÃ« nuk nxiton ndÃ«shkimin pavarÃ«sisht se ka fuqi tÃ« plotÃ« pÃ«r ta bÃ«rÃ«.",           m:"The One who does not hasten punishment despite having full power to do so."},
+  {n:34, ar:"Ù±Ù„Ù’Ø¹ÙŽØ¸ÙÙŠÙ…Ù",                          tr:"Al-Ê¿Aáº“Ä«m",      en:"The Magnificent", sq:"Ai MadhÃ«rishÃ«m i suprematisÃ« nÃ« tÃ« gjitha atributet â€” pÃ«rtej Ã§do kuptimi.",          m:"The One supremely great in all attributes â€” beyond any comprehension."},
+  {n:35, ar:"Ù±Ù„Ù’ØºÙŽÙÙÙˆØ±Ù",                          tr:"Al-GhafÅ«r",     en:"The All-Forgiving", sq:"Ai qÃ« fal plotÃ«sisht mÃ«katet e tÃ« gjithÃ« atyre qÃ« pendohen sinqerisht.",        m:"The One who completely forgives the sins of all who sincerely repent."},
+  {n:36, ar:"Ù±Ù„Ø´ÙŽÙ‘ÙƒÙÙˆØ±Ù",                          tr:"Ash-ShakÅ«r",    en:"The Appreciative", sq:"Ai qÃ« shpÃ«rblen shumÃ« edhe veprat e vogla me shpÃ«rblim tÃ« madh.",         m:"The One who greatly rewards even small deeds with immense recompense."},
+  {n:37, ar:"Ù±Ù„Ù’Ø¹ÙŽÙ„ÙÙŠÙÙ‘",                          tr:"Al-Ê¿Aliyy",     en:"The Most High", sq:"Ai i ngritur mbi Ã§do gjÃ« nÃ« thelbin dhe atributet e Tij.",            m:"The One exalted above everything in His essence and attributes."},
+  {n:38, ar:"Ù±Ù„Ù’ÙƒÙŽØ¨ÙÙŠØ±Ù",                          tr:"Al-KabÄ«r",      en:"The Most Great", sq:"Ai MadhÃ«sia e tÃ« Cilit Ã«shtÃ« e pafundme dhe pÃ«rtej Ã§do kuptimi.",           m:"The One whose greatness is infinite and beyond all comprehension."},
+  {n:39, ar:"Ù±Ù„Ù’Ø­ÙŽÙÙÙŠØ¸Ù",                          tr:"Al-á¸¤afÄ«áº“",     en:"The Preserver", sq:"Ai qÃ« mbron, ruan dhe kujdes gjithÃ« krijimin e Tij.",            m:"The One who protects, preserves and guards all His creation."},
+  {n:40, ar:"Ù±Ù„Ù’Ù…ÙÙ‚ÙÙŠØªÙ",                          tr:"Al-MuqÄ«t",      en:"The Nourisher", sq:"Ai qÃ« siguron ushqimin dhe ruan jetÃ«n pÃ«r tÃ« gjithÃ«.",            m:"The One who provides sustenance and maintains life for all."},
+  {n:41, ar:"Ù±Ù„Ù’Ø­ÙŽØ³ÙÙŠØ¨Ù",                          tr:"Al-á¸¤asÄ«b",      en:"The Reckoner", sq:"Ai qÃ« llogaris tÃ« gjitha veprat dhe Ã«shtÃ« plotÃ«sisht i mjaftueshÃ«m.",             m:"The One who takes account of all deeds and is completely sufficient."},
+  {n:42, ar:"Ù±Ù„Ù’Ø¬ÙŽÙ„ÙÙŠÙ„Ù",                          tr:"Al-JalÄ«l",      en:"The Majestic", sq:"Ai qÃ« zotÃ«ron madhÃ«shti, shkÃ«lqim dhe supremaci.",             m:"The One who possesses grandeur, magnificence and supremacy."},
+  {n:43, ar:"Ù±Ù„Ù’ÙƒÙŽØ±ÙÙŠÙ…Ù",                          tr:"Al-KarÄ«m",      en:"The Generous", sq:"Ai qÃ« jep bujarisht dhe bollshÃ«m pa marrÃ« parasysh meritÃ«n.",             m:"The One who gives generously and abundantly without regard to merit."},
+  {n:44, ar:"Ù±Ù„Ø±ÙŽÙ‘Ù‚ÙÙŠØ¨Ù",                          tr:"Ar-RaqÄ«b",      en:"The Watchful", sq:"Ai qÃ« mbikÃ«qyr tÃ« gjitha punÃ«t e krijimit gjatÃ« gjithÃ« kohÃ«s.",             m:"The One who watches over all affairs of creation at all times."},
+  {n:45, ar:"Ù±Ù„Ù’Ù…ÙØ¬ÙÙŠØ¨Ù",                          tr:"Al-MujÄ«b",      en:"The Responsive", sq:"Ai qÃ« u pÃ«rgjigjet dhe i pranon Ã§do lutjeje tÃ« sinqertÃ«.",           m:"The One who answers and responds to every sincere supplication."},
+  {n:46, ar:"Ù±Ù„Ù’ÙˆÙŽØ§Ø³ÙØ¹Ù",                          tr:"Al-WÄsiÊ¿",      en:"The Vast", sq:"Ai Meshira, dija dhe bujaria e tÃ« Cilit janÃ« tÃ« pakufishme dhe tÃ« pafundme.",                 m:"The One whose mercy, knowledge and generosity are boundless and infinite."},
+  {n:47, ar:"Ù±Ù„Ù’Ø­ÙŽÙƒÙÙŠÙ…Ù",                          tr:"Al-á¸¤akÄ«m",      en:"The All-Wise", sq:"Ai UrtÃ«sia e tÃ« Cilit nÃ« krijim dhe dekret Ã«shtÃ« absolutisht e pÃ«rsosur.",             m:"The One whose wisdom in creation and decree is absolutely perfect."},
+  {n:48, ar:"Ù±Ù„Ù’ÙˆÙŽØ¯ÙÙˆØ¯Ù",                          tr:"Al-WadÅ«d",      en:"The Loving", sq:"Ai qÃ« i do robÃ«rit e Tij tÃ« drejtÃ« dhe i cili Ã«shtÃ« i dashur nga ata.",               m:"The One who loves His righteous servants and is loved by them."},
+  {n:49, ar:"Ù±Ù„Ù’Ù…ÙŽØ¬ÙÙŠØ¯Ù",                          tr:"Al-MajÄ«d",      en:"The Glorious", sq:"Ai GjithÃ«lavdishÃ«m, qÃ« zotÃ«ron Ã§do cilÃ«si tÃ« pÃ«rsosjes dhe nderit.",             m:"The One all-glorious, possessing every quality of perfection and honour."},
+  {n:50, ar:"Ù±Ù„Ù’Ø¨ÙŽØ§Ø¹ÙØ«Ù",                          tr:"Al-BÄÊ¿ith",     en:"The Resurrector", sq:"Ai qÃ« ngre krijimin nga vdekja nÃ« DitÃ«n e Ringjalljes.",          m:"The One who raises creation from the dead on the Day of Resurrection."},
+  {n:51, ar:"Ù±Ù„Ø´ÙŽÙ‘Ù‡ÙÙŠØ¯Ù",                          tr:"Ash-ShahÄ«d",    en:"The Witness", sq:"Ai qÃ« dÃ«shmon tÃ« gjitha gjÃ«rat â€” asgjÃ« nuk i fshihet.",              m:"The One who witnesses all things â€” nothing is concealed from Him."},
+  {n:52, ar:"Ù±Ù„Ù’Ø­ÙŽÙ‚ÙÙ‘",                            tr:"Al-á¸¤aqq",       en:"The Truth", sq:"Ai qÃ« ekziston vÃ«rtet dhe domosdoshmÃ«risht â€” fjala e tÃ« Cilit Ã«shtÃ« e vÃ«rteta absolute.",                m:"The One who truly and necessarily exists â€” whose word is absolute truth."},
+  {n:53, ar:"Ù±Ù„Ù’ÙˆÙŽÙƒÙÙŠÙ„Ù",                          tr:"Al-WakÄ«l",      en:"The Trustee", sq:"Ai nÃ« tÃ« cilin vihet besimi i plotÃ« dhe i cili mjafton pÃ«r tÃ« gjitha punÃ«t.",              m:"The One in whom full trust is placed and who suffices for all affairs."},
+  {n:54, ar:"Ù±Ù„Ù’Ù‚ÙŽÙˆÙÙŠÙÙ‘",                          tr:"Al-Qawiyy",     en:"The All-Powerful", sq:"Ai qÃ« Ã«shtÃ« i pÃ«rsosur nÃ« fuqi â€” kurrÃ« i dobÃ«t apo i lodhur.",         m:"The One who is perfect in strength â€” never weak or fatigued."},
+  {n:55, ar:"Ù±Ù„Ù’Ù…ÙŽØªÙÙŠÙ†Ù",                          tr:"Al-MatÄ«n",      en:"The Firm", sq:"Ai Forca dhe Fuqia e tÃ« Cilit nuk shpenzohen apo zvogÃ«lohen kurrÃ«.",                 m:"The One whose strength and might are never exhausted or diminished."},
+  {n:56, ar:"Ù±Ù„Ù’ÙˆÙŽÙ„ÙÙŠÙÙ‘",                          tr:"Al-Waliyy",     en:"The Protecting Friend", sq:"Ai qÃ« Ã«shtÃ« aleat dhe mbrojtÃ«s i besimtarÃ«ve.",    m:"The One who is the ally and protector of the believers."},
+  {n:57, ar:"Ù±Ù„Ù’Ø­ÙŽÙ…ÙÙŠØ¯Ù",                          tr:"Al-á¸¤amÄ«d",      en:"The Praiseworthy", sq:"Ai qÃ« meriton gjithÃ« lavdÃ«rim me thelbin e Tij dhe tÃ« gjitha veprimet e Tij.",         m:"The One who deserves all praise by His very essence and all His actions."},
+  {n:58, ar:"Ù±Ù„Ù’Ù…ÙØ­Ù’ØµÙÙŠ",                          tr:"Al-Muá¸¥á¹£Ä«",      en:"The Counter", sq:"Ai qÃ« numÃ«ron dhe regjistron tÃ« gjitha gjÃ«rat me saktÃ«si tÃ« pÃ«rsosur.",              m:"The One who counts and records all things with perfect precision."},
+  {n:59, ar:"Ù±Ù„Ù’Ù…ÙØ¨Ù’Ø¯ÙØ¦Ù",                         tr:"Al-MubdiÊ¾",     en:"The Originator", sq:"Ai qÃ« filloi krijimin nga hiÃ§i, pa precedent.",           m:"The One who started creation from nothing, without precedent."},
+  {n:60, ar:"Ù±Ù„Ù’Ù…ÙØ¹ÙÙŠØ¯Ù",                          tr:"Al-MuÊ¿Ä«d",      en:"The Restorer", sq:"Ai qÃ« do ti rivendosÃ« dhe riketÃ« gjithÃ« krijimin pas vdekjes.",             m:"The One who will restore and recreate all creation after death."},
+  {n:61, ar:"Ù±Ù„Ù’Ù…ÙØ­Ù’ÙŠÙÙŠ",                          tr:"Al-Muá¸¥yÄ«",      en:"The Giver of Life", sq:"Ai qÃ« u jep jetÃ« gjithÃ§kaje qÃ« jeton.",        m:"The One who grants life to everything that lives."},
+  {n:62, ar:"Ù±Ù„Ù’Ù…ÙÙ…ÙÙŠØªÙ",                          tr:"Al-MumÄ«t",      en:"The Taker of Life", sq:"Ai qÃ« merr shpirtrat e krijimit nÃ« kohÃ«n e tyre tÃ« caktuar.",        m:"The One who takes the souls of creation at their appointed time."},
+  {n:63, ar:"Ù±Ù„Ù’Ø­ÙŽÙŠÙÙ‘",                            tr:"Al-á¸¤ayy",       en:"The Ever-Living", sq:"Ai Jeta e tÃ« Cilit nuk ka fillim, fund apo ndÃ«rprerje.",          m:"The One whose life has no beginning, no end, and no interruption."},
+  {n:64, ar:"Ù±Ù„Ù’Ù‚ÙŽÙŠÙÙ‘ÙˆÙ…Ù",                         tr:"Al-QayyÅ«m",     en:"The Self-Subsisting", sq:"Ai nga i cili varet gjithÃ« ekzistenca, ndÃ«rkohÃ« qÃ« Ai nuk varet nga asgjÃ«.",      m:"The One upon whom all existence depends, yet who depends on nothing."},
+  {n:65, ar:"Ù±Ù„Ù’ÙˆÙŽØ§Ø¬ÙØ¯Ù",                          tr:"Al-WÄjid",      en:"The Finder", sq:"Ai qÃ« gjen dhe percepton gjithÃ§ka qÃ« dÃ«shiron sipas vullnetit tÃ« Tij.",               m:"The One who finds and perceives everything He wishes at will."},
+  {n:66, ar:"Ù±Ù„Ù’Ù…ÙŽØ§Ø¬ÙØ¯Ù",                          tr:"Al-MÄjid",      en:"The Noble", sq:"Ai fisnik dhe bujar, plot nder dhe lavdi.",                m:"The One noble and generous, full of honour and glory."},
+  {n:67, ar:"Ù±Ù„Ù’ÙˆÙŽØ§Ø­ÙØ¯Ù",                          tr:"Al-WÄá¸¥id",      en:"The One", sq:"Ai qÃ« Ã«shtÃ« unik dhe pa asnjÃ« partner apo tÃ« barabartÃ«.",                  m:"The One who is unique and without any partner or equal."},
+  {n:68, ar:"Ù±Ù„Ù’Ø£ÙŽØ­ÙŽØ¯Ù",                           tr:"Al-Aá¸¥ad",       en:"The Unique", sq:"Ai qÃ« Ã«shtÃ« absolutisht singular, i pandashÃ«m dhe i pakrahasueshÃ«m.",               m:"The One who is absolutely singular, indivisible and incomparable."},
+  {n:69, ar:"Ù±Ù„ØµÙŽÙ‘Ù…ÙŽØ¯Ù",                           tr:"Aá¹£-á¹¢amad",     en:"The Eternal", sq:"Ai nga i cili varen tÃ« gjithÃ«, por Ai VetÃ« nuk varet nga asgjÃ«.",              m:"The One upon whom all depend, but who Himself depends on nothing."},
+  {n:70, ar:"Ù±Ù„Ù’Ù‚ÙŽØ§Ø¯ÙØ±Ù",                          tr:"Al-QÄdir",      en:"The Capable", sq:"Ai qÃ« ka fuqi tÃ« plotÃ« mbi Ã§do gjÃ« pa asnjÃ« kufi.",              m:"The One who has complete power over everything without any limit."},
+  {n:71, ar:"Ù±Ù„Ù’Ù…ÙÙ‚Ù’ØªÙŽØ¯ÙØ±Ù",                       tr:"Al-Muqtadir",   en:"The All-Powerful", sq:"Ai i autoritetit tÃ« plotÃ« i cili ekzekuton vullnetin e Tij me fuqi absolute.",         m:"The One of full authority who executes His will with absolute power."},
+  {n:72, ar:"Ù±Ù„Ù’Ù…ÙÙ‚ÙŽØ¯ÙÙ‘Ù…Ù",                        tr:"Al-Muqaddim",   en:"The Expediter", sq:"Ai qÃ« Ã§on pÃ«rpara dhe jep pÃ«rparÃ«si kujt dhe Ã§farÃ« do.",            m:"The One who brings forward and prioritises whom and what He wills."},
+  {n:73, ar:"Ù±Ù„Ù’Ù…ÙØ¤ÙŽØ®ÙÙ‘Ø±Ù",                        tr:"Al-MuÊ¾akhkhir", en:"The Delayer", sq:"Ai qÃ« vonon dhe shtyn prapa kujt dhe Ã§farÃ« do.",              m:"The One who delays and puts back whom and what He wills."},
+  {n:74, ar:"Ù±Ù„Ù’Ø£ÙŽÙˆÙŽÙ‘Ù„Ù",                          tr:"Al-Awwal",      en:"The First", sq:"Ai Ekzistenca e tÃ« Cilit nuk ka fillim â€” Ai i paraprin gjithÃ§kaje.",                m:"The One whose existence has no beginning â€” He precedes everything."},
+  {n:75, ar:"Ù±Ù„Ù’Ø¢Ø®ÙØ±Ù",                            tr:"Al-Ä€khir",      en:"The Last", sq:"Ai Ekzistenca e tÃ« Cilit nuk ka fund â€” Ai mbetet pas gjithÃ§kaje.",                 m:"The One whose existence has no end â€” He remains after everything."},
+  {n:76, ar:"Ù±Ù„Ø¸ÙŽÙ‘Ø§Ù‡ÙØ±Ù",                          tr:"Aáº“-áº’Ähir",     en:"The Manifest", sq:"Ai qÃ« Ã«shtÃ« i dukshÃ«m dhe evident nÃ«pÃ«rmjet shenjave dhe krijimit tÃ« Tij.",             m:"The One who is apparent and evident through His signs and creation."},
+  {n:77, ar:"Ù±Ù„Ù’Ø¨ÙŽØ§Ø·ÙÙ†Ù",                          tr:"Al-BÄá¹­in",      en:"The Hidden", sq:"Ai i fshehur nga shikimi dhe shqisat e gjithÃ« krijimit tÃ« Tij.",               m:"The One hidden from the sight and senses of all His creation."},
+  {n:78, ar:"Ù±Ù„Ù’ÙˆÙŽØ§Ù„ÙÙŠ",                           tr:"Al-WÄlÄ«",       en:"The Governor", sq:"Ai qÃ« qeveris dhe administron tÃ« gjitha punÃ«t e universit.",             m:"The One who governs and manages all affairs of the universe."},
+  {n:79, ar:"Ù±Ù„Ù’Ù…ÙØªÙŽØ¹ÙŽØ§Ù„ÙÙŠ",                       tr:"Al-MutaÊ¿ÄlÄ«",   en:"The Most Exalted", sq:"Ai i lartÃ« mbi gjithÃ« krijimin dhe Ã§do pÃ«rshkrim nÃ« MadhÃ«rinÃ« e Tij.",         m:"The One far above all creation and any description in His greatness."},
+  {n:80, ar:"Ù±Ù„Ù’Ø¨ÙŽØ±ÙÙ‘",                            tr:"Al-Barr",       en:"The Source of Goodness", sq:"Ai qÃ« Ã«shtÃ« i pafund nÃ« mirÃ«si, i drejtÃ« dhe besnik ndaj tÃ« gjitha premtimeve tÃ« Tij.",   m:"The One who is infinitely kind, righteous and true to all His promises."},
+  {n:81, ar:"Ù±Ù„ØªÙŽÙ‘ÙˆÙŽÙ‘Ø§Ø¨Ù",                         tr:"At-TawwÄb",     en:"The Acceptor of Repentance", sq:"Ai qÃ« pranon me gÃ«zim dhe vazhdimisht pendimin e robÃ«rve tÃ« Tij.",m:"The One who repeatedly and joyfully accepts the repentance of His servants."},
+  {n:82, ar:"Ù±Ù„Ù’Ù…ÙÙ†Ù’ØªÙŽÙ‚ÙÙ…Ù",                       tr:"Al-Muntaqim",   en:"The Avenger", sq:"Ai qÃ« ndÃ«shkon shtypÃ«sit dhe keqbÃ«rÃ«sit me drejtÃ«si tÃ« pÃ«rsosur.",              m:"The One who punishes the oppressors and wrongdoers with perfect justice."},
+  {n:83, ar:"Ù±Ù„Ù’Ø¹ÙŽÙÙÙˆÙÙ‘",                          tr:"Al-Ê¿Afuww",     en:"The Pardoner", sq:"Ai qÃ« fshin plotÃ«sisht mÃ«katet â€” sikur nuk kanÃ« ndodhur kurrÃ«.",             m:"The One who erases sins entirely â€” as if they never occurred."},
+  {n:84, ar:"Ù±Ù„Ø±ÙŽÙ‘Ø¡ÙÙˆÙÙ",                          tr:"Ar-RaÊ¾Å«f",      en:"The Most Kind", sq:"Ai plot dhembshuri dhe butÃ«si tÃ« thellÃ« pÃ«r robÃ«rit e Tij.",            m:"The One full of the deepest compassion and tenderness for His servants."},
+  {n:85, ar:"Ù…ÙŽØ§Ù„ÙÙƒÙ Ù±Ù„Ù’Ù…ÙÙ„Ù’ÙƒÙ",                   tr:"MÄlik al-Mulk", en:"Owner of Sovereignty", sq:"Ai qÃ« zotÃ«ron pronÃ«si absolute dhe ekskluzive tÃ« gjithÃ« sundimit.",     m:"The One who possesses absolute and exclusive ownership of all dominion."},
+  {n:86, ar:"Ø°ÙÙˆ Ù±Ù„Ù’Ø¬ÙŽÙ„ÙŽØ§Ù„Ù ÙˆÙŽÙ±Ù„Ù’Ø¥ÙÙƒÙ’Ø±ÙŽØ§Ù…Ù",       tr:"Dhul-JalÄli wal-IkrÄm", en:"Lord of Majesty and Bounty", sq:"Ai qÃ« kombinon nÃ« mÃ«nyrÃ« unike madhÃ«si supreme me bujarim tÃ« pafund.", m:"The One who uniquely combines supreme greatness with infinite generosity."},
+  {n:87, ar:"Ù±Ù„Ù’Ù…ÙÙ‚Ù’Ø³ÙØ·Ù",                         tr:"Al-Muqsiá¹­",     en:"The Equitable", sq:"Ai qÃ« Ã«shtÃ« plotÃ«sisht i drejtÃ« nÃ« tÃ« gjitha gjykimet dhe marrÃ«veshjet e Tij.",            m:"The One who is perfectly just in all His judgements and dealings."},
+  {n:88, ar:"Ù±Ù„Ù’Ø¬ÙŽØ§Ù…ÙØ¹Ù",                          tr:"Al-JÄmiÊ¿",      en:"The Gatherer", sq:"Ai qÃ« do tÃ« mbledhÃ« gjithÃ« krijimin nÃ« DitÃ«n e Gjykimit.",             m:"The One who will gather all of creation on the Day of Judgement."},
+  {n:89, ar:"Ù±Ù„Ù’ØºÙŽÙ†ÙÙŠÙÙ‘",                          tr:"Al-Ghaniyy",    en:"The Self-Sufficient", sq:"Ai qÃ« nuk ka nevojÃ« absolute pÃ«r asnjÃ« nga krijimi i Tij.",      m:"The One who needs absolutely nothing from any of His creation."},
+  {n:90, ar:"Ù±Ù„Ù’Ù…ÙØºÙ’Ù†ÙÙŠ",                          tr:"Al-MughnÄ«",     en:"The Enricher", sq:"Ai qÃ« pasuron dhe ngop me bujarinÃ« e Tij kÃ« do.",             m:"The One who enriches and satisfies with His bounty whoever He wills."},
+  {n:91, ar:"Ù±Ù„Ù’Ù…ÙŽØ§Ù†ÙØ¹Ù",                          tr:"Al-MÄniÊ¿",      en:"The Preventer", sq:"Ai qÃ« ndalon dhe mbron â€” duke vendosur Ã§farÃ« u arrin robÃ«rve tÃ« Tij.",            m:"The One who withholds and protects â€” deciding what reaches His servants."},
+  {n:92, ar:"Ù±Ù„Ø¶ÙŽÙ‘Ø§Ø±ÙÙ‘",                           tr:"Aá¸-á¸ŒÄrr",      en:"The Distresser", sq:"Ai qÃ« ka fuqi tÃ« shkaktojÃ« dÃ«m kur do si pjesÃ« e urtÃ«sisÃ« sÃ« Tij.",           m:"The One who has power to cause harm when He wills as part of His wisdom."},
+  {n:93, ar:"Ù±Ù„Ù†ÙŽÙ‘Ø§ÙÙØ¹Ù",                          tr:"An-NÄfiÊ¿",      en:"The Benefiter", sq:"Ai qÃ« krijon gjithÃ« dobinÃ« dhe mirÃ«sinÃ« pÃ«r krijimin e Tij siÃ§ do.",            m:"The One who creates all benefit and good for His creation as He wills."},
+  {n:94, ar:"Ù±Ù„Ù†ÙÙ‘ÙˆØ±Ù",                            tr:"An-NÅ«r",        en:"The Light", sq:"Ai qÃ« Ã«shtÃ« burimi i fundit i gjithÃ« dritÃ«s, udhÃ«zimit dhe ndriÃ§imit.",                m:"The One who is the ultimate source of all light, guidance and illumination."},
+  {n:95, ar:"Ù±Ù„Ù’Ù‡ÙŽØ§Ø¯ÙÙŠ",                           tr:"Al-HÄdÄ«",       en:"The Guide", sq:"Ai qÃ« udhÃ«zon krijimin e Tij drejt rrugÃ«s sÃ« drejtÃ« dhe diturisÃ« sÃ« vÃ«rtetÃ«.",                m:"The One who guides His creation to the right path and true knowledge."},
+  {n:96, ar:"Ù±Ù„Ù’Ø¨ÙŽØ¯ÙÙŠØ¹Ù",                          tr:"Al-BadÄ«Ê¿",      en:"The Incomparable", sq:"Ai qÃ« krijoi universin nÃ« mÃ«nyrÃ« krejt tÃ« re dhe tÃ« paprecedentÃ«.",         m:"The One who created the universe in a wholly new and unprecedented way."},
+  {n:97, ar:"Ù±Ù„Ù’Ø¨ÙŽØ§Ù‚ÙÙŠ",                           tr:"Al-BÄqÄ«",       en:"The Everlasting", sq:"Ai qÃ« mbetet pÃ«rgjithmonÃ« kur gjithÃ§ka tjetÃ«r pushon dhe shkatÃ«rrohet.",          m:"The One who remains forever when all else ceases and perishes."},
+  {n:98, ar:"Ù±Ù„Ù’ÙˆÙŽØ§Ø±ÙØ«Ù",                          tr:"Al-WÄrith",     en:"The Inheritor", sq:"Ai qÃ« trashÃ«gon tokÃ«n dhe gjithÃ§ka mbi tÃ« pasi krijimi mbaron.",            m:"The One who inherits the earth and all that is upon it after creation ends."},
+  {n:99, ar:"Ù±Ù„ØµÙŽÙ‘Ø¨ÙÙˆØ±Ù",                          tr:"Aá¹£-á¹¢abÅ«r",     en:"The Patient", sq:"Ai qÃ« Ã«shtÃ« i pafund nÃ« durim â€” kurrÃ« nuk nxiton ndÃ«shkimin pÃ«rtej afatit tÃ« tij.",              m:"The One who is infinitely patient â€” never rushing punishment beyond its due time."},
 ];
 
-// ─── 99 NAMES PAGE ────────────────────────────────────────────────
+// â”€â”€â”€ 99 NAMES PAGE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function AsmaPage() {
   const { t } = useTranslation();
   const isSq = i18n.language?.startsWith("sq");
@@ -3180,12 +3181,12 @@ function AsmaPage() {
 
   return (
     <div style={{ maxWidth: 940, margin: "0 auto", padding: "40px 24px" }}>
-      <PageTitle icon="✨" title={t("asma.title")} sub={t("asma.sub")} />
+      <PageTitle icon="âœ¨" title={t("asma.title")} sub={t("asma.sub")} />
 
       {/* Quranic verse */}
       <div style={{ textAlign: "center", marginBottom: 10 }}>
         <div style={{ fontFamily: ARABIC_F, fontSize: 20, color: GOLD, direction: "rtl", lineHeight: 2 }}>
-          وَلِلَّهِ الْأَسْمَاءُ الْحُسْنَى فَادْعُوهُ بِهَا
+          ÙˆÙŽÙ„ÙÙ„ÙŽÙ‘Ù‡Ù Ø§Ù„Ù’Ø£ÙŽØ³Ù’Ù…ÙŽØ§Ø¡Ù Ø§Ù„Ù’Ø­ÙØ³Ù’Ù†ÙŽÙ‰ ÙÙŽØ§Ø¯Ù’Ø¹ÙÙˆÙ‡Ù Ø¨ÙÙ‡ÙŽØ§
         </div>
         <p style={{ fontSize: 12, color: MUTED, marginTop: 4, letterSpacing: "0.04em" }}>
           {t("asma.verse")}
@@ -3228,9 +3229,9 @@ function AsmaPage() {
           padding:"20px",
         }}>
           <div onClick={e => e.stopPropagation()} style={{
-            background:"linear-gradient(135deg,#0E0C08,#161210)",
+            background:`linear-gradient(135deg,${SURFACE},#f0e8d0)`,
             border:`1px solid ${GOLD}50`,
-            boxShadow:`0 24px 80px rgba(0,0,0,0.9), 0 0 0 1px ${GOLD}15`,
+            boxShadow:`0 24px 80px rgba(160,120,50,0.2), 0 0 0 1px ${GOLD}20`,
             maxWidth:480, width:"100%", padding:"36px 32px",
             position:"relative",
           }}>
@@ -3241,7 +3242,7 @@ function AsmaPage() {
               color:MUTED, width:28, height:28, cursor:"pointer",
               fontSize:13, display:"flex", alignItems:"center", justifyContent:"center",
               fontFamily:SANS, borderRadius:2,
-            }}>✕</button>
+            }}>âœ•</button>
 
             {/* Number badge */}
             <div style={{ fontSize:10, color:GOLD, letterSpacing:"0.18em", textTransform:"uppercase", marginBottom:16 }}>
@@ -3302,27 +3303,27 @@ function AsmaPage() {
       )}
 
       <p style={{ marginTop:20, fontSize:12, color:MUTED, textAlign:"center", letterSpacing:"0.04em" }}>
-        "Allah has 99 names. Whoever memorises (and acts upon) them all will enter Paradise." — Bukhari 2736 · Muslim 2677
+        "Allah has 99 names. Whoever memorises (and acts upon) them all will enter Paradise." â€” Bukhari 2736 Â· Muslim 2677
       </p>
     </div>
   );
 }
 
-// ─── QURAN ────────────────────────────────────────────────────────
+// â”€â”€â”€ QURAN â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 const ARABIC = "'Amiri', 'Traditional Arabic', serif";
 
 // Normalize text for fuzzy search: strip diacritics, apostrophes, hyphens
-// So "Ma'un" → "maun", "Raḥmān" → "rahman", "Al-Fātiḥah" → "alfatihah"
+// So "Ma'un" â†’ "maun", "Raá¸¥mÄn" â†’ "rahman", "Al-FÄtiá¸¥ah" â†’ "alfatihah"
 function normSearch(s) {
   return s
     .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")  // strip combining diacritics (ā→a, ḥ→h, etc.)
-    .replace(/[''ʿʾʻˀ`]/g, "")        // strip Arabic ʿayn, hamza, apostrophe variants
-    .replace(/[-]/g, "")               // strip hyphens (Al-Fatiha → Alfatiha)
+    .replace(/[\u0300-\u036f]/g, "")  // strip combining diacritics (Äâ†’a, á¸¥â†’h, etc.)
+    .replace(/[''Ê¿Ê¾Ê»Ë€`]/g, "")        // strip Arabic Ê¿ayn, hamza, apostrophe variants
+    .replace(/[-]/g, "")               // strip hyphens (Al-Fatiha â†’ Alfatiha)
     .toLowerCase();
 }
 let _surahCache = null;
-// Full-Quran verse index for search — loaded once per session per edition
+// Full-Quran verse index for search â€” loaded once per session per edition
 let _fullVerseCache = null; // { edition: string, verses: [{surahNum,ayahNum,surahName,surahAr,ar,tr,en}] }
 
 function QuranPage() {
@@ -3380,7 +3381,7 @@ function QuranPage() {
           verse: verse.n,
           surahEn: surah?.englishName || "",
           surahAr: surah?.name || "",
-          preview: verse.en ? verse.en.substring(0, 80) + (verse.en.length > 80 ? "…" : "") : "",
+          preview: verse.en ? verse.en.substring(0, 80) + (verse.en.length > 80 ? "â€¦" : "") : "",
           savedAt: Date.now(),
         };
         next = [entry, ...prev].slice(0, 20);
@@ -3394,7 +3395,7 @@ function QuranPage() {
     return bookmarks.some(b => b.key === current + ":" + verseN);
   }
 
-  // Load surah list — use module cache if available
+  // Load surah list â€” use module cache if available
   useEffect(() => {
     if (_surahCache) { setSurahs(_surahCache); setLoadingList(false); return; }
     fetch("https://api.alquran.cloud/v1/surah")
@@ -3407,7 +3408,7 @@ function QuranPage() {
       .catch(() => setLoadingList(false));
   }, []);
 
-  // Load verses — check localStorage first (offline cache)
+  // Load verses â€” check localStorage first (offline cache)
   useEffect(() => {
     if (!current) return;
     setLoadingRead(true); setVerses([]); setFromCache(false);
@@ -3496,7 +3497,7 @@ function QuranPage() {
     }).catch(() => setFullLoading(false));
   }, [search, transEdition]);
 
-  // Cross-surah verse search — uses full Quran cache once loaded
+  // Cross-surah verse search â€” uses full Quran cache once loaded
   const crossResults = useMemo(() => {
     if (search.trim().length < 3) return [];
     if (!_fullVerseCache || _fullVerseCache.edition !== transEdition) return [];
@@ -3532,7 +3533,7 @@ function QuranPage() {
     String(s.number).includes(search)
   );
 
-  // ── READER VIEW ────────────────────────────────────────────────
+  // â”€â”€ READER VIEW â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   if (current && surah) return (
     <div style={{ maxWidth: 780, margin: "0 auto", padding: "40px 24px" }} ref={topRef}>
       {/* Header */}
@@ -3542,7 +3543,7 @@ function QuranPage() {
         </button>
         <div style={{ textAlign: "center", flex: 1 }}>
           <div style={{ fontSize: 11, color: MUTED, letterSpacing: "0.14em", textTransform: "uppercase", marginBottom: 4 }}>
-            Surah {surah.number} · {surah.revelationType} · {surah.numberOfAyahs} verses
+            Surah {surah.number} Â· {surah.revelationType} Â· {surah.numberOfAyahs} verses
             {fromCache && <span style={{ marginLeft:8, color:GOLD, fontSize:9, border:`1px solid ${GOLD}40`, padding:"1px 6px", letterSpacing:"0.1em" }}>CACHED</span>}
           </div>
           <div style={{ fontFamily: SERIF, fontSize: 22, color: TEXT }}>{surah.englishName}</div>
@@ -3562,14 +3563,14 @@ function QuranPage() {
         <div style={{ position: "relative", marginBottom: 28 }} ref={vsInputRef}>
           <div style={{ position: "relative" }}>
             <input
-              placeholder={isSq ? "Kërko fjalë apo varg… (min. 3 shkronja)" : "Search word or verse… (min. 3 letters)"}
+              placeholder={isSq ? "KÃ«rko fjalÃ« apo vargâ€¦ (min. 3 shkronja)" : "Search word or verseâ€¦ (min. 3 letters)"}
               value={verseSearch}
               onChange={e => { setVerseSearch(e.target.value); setVsOpen(true); }}
               onFocus={() => setVsOpen(true)}
               onBlur={() => setTimeout(() => setVsOpen(false), 180)}
               style={{
                 width: "100%", padding: "10px 40px 10px 16px",
-                background: "#0D0D0D", border: `1px solid ${verseSearch.length >= 3 ? GOLD + "80" : BORDER}`,
+                background: "#faf5ec", border: `1px solid ${verseSearch.length >= 3 ? GOLD + "80" : BORDER}`,
                 borderRadius: 2, color: TEXT, fontSize: 13, fontFamily: SANS,
                 outline: "none", boxSizing: "border-box", transition: "border-color 0.2s",
               }}
@@ -3580,7 +3581,7 @@ function QuranPage() {
               <button onClick={() => { setVerseSearch(""); setVsOpen(false); }} style={{
                 position: "absolute", right: 12, top: "50%", transform: "translateY(-50%)",
                 background: "none", border: "none", color: MUTED, cursor: "pointer", fontSize: 16, lineHeight: 1,
-              }}>×</button>
+              }}>Ã—</button>
             )}
             {!verseSearch && (
               <span style={{ position: "absolute", right: 14, top: "50%", transform: "translateY(-50%)", fontSize: 13, color: MUTED, pointerEvents: "none" }}>
@@ -3592,13 +3593,13 @@ function QuranPage() {
           {vsOpen && verseSearch.trim().length >= 3 && (
             <div style={{
               position: "absolute", top: "100%", left: 0, right: 0, zIndex: 100,
-              background: "#0F0F0F", border: `1px solid ${GOLD}40`,
+              background: "#f0e6ce", border: `1px solid ${GOLD}40`,
               borderTop: "none", maxHeight: 380, overflowY: "auto",
-              boxShadow: "0 8px 32px rgba(0,0,0,0.7)",
+              boxShadow: "0 8px 32px rgba(160,120,50,0.15)",
             }}>
               {verseResults.length === 0 ? (
                 <div style={{ padding: "14px 18px", color: MUTED, fontSize: 12, fontFamily: SANS, letterSpacing: "0.08em" }}>
-                  {isSq ? "Asnjë rezultat." : "No results found."}
+                  {isSq ? "AsnjÃ« rezultat." : "No results found."}
                 </div>
               ) : (
                 <>
@@ -3668,7 +3669,7 @@ function QuranPage() {
         </div>
         {surah.number !== 9 && (
           <div style={{ fontSize: 20, fontFamily: ARABIC, color: MUTED, direction: "rtl", marginTop: 8, lineHeight: 2 }}>
-            بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ
+            Ø¨ÙØ³Ù’Ù…Ù Ù±Ù„Ù„ÙŽÙ‘Ù‡Ù Ù±Ù„Ø±ÙŽÙ‘Ø­Ù’Ù…ÙŽÙ°Ù†Ù Ù±Ù„Ø±ÙŽÙ‘Ø­ÙÙŠÙ…Ù
           </div>
         )}
         <div style={{ width: 60, height: 1, background: `linear-gradient(90deg, transparent, ${GOLD}60, transparent)`, margin: "20px auto 0" }} />
@@ -3676,7 +3677,7 @@ function QuranPage() {
 
       {loadingRead && (
         <div style={{ textAlign: "center", padding: 60, color: MUTED, fontSize: 13, letterSpacing: "0.1em" }}>
-          Loading verses…
+          Loading versesâ€¦
         </div>
       )}
 
@@ -3701,13 +3702,13 @@ function QuranPage() {
                   background: "none", border: "none", cursor: "pointer",
                   fontSize: 14, color: isBookmarked(v.n) ? GOLD : MUTED,
                   padding: 2, transition: "color 0.15s", lineHeight: 1,
-                }}>{"🔖"}</button>
+                }}>{"ðŸ”–"}</button>
               </div>
               <div style={{ fontSize: 26, fontFamily: ARABIC, color: TEXT, lineHeight: 2.2, flex: 1, textAlign: "right" }}>
                 {v.ar}
               </div>
             </div>
-            {/* Transliteration — always visible */}
+            {/* Transliteration â€” always visible */}
             {v.tr && (
               <div style={{ fontSize: 15, color: GOLD + "bb", lineHeight: 1.9, paddingLeft: 48, fontFamily: SANS, letterSpacing: "0.04em", fontStyle: "italic" }}>
                 {v.tr}
@@ -3730,7 +3731,7 @@ function QuranPage() {
             flex: 1, padding: "12px 0", background: "transparent", border: `1px solid ${BORDER}`,
             borderRadius: 2, color: current === 1 ? BORDER : MUTED, cursor: current === 1 ? "default" : "pointer",
             fontSize: 12, fontFamily: SANS, letterSpacing: "0.06em", transition: "all 0.2s",
-          }}>← Previous Surah</button>
+          }}>â† Previous Surah</button>
           <button onClick={back} style={{
             padding: "12px 24px", background: "transparent", border: `1px solid ${BORDER}`,
             borderRadius: 2, color: MUTED, cursor: "pointer", fontSize: 12, fontFamily: SANS,
@@ -3739,23 +3740,23 @@ function QuranPage() {
             flex: 1, padding: "12px 0", background: "transparent", border: `1px solid ${BORDER}`,
             borderRadius: 2, color: current === 114 ? BORDER : MUTED, cursor: current === 114 ? "default" : "pointer",
             fontSize: 12, fontFamily: SANS, letterSpacing: "0.06em", transition: "all 0.2s",
-          }}>Next Surah →</button>
+          }}>Next Surah â†’</button>
         </div>
       )}
     </div>
   );
 
-  // ── SURAH LIST VIEW ────────────────────────────────────────────
+  // â”€â”€ SURAH LIST VIEW â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   return (
     <div style={{ maxWidth: 860, margin: "0 auto", padding: "40px 24px" }}>
-      <PageTitle icon="📖" title={t("pages.quran.title")} sub={t("pages.quran.sub")} />
+      <PageTitle icon="ðŸ“–" title={t("pages.quran.title")} sub={t("pages.quran.sub")} />
 
       {/* Bookmarks panel */}
       {bookmarks.length > 0 && (
-        <div style={{ marginBottom: 28, border: "1px solid " + GOLD + "30", background: "linear-gradient(135deg,#0E0C08,#120F08)" }}>
+        <div style={{ marginBottom: 28, border: "1px solid " + GOLD + "30", background: "rgba(255,252,244,0.85)" }}>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "12px 18px", borderBottom: "1px solid " + BORDER }}>
             <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-              <span style={{ fontSize: 14 }}>{"🔖"}</span>
+              <span style={{ fontSize: 14 }}>{"ðŸ”–"}</span>
               <span style={{ fontSize: 11, color: GOLD, letterSpacing: "0.14em", textTransform: "uppercase", fontFamily: SANS, fontWeight: 600 }}>Bookmarks</span>
               <span style={{ fontSize: 10, color: MUTED, background: BORDER, padding: "1px 7px" }}>{bookmarks.length}</span>
             </div>
@@ -3781,7 +3782,7 @@ function QuranPage() {
                   <div style={{ fontSize: 10, color: GOLD, fontFamily: SANS, fontWeight: 600 }}>{b.surah}:{b.verse}</div>
                 </div>
                 <div style={{ flex: 1, minWidth: 0 }}>
-                  <div style={{ fontSize: 13, color: TEXT, fontFamily: SERIF, marginBottom: 2 }}>{b.surahEn} — Verse {b.verse}</div>
+                  <div style={{ fontSize: 13, color: TEXT, fontFamily: SERIF, marginBottom: 2 }}>{b.surahEn} â€” Verse {b.verse}</div>
                   <div style={{ fontSize: 11, color: MUTED, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{b.preview}</div>
                 </div>
                 <div style={{ fontFamily: ARABIC, fontSize: 16, color: GOLD, flexShrink: 0, direction: "rtl" }}>{b.surahAr}</div>
@@ -3793,7 +3794,7 @@ function QuranPage() {
                     return next;
                   });
                 }} style={{ background: "none", border: "none", cursor: "pointer", color: MUTED, fontSize: 16, padding: "0 4px", flexShrink: 0 }}>
-                  ×
+                  Ã—
                 </button>
               </div>
             ))}
@@ -3802,10 +3803,10 @@ function QuranPage() {
       )}
 
       <input
-        placeholder={isSq ? "Kërko sure ose përmbajtje Kurani… (3+ shkronja)" : "Search surah name or Quran content… (3+ letters)"}
+        placeholder={isSq ? "KÃ«rko sure ose pÃ«rmbajtje Kuraniâ€¦ (3+ shkronja)" : "Search surah name or Quran contentâ€¦ (3+ letters)"}
         value={search} onChange={e => setSearch(e.target.value)}
         style={{
-          width: "100%", padding: "11px 16px", background: "#0E0E0E",
+          width: "100%", padding: "11px 16px", background: "#faf5ec",
           border: `1px solid ${search.trim().length >= 3 ? GOLD + "80" : BORDER}`,
           borderRadius: 2, color: TEXT,
           fontSize: 13, fontFamily: SANS, outline: "none", marginBottom: 24,
@@ -3817,7 +3818,7 @@ function QuranPage() {
 
       {loadingList && (
         <div style={{ textAlign: "center", padding: 60, color: MUTED, fontSize: 13, letterSpacing: "0.1em" }}>
-          Loading surahs…
+          Loading surahsâ€¦
         </div>
       )}
 
@@ -3844,7 +3845,7 @@ function QuranPage() {
               <div style={{ flex: 1, minWidth: 0 }}>
                 <div style={{ fontSize: 14, color: TEXT, fontWeight: 500, fontFamily: SERIF, letterSpacing: "0.03em" }}>{s.englishName}</div>
                 <div style={{ fontSize: 11, color: MUTED, marginTop: 2 }}>
-                  {s.englishNameTranslation} · {s.numberOfAyahs} verses · {s.revelationType}
+                  {s.englishNameTranslation} Â· {s.numberOfAyahs} verses Â· {s.revelationType}
                 </div>
               </div>
               <div style={{ fontFamily: ARABIC, fontSize: 20, color: GOLD, direction: "rtl", flexShrink: 0, lineHeight: 1.6 }}>
@@ -3858,15 +3859,15 @@ function QuranPage() {
       {/* Cross-surah verse content search results */}
       {crossResults.length > 0 && (
         <div style={{ border: `1px solid ${GOLD}30` }}>
-          <div style={{ padding: "9px 16px", borderBottom: `1px solid ${BORDER}`, display: "flex", alignItems: "center", gap: 10, background: "#0E0C08" }}>
+          <div style={{ padding: "9px 16px", borderBottom: `1px solid ${BORDER}`, display: "flex", alignItems: "center", gap: 10, background: "#faf5ec" }}>
             <span style={{ fontSize: 10, color: GOLD, letterSpacing: "0.14em", textTransform: "uppercase", fontFamily: SANS, fontWeight: 600 }}>
-              {isSq ? "Rezultate në përmbajtje" : "Verse content matches"}
+              {isSq ? "Rezultate nÃ« pÃ«rmbajtje" : "Verse content matches"}
             </span>
             <span style={{ fontSize: 10, color: MUTED, background: BORDER, padding: "1px 7px", fontFamily: SANS }}>
               {crossResults.length}{crossResults.length === 50 ? "+" : ""}
             </span>
             <span style={{ fontSize: 10, color: MUTED, fontFamily: SANS, marginLeft: "auto" }}>
-              {isSq ? "Të gjitha suret" : "All 114 surahs"}
+              {isSq ? "TÃ« gjitha suret" : "All 114 surahs"}
             </span>
           </div>
           {crossResults.map((r, i) => {
@@ -3922,22 +3923,22 @@ function QuranPage() {
       {search.trim().length >= 3 && crossResults.length === 0 && (
         <div style={{ padding: "18px 0", textAlign: "center", color: MUTED, fontSize: 12, fontFamily: SANS, letterSpacing: "0.08em" }}>
           {fullLoading
-            ? (isSq ? "Duke ngarkuar indeksin e Kuranit…" : "Loading Quran index…")
-            : (filtered.length > 0 ? null : (isSq ? "Asnjë rezultat." : "No matches found."))}
+            ? (isSq ? "Duke ngarkuar indeksin e Kuranitâ€¦" : "Loading Quran indexâ€¦")
+            : (filtered.length > 0 ? null : (isSq ? "AsnjÃ« rezultat." : "No matches found."))}
         </div>
       )}
     </div>
   );
 }
 
-// ─── TASBEEH ──────────────────────────────────────────────────────
+// â”€â”€â”€ TASBEEH â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 const DHIKR_PRESETS = [
-  { label: "SubḥānAllāh",   arabic: "سُبْحَانَ اللَّهِ",   target: 33  },
-  { label: "Alḥamdulillāh", arabic: "الْحَمْدُ لِلَّهِ",   target: 33  },
-  { label: "Allāhu Akbar",  arabic: "اللَّهُ أَكْبَرُ",    target: 34  },
-  { label: "Lā ilāha illAllāh", arabic: "لَا إِلَٰهَ إِلَّا اللَّهُ", target: 100 },
-  { label: "Astaghfirullāh", arabic: "أَسْتَغْفِرُ اللَّهَ", target: 100 },
-  { label: "Ṣalawāt",       arabic: "اللَّهُمَّ صَلِّ عَلَى مُحَمَّد", target: 100 },
+  { label: "Subá¸¥ÄnAllÄh",   arabic: "Ø³ÙØ¨Ù’Ø­ÙŽØ§Ù†ÙŽ Ø§Ù„Ù„ÙŽÙ‘Ù‡Ù",   target: 33  },
+  { label: "Alá¸¥amdulillÄh", arabic: "Ø§Ù„Ù’Ø­ÙŽÙ…Ù’Ø¯Ù Ù„ÙÙ„ÙŽÙ‘Ù‡Ù",   target: 33  },
+  { label: "AllÄhu Akbar",  arabic: "Ø§Ù„Ù„ÙŽÙ‘Ù‡Ù Ø£ÙŽÙƒÙ’Ø¨ÙŽØ±Ù",    target: 34  },
+  { label: "LÄ ilÄha illAllÄh", arabic: "Ù„ÙŽØ§ Ø¥ÙÙ„ÙŽÙ°Ù‡ÙŽ Ø¥ÙÙ„ÙŽÙ‘Ø§ Ø§Ù„Ù„ÙŽÙ‘Ù‡Ù", target: 100 },
+  { label: "AstaghfirullÄh", arabic: "Ø£ÙŽØ³Ù’ØªÙŽØºÙ’ÙÙØ±Ù Ø§Ù„Ù„ÙŽÙ‘Ù‡ÙŽ", target: 100 },
+  { label: "á¹¢alawÄt",       arabic: "Ø§Ù„Ù„ÙŽÙ‘Ù‡ÙÙ…ÙŽÙ‘ ØµÙŽÙ„ÙÙ‘ Ø¹ÙŽÙ„ÙŽÙ‰ Ù…ÙØ­ÙŽÙ…ÙŽÙ‘Ø¯", target: 100 },
 ];
 
 function TasbeehPage() {
@@ -3990,7 +3991,7 @@ function TasbeehPage() {
 
   return (
     <div style={{ maxWidth: 520, margin: "0 auto", padding: "40px 24px", userSelect: "none" }}>
-      <PageTitle icon="📿" title="Tasbeeh" sub="Digital dhikr counter" />
+      <PageTitle icon="ðŸ“¿" title="Tasbeeh" sub="Digital dhikr counter" />
 
       {/* Preset selector */}
       <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 40, justifyContent: "center" }}>
@@ -4031,15 +4032,15 @@ function TasbeehPage() {
               transform: "translate(-50%, -50%)",
               width: 196, height: 196, borderRadius: "50%",
               background: flash2
-                ? "radial-gradient(circle, #1a3a1a, #0A0A0A)"
-                : "radial-gradient(circle, #1A1710, #0A0A0A)",
-              border: `1px solid ${flash2 ? "#27ae60" : GOLD}40`,
+                ? `radial-gradient(circle, #e8f5e8, #d4edda)`
+                : `radial-gradient(circle, ${SURFACE}, #f0e8d0)`,
+              border: `1px solid ${flash2 ? "#27ae60" : GOLD}60`,
               cursor: "pointer", display: "flex", flexDirection: "column",
               alignItems: "center", justifyContent: "center", gap: 6,
               transition: "all 0.15s",
               boxShadow: flash2
-                ? `0 0 40px #27ae6040`
-                : `0 0 40px ${GOLD}18, inset 0 0 40px rgba(0,0,0,0.4)`,
+                ? `0 0 30px #27ae6040`
+                : `0 4px 24px rgba(160,120,50,0.18), 0 1px 0 rgba(255,255,255,0.9) inset`,
               WebkitTapHighlightColor: "transparent",
               outline: "none",
             }}
@@ -4093,7 +4094,7 @@ function TasbeehPage() {
   );
 }
 
-// ─── ADMIN ────────────────────────────────────────────────────────
+// â”€â”€â”€ ADMIN â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 const BOOK_CATS = ["Quran","Tafsir","Hadith","Seerah","Fiqh","Aqeedah","Spirituality","Dua & Dhikr","History","Modern Thought","Arabic","Online","Shqip"];
 const EMPTY_BOOK = { title: "", author: "", cat: "Quran", url: "#" };
 const EMPTY_LEC  = { sort: "", title: "", file: "", url: "" };
@@ -4165,7 +4166,7 @@ function AdminPage({ authSession }) {
         xhr.send(file);
       });
       setBookForm(f => ({ ...f, url: result.url }));
-      flash("✓ PDF uploaded to Cloudflare R2 — URL filled in.");
+      flash("âœ“ PDF uploaded to Cloudflare R2 â€” URL filled in.");
     } catch (e) {
       flash("Upload error: " + e.message);
     } finally {
@@ -4202,7 +4203,7 @@ function AdminPage({ authSession }) {
         file: file.name.replace(/\s+/g, "_"),
         url: result.url,
       }));
-      flash("✓ MP3 uploaded to Cloudflare R2 — fields filled in.");
+      flash("âœ“ MP3 uploaded to Cloudflare R2 â€” fields filled in.");
     } catch (e) {
       flash("Upload error: " + e.message);
     } finally {
@@ -4241,7 +4242,7 @@ function AdminPage({ authSession }) {
 
   useEffect(() => { if (token) load(); }, [token]);
 
-  // ── Books CRUD ─────────────────────────────────────────────────
+  // â”€â”€ Books CRUD â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   async function saveBook() {
     if (!bookForm.title.trim()) return;
     setBusy(true);
@@ -4277,7 +4278,7 @@ function AdminPage({ authSession }) {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
-  // ── Lectures CRUD ──────────────────────────────────────────────
+  // â”€â”€ Lectures CRUD â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   async function saveLec() {
     if (!lecForm.title.trim()) return;
     setBusy(true);
@@ -4314,9 +4315,9 @@ function AdminPage({ authSession }) {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
-  // ── Styles ─────────────────────────────────────────────────────
+  // â”€â”€ Styles â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   const inp = {
-    width: "100%", padding: "9px 12px", background: "#0E0E0E",
+    width: "100%", padding: "9px 12px", background: "#faf5ec",
     border: `1px solid ${BORDER}`, borderRadius: 2, color: TEXT,
     fontSize: 13, fontFamily: SANS, outline: "none",
   };
@@ -4325,11 +4326,11 @@ function AdminPage({ authSession }) {
     fontFamily: SANS, fontWeight: 600, letterSpacing: "0.06em",
     border: `1px solid ${accent}`,
     background: outline ? "transparent" : accent,
-    color: outline ? accent : "#0A0A0A",
+    color: outline ? accent : "#f0e6ce",
     transition: "opacity 0.2s",
   });
 
-  // ── Login screen ───────────────────────────────────────────────
+  // â”€â”€ Login screen â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   if (!token) {
     // User is signed in but not an admin
     if (sessionToken && !isAdminEmail) return (
@@ -4350,7 +4351,7 @@ function AdminPage({ authSession }) {
           <div style={{ textAlign: "center", marginBottom: 32 }}>
             <img src="/logo.png" alt="" style={{ width: 52, height: 52, objectFit: "contain", marginBottom: 16 }} />
             <div style={{ fontFamily: SERIF, fontSize: 22, color: TEXT, letterSpacing: "0.04em" }}>Admin Panel</div>
-            <div style={{ fontSize: 12, color: MUTED, marginTop: 4 }}>Muslim’s Path</div>
+            <div style={{ fontSize: 12, color: MUTED, marginTop: 4 }}>Muslimâ€™s Path</div>
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
             <input style={inp} type="email" placeholder="Admin Email" value={email}
@@ -4365,7 +4366,7 @@ function AdminPage({ authSession }) {
               onKeyDown={e => e.key === "Enter" && login()} />
             {loginErr && <div style={{ fontSize: 12, color: "#e74c3c", textAlign: "center" }}>{loginErr}</div>}
             <button onClick={login} disabled={logging} style={{ ...btn(), marginTop: 8, opacity: logging ? 0.6 : 1 }}>
-              {logging ? "Signing in…" : "Sign In"}
+              {logging ? "Signing inâ€¦" : "Sign In"}
             </button>
           </div>
         </div>
@@ -4373,7 +4374,7 @@ function AdminPage({ authSession }) {
     );
   }
 
-  // ── Dashboard ──────────────────────────────────────────────────
+  // â”€â”€ Dashboard â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   return (
     <div style={{ maxWidth: 960, margin: "0 auto", padding: "40px 24px" }}>
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 32 }}>
@@ -4402,10 +4403,10 @@ function AdminPage({ authSession }) {
           }}>{t}</button>
         ))}
         <div style={{ flex: 1 }} />
-        {busy && <div style={{ fontSize: 12, color: MUTED, alignSelf: "center", paddingRight: 8 }}>Loading…</div>}
+        {busy && <div style={{ fontSize: 12, color: MUTED, alignSelf: "center", paddingRight: 8 }}>Loadingâ€¦</div>}
       </div>
 
-      {/* ── BOOKS TAB ── */}
+      {/* â”€â”€ BOOKS TAB â”€â”€ */}
       {tab === "books" && (
         <div>
           {/* Form */}
@@ -4432,8 +4433,8 @@ function AdminPage({ authSession }) {
             {/* PDF Upload */}
             <div style={{ marginTop: 12, border: `1px dashed ${UPLOAD_WORKER_URL ? BORDER : GOLD+"30"}`, borderRadius: 2, padding: "14px 16px" }}>
               <div style={{ fontSize: 11, color: MUTED, marginBottom: 8, letterSpacing: "0.06em" }}>
-                UPLOAD PDF — auto-fills the URL above
-                {!UPLOAD_WORKER_URL && <span style={{ color: "#e67e22", marginLeft: 8 }}>⚠ Set VITE_UPLOAD_WORKER_URL in Vercel env vars to enable uploads</span>}
+                UPLOAD PDF â€” auto-fills the URL above
+                {!UPLOAD_WORKER_URL && <span style={{ color: "#e67e22", marginLeft: 8 }}>âš  Set VITE_UPLOAD_WORKER_URL in Vercel env vars to enable uploads</span>}
               </div>
               <input
                 type="file" accept=".pdf"
@@ -4446,11 +4447,11 @@ function AdminPage({ authSession }) {
                   <div style={{ height: 3, background: BORDER, borderRadius: 2 }}>
                     <div style={{ height: "100%", width: `${uploadPct}%`, background: GOLD, borderRadius: 2, transition: "width 0.3s" }} />
                   </div>
-                  <div style={{ fontSize: 11, color: GOLD, marginTop: 4 }}>Uploading… {uploadPct}%</div>
+                  <div style={{ fontSize: 11, color: GOLD, marginTop: 4 }}>Uploadingâ€¦ {uploadPct}%</div>
                 </div>
               )}
               {bookForm.url && bookForm.url !== "#" && bookForm.url.includes("supabase") && (
-                <div style={{ fontSize: 11, color: GOLD, marginTop: 8 }}>✓ PDF ready: {bookForm.url.split("/").pop()}</div>
+                <div style={{ fontSize: 11, color: GOLD, marginTop: 8 }}>âœ“ PDF ready: {bookForm.url.split("/").pop()}</div>
               )}
             </div>
 
@@ -4476,7 +4477,7 @@ function AdminPage({ authSession }) {
                   <div style={{ fontSize: 11, color: MUTED }}>{b.author}</div>
                 </div>
                 {b.url !== "#" && (
-                  <a href={b.url} target="_blank" rel="noreferrer" style={{ fontSize: 11, color: MUTED, textDecoration: "none", flexShrink: 0 }}>↗</a>
+                  <a href={b.url} target="_blank" rel="noreferrer" style={{ fontSize: 11, color: MUTED, textDecoration: "none", flexShrink: 0 }}>â†—</a>
                 )}
                 <button onClick={() => startEditBook(b)} style={{ ...btn(GOLD, true), padding: "5px 12px", fontSize: 11 }}>Edit</button>
                 <button onClick={() => deleteBook(b.id)} style={{ ...btn("#c0392b", true), padding: "5px 12px", fontSize: 11 }}>Del</button>
@@ -4489,7 +4490,7 @@ function AdminPage({ authSession }) {
         </div>
       )}
 
-      {/* ── LECTURES TAB ── */}
+      {/* â”€â”€ LECTURES TAB â”€â”€ */}
       {tab === "lectures" && (
         <div>
           {/* Form */}
@@ -4517,8 +4518,8 @@ function AdminPage({ authSession }) {
             {/* MP3 Upload */}
             <div style={{ marginTop: 12, border: `1px dashed ${UPLOAD_WORKER_URL ? BORDER : GOLD+"30"}`, borderRadius: 2, padding: "14px 16px" }}>
               <div style={{ fontSize: 11, color: MUTED, marginBottom: 8, letterSpacing: "0.06em" }}>
-                UPLOAD MP3 — auto-fills filename, URL and title above
-                {!UPLOAD_WORKER_URL && <span style={{ color: "#e67e22", marginLeft: 8 }}>⚠ Set VITE_UPLOAD_WORKER_URL in Vercel env vars to enable uploads</span>}
+                UPLOAD MP3 â€” auto-fills filename, URL and title above
+                {!UPLOAD_WORKER_URL && <span style={{ color: "#e67e22", marginLeft: 8 }}>âš  Set VITE_UPLOAD_WORKER_URL in Vercel env vars to enable uploads</span>}
               </div>
               <input
                 type="file" accept=".mp3,audio/*"
@@ -4531,11 +4532,11 @@ function AdminPage({ authSession }) {
                   <div style={{ height: 3, background: BORDER, borderRadius: 2 }}>
                     <div style={{ height: "100%", width: `${uploadMp3Pct}%`, background: GOLD, borderRadius: 2, transition: "width 0.3s" }} />
                   </div>
-                  <div style={{ fontSize: 11, color: GOLD, marginTop: 4 }}>Uploading… {uploadMp3Pct}%</div>
+                  <div style={{ fontSize: 11, color: GOLD, marginTop: 4 }}>Uploadingâ€¦ {uploadMp3Pct}%</div>
                 </div>
               )}
               {lecForm.url && lecForm.url.includes("r2.dev") && (
-                <div style={{ fontSize: 11, color: GOLD, marginTop: 8 }}>✓ MP3 ready: {lecForm.file}</div>
+                <div style={{ fontSize: 11, color: GOLD, marginTop: 8 }}>âœ“ MP3 ready: {lecForm.file}</div>
               )}
             </div>
 
@@ -4574,17 +4575,17 @@ function AdminPage({ authSession }) {
   );
 }
 
-// ─── AUDIO / LECTURES ─────────────────────────────────────────────
+// â”€â”€â”€ AUDIO / LECTURES â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function AudioPage({ lectures, current, playing, play, skip, seek, progress, duration, fmt, audioRef }) {
   const pct = duration ? (progress / duration) * 100 : 0;
 
   return (
     <div style={{ maxWidth: 720, margin: "0 auto", padding: "40px 24px" }}>
-      <PageTitle icon="🎙️" title="Ligjerata Islame" sub="Leksione dhe mësime nga studiuesit Islam" />
+      <PageTitle icon="ðŸŽ™ï¸" title="Ligjerata Islame" sub="Leksione dhe mÃ«sime nga studiuesit Islam" />
 
       {/* Player */}
       {current && (
-        <div style={{ background: "linear-gradient(145deg,#0E0C08,#161410)", border: `1px solid ${GOLD}40`, padding: "24px 28px", marginBottom: 24, boxShadow: `0 8px 40px rgba(0,0,0,0.6)` }}>
+        <div style={{ background: `linear-gradient(145deg,${SURFACE},#f0e8d0)`, border: `1px solid ${GOLD}50`, padding: "24px 28px", marginBottom: 24, borderRadius: 16, boxShadow: `0 4px 24px rgba(160,120,50,0.12)` }}>
           <div style={{ fontSize: 11, color: MUTED, textTransform: "uppercase", letterSpacing: "0.14em", marginBottom: 6 }}>Now Playing</div>
           <div style={{ fontSize: 20, fontWeight: 400, color: TEXT, fontFamily: SERIF, letterSpacing: "0.03em", marginBottom: 20 }}>{current.title}</div>
 
@@ -4601,20 +4602,20 @@ function AudioPage({ lectures, current, playing, play, skip, seek, progress, dur
           {/* Controls */}
           <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 16 }}>
             {/* Prev track */}
-            <button onClick={() => skip(-1)} title="Previous track" style={{ background: "none", border: "none", cursor: "pointer", color: MUTED, fontSize: 18 }}>⏮</button>
+            <button onClick={() => skip(-1)} title="Previous track" style={{ background: "none", border: "none", cursor: "pointer", color: MUTED, fontSize: 18 }}>â®</button>
             {/* -5s */}
             <button onClick={() => { if (audioRef.current) audioRef.current.currentTime = Math.max(0, audioRef.current.currentTime - 5); }} title="-5 seconds" style={{
               background: "none", border: `1px solid ${BORDER}`, borderRadius: 2,
               cursor: "pointer", color: MUTED, fontSize: 11, fontWeight: 700,
               padding: "4px 8px", letterSpacing: "0.04em", fontFamily: SANS,
-            }}>−5s</button>
+            }}>âˆ’5s</button>
             {/* Play/Pause */}
             <button onClick={() => play(current)} style={{
               width: 52, height: 52, borderRadius: "50%", border: `1px solid ${GOLD}`,
-              background: playing ? GOLD : "transparent", color: playing ? "#0A0A0A" : GOLD,
+              background: playing ? GOLD : "transparent", color: playing ? "#f0e6ce" : GOLD,
               cursor: "pointer", fontSize: 22, display: "flex", alignItems: "center", justifyContent: "center",
               transition: "all 0.2s",
-            }}>{playing ? "⏸" : "▶"}</button>
+            }}>{playing ? "â¸" : "â–¶"}</button>
             {/* +5s */}
             <button onClick={() => { if (audioRef.current) audioRef.current.currentTime = Math.min(duration, audioRef.current.currentTime + 5); }} title="+5 seconds" style={{
               background: "none", border: `1px solid ${BORDER}`, borderRadius: 2,
@@ -4622,7 +4623,7 @@ function AudioPage({ lectures, current, playing, play, skip, seek, progress, dur
               padding: "4px 8px", letterSpacing: "0.04em", fontFamily: SANS,
             }}>+5s</button>
             {/* Next track */}
-            <button onClick={() => skip(1)} title="Next track" style={{ background: "none", border: "none", cursor: "pointer", color: MUTED, fontSize: 18 }}>⏭</button>
+            <button onClick={() => skip(1)} title="Next track" style={{ background: "none", border: "none", cursor: "pointer", color: MUTED, fontSize: 18 }}>â­</button>
           </div>
         </div>
       )}
@@ -4640,12 +4641,12 @@ function AudioPage({ lectures, current, playing, play, skip, seek, progress, dur
               borderLeft: isActive ? `2px solid ${GOLD}` : "2px solid transparent",
               transition: "all 0.15s",
             }}
-              onMouseEnter={e => { if (!isActive) e.currentTarget.style.background = "#0E0E0E"; }}
+              onMouseEnter={e => { if (!isActive) e.currentTarget.style.background = "#faf5ec"; }}
               onMouseLeave={e => { if (!isActive) e.currentTarget.style.background = "transparent"; }}
             >
               <div style={{ width: 28, height: 28, borderRadius: "50%", border: `1px solid ${isActive ? GOLD : BORDER}`, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
                 {isActive && playing
-                  ? <span style={{ fontSize: 10, color: GOLD }}>▶</span>
+                  ? <span style={{ fontSize: 10, color: GOLD }}>â–¶</span>
                   : <span style={{ fontSize: 11, color: MUTED }}>{l.id}</span>}
               </div>
               <div style={{ flex: 1 }}>
