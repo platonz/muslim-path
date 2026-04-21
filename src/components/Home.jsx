@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import i18n from "../i18n";
 import Icon from "./Icon";
@@ -137,13 +137,70 @@ function ToolTile({ icon, label, onClick }) {
 }
 
 // ─── MAIN HOME COMPONENT ────────────────────────────────────────────
-export default function Home({ quote, setPage, savedLocation }) {
+export default function Home({ quote, setPage, savedLocation, onSaveLocation, showInstall, onInstall, onDismissInstall }) {
   const { t } = useTranslation();
   const isSq = i18n.language?.startsWith("sq");
 
   const [timings, setTimings] = useState(null);
   const [nextPrayer, setNextPrayer] = useState(null);
   const [now, setNow] = useState(new Date());
+
+  // ── Inline location search ─────────────────────────────────────
+  const [showLocSearch, setShowLocSearch] = useState(false);
+  const [locQuery, setLocQuery] = useState("");
+  const [locSuggs, setLocSuggs] = useState([]);
+  const [locLoading, setLocLoading] = useState(false);
+  const [locGpsLoading, setLocGpsLoading] = useState(false);
+  const locDebounce = useRef(null);
+  const locInputRef = useRef(null);
+
+  useEffect(() => {
+    if (locQuery.length < 2) { setLocSuggs([]); return; }
+    clearTimeout(locDebounce.current);
+    locDebounce.current = setTimeout(async () => {
+      setLocLoading(true);
+      try {
+        const res = await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(locQuery)}&format=json&limit=6&addressdetails=1`, { headers: { "Accept-Language": "en" } });
+        const json = await res.json();
+        setLocSuggs(json
+          .filter(r => r.class === "place" || r.class === "boundary" || ["city","town","village","municipality","administrative"].includes(r.type))
+          .map(r => ({ name: r.display_name.split(",").slice(0,2).join(", "), lat: parseFloat(r.lat), lon: parseFloat(r.lon), country: r.address?.country_code?.toUpperCase() || "" }))
+          .slice(0, 6));
+      } catch { setLocSuggs([]); }
+      setLocLoading(false);
+    }, 350);
+  }, [locQuery]);
+
+  function pickLocation(loc) {
+    onSaveLocation && onSaveLocation(loc);
+    setShowLocSearch(false);
+    setLocQuery("");
+    setLocSuggs([]);
+  }
+
+  async function locGPS() {
+    if (!navigator.geolocation) return;
+    setLocGpsLoading(true);
+    navigator.geolocation.getCurrentPosition(
+      async ({ coords }) => {
+        try {
+          const res = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${coords.latitude}&lon=${coords.longitude}&format=json&addressdetails=1`, { headers: { "Accept-Language": "en" } });
+          const json = await res.json();
+          const name = [json.address?.city || json.address?.town || json.address?.village || json.address?.county, json.address?.country].filter(Boolean).join(", ");
+          pickLocation({ name: name || "My Location", lat: coords.latitude, lon: coords.longitude, country: json.address?.country_code?.toUpperCase() || "" });
+        } catch { pickLocation({ name: "My Location", lat: coords.latitude, lon: coords.longitude, country: "" }); }
+        setLocGpsLoading(false);
+      },
+      () => setLocGpsLoading(false),
+      { timeout: 10000 }
+    );
+  }
+
+  // ── PWA install nudge (mobile, not yet installed) ──────────────
+  const isStandalone = window.matchMedia("(display-mode: standalone)").matches || navigator.standalone;
+  const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+  const isMobile = window.innerWidth < 768;
+  const [iosDismissed, setIosDismissed] = useState(() => !!localStorage.getItem("mp-ios-install-dismissed"));
 
   // Fetch all prayer timings
   useEffect(() => {
@@ -231,17 +288,56 @@ export default function Home({ quote, setPage, savedLocation }) {
               {/* Small card-local Kaaba watermark, bottom-right of card */}
               <KaabaWatermark fixed={false} opacity={0.07} size="200px" />
               {/* Location + date row */}
-              <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom: 20 }}>
-                <div style={{ display:"flex", alignItems:"center", gap:6 }}>
+              <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom: showLocSearch ? 12 : 20 }}>
+                <button
+                  onClick={() => { setShowLocSearch(v => !v); setTimeout(() => locInputRef.current?.focus(), 60); }}
+                  style={{ display:"flex", alignItems:"center", gap:6, background:"none", border:"none", cursor:"pointer", padding:0 }}
+                >
                   <Icon name="loc" size={13} color={W.gold} sw={2}/>
                   <span style={{ fontSize:13, fontWeight:600, color:W.text, fontFamily:SA }}>
                     {savedLocation?.name || (isSq ? "Vendos qytetin" : "Set location")}
                   </span>
-                </div>
+                  <span style={{ fontSize:10, color:W.gold, fontFamily:SA, marginLeft:2 }}>{showLocSearch ? "▲" : "▼"}</span>
+                </button>
                 <span style={{ fontSize:12, color:W.muted, fontFamily:SA }}>
                   {gregStr}
                 </span>
               </div>
+
+              {/* ── Inline location search ── */}
+              {showLocSearch && (
+                <div style={{ marginBottom:16, position:"relative" }}>
+                  {/* GPS button */}
+                  <button onClick={locGPS} disabled={locGpsLoading} style={{ width:"100%", display:"flex", alignItems:"center", justifyContent:"center", gap:8, padding:"9px 12px", marginBottom:8, borderRadius:10, border:`1px solid ${W.goldBorder}`, background:W.goldBg, color:W.goldDark, fontSize:12, fontWeight:600, cursor:locGpsLoading ? "wait" : "pointer", fontFamily:SA }}>
+                    <span>{locGpsLoading ? "⏳" : "📡"}</span>
+                    {locGpsLoading ? (isSq ? "Duke gjetur…" : "Finding location…") : (isSq ? "Përdor GPS-in tim" : "Use my GPS location")}
+                  </button>
+
+                  {/* Text search */}
+                  <div style={{ position:"relative" }}>
+                    <input
+                      ref={locInputRef}
+                      value={locQuery}
+                      onChange={e => setLocQuery(e.target.value)}
+                      placeholder={isSq ? "Kërko qytetin…" : "Search city…"}
+                      style={{ width:"100%", padding:"9px 12px", borderRadius:10, border:`1px solid ${W.goldBorder}`, fontSize:13, color:W.text, background:"rgba(255,252,244,0.9)", outline:"none", fontFamily:SA, boxSizing:"border-box" }}
+                    />
+                    {locLoading && <span style={{ position:"absolute", right:10, top:"50%", transform:"translateY(-50%)", fontSize:12 }}>⏳</span>}
+                  </div>
+
+                  {/* Suggestions */}
+                  {locSuggs.length > 0 && (
+                    <div style={{ position:"absolute", top:"100%", left:0, right:0, zIndex:50, background:"#faf5ec", border:`1px solid ${W.goldBorder}`, borderRadius:10, boxShadow:"0 8px 24px rgba(0,0,0,0.12)", marginTop:4, overflow:"hidden" }}>
+                      {locSuggs.map((s, i) => (
+                        <button key={i} onMouseDown={() => pickLocation(s)} style={{ display:"block", width:"100%", textAlign:"left", padding:"10px 14px", border:"none", background:"none", cursor:"pointer", fontSize:13, color:W.text, fontFamily:SA, borderBottom: i < locSuggs.length-1 ? `1px solid ${W.goldBorder}` : "none" }}
+                          onMouseEnter={e => e.currentTarget.style.background = W.goldBg}
+                          onMouseLeave={e => e.currentTarget.style.background = "none"}
+                        >📍 {s.name}</button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
 
               {/* Next prayer */}
               {nextPrayer ? (
@@ -256,16 +352,17 @@ export default function Home({ quote, setPage, savedLocation }) {
                     {countdown} · <span style={{ fontVariantNumeric:"tabular-nums", fontWeight:600, color:W.mutedDark }}>{nextPrayer.time}</span>
                   </div>
                 </div>
-              ) : !savedLocation ? (
-                <div onClick={() => {}} style={{ marginBottom:20 }}>
+              ) : !savedLocation && !showLocSearch ? (
+                <div onClick={() => { setShowLocSearch(true); setTimeout(() => locInputRef.current?.focus(), 60); }} style={{ marginBottom:20, cursor:"pointer" }}>
                   <div style={{ fontSize:11, color:W.muted, fontFamily:SA, letterSpacing:"0.08em", textTransform:"uppercase", marginBottom:8 }}>
                     {isSq ? "Namazi i ardhshëm" : "Next prayer"}
                   </div>
-                  <div style={{ fontSize:13, color:W.muted, fontFamily:SA, background:"rgba(201,168,76,0.08)", padding:"10px 14px", borderRadius:10, border:`1px dashed ${W.goldBorder}` }}>
-                    {isSq ? "⚙ Vendosni vendndodhjen për kohët e namazit" : "⚙ Set your location to see prayer times"}
+                  <div style={{ fontSize:13, color:W.gold, fontFamily:SA, background:W.goldBg, padding:"10px 14px", borderRadius:10, border:`1px dashed ${W.goldBorder}`, display:"flex", alignItems:"center", gap:8 }}>
+                    <span>📍</span>
+                    <span>{isSq ? "Vendosni vendndodhjen për kohët e namazit" : "Tap to set your location and see prayer times"}</span>
                   </div>
                 </div>
-              ) : (
+              ) : !savedLocation ? null : (
                 <div style={{ marginBottom:20 }}>
                   <div style={{ fontSize:32, fontWeight:500, color:W.muted, fontFamily:SR }}>Loading…</div>
                 </div>
@@ -367,6 +464,55 @@ export default function Home({ quote, setPage, savedLocation }) {
           </div>
 
         </div>
+
+        {/* ── PWA Install Nudge ──────────────────────────── */}
+        {!isStandalone && isMobile && (
+          <>
+            {/* Android/Chrome — native prompt available */}
+            {showInstall && (
+              <div style={{ margin:"20px 0 8px", background:W.goldBg, border:`1px solid ${W.goldBorder}`, borderRadius:16, padding:"16px 18px", display:"flex", alignItems:"center", gap:14 }}>
+                <img src="/logo.png" alt="" style={{ width:44, height:44, objectFit:"contain", flexShrink:0 }} />
+                <div style={{ flex:1, minWidth:0 }}>
+                  <div style={{ fontSize:14, fontWeight:700, color:W.text, fontFamily:SA, marginBottom:3 }}>
+                    {isSq ? "Instalo aplikacionin" : "Install the app"}
+                  </div>
+                  <div style={{ fontSize:12, color:W.muted, fontFamily:SA }}>
+                    {isSq ? "Shto në ekranin kryesor për akses të shpejtë." : "Add to your home screen for quick access."}
+                  </div>
+                </div>
+                <div style={{ display:"flex", flexDirection:"column", gap:6, flexShrink:0 }}>
+                  <button onClick={onInstall} style={{ padding:"7px 14px", borderRadius:8, border:"none", background:`linear-gradient(135deg,${W.gold},${W.goldDark})`, color:"#fff8e8", fontSize:12, fontWeight:700, cursor:"pointer", fontFamily:SA }}>
+                    {isSq ? "Instalo" : "Install"}
+                  </button>
+                  <button onClick={onDismissInstall} style={{ padding:"4px 14px", borderRadius:8, border:`1px solid ${W.goldBorder}`, background:"none", color:W.muted, fontSize:11, cursor:"pointer", fontFamily:SA }}>
+                    {isSq ? "Jo tani" : "Not now"}
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* iOS — no native prompt, show manual instructions */}
+            {isIOS && !iosDismissed && (
+              <div style={{ margin:"20px 0 8px", background:W.goldBg, border:`1px solid ${W.goldBorder}`, borderRadius:16, padding:"16px 18px" }}>
+                <div style={{ display:"flex", alignItems:"flex-start", justifyContent:"space-between", gap:12 }}>
+                  <div style={{ flex:1 }}>
+                    <div style={{ fontSize:14, fontWeight:700, color:W.text, fontFamily:SA, marginBottom:6 }}>
+                      {isSq ? "Shto në ekranin kryesor" : "Add to Home Screen"}
+                    </div>
+                    <div style={{ fontSize:12, color:W.muted, fontFamily:SA, lineHeight:1.6 }}>
+                      {isSq
+                        ? <>Prekni <strong style={{ color:W.goldDark }}>□↑</strong> Shpërnda, pastaj <strong style={{ color:W.goldDark }}>"Shto në ekranin kryesor"</strong></>
+                        : <>Tap <strong style={{ color:W.goldDark }}>□↑</strong> Share, then <strong style={{ color:W.goldDark }}>"Add to Home Screen"</strong></>
+                      }
+                    </div>
+                  </div>
+                  <button onClick={() => { setIosDismissed(true); localStorage.setItem("mp-ios-install-dismissed","1"); }} style={{ background:"none", border:"none", cursor:"pointer", color:W.muted, fontSize:18, padding:0, lineHeight:1, flexShrink:0 }}>✕</button>
+                </div>
+              </div>
+            )}
+          </>
+        )}
+
       </div>
 
     </>

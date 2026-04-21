@@ -2787,7 +2787,7 @@ export default function App() {
       <Navbar page={page} setPage={navigate} onSettings={() => setShowSettings(true)} hasLocation={!!savedLocation} onSearch={() => setShowSearch(true)} authUser={authUser} onAuthClick={() => setShowAuth(true)} onSignOut={handleSignOut} />
       <LangBar page={page} />
       <main>
-        {page === "home" && <Home quote={quote} setPage={navigate} savedLocation={savedLocation} />}
+        {page === "home" && <Home quote={quote} setPage={navigate} savedLocation={savedLocation} onSaveLocation={loc => { saveSavedLocation(loc); handleSaveLocation(loc); }} showInstall={showInstall} onInstall={handleInstall} onDismissInstall={dismissInstall} />}
         {page === "prayer" && <PrayerTimes savedLocation={savedLocation} />}
         {page === "zakat" && <Zakat />}
         {page === "inheritance" && <Inheritance />}
