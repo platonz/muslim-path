@@ -23,13 +23,25 @@ export default function Navbar({ page, setPage, onSettings, hasLocation, onSearc
     return () => document.removeEventListener("mousedown", handle);
   }, []);
 
+  const isHome = page === "home";
+  const navBg   = isHome ? "rgba(247,240,228,0.82)" : "#080808";
+  const navBdr  = isHome ? "rgba(201,168,76,0.2)"   : BORDER;
+  const navShdw = isHome
+    ? "0 1px 0 rgba(201,168,76,0.15), 0 4px 24px rgba(160,120,50,0.08)"
+    : `0 1px 0 ${GOLD}18, 0 4px 40px rgba(0,0,0,0.8)`;
+  const navText = isHome ? "#3a2a10" : MUTED;
+  const navActv = isHome ? "#a07d3a" : GOLD;
+
   return (
     <nav className="nav-bar" style={{
       position: "sticky", top: 0, zIndex: 100,
-      background: "#080808",
-      borderBottom: `1px solid ${BORDER}`,
-      boxShadow: `0 1px 0 ${GOLD}18, 0 4px 40px rgba(0,0,0,0.8)`,
+      background: navBg,
+      backdropFilter: isHome ? "blur(24px)" : "none",
+      WebkitBackdropFilter: isHome ? "blur(24px)" : "none",
+      borderBottom: `1px solid ${navBdr}`,
+      boxShadow: navShdw,
       padding: "0 32px",
+      transition: "background 0.3s, box-shadow 0.3s",
     }}>
       <div style={{ maxWidth: 1300, margin: "0 auto", display: "flex", alignItems: "center", justifyContent: "space-between", height: 64 }}>
         {/* Logo */}
@@ -48,13 +60,12 @@ export default function Navbar({ page, setPage, onSettings, hasLocation, onSearc
                 onMouseLeave={() => setHovered(null)}
                 style={{
                   background: "transparent", border: "none",
-                  borderBottom: isActive ? `1px solid ${GOLD}` : "1px solid transparent",
+                  borderBottom: isActive ? `1px solid ${navActv}` : "1px solid transparent",
                   cursor: "pointer", padding: "8px 14px", fontSize: 12,
                   fontWeight: isActive ? 600 : 400,
-                  color: isActive ? GOLD : isHov ? TEXT : MUTED,
-                  transition: "all 0.2s", letterSpacing: "0.07em",
-                  textTransform: "uppercase", fontFamily: SANS,
-                  height: 64, borderRadius: 0,
+                  color: isActive ? navActv : isHov ? (isHome ? "#3a2a10" : TEXT) : navText,
+                  transition: "all 0.2s", letterSpacing: "0.04em",
+                  fontFamily: SANS, height: 64, borderRadius: 0,
                 }}>
                 {t(`nav.${n.id}`)}
               </button>
@@ -68,12 +79,12 @@ export default function Navbar({ page, setPage, onSettings, hasLocation, onSearc
               onMouseEnter={() => setToolsOpen(true)}
               style={{
                 background: "transparent", border: "none",
-                borderBottom: toolsActive ? `1px solid ${GOLD}` : toolsOpen ? `1px solid ${GOLD}60` : "1px solid transparent",
+                borderBottom: toolsActive ? `1px solid ${navActv}` : toolsOpen ? `1px solid ${navActv}60` : "1px solid transparent",
                 cursor: "pointer", padding: "8px 14px", fontSize: 12,
                 fontWeight: toolsActive ? 600 : 400,
-                color: toolsActive ? GOLD : toolsOpen ? TEXT : MUTED,
-                transition: "all 0.2s", letterSpacing: "0.07em",
-                textTransform: "uppercase", fontFamily: SANS,
+                color: toolsActive ? navActv : toolsOpen ? (isHome ? "#3a2a10" : TEXT) : navText,
+                transition: "all 0.2s", letterSpacing: "0.04em",
+                fontFamily: SANS,
                 height: 64, borderRadius: 0, display: "flex", alignItems: "center", gap: 5,
               }}>
               🛠 {t("nav.tools")} <span style={{ fontSize: 9, opacity: 0.6 }}>▾</span>
@@ -109,23 +120,23 @@ export default function Navbar({ page, setPage, onSettings, hasLocation, onSearc
         {/* Right side: search + settings + lang switcher + auth + hamburger */}
         <div style={{ display: "flex", alignItems: "center", gap: 10, flexShrink: 0 }}>
           <button onClick={onSearch} title={t("nav.search")} aria-label={t("nav.search")} style={{
-            background: "transparent", border: `1px solid ${BORDER}`,
-            borderRadius: 2, cursor: "pointer", color: MUTED,
+            background: "transparent", border: `1px solid ${isHome ? "rgba(201,168,76,0.25)" : BORDER}`,
+            borderRadius: isHome ? 10 : 2, cursor: "pointer", color: navText,
             width: 36, height: 36, display: "flex", alignItems: "center", justifyContent: "center",
             fontSize: 15, transition: "all 0.2s",
           }}
-            onMouseEnter={e => { e.currentTarget.style.borderColor = GOLD; e.currentTarget.style.color = GOLD; }}
-            onMouseLeave={e => { e.currentTarget.style.borderColor = BORDER; e.currentTarget.style.color = MUTED; }}
+            onMouseEnter={e => { e.currentTarget.style.borderColor = navActv; e.currentTarget.style.color = navActv; }}
+            onMouseLeave={e => { e.currentTarget.style.borderColor = isHome ? "rgba(201,168,76,0.25)" : BORDER; e.currentTarget.style.color = navText; }}
           >🔍</button>
           <button onClick={onSettings} title={t("nav.settings")} aria-label={t("nav.settings")} style={{
             background: "transparent",
-            border: `1px solid ${hasLocation ? GOLD + "60" : BORDER}`,
-            borderRadius: 2, cursor: "pointer", color: hasLocation ? GOLD : MUTED,
+            border: `1px solid ${hasLocation ? (isHome ? "rgba(201,168,76,0.35)" : GOLD+"60") : (isHome ? "rgba(201,168,76,0.25)" : BORDER)}`,
+            borderRadius: isHome ? 10 : 2, cursor: "pointer", color: hasLocation ? navActv : navText,
             width: 36, height: 36, display: "flex", alignItems: "center", justifyContent: "center",
             fontSize: 14, transition: "all 0.2s", position: "relative",
           }}
-            onMouseEnter={e => { e.currentTarget.style.borderColor = GOLD; e.currentTarget.style.color = GOLD; }}
-            onMouseLeave={e => { e.currentTarget.style.borderColor = hasLocation ? GOLD + "60" : BORDER; e.currentTarget.style.color = hasLocation ? GOLD : MUTED; }}
+            onMouseEnter={e => { e.currentTarget.style.borderColor = navActv; e.currentTarget.style.color = navActv; }}
+            onMouseLeave={e => { e.currentTarget.style.borderColor = hasLocation ? (isHome ? "rgba(201,168,76,0.35)" : GOLD+"60") : (isHome ? "rgba(201,168,76,0.25)" : BORDER); e.currentTarget.style.color = hasLocation ? navActv : navText; }}
           >
             ⚙
             {hasLocation && <span style={{ position: "absolute", top: 3, right: 3, width: 6, height: 6, borderRadius: "50%", background: GOLD }} />}
@@ -172,8 +183,10 @@ export default function Navbar({ page, setPage, onSettings, hasLocation, onSearc
             <button onClick={onAuthClick} style={{
               background: "linear-gradient(135deg,#C9A84C,#A8883E)",
               border: "none", cursor: "pointer",
-              padding: "7px 16px", fontSize: 11, fontWeight: 700, color: "#0A0A0A",
-              letterSpacing: "0.08em", textTransform: "uppercase",
+              padding: "7px 18px", fontSize: 12, fontWeight: 700,
+              color: isHome ? "#3a2a10" : "#0A0A0A",
+              borderRadius: isHome ? 20 : 2,
+              letterSpacing: "0.04em",
               fontFamily: "'Inter', sans-serif", transition: "opacity 0.2s",
             }}
               onMouseEnter={e => e.currentTarget.style.opacity = "0.85"}
