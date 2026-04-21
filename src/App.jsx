@@ -2476,7 +2476,10 @@ export default function App() {
     return VALID_PAGES.includes(path) ? path : "home";
   });
   const [navHistory, setNavHistory] = useState([]);
-  const [quote] = useState(() => QUOTES[Math.floor(Math.random() * QUOTES.length)]);
+  const HADITH_QUOTES = QUOTES.filter(q => !q.src?.startsWith("Quran"));
+  const QURAN_QUOTES  = QUOTES.filter(q =>  q.src?.startsWith("Quran"));
+  const [quote]       = useState(() => HADITH_QUOTES[Math.floor(Math.random() * HADITH_QUOTES.length)]);
+  const [verseQuote]  = useState(() => QURAN_QUOTES [Math.floor(Math.random() * QURAN_QUOTES.length)]);
   const [savedLocation, setSavedLocation] = useState(() => loadSavedLocation());
   const [showSettings, setShowSettings] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
@@ -2783,7 +2786,7 @@ export default function App() {
       <Navbar page={page} setPage={navigate} onSettings={() => setShowSettings(true)} hasLocation={!!savedLocation} onSearch={() => setShowSearch(true)} authUser={authUser} onAuthClick={() => setShowAuth(true)} onSignOut={handleSignOut} />
       <LangBar page={page} />
       <main>
-        {page === "home" && <Home quote={quote} setPage={navigate} savedLocation={savedLocation} onSaveLocation={loc => { saveSavedLocation(loc); handleSaveLocation(loc); }} showInstall={showInstall} onInstall={handleInstall} onDismissInstall={dismissInstall} />}
+        {page === "home" && <Home quote={quote} verseQuote={verseQuote} setPage={navigate} savedLocation={savedLocation} onSaveLocation={loc => { saveSavedLocation(loc); handleSaveLocation(loc); }} showInstall={showInstall} onInstall={handleInstall} onDismissInstall={dismissInstall} />}
         {page === "prayer" && <PrayerTimes savedLocation={savedLocation} />}
         {page === "zakat" && <Zakat />}
         {page === "inheritance" && <Inheritance />}

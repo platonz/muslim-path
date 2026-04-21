@@ -137,7 +137,7 @@ function ToolTile({ icon, label, onClick }) {
 }
 
 // ─── MAIN HOME COMPONENT ────────────────────────────────────────────
-export default function Home({ quote, setPage, savedLocation, onSaveLocation, showInstall, onInstall, onDismissInstall }) {
+export default function Home({ quote, verseQuote, setPage, savedLocation, onSaveLocation, showInstall, onInstall, onDismissInstall }) {
   const { t } = useTranslation();
   const isSq = i18n.language?.startsWith("sq");
 
@@ -256,7 +256,7 @@ export default function Home({ quote, setPage, savedLocation, onSaveLocation, sh
   const ROW_KEYS = ["Imsak","Fajr","Dhuhr","Asr","Maghrib"];
 
   const quoteText = isSq && quote?.sq ? quote.sq : quote?.text || "";
-  const isQuranVerse = quote?.src?.startsWith("Quran");
+  const verseText  = isSq && verseQuote?.sq ? verseQuote.sq : verseQuote?.text || "";
 
   // Feature tiles
   const FEATURES = [
@@ -417,13 +417,13 @@ export default function Home({ quote, setPage, savedLocation, onSaveLocation, sh
                       </div>
                     </div>
                   </div>
-                  {isQuranVerse && (
+                  {verseQuote && (
                     <div style={{ borderTop:`1px solid ${W.goldBorder}`, paddingTop:10 }}>
                       <div style={{ fontSize:10, color:W.goldDark, fontFamily:SA, letterSpacing:"0.09em", textTransform:"uppercase", marginBottom:6 }}>
-                        {isSq ? "Ajeti i ditës" : "Verse of the day"} · {quote.src.replace("Quran ","")}
+                        {isSq ? "Ajeti i ditës" : "Verse of the day"} · {verseQuote.src.replace("Quran ","")}
                       </div>
                       <p style={{ fontSize:14, color:W.text, fontFamily:SR, fontStyle:"italic", lineHeight:1.7, margin:0 }}>
-                        "{quoteText}"
+                        "{verseText}"
                       </p>
                     </div>
                   )}
