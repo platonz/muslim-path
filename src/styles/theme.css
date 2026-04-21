@@ -265,6 +265,17 @@ input, select, textarea { color-scheme: light; }
   .quran-card-large { grid-column: span 1; }
 }
 
+/* ─── FLOATING PLAYER MOBILE OFFSET ────────────────────── */
+/* On mobile, push player above the tab bar (58px) */
+.floating-player-full {
+  bottom: 0 !important;
+}
+@media (max-width: 640px) {
+  .floating-player-full {
+    bottom: 58px !important;
+  }
+}
+
 /* ─── ANIMATION ──────────────────────────────────────────── */
 @keyframes slideUp {
   from { transform: translateY(100%); opacity: 0; }

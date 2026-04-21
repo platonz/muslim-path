@@ -680,6 +680,31 @@ function PrayerTimes({ savedLocation }) {
   const [suggLoading, setSuggLoading] = useState(false);
   const [displayCity, setDisplayCity] = useState("");
   const [countryCode, setCountryCode] = useState("");
+  const [gpsLoading, setGpsLoading] = useState(false);
+
+  async function useGPS() {
+    if (!navigator.geolocation) { setErr("Geolocation not supported by your browser"); return; }
+    setGpsLoading(true); setErr("");
+    navigator.geolocation.getCurrentPosition(
+      async ({ coords }) => {
+        try {
+          const res = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${coords.latitude}&lon=${coords.longitude}&format=json&addressdetails=1`, { headers: { "Accept-Language": "en" } });
+          const json = await res.json();
+          const name = [json.address?.city || json.address?.town || json.address?.village || json.address?.county, json.address?.country].filter(Boolean).join(", ");
+          const cityName = name || "My Location";
+          setCity(cityName);
+          setCountryCode(json.address?.country_code?.toUpperCase() || "");
+          search(cityName, { lat: coords.latitude, lon: coords.longitude });
+        } catch {
+          setCity("My Location");
+          search("My Location", { lat: coords.latitude, lon: coords.longitude });
+        }
+        setGpsLoading(false);
+      },
+      () => { setErr("Location access denied. Please search for a city manually."); setGpsLoading(false); },
+      { timeout: 10000 }
+    );
+  }
 
   // Auto-load from saved location
   useEffect(() => {
@@ -829,7 +854,22 @@ function PrayerTimes({ savedLocation }) {
 
           <Select label="Calculation Method" value={method} onChange={e => setMethod(e.target.value)} options={METHODS} />
           <Select label="Asr Calculation" value={school} onChange={e => setSchool(e.target.value)} options={[{ v: 1, l: "Ḥanafī — later Asr (BIK Kosovo)" }, { v: 0, l: "Shāfiʿī / Standard — earlier Asr" }]} />
-          <Btn onClick={() => search()} disabled={loading}>{loading ? "Searching…" : "Get Prayer Times"}</Btn>
+          <div style={{ display: "flex", gap: 8 }}>
+            <Btn onClick={() => search()} disabled={loading || gpsLoading} style={{ flex: 1 }}>{loading ? "Searching…" : "Get Prayer Times"}</Btn>
+            <button
+              onClick={useGPS}
+              disabled={gpsLoading || loading}
+              title="Use GPS location"
+              style={{
+                flexShrink: 0, padding: "0 14px", borderRadius: "var(--radius-sm)",
+                border: `1px solid ${GOLD}50`, background: GREEN_L, color: GOLD,
+                fontSize: 18, cursor: (gpsLoading || loading) ? "wait" : "pointer",
+                transition: "all 0.2s",
+              }}
+              onMouseEnter={e => e.currentTarget.style.background = "#f0ead0"}
+              onMouseLeave={e => e.currentTarget.style.background = GREEN_L}
+            >{gpsLoading ? "⏳" : "📡"}</button>
+          </div>
         </div>
       </Card>
 
@@ -1664,8 +1704,32 @@ function SettingsModal({ onClose, savedLocation, onSave, notifEnabled, onNotifTo
   const [suggLoading, setSuggLoading] = useState(false);
   const [selected, setSelected] = useState(savedLocation || null);
   const [saved, setSaved] = useState(false);
+  const [gpsLoading, setGpsLoading] = useState(false);
+  const [gpsErr, setGpsErr] = useState("");
   const debounceRef = useRef(null);
   const wrapRef = useRef(null);
+
+  async function useGPS() {
+    if (!navigator.geolocation) { setGpsErr("Geolocation not supported"); return; }
+    setGpsLoading(true); setGpsErr("");
+    navigator.geolocation.getCurrentPosition(
+      async ({ coords }) => {
+        try {
+          const res = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${coords.latitude}&lon=${coords.longitude}&format=json&addressdetails=1`, { headers: { "Accept-Language": "en" } });
+          const json = await res.json();
+          const name = [json.address?.city || json.address?.town || json.address?.village || json.address?.county, json.address?.country].filter(Boolean).join(", ");
+          const loc = { name: name || "My Location", lat: coords.latitude, lon: coords.longitude, country: json.address?.country_code?.toUpperCase() || "" };
+          setCity(loc.name); setSelected(loc);
+        } catch {
+          setSelected({ name: "My Location", lat: coords.latitude, lon: coords.longitude, country: "" });
+          setCity("My Location");
+        }
+        setGpsLoading(false);
+      },
+      (err) => { setGpsErr("Location access denied. Please search manually."); setGpsLoading(false); },
+      { timeout: 10000 }
+    );
+  }
 
   useEffect(() => {
     if (city.length < 2) { setSuggestions([]); setShowSugg(false); return; }
@@ -1728,6 +1792,19 @@ function SettingsModal({ onClose, savedLocation, onSave, notifEnabled, onNotifTo
               <button onClick={clear} style={{ background:"none", border:`1px solid ${BORDER}`, borderRadius:2, padding:"5px 12px", fontSize:11, color:MUTED, cursor:"pointer", letterSpacing:"0.06em", textTransform:"uppercase" }}>Remove</button>
             </div>
           )}
+
+          {/* GPS button */}
+          <button onClick={useGPS} disabled={gpsLoading} style={{ width:"100%", display:"flex", alignItems:"center", justifyContent:"center", gap:8, padding:"11px", marginBottom:14, borderRadius:"var(--radius-sm)", border:`1px solid ${GOLD}50`, background:GREEN_L, color:GOLD, fontSize:13, fontWeight:600, cursor:gpsLoading ? "wait" : "pointer", transition:"all 0.2s", fontFamily:SANS }}>
+            <span style={{ fontSize:16 }}>📡</span>
+            {gpsLoading ? "Getting location…" : "Use my GPS location"}
+          </button>
+          {gpsErr && <p style={{ margin:"-8px 0 12px", fontSize:11, color:"#c0392b", textAlign:"center" }}>{gpsErr}</p>}
+
+          <div style={{ display:"flex", alignItems:"center", gap:8, marginBottom:14 }}>
+            <div style={{ flex:1, height:1, background:BORDER }} />
+            <span style={{ fontSize:11, color:MUTED, letterSpacing:"0.08em" }}>OR</span>
+            <div style={{ flex:1, height:1, background:BORDER }} />
+          </div>
 
           {/* City search */}
           <div style={{ position:"relative", marginBottom:16 }} ref={wrapRef}>
@@ -2231,29 +2308,86 @@ function pageToUrl(pageId, lang) {
 }
 
 // ─── FLOATING MINI-PLAYER ─────────────────────────────────────────
-function FloatingPlayer({ current, playing, play, skip, stop, progress, duration, fmt, navigate }) {
+function FloatingPlayer({ current, playing, play, skip, stop, progress, duration, fmt, navigate, minimized, setMinimized }) {
   if (!current) return null;
   const pct = duration ? (progress / duration) * 100 : 0;
+
+  // ── Minimized pill ──────────────────────────────────────────────
+  if (minimized) {
+    return (
+      <div
+        onClick={() => setMinimized(false)}
+        title="Restore player"
+        style={{
+          position: "fixed", bottom: 8, right: 16, zIndex: 300,
+          display: "flex", alignItems: "center", gap: 10,
+          background: `linear-gradient(135deg,${SURFACE},#f0e8d0)`,
+          border: `1px solid ${playing ? GOLD + "70" : BORDER}`,
+          borderRadius: 999,
+          boxShadow: `0 4px 20px rgba(160,120,50,0.18)`,
+          padding: "6px 14px 6px 8px",
+          cursor: "pointer",
+          maxWidth: "calc(100vw - 32px)",
+          animation: "slideUp 0.22s cubic-bezier(0.22,1,0.36,1)",
+          overflow: "hidden",
+        }}
+      >
+        {/* Progress ring around logo */}
+        <div style={{ position: "relative", flexShrink: 0, width: 28, height: 28 }}>
+          <svg viewBox="0 0 28 28" style={{ position: "absolute", inset: 0, transform: "rotate(-90deg)" }}>
+            <circle cx="14" cy="14" r="12" fill="none" stroke={BORDER} strokeWidth="2" />
+            <circle cx="14" cy="14" r="12" fill="none" stroke={GOLD} strokeWidth="2"
+              strokeDasharray={`${2 * Math.PI * 12}`}
+              strokeDashoffset={`${2 * Math.PI * 12 * (1 - pct / 100)}`}
+              strokeLinecap="round" style={{ transition: "stroke-dashoffset 0.4s linear" }} />
+          </svg>
+          <img src="/logo.png" alt="" style={{ position: "absolute", inset: 4, width: 20, height: 20, objectFit: "contain", opacity: playing ? 0.9 : 0.5 }} />
+        </div>
+
+        {/* Track title */}
+        <div style={{ minWidth: 0, maxWidth: 160 }}>
+          <div style={{ fontSize: 9, color: playing ? GOLD : MUTED, letterSpacing: "0.14em", textTransform: "uppercase" }}>{playing ? "Playing" : "Paused"}</div>
+          <div style={{ fontSize: 12, color: TEXT, fontFamily: SERIF, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{current.title}</div>
+        </div>
+
+        {/* Play/Pause inline */}
+        <button
+          onClick={e => { e.stopPropagation(); play(current); }}
+          title={playing ? "Pause" : "Resume"}
+          style={{
+            width: 28, height: 28, borderRadius: "50%",
+            border: `1px solid ${GOLD}`, background: playing ? GOLD : "transparent",
+            color: playing ? "#f0e6ce" : GOLD,
+            cursor: "pointer", fontSize: 11,
+            display: "flex", alignItems: "center", justifyContent: "center",
+            flexShrink: 0, transition: "all 0.2s",
+          }}
+        >{playing ? "⏸" : "▶"}</button>
+      </div>
+    );
+  }
+
+  // ── Full player ──────────────────────────────────────────────────
   return (
-    <div style={{
-      position: "fixed", bottom: 0, left: 0, right: 0, zIndex: 300,
+    <div className="floating-player-full" style={{
+      position: "fixed", left: 0, right: 0, zIndex: 510,
       background: `linear-gradient(135deg,${SURFACE},#f0e8d0)`,
       borderTop: `1px solid ${playing ? GOLD + "70" : BORDER}`,
       boxShadow: `0 -4px 24px rgba(160,120,50,0.15)`,
-      padding: "0 24px",
+      padding: "0 16px",
       animation: "slideUp 0.28s cubic-bezier(0.22,1,0.36,1)",
-      transition: "border-color 0.3s",
+      transition: "border-color 0.3s, bottom 0.2s",
     }}>
-      {/* Progress bar at top — only animates when playing */}
+      {/* Progress bar at top */}
       <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 2, background: BORDER }}>
         <div style={{ height: "100%", width: `${pct}%`, background: playing ? GOLD : MUTED, transition: "width 0.4s linear, background 0.3s" }} />
       </div>
 
-      <div style={{ maxWidth: 900, margin: "0 auto", display: "flex", alignItems: "center", gap: 18, height: 68 }}>
+      <div style={{ maxWidth: 900, margin: "0 auto", display: "flex", alignItems: "center", gap: 12, height: 68 }}>
         {/* Logo */}
         <img
           src="/logo.png" alt="" onClick={() => navigate("audio")}
-          style={{ width: 34, height: 34, objectFit: "contain", cursor: "pointer", opacity: playing ? 0.9 : 0.45, flexShrink: 0, transition: "opacity 0.3s" }}
+          style={{ width: 32, height: 32, objectFit: "contain", cursor: "pointer", opacity: playing ? 0.9 : 0.45, flexShrink: 0, transition: "opacity 0.3s" }}
         />
 
         {/* Track title + status */}
@@ -2261,7 +2395,7 @@ function FloatingPlayer({ current, playing, play, skip, stop, progress, duration
           <div style={{ fontSize: 9, color: playing ? GOLD : MUTED, letterSpacing: "0.16em", textTransform: "uppercase", marginBottom: 2, transition: "color 0.3s" }}>
             {playing ? "Now Playing" : "Paused"}
           </div>
-          <div style={{ fontSize: 14, color: playing ? TEXT : MUTED, fontFamily: SERIF, letterSpacing: "0.03em", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", transition: "color 0.3s" }}>
+          <div style={{ fontSize: 13, color: playing ? TEXT : MUTED, fontFamily: SERIF, letterSpacing: "0.03em", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", transition: "color 0.3s" }}>
             {current.title}
           </div>
         </div>
@@ -2272,19 +2406,19 @@ function FloatingPlayer({ current, playing, play, skip, stop, progress, duration
         </div>
 
         {/* Controls */}
-        <div style={{ display: "flex", alignItems: "center", gap: 8, flexShrink: 0 }}>
-          <button onClick={() => skip(-1)} title="Previous" style={{ background: "none", border: "none", cursor: "pointer", color: MUTED, fontSize: 16, padding: 4 }}>⏮</button>
+        <div style={{ display: "flex", alignItems: "center", gap: 6, flexShrink: 0 }}>
+          <button onClick={() => skip(-1)} title="Previous" style={{ background: "none", border: "none", cursor: "pointer", color: MUTED, fontSize: 15, padding: 4 }}>⏮</button>
 
           {/* Pause / Resume */}
           <button
             onClick={() => play(current)}
             title={playing ? "Pause" : "Resume"}
             style={{
-              width: 42, height: 42, borderRadius: "50%",
+              width: 40, height: 40, borderRadius: "50%",
               border: `1px solid ${GOLD}`,
               background: playing ? GOLD : "transparent",
               color: playing ? "#f0e6ce" : GOLD,
-              cursor: "pointer", fontSize: playing ? 18 : 16,
+              cursor: "pointer", fontSize: 15,
               display: "flex", alignItems: "center", justifyContent: "center",
               transition: "all 0.2s",
             }}
@@ -2292,25 +2426,37 @@ function FloatingPlayer({ current, playing, play, skip, stop, progress, duration
             onMouseLeave={e => e.currentTarget.style.transform = "scale(1)"}
           >{playing ? "⏸" : "▶"}</button>
 
-          <button onClick={() => skip(1)} title="Next" style={{ background: "none", border: "none", cursor: "pointer", color: MUTED, fontSize: 16, padding: 4 }}>⏭</button>
+          <button onClick={() => skip(1)} title="Next" style={{ background: "none", border: "none", cursor: "pointer", color: MUTED, fontSize: 15, padding: 4 }}>⏭</button>
 
-          {/* Stop — closes player */}
+          {/* Minimize — keeps audio playing */}
+          <button
+            onClick={() => setMinimized(true)}
+            title="Minimize player"
+            style={{
+              background: "none", border: `1px solid ${BORDER}`, borderRadius: "var(--radius-sm)",
+              cursor: "pointer", color: MUTED, fontSize: 11,
+              width: 26, height: 26, display: "flex", alignItems: "center", justifyContent: "center",
+              transition: "all 0.2s",
+            }}
+            onMouseEnter={e => { e.currentTarget.style.borderColor = GOLD; e.currentTarget.style.color = GOLD; }}
+            onMouseLeave={e => { e.currentTarget.style.borderColor = BORDER; e.currentTarget.style.color = MUTED; }}
+          >⌄</button>
+
+          {/* Stop — closes player entirely */}
           <button
             onClick={stop}
             title="Stop"
             style={{
-              background: "none", border: `1px solid ${BORDER}`, borderRadius: 2,
-              cursor: "pointer", color: MUTED, fontSize: 13, fontWeight: 700,
-              width: 28, height: 28, display: "flex", alignItems: "center", justifyContent: "center",
-              marginLeft: 4, transition: "all 0.2s",
+              background: "none", border: `1px solid ${BORDER}`, borderRadius: "var(--radius-sm)",
+              cursor: "pointer", color: MUTED, fontSize: 12, fontWeight: 700,
+              width: 26, height: 26, display: "flex", alignItems: "center", justifyContent: "center",
+              transition: "all 0.2s",
             }}
             onMouseEnter={e => { e.currentTarget.style.borderColor = "#c0392b"; e.currentTarget.style.color = "#c0392b"; }}
             onMouseLeave={e => { e.currentTarget.style.borderColor = BORDER; e.currentTarget.style.color = MUTED; }}
           >■</button>
         </div>
       </div>
-
-      <style>{`@keyframes slideUp { from { transform: translateY(100%) } to { transform: translateY(0) } }`}</style>
     </div>
   );
 }
@@ -2430,6 +2576,7 @@ export default function App() {
   const [playing, setPlaying] = useState(false);
   const [progress, setProgress] = useState(0);
   const [duration, setDuration] = useState(0);
+  const [playerMinimized, setPlayerMinimized] = useState(false);
   const audioRef = useRef(null);
 
   useEffect(() => {
@@ -2625,10 +2772,10 @@ export default function App() {
     window.history.pushState({}, "", pageToUrl(prev, lang));
   }
 
-  const audioProps = { lectures, current, playing, play: playLecture, skip: skipLecture, stop: stopAudio, seek: seekAudio, progress, duration, fmt: fmtTime, audioRef };
+  const audioProps = { lectures, current, playing, play: playLecture, skip: skipLecture, stop: stopAudio, seek: seekAudio, progress, duration, fmt: fmtTime, audioRef, minimized: playerMinimized, setMinimized: setPlayerMinimized };
 
   return (
-    <div className="app-root" style={{ paddingBottom: current ? 68 : 0 }}>
+    <div className="app-root" style={{ paddingBottom: current && !playerMinimized ? 68 : 0 }}>
       {/* ── Fixed decorative blobs (behind all content) ── */}
       <div className="app-blob app-blob-1" aria-hidden="true" />
       <div className="app-blob app-blob-2" aria-hidden="true" />
@@ -2938,17 +3085,34 @@ const DUAS = [
 ];
 
 // ─── DUA PAGE ──────────────────────────────────────────────────────
+// Category metadata for the grid view
+const DUA_CAT_META = {
+  Morning:    { icon: "☀️", sqLabel: "Mëngjes",   color: "#e8a020" },
+  Evening:    { icon: "🌙", sqLabel: "Mbrëmje",   color: "#6b7fba" },
+  Prayer:     { icon: "🕌", sqLabel: "Namaz",     color: "#2e8b57" },
+  Meals:      { icon: "🍽️", sqLabel: "Ushqim",    color: "#c0603a" },
+  Home:       { icon: "🏠", sqLabel: "Shtëpi",    color: "#8b5e3c" },
+  Sleep:      { icon: "🌙", sqLabel: "Gjumë",     color: "#4a5580" },
+  Travel:     { icon: "✈️", sqLabel: "Udhëtim",   color: "#1a8fa0" },
+  Protection: { icon: "🛡️", sqLabel: "Mbrojtje",  color: "#6b4a9a" },
+  Distress:   { icon: "🤲", sqLabel: "Vështirësi",color: "#b85c5c" },
+  General:    { icon: "📿", sqLabel: "Të tjera",  color: "#5a7a5a" },
+};
+
 function DuaPage({ favs = new Set(), onFav = () => {} }) {
   const { t } = useTranslation();
   const isSq = i18n.language?.startsWith("sq");
-  const [cat, setCat] = useState("All");
+  // null = category grid view; "Saved" or cat name = list view
+  const [cat, setCat] = useState(null);
   const [open, setOpen] = useState(null);
   const [copied, setCopied] = useState(null);
   const ARABIC_F = "'Amiri', 'Traditional Arabic', serif";
 
+  const CONTENT_CATS = Object.keys(DUA_CAT_META); // ordered category list, no "All"
+
   const filtered = cat === "Saved"
     ? DUAS.filter((d, i) => favs.has(d.cat + "-" + i))
-    : cat === "All" ? DUAS : DUAS.filter(d => d.cat === cat);
+    : DUAS.filter(d => d.cat === cat);
 
   function copy(dua, id) {
     const translation = isSq && dua.sq ? dua.sq : dua.en;
@@ -2958,23 +3122,102 @@ function DuaPage({ favs = new Set(), onFav = () => {} }) {
     }).catch(() => {});
   }
 
-  const catLabels = t("dua.cats", { returnObjects: true });
+  const savedCount = DUAS.filter((d, i) => favs.has(d.cat + "-" + i)).length;
 
+  // ── Category grid (landing view) ───────────────────────────────
+  if (cat === null) {
+    return (
+      <div style={{ maxWidth: 720, margin: "0 auto", padding: "40px 24px" }}>
+        <PageTitle icon="dua" title={t("dua.title")} sub={t("dua.sub")} />
+
+        {/* Saved shortcut */}
+        {savedCount > 0 && (
+          <button
+            onClick={() => { setCat("Saved"); setOpen(null); }}
+            style={{
+              width: "100%", display: "flex", alignItems: "center", gap: 14,
+              padding: "14px 18px", marginBottom: 20,
+              background: GREEN_L, border: `1px solid ${GOLD}40`,
+              borderRadius: "var(--radius-md)", cursor: "pointer", textAlign: "left",
+              transition: "all 0.15s",
+            }}
+            onMouseEnter={e => e.currentTarget.style.background = "#f0ead0"}
+            onMouseLeave={e => e.currentTarget.style.background = GREEN_L}
+          >
+            <span style={{ fontSize: 22 }}>♥</span>
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <div style={{ fontSize: 13, fontWeight: 600, color: GOLD, fontFamily: SERIF }}>{t("dua.saved")}</div>
+              <div style={{ fontSize: 11, color: MUTED }}>{savedCount} {isSq ? "lutje të ruajtura" : "saved duas"}</div>
+            </div>
+            <span style={{ color: MUTED, fontSize: 16 }}>›</span>
+          </button>
+        )}
+
+        {/* Category grid */}
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(140px, 1fr))", gap: 12 }}>
+          {CONTENT_CATS.map(c => {
+            const meta = DUA_CAT_META[c];
+            const count = DUAS.filter(d => d.cat === c).length;
+            return (
+              <button
+                key={c}
+                onClick={() => { setCat(c); setOpen(null); }}
+                style={{
+                  display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
+                  gap: 8, padding: "20px 12px",
+                  background: SURFACE, border: `1px solid ${BORDER}`,
+                  borderRadius: "var(--radius-md)", cursor: "pointer",
+                  transition: "all 0.15s", textAlign: "center",
+                }}
+                onMouseEnter={e => { e.currentTarget.style.background = GREEN_L; e.currentTarget.style.borderColor = GOLD + "60"; e.currentTarget.style.transform = "translateY(-2px)"; }}
+                onMouseLeave={e => { e.currentTarget.style.background = SURFACE; e.currentTarget.style.borderColor = BORDER; e.currentTarget.style.transform = "translateY(0)"; }}
+              >
+                <span style={{ fontSize: 26, lineHeight: 1 }}>{meta.icon}</span>
+                <div>
+                  <div style={{ fontSize: 13, fontWeight: 600, color: TEXT, fontFamily: SERIF, letterSpacing: "0.02em" }}>
+                    {isSq ? meta.sqLabel : c}
+                  </div>
+                  <div style={{ fontSize: 10, color: MUTED, marginTop: 2 }}>{count} {isSq ? "lutje" : "duas"}</div>
+                </div>
+              </button>
+            );
+          })}
+        </div>
+
+        <p style={{ marginTop: 24, fontSize: 12, color: MUTED, textAlign: "center", letterSpacing: "0.04em" }}>
+          {t("dua.hint")}
+        </p>
+      </div>
+    );
+  }
+
+  // ── Dua list view (category selected) ──────────────────────────
+  const meta = DUA_CAT_META[cat];
   return (
     <div style={{ maxWidth: 720, margin: "0 auto", padding: "40px 24px" }}>
-      <PageTitle icon="dua" title={t("dua.title")} sub={t("dua.sub")} />
-
-      {/* Category filter */}
-      <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 28 }}>
-        {["Saved", ...DUA_CATS].map(c => (
-          <button key={c} onClick={() => { setCat(c); setOpen(null); }} style={{
-            padding: "6px 14px", border: `1px solid ${cat===c ? GOLD : BORDER}`,
-            background: cat===c ? GREEN_L : "transparent",
-            color: cat===c ? GOLD : MUTED, fontSize: 11, cursor: "pointer",
-            fontFamily: SANS, letterSpacing: "0.06em", textTransform: "uppercase",
-            transition: "all 0.15s", borderRadius: 2,
-          }}>{c === "Saved" ? t("dua.saved") : (catLabels[c] || c)}</button>
-        ))}
+      {/* Back header */}
+      <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 28 }}>
+        <button
+          onClick={() => { setCat(null); setOpen(null); }}
+          style={{
+            background: SURFACE, border: `1px solid ${BORDER}`, borderRadius: "var(--radius-sm)",
+            cursor: "pointer", color: MUTED, padding: "6px 14px",
+            fontSize: 13, display: "flex", alignItems: "center", gap: 6,
+            transition: "all 0.15s",
+          }}
+          onMouseEnter={e => { e.currentTarget.style.borderColor = GOLD; e.currentTarget.style.color = GOLD; }}
+          onMouseLeave={e => { e.currentTarget.style.borderColor = BORDER; e.currentTarget.style.color = MUTED; }}
+        >‹ {isSq ? "Kategoritë" : "Categories"}</button>
+        <div style={{ flex: 1, display: "flex", alignItems: "center", gap: 10 }}>
+          {cat !== "Saved" && <span style={{ fontSize: 22 }}>{meta?.icon}</span>}
+          {cat === "Saved" && <span style={{ fontSize: 22, color: GOLD }}>♥</span>}
+          <div>
+            <h2 style={{ margin: 0, fontSize: 20, fontFamily: SERIF, color: TEXT, letterSpacing: "0.04em" }}>
+              {cat === "Saved" ? t("dua.saved") : (isSq ? meta?.sqLabel : cat)}
+            </h2>
+            <div style={{ fontSize: 11, color: MUTED }}>{filtered.length} {isSq ? "lutje" : "duas"}</div>
+          </div>
+        </div>
       </div>
 
       {/* Dua cards */}
@@ -2986,13 +3229,12 @@ function DuaPage({ favs = new Set(), onFav = () => {} }) {
           const isFav = favs.has(favId);
           const isOpen = open === id;
           return (
-            <div key={id} style={{ border: `1px solid ${isOpen ? GOLD+"40" : BORDER}`, background: isOpen ? "#faf5ec" : SURFACE, transition: "all 0.2s" }}>
+            <div key={id} className="glass-card" style={{ borderRadius: "var(--radius-sm)", marginBottom: 2, background: isOpen ? "#faf5ec" : SURFACE, border: `1px solid ${isOpen ? GOLD+"40" : BORDER}`, transition: "all 0.2s" }}>
               <button onClick={() => setOpen(isOpen ? null : id)} style={{
                 width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between",
                 padding: "14px 18px", background: "none", border: "none", cursor: "pointer", textAlign: "left",
               }}>
                 <div style={{ flex: 1, minWidth: 0 }}>
-                  <div style={{ fontSize: 10, color: isOpen ? GOLD : MUTED, letterSpacing: "0.12em", textTransform: "uppercase", marginBottom: 3 }}>{isSq ? (catLabels[dua.cat] || dua.cat) : dua.cat}</div>
                   <div style={{ fontSize: 15, color: TEXT, fontFamily: SERIF, letterSpacing: "0.02em" }}>{isSq && dua.sqTitle ? dua.sqTitle : dua.title}</div>
                 </div>
                 <span style={{ color: MUTED, fontSize: 11, flexShrink: 0, marginLeft: 12 }}>{isOpen ? "▲" : "▼"}</span>
@@ -3014,7 +3256,7 @@ function DuaPage({ favs = new Set(), onFav = () => {} }) {
                   </div>
                   {/* Note */}
                   {(isSq ? (dua.sqNote || dua.note) : dua.note) && (
-                    <div style={{ fontSize: 12, color: GOLD, background: GREEN_L, border: `1px solid ${GOLD}30`, padding: "9px 14px", marginBottom: 14, lineHeight: 1.65 }}>
+                    <div style={{ fontSize: 12, color: GOLD, background: GREEN_L, border: `1px solid ${GOLD}30`, borderRadius: "var(--radius-sm)", padding: "9px 14px", marginBottom: 14, lineHeight: 1.65 }}>
                       ✦ {isSq && dua.sqNote ? dua.sqNote : dua.note}
                     </div>
                   )}
@@ -3024,12 +3266,12 @@ function DuaPage({ favs = new Set(), onFav = () => {} }) {
                     <div style={{ display: "flex", gap: 8 }}>
                       <button onClick={() => onFav(favId)} title={isFav ? "Remove from saved" : "Save"} style={{
                         background: "none", border: "1px solid " + (isFav ? GOLD + "60" : BORDER),
-                        padding: "4px 10px", fontSize: 14, color: isFav ? GOLD : MUTED,
+                        borderRadius: "var(--radius-sm)", padding: "4px 10px", fontSize: 14, color: isFav ? GOLD : MUTED,
                         cursor: "pointer", transition: "all 0.15s",
                       }}>{isFav ? "♥" : "♡"}</button>
                       <button onClick={() => copy(dua, id)} style={{
                         background: "none", border: "1px solid " + (copied===id ? GOLD : BORDER),
-                        padding: "4px 14px", fontSize: 11, color: copied===id ? GOLD : MUTED,
+                        borderRadius: "var(--radius-sm)", padding: "4px 14px", fontSize: 11, color: copied===id ? GOLD : MUTED,
                         cursor: "pointer", fontFamily: SANS, letterSpacing: "0.06em", transition: "all 0.15s",
                       }}>{copied===id ? t("dua.copied") : t("dua.copy")}</button>
                     </div>
@@ -3046,9 +3288,6 @@ function DuaPage({ favs = new Set(), onFav = () => {} }) {
           <div style={{ fontSize: 13, letterSpacing: "0.04em" }}>{t("dua.noSaved")}</div>
         </div>
       )}
-      <p style={{ marginTop: 24, fontSize: 12, color: MUTED, textAlign: "center", letterSpacing: "0.04em" }}>
-        {t("dua.hint")}
-      </p>
     </div>
   );
 }
