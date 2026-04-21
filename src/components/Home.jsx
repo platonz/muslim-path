@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import i18n from "../i18n";
+import Icon from "./Icon";
+import KaabaWatermark from "./KaabaWatermark";
 
 // ─── WARM PALETTE ───────────────────────────────────────────────────
 const W = {
@@ -41,61 +43,7 @@ const MON_EN = ["January","February","March","April","May","June","July","August
 const PR_SQ  = { Imsak:"Imsak", Fajr:"Sabah", Dhuhr:"Dreka", Asr:"Ikindia", Maghrib:"Aksham", Isha:"Jacia" };
 const PR_EN  = { Imsak:"Imsak", Fajr:"Fajr",  Dhuhr:"Dhuhr", Asr:"Asr",    Maghrib:"Maghrib", Isha:"Isha"  };
 
-// ─── ICON SVG ───────────────────────────────────────────────────────
-function Icon({ name, size = 20, color = "currentColor", sw = 1.55 }) {
-  const p = { width: size, height: size, viewBox: "0 0 24 24", fill: "none",
-    stroke: color, strokeWidth: sw, strokeLinecap: "round", strokeLinejoin: "round" };
-  switch(name) {
-    case "prayer":   return <svg {...p}><path d="M12 2L8 7H5L3 10l9 2 9-2-2-3h-3L12 2z"/><line x1="12" y1="12" x2="12" y2="22"/><path d="M5 22h14"/></svg>;
-    case "quran":    return <svg {...p}><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>;
-    case "calendar": return <svg {...p}><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>;
-    case "dua":      return <svg {...p}><path d="M18 11V6a3 3 0 00-6 0v5"/><path d="M6 11V6a3 3 0 016 0"/><path d="M6 11h12v8a3 3 0 01-3 3H9a3 3 0 01-3-3v-8z"/></svg>;
-    case "library":  return <svg {...p}><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>;
-    case "audio":    return <svg {...p}><path d="M12 2a3 3 0 013 3v7a3 3 0 01-6 0V5a3 3 0 013-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="8" y1="22" x2="16" y2="22"/></svg>;
-    case "tasbeeh":  return <svg {...p}><circle cx="12" cy="8" r="3"/><circle cx="19" cy="14" r="2"/><circle cx="5" cy="14" r="2"/><path d="M12 11c0 5 7 3 7 0M12 11c0 5-7 3-7 0"/></svg>;
-    case "asma":     return <svg {...p}><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>;
-    case "zakat":    return <svg {...p}><circle cx="12" cy="12" r="10"/><path d="M16 8h-6a2 2 0 000 4h4a2 2 0 010 4H8"/><line x1="12" y1="6" x2="12" y2="8"/><line x1="12" y1="16" x2="12" y2="18"/></svg>;
-    case "inherit":  return <svg {...p}><circle cx="12" cy="5" r="3"/><path d="M12 8v8"/><path d="M8 22l4-6 4 6"/></svg>;
-    case "dates":    return <svg {...p}><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 014-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg>;
-    case "home":     return <svg {...p}><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>;
-    case "more":     return <svg {...p}><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>;
-    case "chevron":  return <svg {...p}><polyline points="9 18 15 12 9 6"/></svg>;
-    case "loc":      return <svg {...p}><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>;
-    case "search":   return <svg {...p}><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>;
-    default:         return null;
-  }
-}
-
-// ─── KAABA WATERMARK ────────────────────────────────────────────────
-function KaabaWatermark() {
-  return (
-    <svg viewBox="0 0 220 200" fill="none" xmlns="http://www.w3.org/2000/svg"
-      style={{ position:"absolute", bottom:0, right:0, width:200, height:180, opacity:0.07, pointerEvents:"none" }}>
-      {/* Base cube */}
-      <rect x="30" y="50" width="160" height="150" fill="#a07d3a"/>
-      {/* Kiswa texture lines */}
-      {[70,90,110,130,150,170].map(y =>
-        <line key={y} x1="30" y1={y} x2="190" y2={y} stroke="#c9a84c" strokeWidth="0.8" opacity="0.5"/>
-      )}
-      {/* Hizam band */}
-      <rect x="30" y="110" width="160" height="18" fill="#c9a84c" opacity="0.6"/>
-      {/* Hizam calligraphy marks */}
-      {[50,70,90,110,130,150,170].map(x =>
-        <rect key={x} x={x} y="112" width="10" height="14" rx="1" fill="#a07d3a" opacity="0.5"/>
-      )}
-      {/* Door arch */}
-      <path d="M90 200 L90 155 Q90 140 100 140 L120 140 Q130 140 130 155 L130 200 Z" fill="#c9a84c" opacity="0.5"/>
-      {/* Door frame */}
-      <path d="M87 200 L87 154 Q87 137 100 137 L120 137 Q133 137 133 154 L133 200"
-        stroke="#c9a84c" strokeWidth="1.5" fill="none" opacity="0.7"/>
-      {/* Corner vertical lines */}
-      <line x1="30" y1="50" x2="30" y2="200" stroke="#c9a84c" strokeWidth="1.5" opacity="0.4"/>
-      <line x1="190" y1="50" x2="190" y2="200" stroke="#c9a84c" strokeWidth="1.5" opacity="0.4"/>
-      {/* Roof edge */}
-      <line x1="26" y1="50" x2="194" y2="50" stroke="#c9a84c" strokeWidth="2" opacity="0.5"/>
-    </svg>
-  );
-}
+// Icon and KaabaWatermark are imported from shared components above
 
 // ─── GLASS CARD ─────────────────────────────────────────────────────
 function Card({ children, style = {}, onClick, className = "" }) {
@@ -272,94 +220,16 @@ export default function Home({ quote, setPage, savedLocation }) {
 
   return (
     <>
-      <style>{`
-        .home-wrap {
-          min-height: calc(100vh - 64px);
-          background: linear-gradient(150deg, #f7f0e4 0%, #efe3ca 55%, #e6d4ae 100%);
-          background-attachment: fixed;
-          padding: 28px 20px 80px;
-          position: relative;
-        }
-        .home-wrap::before, .home-wrap::after {
-          content: '';
-          position: fixed;
-          border-radius: 50%;
-          pointer-events: none;
-          filter: blur(80px);
-          z-index: 0;
-        }
-        .home-wrap::before {
-          width: 500px; height: 500px;
-          background: radial-gradient(circle, rgba(201,168,76,0.18) 0%, transparent 70%);
-          top: -100px; right: -100px;
-        }
-        .home-wrap::after {
-          width: 400px; height: 400px;
-          background: radial-gradient(circle, rgba(201,168,76,0.12) 0%, transparent 70%);
-          bottom: 0; left: -80px;
-        }
-        .home-inner {
-          max-width: 1100px;
-          margin: 0 auto;
-          position: relative;
-          z-index: 1;
-        }
-        .bento-main {
-          display: grid;
-          grid-template-columns: 1.9fr 1fr;
-          gap: 14px;
-          margin-bottom: 14px;
-        }
-        .bento-features {
-          display: grid;
-          grid-template-columns: repeat(4, 1fr);
-          gap: 14px;
-          margin-bottom: 14px;
-        }
-        .bento-tools {
-          display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          gap: 14px;
-        }
-        .quran-card-large {
-          grid-column: span 2;
-        }
-        .glass-card { -webkit-backdrop-filter: blur(28px); }
-
-        /* Mobile bottom tab bar placeholder height */
-        @media (max-width: 640px) {
-          .home-wrap { padding-bottom: 90px; }
-          .bento-main {
-            grid-template-columns: 1fr;
-          }
-          .bento-features {
-            grid-template-columns: repeat(2, 1fr);
-          }
-          .quran-card-large { grid-column: span 2; }
-          .bento-tools {
-            grid-template-columns: repeat(3, 1fr);
-          }
-          .bottom-tabs { display: flex !important; }
-        }
-        @media (max-width: 480px) {
-          .bento-features { grid-template-columns: repeat(2,1fr); }
-          .bento-tools    { grid-template-columns: repeat(3,1fr); }
-        }
-        @media (min-width: 641px) and (max-width: 900px) {
-          .bento-features { grid-template-columns: repeat(3,1fr); }
-          .quran-card-large { grid-column: span 1; }
-        }
-      `}</style>
-
-      <div className="home-wrap">
-        <div className="home-inner">
+      <div className="home-wrap" style={{ padding: "28px 20px 90px", position: "relative" }}>
+        <div className="home-inner" style={{ maxWidth: 1100, margin: "0 auto", position: "relative", zIndex: 1 }}>
 
           {/* ── TOP ROW: Prayer + Hadith ─────────────────── */}
           <div className="bento-main">
 
             {/* Prayer Hero Card */}
             <Card style={{ padding: "28px 28px 24px", overflow: "hidden" }}>
-              <KaabaWatermark />
+              {/* Small card-local Kaaba watermark, bottom-right of card */}
+              <KaabaWatermark fixed={false} opacity={0.07} size="200px" />
               {/* Location + date row */}
               <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom: 20 }}>
                 <div style={{ display:"flex", alignItems:"center", gap:6 }}>
@@ -499,37 +369,7 @@ export default function Home({ quote, setPage, savedLocation }) {
         </div>
       </div>
 
-      {/* ── MOBILE BOTTOM TAB BAR ──────────────────────── */}
-      <nav className="bottom-tabs" style={{
-        display:"none", position:"fixed", bottom:0, left:0, right:0, zIndex:200,
-        background:"rgba(247,240,228,0.88)", backdropFilter:"blur(24px)",
-        WebkitBackdropFilter:"blur(24px)",
-        borderTop:"1px solid rgba(201,168,76,0.2)",
-        boxShadow:"0 -4px 24px rgba(160,120,50,0.1)",
-        padding:"8px 0 max(8px, env(safe-area-inset-bottom))",
-      }}>
-        {[
-          { id:"home",    icon:"home",    en:"Home",   sq:"Shtëpia" },
-          { id:"prayer",  icon:"prayer",  en:"Prayers",sq:"Kohët" },
-          { id:"quran",   icon:"quran",   en:"Quran",  sq:"Kurani" },
-          { id:"dua",     icon:"dua",     en:"Dua",    sq:"Dua" },
-          { id:"library", icon:"library", en:"More",   sq:"Më shumë" },
-        ].map(tab => {
-          const active = false; // home page is active
-          return (
-            <button key={tab.id} onClick={() => setPage(tab.id)} style={{
-              flex:1, background:"none", border:"none", cursor:"pointer",
-              display:"flex", flexDirection:"column", alignItems:"center", gap:3,
-              padding:"4px 0", color: tab.id === "home" ? W.gold : W.muted,
-            }}>
-              <Icon name={tab.icon} size={22} color={tab.id === "home" ? W.goldDark : W.muted} sw={tab.id === "home" ? 2 : 1.5}/>
-              <span style={{ fontSize:9, fontFamily:SA, fontWeight: tab.id === "home" ? 700 : 400, letterSpacing:"0.04em" }}>
-                {isSq ? tab.sq : tab.en}
-              </span>
-            </button>
-          );
-        })}
-      </nav>
     </>
   );
 }
+

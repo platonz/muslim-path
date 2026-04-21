@@ -4,6 +4,9 @@ import i18n from "./i18n";
 import { BG, SURFACE, BORDER, GREEN, GREEN_L, GOLD, TEXT, MUTED, SERIF, SANS } from "./constants";
 import Navbar from "./components/Navbar";
 import Home from "./components/Home";
+import Icon from "./components/Icon";
+import KaabaWatermark from "./components/KaabaWatermark";
+import MobileTabBar from "./components/MobileTabBar";
 
 // â”€â”€â”€ QUOTES â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 const QUOTES = [
@@ -383,15 +386,12 @@ function calcFaraid(h, madhab) {
 }
 
 // â”€â”€â”€ SHARED COMPONENTS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-function Card({ children, style }) {
+function Card({ children, style, className = "" }) {
   return (
-    <div style={{
-      background: SURFACE,
-      border: `1px solid ${BORDER}`,
-      borderRadius: 16, padding: 28,
-      boxShadow: "0 2px 16px rgba(160,120,50,0.08), 0 1px 0 rgba(255,255,255,0.8) inset",
-      ...style
-    }}>
+    <div
+      className={`glass-card ${className}`}
+      style={{ padding: 28, ...style }}
+    >
       {children}
     </div>
   );
@@ -401,11 +401,17 @@ function PageTitle({ icon, title, sub }) {
   return (
     <div style={{ marginBottom: 36 }}>
       <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 6 }}>
-        <span style={{ fontSize: 20 }}>{icon}</span>
+        <div style={{
+          width: 40, height: 40, borderRadius: "var(--radius-sm)",
+          background: "var(--gold-bg)", border: "1px solid var(--gold-border)",
+          display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0,
+        }}>
+          <Icon name={icon} size={20} color="var(--gold-dark)" sw={1.7} />
+        </div>
         <h1 style={{ margin: 0, fontSize: 28, fontWeight: 600, color: TEXT, fontFamily: SERIF, letterSpacing: "0.04em" }}>{title}</h1>
       </div>
-      {sub && <p style={{ margin: "0 0 0 32px", color: MUTED, fontSize: 13, letterSpacing: "0.03em" }}>{sub}</p>}
-      <div style={{ marginTop: 16, height: 1, background: `linear-gradient(90deg, ${GOLD} 0%, transparent 60%)`, opacity: 0.4 }} />
+      {sub && <p style={{ margin: "0 0 0 52px", color: MUTED, fontSize: 13, letterSpacing: "0.03em" }}>{sub}</p>}
+      <div style={{ marginTop: 16, height: 1, background: `linear-gradient(90deg, ${GOLD} 0%, transparent 60%)`, opacity: 0.35 }} />
     </div>
   );
 }
@@ -417,14 +423,15 @@ function Input({ label, ...props }) {
       <input
         {...props}
         style={{
-          padding: "11px 14px", borderRadius: 2,
+          padding: "11px 14px",
+          borderRadius: "var(--radius-sm)",
           border: `1px solid ${BORDER}`,
-          fontSize: 14, color: TEXT, background: "#faf5ec", outline: "none",
+          fontSize: 14, color: TEXT, background: "var(--cream-solid)", outline: "none",
           transition: "border-color 0.2s, box-shadow 0.2s",
           fontFamily: SANS,
           ...props.style
         }}
-        onFocus={e => { e.target.style.borderColor = GOLD; e.target.style.boxShadow = `0 0 0 1px ${GOLD}22`; }}
+        onFocus={e => { e.target.style.borderColor = GOLD; e.target.style.boxShadow = `0 0 0 3px ${GOLD}18`; }}
         onBlur={e => { e.target.style.borderColor = BORDER; e.target.style.boxShadow = "none"; }}
       />
     </div>
@@ -438,13 +445,15 @@ function Select({ label, options, ...props }) {
       <select
         {...props}
         style={{
-          padding: "11px 14px", borderRadius: 2, border: `1px solid ${BORDER}`,
-          fontSize: 14, color: TEXT, background: "#faf5ec", outline: "none", cursor: "pointer",
+          padding: "11px 14px",
+          borderRadius: "var(--radius-sm)",
+          border: `1px solid ${BORDER}`,
+          fontSize: 14, color: TEXT, background: "var(--cream-solid)", outline: "none", cursor: "pointer",
           fontFamily: SANS,
           ...props.style
         }}
       >
-        {options.map(o => <option key={o.v} value={o.v} style={{ background: "#faf5ec" }}>{o.l}</option>)}
+        {options.map(o => <option key={o.v} value={o.v} style={{ background: "var(--cream-solid)" }}>{o.l}</option>)}
       </select>
     </div>
   );
@@ -456,12 +465,13 @@ function Btn({ children, onClick, variant = "primary", disabled, style }) {
       onClick={onClick}
       disabled={disabled}
       style={{
-        padding: "11px 24px", borderRadius: 2,
+        padding: "11px 24px",
+        borderRadius: "var(--radius-sm)",
         border: variant === "primary" ? "none" : `1px solid ${BORDER}`,
         background: disabled ? "#e8d8b8"
           : variant === "primary"
             ? `linear-gradient(135deg, ${GOLD} 0%, #A8893C 100%)`
-            : SURFACE,
+            : "var(--cream-solid)",
         color: disabled ? MUTED : variant === "primary" ? "#3a2a10" : TEXT,
         fontSize: 13, fontWeight: 700, cursor: disabled ? "not-allowed" : "pointer",
         letterSpacing: "0.08em", textTransform: "uppercase",
@@ -469,8 +479,8 @@ function Btn({ children, onClick, variant = "primary", disabled, style }) {
         fontFamily: SANS,
         ...style
       }}
-      onMouseEnter={e => { if (!disabled) e.currentTarget.style.opacity = "0.85"; }}
-      onMouseLeave={e => { e.currentTarget.style.opacity = "1"; }}
+      onMouseEnter={e => { if (!disabled) { e.currentTarget.style.opacity = "0.85"; e.currentTarget.style.transform = "translateY(-1px)"; } }}
+      onMouseLeave={e => { e.currentTarget.style.opacity = "1"; e.currentTarget.style.transform = "none"; }}
     >
       {children}
     </button>
@@ -761,7 +771,7 @@ function PrayerTimes({ savedLocation }) {
 
   return (
     <div style={{ maxWidth: 680, margin: "0 auto", padding: "40px 24px" }}>
-      <PageTitle icon="ðŸ•Œ" title={t("pages.prayer.title")} sub={t("pages.prayer.sub")} />
+      <PageTitle icon="prayer" title={t("pages.prayer.title")} sub={t("pages.prayer.sub")} />
       <Card style={{ marginBottom: 20 }}>
         <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
 
@@ -901,7 +911,7 @@ function Zakat() {
 
   return (
     <div style={{ maxWidth: 680, margin: "0 auto", padding: "40px 24px" }}>
-      <PageTitle icon="ðŸ’°" title="Zakat Calculator" sub="2.5% of net zakatable wealth above nisab, held for one lunar year" />
+      <PageTitle icon="zakat" title="Zakat Calculator" sub="2.5% of net zakatable wealth above nisab, held for one lunar year" />
       <Card style={{ marginBottom: 20 }}>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14, marginBottom: 20 }}>
           <Select label="Currency" value={currency} onChange={e => setCurrency(e.target.value)}
@@ -1020,7 +1030,7 @@ function Inheritance() {
 
   return (
     <div style={{ maxWidth: 720, margin: "0 auto", padding: "40px 24px" }}>
-      <PageTitle icon="âš–ï¸" title="Inheritance Calculator" sub="Calculate Islamic inheritance shares (FarÄÊ¾iá¸) according to your madhab" />
+      <PageTitle icon="inherit" title="Inheritance Calculator" sub="Calculate Islamic inheritance shares (FarÄÊ¾iá¸) according to your madhab" />
 
       <div className="inherit-top-grid">
         <Card>
@@ -1172,7 +1182,7 @@ function DateConverter() {
 
   return (
     <div style={{ maxWidth: 560, margin: "0 auto", padding: "40px 24px" }}>
-      <PageTitle icon="ðŸ“…" title="Date Converter" sub="Convert between Hijri (Islamic) and Gregorian calendars" />
+      <PageTitle icon="dates" title="Date Converter" sub="Convert between Hijri (Islamic) and Gregorian calendars" />
 
       {/* Today banner */}
       <Card style={{ background: GREEN_L, border: `1px solid ${GOLD}30`, marginBottom: 20, textAlign: "center" }}>
@@ -1295,7 +1305,7 @@ function Library({ navigate }) {
 
   return (
     <div style={{ maxWidth: 960, margin: "0 auto", padding: "40px 24px" }}>
-      <PageTitle icon="ðŸ“š" title={t("pages.library.title")} sub={loading ? "Loadingâ€¦" : `${books.length} curated books and resources`} />
+      <PageTitle icon="library" title={t("pages.library.title")} sub={loading ? "Loadingâ€¦" : `${books.length} curated books and resources`} />
 
       <div style={{ display: "flex", gap: 10, marginBottom: 20, flexWrap: "wrap" }}>
         <input
@@ -1485,7 +1495,7 @@ function IslamicCalendar() {
 
   return (
     <div style={{ maxWidth: 900, margin: "0 auto", padding: "40px 24px" }}>
-      <PageTitle icon="ðŸ“†" title={t("pages.calendar.title")} sub={t("pages.calendar.sub")} />
+      <PageTitle icon="calendar" title={t("pages.calendar.title")} sub={t("pages.calendar.sub")} />
 
       {/* Today strip */}
       <Card style={{ background: `linear-gradient(145deg,${SURFACE},#f5edda)`, border: `1px solid ${GOLD}40`, marginBottom: 20 }}>
@@ -2618,32 +2628,14 @@ export default function App() {
   const audioProps = { lectures, current, playing, play: playLecture, skip: skipLecture, stop: stopAudio, seek: seekAudio, progress, duration, fmt: fmtTime, audioRef };
 
   return (
-    <div style={{ minHeight: "100vh", background: `linear-gradient(160deg,#f7f0e4 0%,#efe3ca 55%,#e6d4ae 100%)`, backgroundAttachment: "fixed", fontFamily: SANS, color: TEXT, paddingBottom: current ? 68 : 0 }}>
-      <style>{`
-        h1,h2,h3 { font-family: ${SERIF}; }
-        * { box-sizing: border-box; }
-        ::selection { background: ${GOLD}33; color: ${TEXT}; }
-        ::-webkit-scrollbar { width: 5px; background: #f0e6ce; }
-        ::-webkit-scrollbar-thumb { background: #d4b87a; border-radius: 4px; }
-        input::placeholder, textarea::placeholder { color: ${MUTED}; opacity: 0.7; }
-        option { background: #faf5ec; color: ${TEXT}; }
-        body { background: #f0e6ce; margin: 0; }
-        input, select, textarea { color-scheme: light; }
+    <div className="app-root" style={{ paddingBottom: current ? 68 : 0 }}>
+      {/* ── Fixed decorative blobs (behind all content) ── */}
+      <div className="app-blob app-blob-1" aria-hidden="true" />
+      <div className="app-blob app-blob-2" aria-hidden="true" />
 
-        /* Inheritance responsive layouts */
-        .inherit-top-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
-        .inherit-heirs-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 32px; }
-        .inherit-results-header { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 8px; padding: 8px 0; border-bottom: 2px solid ${BORDER}; margin-bottom: 4px; }
-        .inherit-results-row { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 8px; padding: 12px 0; }
-        .inherit-results-card { display: none; padding: 12px 0; }
-        @media (max-width: 600px) {
-          .inherit-top-grid { grid-template-columns: 1fr; }
-          .inherit-heirs-grid { grid-template-columns: 1fr; }
-          .inherit-results-header { display: none; }
-          .inherit-results-row { display: none; }
-          .inherit-results-card { display: block; }
-        }
-      `}</style>
+      {/* ── Global Kaaba watermark (every page) ── */}
+      {page !== "home" && <KaabaWatermark fixed opacity={0.08} />}
+
       <audio ref={audioRef} onTimeUpdate={onTimeUpdate} onEnded={() => skipLecture(1)} onLoadedMetadata={() => setDuration(audioRef.current?.duration || 0)} />
       <Navbar page={page} setPage={navigate} onSettings={() => setShowSettings(true)} hasLocation={!!savedLocation} onSearch={() => setShowSearch(true)} authUser={authUser} onAuthClick={() => setShowAuth(true)} onSignOut={handleSignOut} />
       {page !== "home" && <LangBar page={page} />}
@@ -2685,15 +2677,15 @@ export default function App() {
           bottom: current ? 80 : 24,
           left: 16,
           zIndex: 450,
-          background: "#faf5ec",
+          background: "var(--cream-solid)",
           border: `1px solid ${BORDER}`,
-          borderRadius: 2,
+          borderRadius: "var(--radius-sm)",
           color: MUTED,
           cursor: "pointer",
           width: 40, height: 40,
           display: "flex", alignItems: "center", justifyContent: "center",
           fontSize: 20, lineHeight: 1,
-          boxShadow: "0 2px 12px rgba(160,120,50,0.12)",
+          boxShadow: "var(--shadow-glass-sm)",
           transition: "border-color 0.2s, color 0.2s",
         }}
           onMouseEnter={e => { e.currentTarget.style.borderColor = GOLD; e.currentTarget.style.color = GOLD; }}
@@ -2704,11 +2696,9 @@ export default function App() {
 
       {/* PWA Install Banner */}
       {showInstall && (
-        <div style={{
+        <div className="glass-card" style={{
           position: "fixed", bottom: 8, left: 8, right: 8, zIndex: 400,
-          background: `linear-gradient(135deg,${SURFACE},#f0e8d0)`,
-          border: `1px solid ${GOLD}60`,
-          boxShadow: "0 8px 40px rgba(160,120,50,0.18)",
+          borderColor: `${GOLD}60`,
           padding: "14px 18px",
           display: "flex", alignItems: "center", gap: 14,
           maxWidth: 480, margin: "0 auto",
@@ -2738,6 +2728,9 @@ export default function App() {
           onAuth={session => setAuthSession(session)}
         />
       )}
+
+      {/* ── Mobile bottom tab bar (all pages) ── */}
+      <MobileTabBar page={page} navigate={navigate} />
     </div>
   );
 }
@@ -2969,7 +2962,7 @@ function DuaPage({ favs = new Set(), onFav = () => {} }) {
 
   return (
     <div style={{ maxWidth: 720, margin: "0 auto", padding: "40px 24px" }}>
-      <PageTitle icon="ðŸ¤²" title={t("dua.title")} sub={t("dua.sub")} />
+      <PageTitle icon="dua" title={t("dua.title")} sub={t("dua.sub")} />
 
       {/* Category filter */}
       <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 28 }}>
@@ -3181,7 +3174,7 @@ function AsmaPage() {
 
   return (
     <div style={{ maxWidth: 940, margin: "0 auto", padding: "40px 24px" }}>
-      <PageTitle icon="âœ¨" title={t("asma.title")} sub={t("asma.sub")} />
+      <PageTitle icon="asma" title={t("asma.title")} sub={t("asma.sub")} />
 
       {/* Quranic verse */}
       <div style={{ textAlign: "center", marginBottom: 10 }}>
@@ -3749,7 +3742,7 @@ function QuranPage() {
   // â”€â”€ SURAH LIST VIEW â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   return (
     <div style={{ maxWidth: 860, margin: "0 auto", padding: "40px 24px" }}>
-      <PageTitle icon="ðŸ“–" title={t("pages.quran.title")} sub={t("pages.quran.sub")} />
+      <PageTitle icon="quran" title={t("pages.quran.title")} sub={t("pages.quran.sub")} />
 
       {/* Bookmarks panel */}
       {bookmarks.length > 0 && (
@@ -3991,7 +3984,7 @@ function TasbeehPage() {
 
   return (
     <div style={{ maxWidth: 520, margin: "0 auto", padding: "40px 24px", userSelect: "none" }}>
-      <PageTitle icon="ðŸ“¿" title="Tasbeeh" sub="Digital dhikr counter" />
+      <PageTitle icon="tasbeeh" title="Tasbeeh" sub="Digital dhikr counter" />
 
       {/* Preset selector */}
       <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 40, justifyContent: "center" }}>
@@ -4581,7 +4574,7 @@ function AudioPage({ lectures, current, playing, play, skip, seek, progress, dur
 
   return (
     <div style={{ maxWidth: 720, margin: "0 auto", padding: "40px 24px" }}>
-      <PageTitle icon="ðŸŽ™ï¸" title="Ligjerata Islame" sub="Leksione dhe mÃ«sime nga studiuesit Islam" />
+      <PageTitle icon="audio" title="Ligjerata Islame" sub="Leksione dhe mÃ«sime nga studiuesit Islam" />
 
       {/* Player */}
       {current && (
