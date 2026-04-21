@@ -52,6 +52,7 @@ html { scroll-behavior: smooth; }
 
 body {
   margin: 0;
+  font-size: 17px;
   background: var(--cream-bg);
   color: var(--text-primary);
   font-family: var(--font-sans);

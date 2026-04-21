@@ -2293,7 +2293,7 @@ const VALID_PAGES = ["home","prayer","zakat","inheritance","calendar","dates","l
 // ── Language-prefixed URL slug mapping ────────────────────────────
 const PAGE_SLUGS = {
   en: { home:"", prayer:"prayer", zakat:"zakat", inheritance:"inheritance", calendar:"calendar", dates:"dates", library:"library", audio:"audio", tasbeeh:"tasbeeh", quran:"quran", dua:"dua", asma:"asma", admin:"admin" },
-  sq: { home:"", prayer:"namazi", zakat:"zekati", inheritance:"trashegimia", calendar:"kalendari", dates:"datat", library:"biblioteka", audio:"ligjerata", tasbeeh:"tesbihe", quran:"kurani", dua:"dua", asma:"emrat", admin:"admin" },
+  sq: { home:"", prayer:"namazi", zakat:"zekati", inheritance:"hiseja", calendar:"kalendari", dates:"datat", library:"biblioteka", audio:"ligjerata", tasbeeh:"tesbihe", quran:"kurani", dua:"dua", asma:"emrat", admin:"admin" },
 };
 function slugToPage(lang, slug) {
   const map = PAGE_SLUGS[lang] || PAGE_SLUGS.en;

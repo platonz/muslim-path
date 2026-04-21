@@ -214,7 +214,7 @@ export default function Home({ quote, setPage, savedLocation }) {
   ];
   const TOOLS = [
     { id:"zakat",       icon:"zakat",   en:"Zakat",       sq:"Zekati" },
-    { id:"inheritance", icon:"inherit", en:"Inheritance", sq:"Trashëgimia" },
+    { id:"inheritance", icon:"inherit", en:"Inheritance", sq:"Hiseja" },
     { id:"dates",       icon:"dates",   en:"Dates",       sq:"Datat" },
   ];
 
