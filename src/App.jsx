@@ -745,8 +745,8 @@ const LECTURES = [
 function PrayerTimes({ savedLocation }) {
   const { t } = useTranslation();
   const [city, setCity] = useState("");
-  const [method, setMethod] = useState(1);
-  const [school, setSchool] = useState(1);
+  const [method, setMethod] = useState(() => parseInt(localStorage.getItem("mp-prayer-method") || "1"));
+  const [school, setSchool] = useState(() => parseInt(localStorage.getItem("mp-prayer-school") || "1"));
   const [times, setTimes] = useState(null);
   const [loading, setLoading] = useState(false);
   const [err, setErr] = useState("");
@@ -926,8 +926,8 @@ function PrayerTimes({ savedLocation }) {
             )}
           </div>
 
-          <Select label="Calculation Method" value={method} onChange={e => setMethod(e.target.value)} options={METHODS} />
-          <Select label="Asr Calculation" value={school} onChange={e => setSchool(e.target.value)} options={[{ v: 1, l: "Ḥanafī — later Asr (BIK Kosovo)" }, { v: 0, l: "Shāfiʿī / Standard — earlier Asr" }]} />
+          <Select label="Calculation Method" value={method} onChange={e => { setMethod(e.target.value); localStorage.setItem("mp-prayer-method", e.target.value); }} options={METHODS} />
+          <Select label="Asr Calculation" value={school} onChange={e => { setSchool(e.target.value); localStorage.setItem("mp-prayer-school", e.target.value); }} options={[{ v: 1, l: "Ḥanafī — later Asr (BIK Kosovo)" }, { v: 0, l: "Shāfiʿī / Standard — earlier Asr" }]} />
           <div style={{ display: "flex", gap: 8 }}>
             <Btn onClick={() => search()} disabled={loading || gpsLoading} style={{ flex: 1 }}>{loading ? "Searching…" : "Get Prayer Times"}</Btn>
             <button

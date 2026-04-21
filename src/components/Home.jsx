@@ -154,20 +154,25 @@ export default function Home({ quote, verseQuote, setPage, savedLocation, onSave
   const locDebounce = useRef(null);
   const locInputRef = useRef(null);
 
+  // Photon geocoding helper (replaces Nominatim — no rate limits)
+  function photonToLoc(f) {
+    const p = f.properties;
+    const parts = [p.name || p.city || p.town || p.village, p.state !== p.country ? p.state : null, p.country].filter(Boolean);
+    return { name: parts.slice(0,2).join(", "), lat: f.geometry.coordinates[1], lon: f.geometry.coordinates[0], country: (p.countrycode || "").toUpperCase() };
+  }
+
   useEffect(() => {
     if (locQuery.length < 2) { setLocSuggs([]); return; }
     clearTimeout(locDebounce.current);
     locDebounce.current = setTimeout(async () => {
       setLocLoading(true);
       try {
-        const res = await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(locQuery)}&format=json&limit=8&addressdetails=1`, { headers: { "Accept-Language": "en" } });
+        const res = await fetch(`https://photon.komoot.io/api/?q=${encodeURIComponent(locQuery)}&limit=8&lang=en`);
         const json = await res.json();
-        setLocSuggs(json
-          .map(r => ({ name: r.display_name.split(",").slice(0,3).join(", "), lat: parseFloat(r.lat), lon: parseFloat(r.lon), country: r.address?.country_code?.toUpperCase() || "" }))
-          .slice(0, 6));
+        setLocSuggs((json.features || []).map(photonToLoc).slice(0, 6));
       } catch { setLocSuggs([]); }
       setLocLoading(false);
-    }, 350);
+    }, 300);
   }, [locQuery]);
 
   function pickLocation(loc) {
@@ -183,10 +188,11 @@ export default function Home({ quote, verseQuote, setPage, savedLocation, onSave
     navigator.geolocation.getCurrentPosition(
       async ({ coords }) => {
         try {
-          const res = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${coords.latitude}&lon=${coords.longitude}&format=json&addressdetails=1`, { headers: { "Accept-Language": "en" } });
+          const res = await fetch(`https://photon.komoot.io/reverse?lon=${coords.longitude}&lat=${coords.latitude}&limit=1`);
           const json = await res.json();
-          const name = [json.address?.city || json.address?.town || json.address?.village || json.address?.county, json.address?.country].filter(Boolean).join(", ");
-          pickLocation({ name: name || "My Location", lat: coords.latitude, lon: coords.longitude, country: json.address?.country_code?.toUpperCase() || "" });
+          const loc = json.features?.[0] ? photonToLoc(json.features[0]) : { name: "My Location", lat: coords.latitude, lon: coords.longitude, country: "" };
+          loc.lat = coords.latitude; loc.lon = coords.longitude;
+          pickLocation(loc);
         } catch { pickLocation({ name: "My Location", lat: coords.latitude, lon: coords.longitude, country: "" }); }
         setLocGpsLoading(false);
       },
@@ -195,18 +201,26 @@ export default function Home({ quote, verseQuote, setPage, savedLocation, onSave
     );
   }
 
-  // ── PWA install nudge (mobile, not yet installed) ──────────────
-  const isStandalone = window.matchMedia("(display-mode: standalone)").matches || navigator.standalone;
+  // ── PWA install nudge ──────────────────────────────────────────
+  const isStandalone = window.matchMedia("(display-mode: standalone)").matches || !!navigator.standalone;
   const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
   const isMobile = window.innerWidth < 768;
-  const [iosDismissed, setIosDismissed] = useState(() => !!localStorage.getItem("mp-ios-install-dismissed"));
+  const [installDismissed, setInstallDismissed] = useState(() => !!localStorage.getItem("mp-install-dismissed"));
 
-  // Fetch all prayer timings
+  function dismissInstallNudge() {
+    setInstallDismissed(true);
+    localStorage.setItem("mp-install-dismissed", "1");
+  }
+
+  // Fetch prayer timings using saved method/school preferences
+  const prayerMethod = parseInt(localStorage.getItem("mp-prayer-method") || "1");
+  const prayerSchool = parseInt(localStorage.getItem("mp-prayer-school") || "1");
+
   useEffect(() => {
     if (!savedLocation) return;
     const d = new Date();
     const dateStr = `${d.getDate()}-${d.getMonth()+1}-${d.getFullYear()}`;
-    fetch(`https://api.aladhan.com/v1/timings/${dateStr}?latitude=${savedLocation.lat}&longitude=${savedLocation.lon}&method=2`)
+    fetch(`https://api.aladhan.com/v1/timings/${dateStr}?latitude=${savedLocation.lat}&longitude=${savedLocation.lon}&method=${prayerMethod}&school=${prayerSchool}`)
       .then(r => r.json())
       .then(json => {
         if (json.code !== 200) return;
@@ -464,52 +478,47 @@ export default function Home({ quote, verseQuote, setPage, savedLocation, onSave
 
         </div>
 
-        {/* ── PWA Install Nudge ──────────────────────────── */}
-        {!isStandalone && isMobile && (
-          <>
-            {/* Android/Chrome — native prompt available */}
-            {showInstall && (
-              <div style={{ margin:"20px 0 8px", background:W.goldBg, border:`1px solid ${W.goldBorder}`, borderRadius:16, padding:"16px 18px", display:"flex", alignItems:"center", gap:14 }}>
-                <img src="/logo.png" alt="" style={{ width:44, height:44, objectFit:"contain", flexShrink:0 }} />
-                <div style={{ flex:1, minWidth:0 }}>
-                  <div style={{ fontSize:14, fontWeight:700, color:W.text, fontFamily:SA, marginBottom:3 }}>
-                    {isSq ? "Instalo aplikacionin" : "Install the app"}
-                  </div>
-                  <div style={{ fontSize:12, color:W.muted, fontFamily:SA }}>
-                    {isSq ? "Shto në ekranin kryesor për akses të shpejtë." : "Add to your home screen for quick access."}
-                  </div>
+        {/* ── PWA Install Nudge — shown for all mobile visitors ── */}
+        {!isStandalone && isMobile && !installDismissed && (
+          <div style={{ margin:"20px 0 8px", background:W.goldBg, border:`1px solid ${W.goldBorder}`, borderRadius:16, padding:"16px 18px" }}>
+            <div style={{ display:"flex", alignItems:"center", gap:14 }}>
+              <img src="/logo.png" alt="" style={{ width:44, height:44, objectFit:"contain", flexShrink:0, borderRadius:10 }} />
+              <div style={{ flex:1, minWidth:0 }}>
+                <div style={{ fontSize:14, fontWeight:700, color:W.text, fontFamily:SA, marginBottom:3 }}>
+                  {isSq ? "Shto në ekranin kryesor" : "Add to your Home Screen"}
                 </div>
-                <div style={{ display:"flex", flexDirection:"column", gap:6, flexShrink:0 }}>
+                {isIOS ? (
+                  <div style={{ fontSize:12, color:W.muted, fontFamily:SA, lineHeight:1.6 }}>
+                    {isSq
+                      ? <>Prekni <strong style={{color:W.goldDark}}>□↑</strong>, pastaj <strong style={{color:W.goldDark}}>"Shto në ekranin kryesor"</ strong></>
+                      : <>Tap <strong style={{color:W.goldDark}}>□↑ Share</strong>, then <strong style={{color:W.goldDark}}>"Add to Home Screen"</strong></>
+                    }
+                  </div>
+                ) : showInstall ? (
+                  <div style={{ fontSize:12, color:W.muted, fontFamily:SA }}>
+                    {isSq ? "Instalo aplikacionin për akses të shpejtë." : "Install the app for quick offline access."}
+                  </div>
+                ) : (
+                  <div style={{ fontSize:12, color:W.muted, fontFamily:SA, lineHeight:1.6 }}>
+                    {isSq
+                      ? <>Tap menynë e shfletuesit <strong style={{color:W.goldDark}}>⋮</strong>, pastaj <strong style={{color:W.goldDark}}>"Shto në ekranin kryesor"</strong></>
+                      : <>Tap browser menu <strong style={{color:W.goldDark}}>⋮</strong>, then <strong style={{color:W.goldDark}}>"Add to Home Screen"</strong></>
+                    }
+                  </div>
+                )}
+              </div>
+              <div style={{ display:"flex", flexDirection:"column", gap:6, flexShrink:0 }}>
+                {showInstall && !isIOS && (
                   <button onClick={onInstall} style={{ padding:"7px 14px", borderRadius:8, border:"none", background:`linear-gradient(135deg,${W.gold},${W.goldDark})`, color:"#fff8e8", fontSize:12, fontWeight:700, cursor:"pointer", fontFamily:SA }}>
                     {isSq ? "Instalo" : "Install"}
                   </button>
-                  <button onClick={onDismissInstall} style={{ padding:"4px 14px", borderRadius:8, border:`1px solid ${W.goldBorder}`, background:"none", color:W.muted, fontSize:11, cursor:"pointer", fontFamily:SA }}>
-                    {isSq ? "Jo tani" : "Not now"}
-                  </button>
-                </div>
+                )}
+                <button onClick={dismissInstallNudge} style={{ padding:"5px 14px", borderRadius:8, border:`1px solid ${W.goldBorder}`, background:"none", color:W.muted, fontSize:11, cursor:"pointer", fontFamily:SA }}>
+                  {isSq ? "Jo tani" : "Not now"}
+                </button>
               </div>
-            )}
-
-            {/* iOS — no native prompt, show manual instructions */}
-            {isIOS && !iosDismissed && (
-              <div style={{ margin:"20px 0 8px", background:W.goldBg, border:`1px solid ${W.goldBorder}`, borderRadius:16, padding:"16px 18px" }}>
-                <div style={{ display:"flex", alignItems:"flex-start", justifyContent:"space-between", gap:12 }}>
-                  <div style={{ flex:1 }}>
-                    <div style={{ fontSize:14, fontWeight:700, color:W.text, fontFamily:SA, marginBottom:6 }}>
-                      {isSq ? "Shto në ekranin kryesor" : "Add to Home Screen"}
-                    </div>
-                    <div style={{ fontSize:12, color:W.muted, fontFamily:SA, lineHeight:1.6 }}>
-                      {isSq
-                        ? <>Prekni <strong style={{ color:W.goldDark }}>□↑</strong> Shpërnda, pastaj <strong style={{ color:W.goldDark }}>"Shto në ekranin kryesor"</strong></>
-                        : <>Tap <strong style={{ color:W.goldDark }}>□↑</strong> Share, then <strong style={{ color:W.goldDark }}>"Add to Home Screen"</strong></>
-                      }
-                    </div>
-                  </div>
-                  <button onClick={() => { setIosDismissed(true); localStorage.setItem("mp-ios-install-dismissed","1"); }} style={{ background:"none", border:"none", cursor:"pointer", color:W.muted, fontSize:18, padding:0, lineHeight:1, flexShrink:0 }}>✕</button>
-                </div>
-              </div>
-            )}
-          </>
+            </div>
+          </div>
         )}
 
       </div>
