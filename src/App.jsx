@@ -725,12 +725,10 @@ function PrayerTimes({ savedLocation }) {
     debounceRef.current = setTimeout(async () => {
       setSuggLoading(true);
       try {
-        const res = await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(city)}&format=json&limit=6&featuretype=city&addressdetails=1`, { headers: { "Accept-Language": "en" } });
+        const res = await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(city)}&format=json&limit=8&addressdetails=1`, { headers: { "Accept-Language": "en" } });
         const json = await res.json();
-        const cities = json
-          .filter(r => r.class === "place" || r.class === "boundary" || r.addresstype === "city" || r.addresstype === "town" || ["city","town","village","municipality","administrative"].includes(r.type))
-          .map(r => ({
-            name: r.display_name.split(",").slice(0,2).join(", "),
+        const cities = json.map(r => ({
+            name: r.display_name.split(",").slice(0,3).join(", "),
             lat: parseFloat(r.lat),
             lon: parseFloat(r.lon),
             country: r.address?.country_code?.toUpperCase() || "",
@@ -1738,11 +1736,9 @@ function SettingsModal({ onClose, savedLocation, onSave, notifEnabled, onNotifTo
     debounceRef.current = setTimeout(async () => {
       setSuggLoading(true);
       try {
-        const res = await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(city)}&format=json&limit=6&addressdetails=1`, { headers: { "Accept-Language": "en" } });
+        const res = await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(city)}&format=json&limit=8&addressdetails=1`, { headers: { "Accept-Language": "en" } });
         const json = await res.json();
-        const cities = json
-          .filter(r => r.class === "place" || r.class === "boundary" || ["city","town","village","municipality","administrative"].includes(r.type))
-          .map(r => ({ name: r.display_name.split(",").slice(0,2).join(", "), lat: parseFloat(r.lat), lon: parseFloat(r.lon), country: r.address?.country_code?.toUpperCase() || "" }));
+        const cities = json.map(r => ({ name: r.display_name.split(",").slice(0,3).join(", "), lat: parseFloat(r.lat), lon: parseFloat(r.lon), country: r.address?.country_code?.toUpperCase() || "" }));
         setSuggestions(cities.slice(0, 6));
         setShowSugg(true);
       } catch { setSuggestions([]); }

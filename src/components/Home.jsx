@@ -160,11 +160,10 @@ export default function Home({ quote, setPage, savedLocation, onSaveLocation, sh
     locDebounce.current = setTimeout(async () => {
       setLocLoading(true);
       try {
-        const res = await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(locQuery)}&format=json&limit=6&addressdetails=1`, { headers: { "Accept-Language": "en" } });
+        const res = await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(locQuery)}&format=json&limit=8&addressdetails=1`, { headers: { "Accept-Language": "en" } });
         const json = await res.json();
         setLocSuggs(json
-          .filter(r => r.class === "place" || r.class === "boundary" || ["city","town","village","municipality","administrative"].includes(r.type))
-          .map(r => ({ name: r.display_name.split(",").slice(0,2).join(", "), lat: parseFloat(r.lat), lon: parseFloat(r.lon), country: r.address?.country_code?.toUpperCase() || "" }))
+          .map(r => ({ name: r.display_name.split(",").slice(0,3).join(", "), lat: parseFloat(r.lat), lon: parseFloat(r.lon), country: r.address?.country_code?.toUpperCase() || "" }))
           .slice(0, 6));
       } catch { setLocSuggs([]); }
       setLocLoading(false);
