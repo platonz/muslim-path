@@ -44,7 +44,7 @@ export default function Navbar({ page, setPage, onSettings, hasLocation, onSearc
       <div style={{ maxWidth: 1300, margin: "0 auto", display: "flex", alignItems: "center", justifyContent: "space-between", height: 64 }}>
         {/* Logo */}
         <button onClick={() => setPage("home")} style={{ background: "none", border: "none", cursor: "pointer", display: "flex", alignItems: "center", gap: 10 }}>
-          <img src="/logo.png" alt="Muslim's Path" style={{ width: 40, height: 40, objectFit: "contain" }} />
+          <img src="/logo.png" alt="Muslim's Path" style={{ width: 80, height: 80, objectFit: "contain" }} />
         </button>
 
         {/* Desktop nav */}
