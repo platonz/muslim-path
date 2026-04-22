@@ -40,7 +40,7 @@ const DAY_SQ = ["E diel","E hënë","E martë","E mërkurë","E enjte","E premte
 const DAY_EN = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
 const MON_SQ = ["janar","shkurt","mars","prill","maj","qershor","korrik","gusht","shtator","tetor","nëntor","dhjetor"];
 const MON_EN = ["January","February","March","April","May","June","July","August","September","October","November","December"];
-const PR_SQ  = { Imsak:"Imsak", Fajr:"Sabah", Dhuhr:"Dreka", Asr:"Ikindia", Maghrib:"Aksham", Isha:"Jacia" };
+const PR_SQ  = { Imsak:"Imsaku", Fajr:"Sabahu", Dhuhr:"Dreka", Asr:"Ikindia", Maghrib:"Akshami", Isha:"Jacia" };
 const PR_EN  = { Imsak:"Imsak", Fajr:"Fajr",  Dhuhr:"Dhuhr", Asr:"Asr",    Maghrib:"Maghrib", Isha:"Isha"  };
 
 // Icon and KaabaWatermark are imported from shared components above
@@ -293,6 +293,49 @@ export default function Home({ quote, verseQuote, setPage, savedLocation, onSave
       <div className="home-wrap" style={{ padding: "28px 20px 90px", position: "relative" }}>
         <div className="home-inner" style={{ maxWidth: 1100, margin: "0 auto", position: "relative", zIndex: 1 }}>
 
+          {/* ── PWA Install Nudge ────────────────────────── */}
+          {!isStandalone && isMobile && !installDismissed && (
+            <div style={{ marginBottom:16, background:W.goldBg, border:`1px solid ${W.goldBorder}`, borderRadius:14, padding:"13px 16px" }}>
+              <div style={{ display:"flex", alignItems:"center", gap:12 }}>
+                <img src="/logo.png" alt="" style={{ width:40, height:40, objectFit:"contain", flexShrink:0, borderRadius:8 }} />
+                <div style={{ flex:1, minWidth:0 }}>
+                  <div style={{ fontSize:13, fontWeight:700, color:W.text, fontFamily:SA, marginBottom:2 }}>
+                    {isSq ? "Shto në ekranin kryesor" : "Add to your Home Screen"}
+                  </div>
+                  {isIOS ? (
+                    <div style={{ fontSize:11, color:W.muted, fontFamily:SA, lineHeight:1.5 }}>
+                      {isSq
+                        ? <>Tap <strong style={{color:W.goldDark}}>□↑</strong> → <strong style={{color:W.goldDark}}>"Shto në ekranin kryesor"</strong></>
+                        : <>Tap <strong style={{color:W.goldDark}}>□↑ Share</strong> → <strong style={{color:W.goldDark}}>"Add to Home Screen"</strong></>
+                      }
+                    </div>
+                  ) : showInstall ? (
+                    <div style={{ fontSize:11, color:W.muted, fontFamily:SA }}>
+                      {isSq ? "Instalo për akses të shpejtë." : "Install for quick offline access."}
+                    </div>
+                  ) : (
+                    <div style={{ fontSize:11, color:W.muted, fontFamily:SA, lineHeight:1.5 }}>
+                      {isSq
+                        ? <>Tap <strong style={{color:W.goldDark}}>⋮</strong> → <strong style={{color:W.goldDark}}>"Shto në ekranin kryesor"</strong></>
+                        : <>Tap <strong style={{color:W.goldDark}}>⋮</strong> → <strong style={{color:W.goldDark}}>"Add to Home Screen"</strong></>
+                      }
+                    </div>
+                  )}
+                </div>
+                <div style={{ display:"flex", flexDirection:"column", gap:5, flexShrink:0, alignItems:"flex-end" }}>
+                  {showInstall && !isIOS && (
+                    <button onClick={onInstall} style={{ padding:"6px 12px", borderRadius:7, border:"none", background:`linear-gradient(135deg,${W.gold},${W.goldDark})`, color:"#fff8e8", fontSize:11, fontWeight:700, cursor:"pointer", fontFamily:SA, whiteSpace:"nowrap" }}>
+                      {isSq ? "Instalo" : "Install"}
+                    </button>
+                  )}
+                  <button onClick={dismissInstallNudge} style={{ padding:"4px 12px", borderRadius:7, border:`1px solid ${W.goldBorder}`, background:"none", color:W.muted, fontSize:11, cursor:"pointer", fontFamily:SA, whiteSpace:"nowrap" }}>
+                    {isSq ? "Jo tani" : "Not now"}
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* ── TOP ROW: Prayer + Hadith ─────────────────── */}
           <div className="bento-main">
 
@@ -477,49 +520,6 @@ export default function Home({ quote, verseQuote, setPage, savedLocation, onSave
           </div>
 
         </div>
-
-        {/* ── PWA Install Nudge — shown for all mobile visitors ── */}
-        {!isStandalone && isMobile && !installDismissed && (
-          <div style={{ margin:"20px 0 8px", background:W.goldBg, border:`1px solid ${W.goldBorder}`, borderRadius:16, padding:"16px 18px" }}>
-            <div style={{ display:"flex", alignItems:"center", gap:14 }}>
-              <img src="/logo.png" alt="" style={{ width:44, height:44, objectFit:"contain", flexShrink:0, borderRadius:10 }} />
-              <div style={{ flex:1, minWidth:0 }}>
-                <div style={{ fontSize:14, fontWeight:700, color:W.text, fontFamily:SA, marginBottom:3 }}>
-                  {isSq ? "Shto në ekranin kryesor" : "Add to your Home Screen"}
-                </div>
-                {isIOS ? (
-                  <div style={{ fontSize:12, color:W.muted, fontFamily:SA, lineHeight:1.6 }}>
-                    {isSq
-                      ? <>Prekni <strong style={{color:W.goldDark}}>□↑</strong>, pastaj <strong style={{color:W.goldDark}}>"Shto në ekranin kryesor"</ strong></>
-                      : <>Tap <strong style={{color:W.goldDark}}>□↑ Share</strong>, then <strong style={{color:W.goldDark}}>"Add to Home Screen"</strong></>
-                    }
-                  </div>
-                ) : showInstall ? (
-                  <div style={{ fontSize:12, color:W.muted, fontFamily:SA }}>
-                    {isSq ? "Instalo aplikacionin për akses të shpejtë." : "Install the app for quick offline access."}
-                  </div>
-                ) : (
-                  <div style={{ fontSize:12, color:W.muted, fontFamily:SA, lineHeight:1.6 }}>
-                    {isSq
-                      ? <>Tap menynë e shfletuesit <strong style={{color:W.goldDark}}>⋮</strong>, pastaj <strong style={{color:W.goldDark}}>"Shto në ekranin kryesor"</strong></>
-                      : <>Tap browser menu <strong style={{color:W.goldDark}}>⋮</strong>, then <strong style={{color:W.goldDark}}>"Add to Home Screen"</strong></>
-                    }
-                  </div>
-                )}
-              </div>
-              <div style={{ display:"flex", flexDirection:"column", gap:6, flexShrink:0 }}>
-                {showInstall && !isIOS && (
-                  <button onClick={onInstall} style={{ padding:"7px 14px", borderRadius:8, border:"none", background:`linear-gradient(135deg,${W.gold},${W.goldDark})`, color:"#fff8e8", fontSize:12, fontWeight:700, cursor:"pointer", fontFamily:SA }}>
-                    {isSq ? "Instalo" : "Install"}
-                  </button>
-                )}
-                <button onClick={dismissInstallNudge} style={{ padding:"5px 14px", borderRadius:8, border:`1px solid ${W.goldBorder}`, background:"none", color:W.muted, fontSize:11, cursor:"pointer", fontFamily:SA }}>
-                  {isSq ? "Jo tani" : "Not now"}
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
 
       </div>
 

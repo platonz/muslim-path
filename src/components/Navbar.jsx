@@ -201,9 +201,9 @@ export default function Navbar({ page, setPage, onSettings, hasLocation, onSearc
 
       {/* Mobile menu */}
       {menuOpen && <>
-        <div onClick={() => setMenuOpen(false)} style={{ position: "fixed", inset: 0, zIndex: 499 }} />
+        <div onClick={() => setMenuOpen(false)} style={{ position: "fixed", inset: 0, zIndex: 601 }} />
         <div className="nav-mobile-menu" style={{
-          position: "fixed", top: 64, left: 0, right: 0, zIndex: 500,
+          position: "fixed", top: 64, left: 0, right: 0, zIndex: 602,
           borderTop: `1px solid ${BORDER}`,
           padding: "8px 0 16px",
           display: "flex", flexDirection: "column",

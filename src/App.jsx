@@ -743,7 +743,8 @@ const LECTURES = [
 
 // ─── PRAYER TIMES ─────────────────────────────────────────────────
 function PrayerTimes({ savedLocation }) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const isSq = i18n.language?.startsWith("sq");
   const [city, setCity] = useState("");
   const [method, setMethod] = useState(() => parseInt(localStorage.getItem("mp-prayer-method") || "1"));
   const [school, setSchool] = useState(() => parseInt(localStorage.getItem("mp-prayer-school") || "1"));
@@ -855,6 +856,8 @@ function PrayerTimes({ savedLocation }) {
   }
 
   const prayerKeys = ["Fajr", "Sunrise", "Dhuhr", "Asr", "Maghrib", "Isha"];
+  const PR_SQ_PAGE = { Fajr:"Sabahu", Sunrise:"Lindja", Dhuhr:"Dreka", Asr:"Ikindia", Maghrib:"Akshami", Isha:"Jacia" };
+  const PR_EN_PAGE = { Fajr:"Fajr", Sunrise:"Sunrise", Dhuhr:"Dhuhr", Asr:"Asr", Maghrib:"Maghrib", Isha:"Isha" };
   const now = new Date();
   const nowMins = now.getHours()*60 + now.getMinutes();
 
@@ -968,7 +971,7 @@ function PrayerTimes({ savedLocation }) {
                   borderLeft: isNext ? `2px solid ${GOLD}` : "2px solid transparent",
                   borderBottom: `1px solid ${BORDER}`,
                 }}>
-                  <span style={{ fontWeight: isNext ? 600 : 400, color: isNext ? GOLD : MUTED, fontSize: 12, letterSpacing: "0.1em", textTransform: "uppercase" }}>{k}</span>
+                  <span style={{ fontWeight: isNext ? 600 : 400, color: isNext ? GOLD : MUTED, fontSize: 12, letterSpacing: "0.1em", textTransform: "uppercase" }}>{isSq ? (PR_SQ_PAGE[k] || k) : (PR_EN_PAGE[k] || k)}</span>
                   <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
                     <span style={{ fontWeight: 300, color: isNext ? TEXT : MUTED, fontSize: 18, fontVariantNumeric: "tabular-nums", fontFamily: SERIF, letterSpacing: "0.06em" }}>{times.timings[k]}</span>
                     {isNext && <span style={{ fontSize: 9, border: `1px solid ${GOLD}`, color: GOLD, padding: "2px 8px", fontWeight: 700, letterSpacing: "0.14em" }}>NEXT</span>}
@@ -2579,7 +2582,7 @@ export default function App() {
   const [showInstall, setShowInstall] = useState(false);
 
   useEffect(() => {
-    if (localStorage.getItem("mp-pwa-dismissed")) return;
+    if (localStorage.getItem("mp-install-dismissed")) return;
     function handler(e) {
       e.preventDefault();
       deferredPrompt.current = e;
@@ -2600,7 +2603,7 @@ export default function App() {
 
   function dismissInstall() {
     setShowInstall(false);
-    try { localStorage.setItem("mp-pwa-dismissed", "1"); } catch {}
+    try { localStorage.setItem("mp-install-dismissed", "1"); } catch {}
   }
 
   // ── Auth state ─────────────────────────────────────────────────
@@ -2915,34 +2918,6 @@ export default function App() {
         >‹</button>
       )}
       <FloatingPlayer {...audioProps} navigate={navigate} />
-
-      {/* PWA Install Banner */}
-      {showInstall && (
-        <div className="glass-card" style={{
-          position: "fixed", bottom: 8, left: 8, right: 8, zIndex: 400,
-          borderColor: `${GOLD}60`,
-          padding: "14px 18px",
-          display: "flex", alignItems: "center", gap: 14,
-          maxWidth: 480, margin: "0 auto",
-        }}>
-          <img src="/logo.png" alt="" style={{ width: 36, height: 36, objectFit: "contain", flexShrink: 0 }} />
-          <div style={{ flex: 1, minWidth: 0 }}>
-            <div style={{ fontSize: 13, color: TEXT, fontFamily: SERIF, marginBottom: 2 }}>{t("common.addToHome")}</div>
-            <div style={{ fontSize: 11, color: MUTED }}>{t("common.installMsg")}</div>
-          </div>
-          <button onClick={handleInstall} style={{
-            background: "linear-gradient(135deg,#C9A84C,#A8883E)",
-            border: "none", padding: "8px 16px", cursor: "pointer",
-            fontSize: 11, fontWeight: 700, color: "#f0e6ce",
-            letterSpacing: "0.08em", textTransform: "uppercase",
-            fontFamily: SANS, flexShrink: 0,
-          }}>{t("common.install")}</button>
-          <button onClick={dismissInstall} style={{
-            background: "none", border: "none", cursor: "pointer",
-            color: MUTED, fontSize: 18, padding: "0 4px", flexShrink: 0, lineHeight: 1,
-          }}>×</button>
-        </div>
-      )}
 
       {showAuth && (
         <AuthModal
