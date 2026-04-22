@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { createPortal } from "react-dom";
 import { useTranslation } from "react-i18next";
 import {
   BORDER, GOLD, GREEN_L, TEXT, MUTED, SERIF, SANS,
@@ -199,8 +200,8 @@ export default function Navbar({ page, setPage, onSettings, hasLocation, onSearc
         </div>
       </div>
 
-      {/* Mobile menu */}
-      {menuOpen && <>
+      {/* Mobile menu — rendered via portal so it escapes nav's stacking context */}
+      {menuOpen && createPortal(<>
         <div onClick={() => setMenuOpen(false)} style={{ position: "fixed", inset: 0, zIndex: 601 }} />
         <div className="nav-mobile-menu" style={{
           position: "fixed", top: 64, left: 0, right: 0, zIndex: 602,
@@ -296,7 +297,7 @@ export default function Navbar({ page, setPage, onSettings, hasLocation, onSearc
             </button>
           )}
         </div>
-      </>}
+      </>, document.body)}
 
       <style>{`
         @media (max-width: 900px) {
