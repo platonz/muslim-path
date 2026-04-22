@@ -2895,9 +2895,9 @@ export default function App() {
           lectures={lectures}
         />
       )}
-      {/* Back button — fixed bottom-left, only when there's history */}
+      {/* Back button — top-left on mobile, bottom-left on desktop */}
       {navHistory.length > 0 && (
-        <button onClick={goBack} title="Go back" style={{
+        <button onClick={goBack} title="Go back" className="back-btn" style={{
           position: "fixed",
           bottom: current ? 80 : 24,
           left: 16,

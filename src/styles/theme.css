@@ -266,6 +266,15 @@ input, select, textarea { color-scheme: light; }
   .quran-card-large { grid-column: span 1; }
 }
 
+/* ─── BACK BUTTON ───────────────────────────────────────── */
+@media (max-width: 640px) {
+  .back-btn {
+    top: 72px !important;
+    bottom: auto !important;
+    left: 12px !important;
+  }
+}
+
 /* ─── FLOATING PLAYER MOBILE OFFSET ────────────────────── */
 /* On mobile, push player above the tab bar (58px) */
 .floating-player-full {
