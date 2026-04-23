@@ -4,22 +4,22 @@ import i18n from "../i18n";
 import Icon from "./Icon";
 import KaabaWatermark from "./KaabaWatermark";
 
-// ─── WARM PALETTE ───────────────────────────────────────────────────
+// ─── DESIGN TOKENS (mdesign v2) ─────────────────────────────────────
 const W = {
-  card:        "rgba(255,252,244,0.68)",
-  cardHov:     "rgba(255,252,244,0.88)",
-  border:      "rgba(255,255,255,0.78)",
-  shadow:      "0 2px 18px rgba(160,120,50,0.09), 0 1px 0 rgba(255,255,255,0.85) inset",
-  shadowHov:   "0 6px 28px rgba(160,120,50,0.16), 0 1px 0 rgba(255,255,255,0.9) inset",
-  text:        "#3a2a10",
-  muted:       "rgba(100,75,30,0.52)",
-  mutedDark:   "rgba(100,75,30,0.75)",
-  gold:        "#c9a84c",
-  goldDark:    "#a07d3a",
-  goldBg:      "rgba(201,168,76,0.11)",
-  goldBorder:  "rgba(201,168,76,0.28)",
+  card:       "#FFFFFF",
+  cardHov:    "#FDFCF9",
+  border:     "#E0D5C0",
+  shadow:     "0 2px 12px rgba(26,25,21,0.07)",
+  shadowHov:  "0 4px 20px rgba(26,25,21,0.12)",
+  text:       "#1A1915",
+  muted:      "#9A8E7A",
+  mutedDark:  "#6B6050",
+  gold:       "#B89D60",
+  goldDark:   "#8A7235",
+  goldBg:     "#FAF5E8",
+  goldBorder: "rgba(184,157,96,0.30)",
 };
-const SR = "'Cormorant Garamond', Georgia, serif";
+const SR = "'Playfair Display', Georgia, serif";
 const SA = "'Inter', -apple-system, BlinkMacSystemFont, sans-serif";
 
 // ─── HIJRI ──────────────────────────────────────────────────────────
@@ -45,23 +45,21 @@ const PR_EN  = { Imsak:"Imsak", Fajr:"Fajr",  Dhuhr:"Dhuhr", Asr:"Asr",    Maghr
 
 // Icon and KaabaWatermark are imported from shared components above
 
-// ─── GLASS CARD ─────────────────────────────────────────────────────
+// ─── CARD ────────────────────────────────────────────────────────────
 function Card({ children, style = {}, onClick, className = "" }) {
   const [hov, setHov] = useState(false);
   return (
     <div
-      className={`glass-card ${className}`}
+      className={className}
       onClick={onClick}
       onMouseEnter={() => onClick && setHov(true)}
       onMouseLeave={() => setHov(false)}
       style={{
         background: hov ? W.cardHov : W.card,
-        backdropFilter: "blur(28px)",
-        WebkitBackdropFilter: "blur(28px)",
-        border: `1px solid ${W.border}`,
-        borderRadius: 20,
+        border: `1px solid ${hov ? W.goldBorder : W.border}`,
+        borderRadius: 14,
         boxShadow: hov ? W.shadowHov : W.shadow,
-        transition: "background 0.2s, box-shadow 0.2s, transform 0.2s",
+        transition: "background 0.18s, box-shadow 0.18s, transform 0.18s, border-color 0.18s",
         transform: hov && onClick ? "translateY(-2px)" : "none",
         cursor: onClick ? "pointer" : "default",
         position: "relative",
@@ -78,13 +76,13 @@ function Card({ children, style = {}, onClick, className = "" }) {
 function IconBadge({ name, size = 36 }) {
   return (
     <div style={{
-      width: size, height: size, borderRadius: 10,
+      width: size, height: size, borderRadius: 9,
       background: W.goldBg,
       border: `1px solid ${W.goldBorder}`,
       display: "flex", alignItems: "center", justifyContent: "center",
       flexShrink: 0,
     }}>
-      <Icon name={name} size={size * 0.52} color={W.goldDark} sw={1.6}/>
+      <Icon name={name} size={size * 0.50} color={W.goldDark} sw={1.5}/>
     </div>
   );
 }
@@ -94,15 +92,15 @@ function PrayerPill({ label, time, active }) {
   return (
     <div style={{
       display: "flex", flexDirection: "column", alignItems: "center",
-      gap: 4, padding: "8px 10px", borderRadius: 12, minWidth: 54,
-      background: active ? W.goldBg : "rgba(255,255,255,0.35)",
-      border: `1px solid ${active ? W.goldBorder : "rgba(255,255,255,0.5)"}`,
-      transition: "background 0.2s",
+      gap: 3, padding: "8px 10px", borderRadius: 10, minWidth: 54,
+      background: active ? W.goldBg : "#F7F4EE",
+      border: `1px solid ${active ? W.goldBorder : W.border}`,
+      transition: "background 0.15s",
     }}>
-      <span style={{ fontSize: 10, color: active ? W.goldDark : W.muted, fontFamily: SA, fontWeight: active ? 700 : 400, letterSpacing: "0.05em", textTransform: "uppercase" }}>
+      <span style={{ fontSize: 10, color: active ? W.goldDark : W.muted, fontFamily: SA, fontWeight: active ? 700 : 500, letterSpacing: "0.06em", textTransform: "uppercase" }}>
         {label}
       </span>
-      <span style={{ fontSize: 14, color: active ? W.text : W.mutedDark, fontFamily: SA, fontWeight: active ? 700 : 500, fontVariantNumeric: "tabular-nums" }}>
+      <span style={{ fontSize: 14, color: active ? W.goldDark : W.mutedDark, fontFamily: SA, fontWeight: active ? 700 : 400, fontVariantNumeric: "tabular-nums" }}>
         {time}
       </span>
     </div>
@@ -112,11 +110,11 @@ function PrayerPill({ label, time, active }) {
 // ─── FEATURE TILE ───────────────────────────────────────────────────
 function FeatureTile({ icon, label, sub, onClick }) {
   return (
-    <Card onClick={onClick} style={{ padding: "18px 16px" }}>
+    <Card onClick={onClick} style={{ padding: "16px 14px" }}>
       <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-        <IconBadge name={icon} size={38}/>
+        <IconBadge name={icon} size={36}/>
         <div>
-          <div style={{ fontSize: 14, fontWeight: 600, color: W.text, fontFamily: SA, letterSpacing: "-0.01em" }}>{label}</div>
+          <div style={{ fontSize: 13, fontWeight: 600, color: W.text, fontFamily: SA }}>{label}</div>
           {sub && <div style={{ fontSize: 11, color: W.muted, marginTop: 2, fontFamily: SA }}>{sub}</div>}
         </div>
       </div>
@@ -127,10 +125,10 @@ function FeatureTile({ icon, label, sub, onClick }) {
 // ─── TOOL TILE ──────────────────────────────────────────────────────
 function ToolTile({ icon, label, onClick }) {
   return (
-    <Card onClick={onClick} style={{ padding: "14px 16px" }}>
+    <Card onClick={onClick} style={{ padding: "12px 14px" }}>
       <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-        <IconBadge name={icon} size={32}/>
-        <span style={{ fontSize: 13, fontWeight: 600, color: W.text, fontFamily: SA }}>{label}</span>
+        <IconBadge name={icon} size={30}/>
+        <span style={{ fontSize: 12, fontWeight: 600, color: W.text, fontFamily: SA }}>{label}</span>
       </div>
     </Card>
   );
@@ -295,7 +293,7 @@ export default function Home({ quote, verseQuote, setPage, savedLocation, onSave
 
           {/* ── PWA Install Nudge ────────────────────────── */}
           {!isStandalone && isMobile && !installDismissed && (
-            <div style={{ marginBottom:16, background:W.goldBg, border:`1px solid ${W.goldBorder}`, borderRadius:14, padding:"13px 16px" }}>
+            <div style={{ marginBottom:16, background:"#FFFFFF", border:`1px solid ${W.border}`, borderRadius:14, padding:"14px 16px", boxShadow:W.shadow }}>
               <div style={{ display:"flex", alignItems:"center", gap:12 }}>
                 <img src="/logo.png" alt="" style={{ width:40, height:40, objectFit:"contain", flexShrink:0, borderRadius:8 }} />
                 <div style={{ flex:1, minWidth:0 }}>
@@ -340,22 +338,20 @@ export default function Home({ quote, verseQuote, setPage, savedLocation, onSave
           <div className="bento-main">
 
             {/* Prayer Hero Card */}
-            <Card style={{ padding: "28px 28px 24px", overflow: "hidden" }}>
-              {/* Small card-local Kaaba watermark, bottom-right of card */}
-              <KaabaWatermark fixed={false} opacity={0.07} size="200px" />
+            <Card style={{ padding: "24px 24px 20px", overflow: "hidden" }}>
               {/* Location + date row */}
-              <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom: showLocSearch ? 12 : 20 }}>
+              <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom: showLocSearch ? 10 : 18 }}>
                 <button
                   onClick={() => { setShowLocSearch(v => !v); setTimeout(() => locInputRef.current?.focus(), 60); }}
                   style={{ display:"flex", alignItems:"center", gap:6, background:"none", border:"none", cursor:"pointer", padding:0 }}
                 >
-                  <Icon name="loc" size={13} color={W.gold} sw={2}/>
+                  <Icon name="loc" size={12} color={W.goldDark} sw={2}/>
                   <span style={{ fontSize:13, fontWeight:600, color:W.text, fontFamily:SA }}>
                     {savedLocation?.name || (isSq ? "Vendos qytetin" : "Set location")}
                   </span>
-                  <span style={{ fontSize:10, color:W.gold, fontFamily:SA, marginLeft:2 }}>{showLocSearch ? "▲" : "▼"}</span>
+                  <span style={{ fontSize:9, color:W.gold, fontFamily:SA, marginLeft:2 }}>{showLocSearch ? "▲" : "▼"}</span>
                 </button>
-                <span style={{ fontSize:12, color:W.muted, fontFamily:SA }}>
+                <span style={{ fontSize:11, color:W.muted, fontFamily:SA }}>
                   {gregStr}
                 </span>
               </div>
@@ -364,7 +360,7 @@ export default function Home({ quote, verseQuote, setPage, savedLocation, onSave
               {showLocSearch && (
                 <div style={{ marginBottom:16, position:"relative" }}>
                   {/* GPS button */}
-                  <button onClick={locGPS} disabled={locGpsLoading} style={{ width:"100%", display:"flex", alignItems:"center", justifyContent:"center", gap:8, padding:"9px 12px", marginBottom:8, borderRadius:10, border:`1px solid ${W.goldBorder}`, background:W.goldBg, color:W.goldDark, fontSize:12, fontWeight:600, cursor:locGpsLoading ? "wait" : "pointer", fontFamily:SA }}>
+                  <button onClick={locGPS} disabled={locGpsLoading} style={{ width:"100%", display:"flex", alignItems:"center", justifyContent:"center", gap:8, padding:"9px 12px", marginBottom:8, borderRadius:999, border:`1px solid ${W.goldBorder}`, background:W.goldBg, color:W.goldDark, fontSize:12, fontWeight:600, cursor:locGpsLoading ? "wait" : "pointer", fontFamily:SA }}>
                     <span>{locGpsLoading ? "⏳" : "📡"}</span>
                     {locGpsLoading ? (isSq ? "Duke gjetur…" : "Finding location…") : (isSq ? "Përdor GPS-in tim" : "Use my GPS location")}
                   </button>
@@ -376,16 +372,16 @@ export default function Home({ quote, verseQuote, setPage, savedLocation, onSave
                       value={locQuery}
                       onChange={e => setLocQuery(e.target.value)}
                       placeholder={isSq ? "Kërko qytetin…" : "Search city…"}
-                      style={{ width:"100%", padding:"9px 12px", borderRadius:10, border:`1px solid ${W.goldBorder}`, fontSize:13, color:W.text, background:"rgba(255,252,244,0.9)", outline:"none", fontFamily:SA, boxSizing:"border-box" }}
+                      style={{ width:"100%", padding:"9px 14px", borderRadius:10, border:`1px solid ${W.border}`, fontSize:13, color:W.text, background:"#FFFFFF", outline:"none", fontFamily:SA, boxSizing:"border-box" }}
                     />
                     {locLoading && <span style={{ position:"absolute", right:10, top:"50%", transform:"translateY(-50%)", fontSize:12 }}>⏳</span>}
                   </div>
 
                   {/* Suggestions */}
                   {locSuggs.length > 0 && (
-                    <div style={{ position:"absolute", top:"100%", left:0, right:0, zIndex:50, background:"#faf5ec", border:`1px solid ${W.goldBorder}`, borderRadius:10, boxShadow:"0 8px 24px rgba(0,0,0,0.12)", marginTop:4, overflow:"hidden" }}>
+                    <div style={{ position:"absolute", top:"100%", left:0, right:0, zIndex:50, background:"#FFFFFF", border:`1px solid ${W.border}`, borderRadius:10, boxShadow:"0 4px 20px rgba(26,25,21,0.10)", marginTop:4, overflow:"hidden" }}>
                       {locSuggs.map((s, i) => (
-                        <button key={i} onMouseDown={() => pickLocation(s)} style={{ display:"block", width:"100%", textAlign:"left", padding:"10px 14px", border:"none", background:"none", cursor:"pointer", fontSize:13, color:W.text, fontFamily:SA, borderBottom: i < locSuggs.length-1 ? `1px solid ${W.goldBorder}` : "none" }}
+                        <button key={i} onMouseDown={() => pickLocation(s)} style={{ display:"block", width:"100%", textAlign:"left", padding:"10px 14px", border:"none", background:"none", cursor:"pointer", fontSize:13, color:W.text, fontFamily:SA, borderBottom: i < locSuggs.length-1 ? `1px solid ${W.border}` : "none" }}
                           onMouseEnter={e => e.currentTarget.style.background = W.goldBg}
                           onMouseLeave={e => e.currentTarget.style.background = "none"}
                         >📍 {s.name}</button>
@@ -397,30 +393,30 @@ export default function Home({ quote, verseQuote, setPage, savedLocation, onSave
 
               {/* Next prayer */}
               {nextPrayer ? (
-                <div onClick={() => setPage("prayer")} style={{ cursor:"pointer", marginBottom: 20 }}>
-                  <div style={{ fontSize:11, color:W.muted, fontFamily:SA, letterSpacing:"0.08em", textTransform:"uppercase", marginBottom:4 }}>
+                <div onClick={() => setPage("prayer")} style={{ cursor:"pointer", marginBottom:18 }}>
+                  <div style={{ fontSize:10, color:W.muted, fontFamily:SA, letterSpacing:"0.10em", textTransform:"uppercase", marginBottom:4 }}>
                     {isSq ? "Namazi i ardhshëm" : "Next prayer"}
                   </div>
-                  <div style={{ fontSize: 46, fontWeight:500, color:W.text, fontFamily:SR, lineHeight:1.05, letterSpacing:"-0.01em" }}>
+                  <div style={{ fontSize:44, fontWeight:600, color:W.text, fontFamily:SR, lineHeight:1.05, letterSpacing:"-0.01em" }}>
                     {PR[nextPrayer.name]}
                   </div>
-                  <div style={{ fontSize:14, color:W.muted, fontFamily:SA, marginTop:4 }}>
-                    {countdown} · <span style={{ fontVariantNumeric:"tabular-nums", fontWeight:600, color:W.mutedDark }}>{nextPrayer.time}</span>
+                  <div style={{ fontSize:13, color:W.muted, fontFamily:SA, marginTop:4 }}>
+                    {countdown} · <span style={{ fontVariantNumeric:"tabular-nums", fontWeight:600, color:W.goldDark }}>{nextPrayer.time}</span>
                   </div>
                 </div>
               ) : !savedLocation && !showLocSearch ? (
-                <div onClick={() => { setShowLocSearch(true); setTimeout(() => locInputRef.current?.focus(), 60); }} style={{ marginBottom:20, cursor:"pointer" }}>
-                  <div style={{ fontSize:11, color:W.muted, fontFamily:SA, letterSpacing:"0.08em", textTransform:"uppercase", marginBottom:8 }}>
+                <div onClick={() => { setShowLocSearch(true); setTimeout(() => locInputRef.current?.focus(), 60); }} style={{ marginBottom:18, cursor:"pointer" }}>
+                  <div style={{ fontSize:10, color:W.muted, fontFamily:SA, letterSpacing:"0.10em", textTransform:"uppercase", marginBottom:8 }}>
                     {isSq ? "Namazi i ardhshëm" : "Next prayer"}
                   </div>
-                  <div style={{ fontSize:13, color:W.gold, fontFamily:SA, background:W.goldBg, padding:"10px 14px", borderRadius:10, border:`1px dashed ${W.goldBorder}`, display:"flex", alignItems:"center", gap:8 }}>
-                    <span>📍</span>
+                  <div style={{ fontSize:13, color:W.goldDark, fontFamily:SA, background:W.goldBg, padding:"10px 14px", borderRadius:10, border:`1px dashed ${W.goldBorder}`, display:"flex", alignItems:"center", gap:8 }}>
+                    <Icon name="loc" size={14} color={W.goldDark} sw={1.5}/>
                     <span>{isSq ? "Vendosni vendndodhjen për kohët e namazit" : "Tap to set your location and see prayer times"}</span>
                   </div>
                 </div>
               ) : !savedLocation ? null : (
-                <div style={{ marginBottom:20 }}>
-                  <div style={{ fontSize:32, fontWeight:500, color:W.muted, fontFamily:SR }}>Loading…</div>
+                <div style={{ marginBottom:18 }}>
+                  <div style={{ fontSize:32, fontWeight:400, color:W.muted, fontFamily:SR }}>Loading…</div>
                 </div>
               )}
 
@@ -440,14 +436,13 @@ export default function Home({ quote, verseQuote, setPage, savedLocation, onSave
             </Card>
 
             {/* Hadith Card */}
-            <Card style={{ padding:"24px 22px", display:"flex", flexDirection:"column", gap:12 }}>
-              <div style={{ display:"flex", alignItems:"center", gap:8 }}>
-                <div style={{ width:3, height:20, borderRadius:2, background:`linear-gradient(180deg,${W.gold},${W.goldDark})` }}/>
-                <span style={{ fontSize:11, fontWeight:700, color:W.goldDark, fontFamily:SA, letterSpacing:"0.1em", textTransform:"uppercase" }}>
+            <Card style={{ padding:"22px 20px", display:"flex", flexDirection:"column", gap:12, borderLeft:`3px solid ${W.goldDark}` }}>
+              <div>
+                <span style={{ fontSize:10, fontWeight:700, color:W.muted, fontFamily:SA, letterSpacing:"0.10em", textTransform:"uppercase" }}>
                   {isSq ? "Hadithi i ditës" : "Hadith of the day"}
                 </span>
               </div>
-              <p style={{ fontSize:15, color:W.text, fontFamily:SR, fontStyle:"italic", lineHeight:1.75, margin:0, flex:1 }}>
+              <p style={{ fontSize:14, color:W.text, fontFamily:SR, fontStyle:"italic", lineHeight:1.8, margin:0, flex:1 }}>
                 "{quoteText}"
               </p>
               <div>
@@ -460,32 +455,32 @@ export default function Home({ quote, verseQuote, setPage, savedLocation, onSave
           {/* ── FEATURE TILES ────────────────────────────── */}
           <div className="bento-features">
             {/* Quran — large tile spanning 2 cols */}
-            <Card onClick={() => setPage("quran")} className="quran-card-large" style={{ padding:"22px 24px" }}>
+            <Card onClick={() => setPage("quran")} className="quran-card-large" style={{ padding:"20px 22px" }}>
               <div style={{ display:"flex", alignItems:"flex-start", justifyContent:"space-between", gap:12 }}>
                 <div style={{ flex:1 }}>
-                  <div style={{ display:"flex", alignItems:"center", gap:10, marginBottom:12 }}>
-                    <IconBadge name="quran" size={38}/>
+                  <div style={{ display:"flex", alignItems:"center", gap:10, marginBottom:10 }}>
+                    <IconBadge name="quran" size={36}/>
                     <div>
-                      <div style={{ fontSize:16, fontWeight:700, color:W.text, fontFamily:SA }}>
+                      <div style={{ fontSize:15, fontWeight:700, color:W.text, fontFamily:SA }}>
                         {isSq ? "Kurani" : "Quran"}
                       </div>
                       <div style={{ fontSize:11, color:W.muted, fontFamily:SA }}>
-                        {isSq ? "Lexo, dëgo, studio — më përshkrthim shqip." : "Read, listen, study — with transliteration."}
+                        {isSq ? "Lexo, dëgo, studio — me përshkrthim shqip." : "Read, listen, study — with transliteration."}
                       </div>
                     </div>
                   </div>
                   {verseQuote && (
-                    <div style={{ borderTop:`1px solid ${W.goldBorder}`, paddingTop:10 }}>
-                      <div style={{ fontSize:10, color:W.goldDark, fontFamily:SA, letterSpacing:"0.09em", textTransform:"uppercase", marginBottom:6 }}>
+                    <div style={{ borderTop:`1px solid ${W.border}`, paddingTop:10 }}>
+                      <div style={{ fontSize:10, color:W.muted, fontFamily:SA, letterSpacing:"0.10em", textTransform:"uppercase", marginBottom:5 }}>
                         {isSq ? "Ajeti i ditës" : "Verse of the day"} · {verseQuote.src.replace("Quran ","")}
                       </div>
-                      <p style={{ fontSize:14, color:W.text, fontFamily:SR, fontStyle:"italic", lineHeight:1.7, margin:0 }}>
+                      <p style={{ fontSize:13, color:W.text, fontFamily:SR, fontStyle:"italic", lineHeight:1.75, margin:0 }}>
                         "{verseText}"
                       </p>
                     </div>
                   )}
                 </div>
-                <Icon name="chevron" size={18} color={W.muted} sw={2}/>
+                <Icon name="chevron" size={16} color={W.muted} sw={1.5}/>
               </div>
             </Card>
 
@@ -501,12 +496,11 @@ export default function Home({ quote, verseQuote, setPage, savedLocation, onSave
           </div>
 
           {/* ── TOOLS ────────────────────────────────────── */}
-          <div style={{ display:"flex", alignItems:"center", gap:12, margin:"20px 0 12px" }}>
-            <div style={{ width:3, height:16, borderRadius:2, background:`linear-gradient(180deg,${W.gold},${W.goldDark})` }}/>
-            <span style={{ fontSize:11, fontWeight:700, color:W.goldDark, fontFamily:SA, letterSpacing:"0.12em", textTransform:"uppercase" }}>
+          <div style={{ display:"flex", alignItems:"center", gap:10, margin:"20px 0 10px" }}>
+            <span style={{ fontSize:10, fontWeight:700, color:W.muted, fontFamily:SA, letterSpacing:"0.12em", textTransform:"uppercase" }}>
               {isSq ? "Mjetet" : "Tools"}
             </span>
-            <div style={{ flex:1, height:1, background:`linear-gradient(to right,${W.goldBorder},transparent)` }}/>
+            <div style={{ flex:1, height:1, background:W.border }}/>
           </div>
           <div className="bento-tools">
             {TOOLS.map(tool => (

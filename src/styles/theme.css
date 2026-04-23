@@ -53,8 +53,8 @@ html { scroll-behavior: smooth; }
 body {
   margin: 0;
   font-size: 17px;
-  background: var(--cream-bg);
-  color: var(--text-primary);
+  background: #FAF7EE;
+  color: #1A1915;
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -108,8 +108,7 @@ input, select, textarea { color-scheme: light; }
 /* ─── APP ROOT ───────────────────────────────────────────── */
 .app-root {
   min-height: 100vh;
-  background: linear-gradient(160deg, #f7f0e4 0%, #efe3ca 55%, #e6d4ae 100%);
-  background-attachment: fixed;
+  background: #FAF7EE;
   position: relative;
   overflow-x: clip;
 }
