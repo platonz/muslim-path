@@ -465,8 +465,15 @@ function calcFaraid(h, madhab) {
 function Card({ children, style, className = "" }) {
   return (
     <div
-      className={`glass-card ${className}`}
-      style={{ padding: 28, ...style }}
+      className={className}
+      style={{
+        padding: 28,
+        background: "#FFFFFF",
+        border: `1px solid ${BORDER}`,
+        borderRadius: 14,
+        boxShadow: "0 2px 12px rgba(26,25,21,0.07)",
+        ...style
+      }}
     >
       {children}
     </div>
@@ -478,11 +485,11 @@ function PageTitle({ icon, title, sub }) {
     <div style={{ marginBottom: 36 }}>
       <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 6 }}>
         <div style={{
-          width: 40, height: 40, borderRadius: "var(--radius-sm)",
-          background: "var(--gold-bg)", border: "1px solid var(--gold-border)",
+          width: 40, height: 40, borderRadius: 10,
+          background: "#FAF5E8", border: "1px solid rgba(184,157,96,0.30)",
           display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0,
         }}>
-          <Icon name={icon} size={20} color="var(--gold-dark)" sw={1.7} />
+          <Icon name={icon} size={20} color="#8A7235" sw={1.7} />
         </div>
         <h1 style={{ margin: 0, fontSize: 28, fontWeight: 600, color: TEXT, fontFamily: SERIF, letterSpacing: "0.04em" }}>{title}</h1>
       </div>
@@ -502,7 +509,7 @@ function Input({ label, ...props }) {
           padding: "11px 14px",
           borderRadius: "var(--radius-sm)",
           border: `1px solid ${BORDER}`,
-          fontSize: 14, color: TEXT, background: "var(--cream-solid)", outline: "none",
+          fontSize: 14, color: TEXT, background: SURFACE, outline: "none",
           transition: "border-color 0.2s, box-shadow 0.2s",
           fontFamily: SANS,
           ...props.style
@@ -524,12 +531,12 @@ function Select({ label, options, ...props }) {
           padding: "11px 14px",
           borderRadius: "var(--radius-sm)",
           border: `1px solid ${BORDER}`,
-          fontSize: 14, color: TEXT, background: "var(--cream-solid)", outline: "none", cursor: "pointer",
+          fontSize: 14, color: TEXT, background: SURFACE, outline: "none", cursor: "pointer",
           fontFamily: SANS,
           ...props.style
         }}
       >
-        {options.map(o => <option key={o.v} value={o.v} style={{ background: "var(--cream-solid)" }}>{o.l}</option>)}
+        {options.map(o => <option key={o.v} value={o.v} style={{ background: "#FFFFFF" }}>{o.l}</option>)}
       </select>
     </div>
   );
@@ -542,15 +549,15 @@ function Btn({ children, onClick, variant = "primary", disabled, style }) {
       disabled={disabled}
       style={{
         padding: "11px 24px",
-        borderRadius: "var(--radius-sm)",
+        borderRadius: 999,
         border: variant === "primary" ? "none" : `1px solid ${BORDER}`,
-        background: disabled ? "#e8d8b8"
+        background: disabled ? "#E8DCC8"
           : variant === "primary"
-            ? `linear-gradient(135deg, ${GOLD} 0%, #A8893C 100%)`
-            : "var(--cream-solid)",
-        color: disabled ? MUTED : variant === "primary" ? "#3a2a10" : TEXT,
-        fontSize: 13, fontWeight: 700, cursor: disabled ? "not-allowed" : "pointer",
-        letterSpacing: "0.08em", textTransform: "uppercase",
+            ? "#8A7235"
+            : "#FFFFFF",
+        color: disabled ? MUTED : variant === "primary" ? "#FFFFFF" : TEXT,
+        fontSize: 13, fontWeight: 600, cursor: disabled ? "not-allowed" : "pointer",
+        letterSpacing: "0.05em",
         transition: "opacity 0.2s, transform 0.15s",
         fontFamily: SANS,
         ...style
@@ -938,13 +945,13 @@ function PrayerTimes({ savedLocation }) {
               disabled={gpsLoading || loading}
               title="Use GPS location"
               style={{
-                flexShrink: 0, padding: "0 14px", borderRadius: "var(--radius-sm)",
-                border: `1px solid ${GOLD}50`, background: GREEN_L, color: GOLD,
+                flexShrink: 0, padding: "0 14px", borderRadius: 999,
+                border: `1px solid ${BORDER}`, background: "#FAF5E8", color: "#8A7235",
                 fontSize: 18, cursor: (gpsLoading || loading) ? "wait" : "pointer",
                 transition: "all 0.2s",
               }}
-              onMouseEnter={e => e.currentTarget.style.background = "#f0ead0"}
-              onMouseLeave={e => e.currentTarget.style.background = GREEN_L}
+              onMouseEnter={e => e.currentTarget.style.background = "#F0EAD8"}
+              onMouseLeave={e => e.currentTarget.style.background = "#FAF5E8"}
             >{gpsLoading ? "⏳" : "📡"}</button>
           </div>
         </div>
@@ -960,21 +967,22 @@ function PrayerTimes({ savedLocation }) {
               {times.date.readable} · {countryCode === "XK" ? "Europe/Pristina" : times.meta.timezone}
             </p>
           </div>
-          <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
-            {prayerKeys.map(k => {
+          <div style={{ display: "flex", flexDirection: "column" }}>
+            {prayerKeys.map((k, i) => {
               const isNext = k === nextPrayer;
+              const isLast = i === prayerKeys.length - 1;
               return (
                 <div key={k} style={{
                   display: "flex", justifyContent: "space-between", alignItems: "center",
-                  padding: "13px 16px", borderRadius: 0,
-                  background: isNext ? GREEN_L : "transparent",
-                  borderLeft: isNext ? `2px solid ${GOLD}` : "2px solid transparent",
-                  borderBottom: `1px solid ${BORDER}`,
+                  padding: "13px 16px",
+                  background: isNext ? "#FAF5E8" : "transparent",
+                  borderLeft: isNext ? `3px solid #8A7235` : "3px solid transparent",
+                  borderBottom: isLast ? "none" : `1px solid ${BORDER}`,
                 }}>
-                  <span style={{ fontWeight: isNext ? 600 : 400, color: isNext ? GOLD : MUTED, fontSize: 12, letterSpacing: "0.1em", textTransform: "uppercase" }}>{isSq ? (PR_SQ_PAGE[k] || k) : (PR_EN_PAGE[k] || k)}</span>
+                  <span style={{ fontWeight: isNext ? 600 : 400, color: isNext ? "#8A7235" : MUTED, fontSize: 12, letterSpacing: "0.1em", textTransform: "uppercase" }}>{isSq ? (PR_SQ_PAGE[k] || k) : (PR_EN_PAGE[k] || k)}</span>
                   <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                    <span style={{ fontWeight: 300, color: isNext ? TEXT : MUTED, fontSize: 18, fontVariantNumeric: "tabular-nums", fontFamily: SERIF, letterSpacing: "0.06em" }}>{times.timings[k]}</span>
-                    {isNext && <span style={{ fontSize: 9, border: `1px solid ${GOLD}`, color: GOLD, padding: "2px 8px", fontWeight: 700, letterSpacing: "0.14em" }}>NEXT</span>}
+                    <span style={{ fontWeight: isNext ? 500 : 300, color: isNext ? TEXT : MUTED, fontSize: 18, fontVariantNumeric: "tabular-nums", fontFamily: SERIF, letterSpacing: "0.06em" }}>{times.timings[k]}</span>
+                    {isNext && <span style={{ fontSize: 9, background: "#8A7235", color: "#FFFFFF", padding: "2px 8px", borderRadius: 999, fontWeight: 700, letterSpacing: "0.12em" }}>NEXT</span>}
                   </div>
                 </div>
               );

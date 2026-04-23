@@ -25,22 +25,21 @@ export default function Navbar({ page, setPage, onSettings, hasLocation, onSearc
   }, []);
 
   const isHome = page === "home";
-  const navBg   = "rgba(245,237,218,0.88)";
-  const navBdr  = "rgba(201,168,76,0.22)";
-  const navShdw = "0 1px 0 rgba(201,168,76,0.15), 0 2px 16px rgba(160,120,50,0.08)";
+  const navBg   = "rgba(250,247,238,0.95)";
+  const navBdr  = "#E0D5C0";
+  const navShdw = "0 1px 4px rgba(26,25,21,0.06)";
   const navText = MUTED;
-  const navActv = "#a07d3a";
+  const navActv = "#8A7235";
 
   return (
     <nav className="nav-bar" style={{
       position: "sticky", top: 0, zIndex: 100,
       background: navBg,
-      backdropFilter: "blur(20px)",
-      WebkitBackdropFilter: "blur(20px)",
+      backdropFilter: "blur(12px)",
+      WebkitBackdropFilter: "blur(12px)",
       borderBottom: `1px solid ${navBdr}`,
       boxShadow: navShdw,
       padding: "0 32px",
-      transition: "background 0.3s, box-shadow 0.3s",
     }}>
       <div style={{ maxWidth: 1300, margin: "0 auto", display: "flex", alignItems: "center", justifyContent: "space-between", height: 64 }}>
         {/* Logo */}
@@ -91,9 +90,9 @@ export default function Navbar({ page, setPage, onSettings, hasLocation, onSearc
             {toolsOpen && (
               <div onMouseLeave={() => setToolsOpen(false)} style={{
                 position: "absolute", top: "100%", left: 0,
-                background: "#faf5ec", border: `1px solid ${GOLD}25`,
-                boxShadow: `0 16px 48px rgba(0,0,0,0.9)`,
-                minWidth: 180, zIndex: 200,
+                background: "#FFFFFF", border: `1px solid ${BORDER}`,
+                boxShadow: "0 4px 20px rgba(26,25,21,0.10)",
+                minWidth: 180, zIndex: 200, borderRadius: 10, overflow: "hidden",
               }}>
                 {TOOLS_ITEMS.map(tool => (
                   <button key={tool.id} onClick={() => { setPage(tool.id); setToolsOpen(false); }} style={{
@@ -119,26 +118,26 @@ export default function Navbar({ page, setPage, onSettings, hasLocation, onSearc
         {/* Right side: search + settings + lang switcher + auth + hamburger */}
         <div style={{ display: "flex", alignItems: "center", gap: 10, flexShrink: 0 }}>
           <button onClick={onSearch} title={t("nav.search")} aria-label={t("nav.search")} style={{
-            background: "transparent", border: `1px solid rgba(201,168,76,0.3)`,
-            borderRadius: 10, cursor: "pointer", color: navText,
-            width: 36, height: 36, display: "flex", alignItems: "center", justifyContent: "center",
-            fontSize: 15, transition: "all 0.2s",
+            background: "transparent", border: `1px solid ${BORDER}`,
+            borderRadius: 8, cursor: "pointer", color: navText,
+            width: 34, height: 34, display: "flex", alignItems: "center", justifyContent: "center",
+            fontSize: 14, transition: "border-color 0.15s, color 0.15s",
           }}
             onMouseEnter={e => { e.currentTarget.style.borderColor = navActv; e.currentTarget.style.color = navActv; }}
-            onMouseLeave={e => { e.currentTarget.style.borderColor = isHome ? "rgba(201,168,76,0.25)" : BORDER; e.currentTarget.style.color = navText; }}
+            onMouseLeave={e => { e.currentTarget.style.borderColor = BORDER; e.currentTarget.style.color = navText; }}
           >🔍</button>
           <button onClick={onSettings} title={t("nav.settings")} aria-label={t("nav.settings")} style={{
             background: "transparent",
-            border: `1px solid rgba(201,168,76,${hasLocation ? "0.4" : "0.25"})`,
-            borderRadius: 10, cursor: "pointer", color: hasLocation ? navActv : navText,
-            width: 36, height: 36, display: "flex", alignItems: "center", justifyContent: "center",
-            fontSize: 14, transition: "all 0.2s", position: "relative",
+            border: `1px solid ${hasLocation ? GOLD+"80" : BORDER}`,
+            borderRadius: 8, cursor: "pointer", color: hasLocation ? navActv : navText,
+            width: 34, height: 34, display: "flex", alignItems: "center", justifyContent: "center",
+            fontSize: 13, transition: "border-color 0.15s, color 0.15s", position: "relative",
           }}
             onMouseEnter={e => { e.currentTarget.style.borderColor = navActv; e.currentTarget.style.color = navActv; }}
-            onMouseLeave={e => { e.currentTarget.style.borderColor = hasLocation ? (isHome ? "rgba(201,168,76,0.35)" : GOLD+"60") : (isHome ? "rgba(201,168,76,0.25)" : BORDER); e.currentTarget.style.color = hasLocation ? navActv : navText; }}
+            onMouseLeave={e => { e.currentTarget.style.borderColor = hasLocation ? GOLD+"80" : BORDER; e.currentTarget.style.color = hasLocation ? navActv : navText; }}
           >
             ⚙
-            {hasLocation && <span style={{ position: "absolute", top: 3, right: 3, width: 6, height: 6, borderRadius: "50%", background: GOLD }} />}
+            {hasLocation && <span style={{ position: "absolute", top: 4, right: 4, width: 5, height: 5, borderRadius: "50%", background: navActv }} />}
           </button>
 
           {/* Auth button */}
@@ -149,23 +148,23 @@ export default function Navbar({ page, setPage, onSettings, hasLocation, onSearc
                 const m = document.getElementById("nav-user-menu");
                 if (m) m.style.display = m.style.display === "none" ? "block" : "none";
               }} style={{
-                background: "linear-gradient(135deg,#C9A84C,#A8883E)", border: "none",
+                background: navActv, border: "none",
                 borderRadius: "50%", width: 32, height: 32, cursor: "pointer",
-                fontSize: 12, fontWeight: 700, color: "#3a2a10",
+                fontSize: 12, fontWeight: 700, color: "#FFFFFF",
                 display: "flex", alignItems: "center", justifyContent: "center",
                 flexShrink: 0,
               }}>
                 {(authUser.user_metadata?.full_name || authUser.email || "U").charAt(0).toUpperCase()}
               </button>
               <div id="nav-user-menu" style={{
-                display: "none", position: "absolute", top: "calc(100% + 10px)", right: 0,
-                background: "#faf5ec", border: "1px solid #2A2520",
-                boxShadow: "0 16px 48px rgba(0,0,0,0.9)",
-                minWidth: 200, zIndex: 300, padding: "8px 0",
+                display: "none", position: "absolute", top: "calc(100% + 8px)", right: 0,
+                background: "#FFFFFF", border: `1px solid ${BORDER}`,
+                boxShadow: "0 4px 20px rgba(26,25,21,0.10)",
+                minWidth: 200, zIndex: 300, padding: "8px 0", borderRadius: 10, overflow: "hidden",
               }}>
-                <div style={{ padding: "10px 16px 8px", borderBottom: "1px solid #242424" }}>
-                  <div style={{ fontSize: 12, color: "#3a2a10", marginBottom: 2 }}>{authUser.user_metadata?.full_name || ""}</div>
-                  <div style={{ fontSize: 11, color: "#7a5c28" }}>{authUser.email}</div>
+                <div style={{ padding: "10px 16px 8px", borderBottom: `1px solid ${BORDER}` }}>
+                  <div style={{ fontSize: 12, color: TEXT, marginBottom: 2 }}>{authUser.user_metadata?.full_name || ""}</div>
+                  <div style={{ fontSize: 11, color: MUTED }}>{authUser.email}</div>
                 </div>
                 <button onClick={() => { onSignOut(); document.getElementById("nav-user-menu").style.display = "none"; }} style={{
                   width: "100%", background: "none", border: "none",
@@ -180,13 +179,13 @@ export default function Navbar({ page, setPage, onSettings, hasLocation, onSearc
             </div>
           ) : (
             <button onClick={onAuthClick} style={{
-              background: "linear-gradient(135deg,#C9A84C,#A8883E)",
+              background: navActv,
               border: "none", cursor: "pointer",
-              padding: "7px 18px", fontSize: 12, fontWeight: 700,
-              color: isHome ? "#3a2a10" : "#3a2a10",
-              borderRadius: 20,
-              letterSpacing: "0.04em",
-              fontFamily: "'Inter', sans-serif", transition: "opacity 0.2s",
+              padding: "7px 18px", fontSize: 12, fontWeight: 600,
+              color: "#FFFFFF",
+              borderRadius: 999,
+              letterSpacing: "0.03em",
+              fontFamily: "'Inter', sans-serif", transition: "opacity 0.15s",
             }}
               onMouseEnter={e => e.currentTarget.style.opacity = "0.85"}
               onMouseLeave={e => e.currentTarget.style.opacity = "1"}
@@ -208,9 +207,9 @@ export default function Navbar({ page, setPage, onSettings, hasLocation, onSearc
           borderTop: `1px solid ${BORDER}`,
           padding: "8px 0 16px",
           display: "flex", flexDirection: "column",
-          background: "rgba(245,237,218,0.97)",
-          backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)",
-          boxShadow: "0 8px 32px rgba(0,0,0,0.85)",
+          background: "rgba(250,247,238,0.98)",
+          backdropFilter: "blur(16px)", WebkitBackdropFilter: "blur(16px)",
+          boxShadow: "0 4px 24px rgba(26,25,21,0.10)",
           maxHeight: "calc(100vh - 64px)", overflowY: "auto",
         }}>
           {NAV_ITEMS.map(n => (

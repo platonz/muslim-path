@@ -33,15 +33,15 @@ export default function MobileTabBar({ page, navigate }) {
               alignItems: "center",
               gap: 3,
               padding: "4px 0",
-              color: active ? "var(--gold-dark)" : "var(--text-muted)",
+              color: active ? "#8A7235" : "#9A8E7A",
               transition: "color 0.15s",
             }}
           >
             <Icon
               name={tab.icon}
               size={22}
-              color={active ? "var(--gold-dark)" : "var(--text-muted)"}
-              sw={active ? 2.1 : 1.5}
+              color={active ? "#8A7235" : "#9A8E7A"}
+              sw={active ? 2.0 : 1.5}
             />
             <span style={{
               fontSize: 9,

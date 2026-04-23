@@ -1,13 +1,13 @@
-// ─── PALETTE — Warm Glassmorphism ──────────────────────────────────
-export const BG      = "#f0e6ce";          // warm cream page background
-export const SURFACE = "#faf5ec";          // card / input background
-export const BORDER  = "#e2cfa4";          // warm beige border
-export const GREEN   = "#c9a84c";          // gold (kept for back-compat)
-export const GREEN_L = "#f5edd8";          // warm hover state
-export const GOLD    = "#c9a84c";          // gold accent
-export const TEXT    = "#3a2a10";          // dark warm brown (primary text)
-export const MUTED   = "#7a5c28";          // medium warm brown (secondary text)
-export const SERIF   = "'Cormorant Garamond', Georgia, serif";
+// ─── PALETTE — mdesign v2 ───────────────────────────────────────────
+export const BG      = "#FAF7EE";          // warm cream page background
+export const SURFACE = "#FFFFFF";          // card / input background
+export const BORDER  = "#E0D5C0";          // warm border (warm-200)
+export const GREEN   = "#B89D60";          // kept for back-compat
+export const GREEN_L = "#FAF5E8";          // gold-50 subtle hover
+export const GOLD    = "#B89D60";          // gold-400 accent
+export const TEXT    = "#1A1915";          // dark-900 primary text
+export const MUTED   = "#9A8E7A";          // warm-500 secondary text
+export const SERIF   = "'Playfair Display', Georgia, serif";
 export const SANS    = "'Inter', -apple-system, BlinkMacSystemFont, sans-serif";
 
 export const NAV_ITEMS = [
