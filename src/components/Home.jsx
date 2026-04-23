@@ -93,14 +93,14 @@ function PrayerPill({ label, time, active }) {
     <div style={{
       display: "flex", flexDirection: "column", alignItems: "center",
       gap: 3, padding: "8px 10px", borderRadius: 10, minWidth: 54,
-      background: active ? W.goldBg : "#F7F4EE",
-      border: `1px solid ${active ? W.goldBorder : W.border}`,
+      background: active ? "#2D5018" : "#F7F4EE",
+      border: `1px solid ${active ? "#1A3010" : W.border}`,
       transition: "background 0.15s",
     }}>
-      <span style={{ fontSize: 10, color: active ? W.goldDark : W.muted, fontFamily: SA, fontWeight: active ? 700 : 500, letterSpacing: "0.06em", textTransform: "uppercase" }}>
+      <span style={{ fontSize: 10, color: active ? "rgba(255,255,255,0.75)" : W.muted, fontFamily: SA, fontWeight: active ? 700 : 500, letterSpacing: "0.06em", textTransform: "uppercase" }}>
         {label}
       </span>
-      <span style={{ fontSize: 14, color: active ? W.goldDark : W.mutedDark, fontFamily: SA, fontWeight: active ? 700 : 400, fontVariantNumeric: "tabular-nums" }}>
+      <span style={{ fontSize: 14, color: active ? "#FFFFFF" : W.mutedDark, fontFamily: SA, fontWeight: active ? 700 : 400, fontVariantNumeric: "tabular-nums" }}>
         {time}
       </span>
     </div>
