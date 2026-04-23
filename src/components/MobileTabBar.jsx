@@ -37,12 +37,19 @@ export default function MobileTabBar({ page, navigate }) {
               transition: "color 0.15s",
             }}
           >
-            <Icon
-              name={tab.icon}
-              size={22}
-              color={active ? "#8A7235" : "#9A8E7A"}
-              sw={active ? 2.0 : 1.5}
-            />
+            <span style={tab.id === "quran" ? {
+              filter: active
+                ? "drop-shadow(0 0 5px rgba(184,157,96,0.85)) drop-shadow(0 0 2px rgba(184,157,96,0.6))"
+                : "drop-shadow(0 0 3px rgba(184,157,96,0.45))",
+              display: "flex",
+            } : {}}>
+              <Icon
+                name={tab.icon}
+                size={22}
+                color={active ? "#8A7235" : "#9A8E7A"}
+                sw={active ? 2.0 : 1.5}
+              />
+            </span>
             <span style={{
               fontSize: 9,
               fontFamily: "var(--font-sans)",

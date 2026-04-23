@@ -111,12 +111,12 @@ function PrayerPill({ label, time, active }) {
 function FeatureTile({ icon, label, sub, onClick }) {
   return (
     <Card onClick={onClick} style={{ padding: "16px 14px" }}>
-      <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-        <IconBadge name={icon} size={36}/>
-        <div>
+      <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+          <IconBadge name={icon} size={36}/>
           <div style={{ fontSize: 13, fontWeight: 600, color: W.text, fontFamily: SA }}>{label}</div>
-          {sub && <div style={{ fontSize: 11, color: W.muted, marginTop: 2, fontFamily: SA }}>{sub}</div>}
         </div>
+        {sub && <div style={{ fontSize: 12, color: W.muted, fontFamily: SA, lineHeight: 1.4 }}>{sub}</div>}
       </div>
     </Card>
   );
@@ -270,15 +270,15 @@ export default function Home({ quote, verseQuote, setPage, savedLocation, onSave
   const quoteText = isSq && quote?.sq ? quote.sq : quote?.text || "";
   const verseText  = isSq && verseQuote?.sq ? verseQuote.sq : verseQuote?.text || "";
 
-  // Feature tiles
+  // Feature tiles — design order: Dua, 99 Names, Library, Lectures, Tasbeeh, Calendar
   const FEATURES = [
     { id:"quran",    icon:"quran",   en:"Quran",      sq:"Kurani",      subEn:"Read, listen, study",      subSq:"Lexo, dëgo, studio" },
-    { id:"calendar", icon:"calendar",en:"Calendar",   sq:"Kalendari",   subEn:hijriStr,                    subSq:hijriStr },
     { id:"dua",      icon:"dua",     en:"Dua",        sq:"Dua",         subEn:"Curated supplications",    subSq:"Lutje të zgjedhura" },
+    { id:"asma",     icon:"asma",    en:"99 Names",   sq:"99 Emrat",    subEn:"Asma-ul-Husna",            subSq:"Asma-ul-Husna" },
     { id:"library",  icon:"library", en:"Library",    sq:"Biblioteka",  subEn:"Books & articles",         subSq:"Libra & artikuj" },
     { id:"audio",    icon:"audio",   en:"Lectures",   sq:"Ligjërata",   subEn:"Audio & video",            subSq:"Audio & video" },
     { id:"tasbeeh",  icon:"tasbeeh", en:"Tasbeeh",    sq:"Tesbihe",     subEn:"Dhikr counter",            subSq:"Dhikr dixhital" },
-    { id:"asma",     icon:"asma",    en:"99 Names",   sq:"99 Emrat",    subEn:"Asma-ul-Husna",            subSq:"Asma-ul-Husna" },
+    { id:"calendar", icon:"calendar",en:"Calendar",   sq:"Kalendari",   subEn:hijriStr,                    subSq:hijriStr },
   ];
   const TOOLS = [
     { id:"zakat",       icon:"zakat",   en:"Zakat",       sq:"Zekati" },
@@ -338,7 +338,7 @@ export default function Home({ quote, verseQuote, setPage, savedLocation, onSave
           <div className="bento-main">
 
             {/* Prayer Hero Card */}
-            <Card style={{ padding: "24px 24px 20px", overflow: "hidden" }}>
+            <Card style={{ padding: "24px 24px 20px", overflow: "hidden", borderLeft: "3px solid #2D5018" }}>
               {/* Location + date row */}
               <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom: showLocSearch ? 10 : 18 }}>
                 <button
