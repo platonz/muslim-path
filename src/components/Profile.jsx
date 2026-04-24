@@ -19,6 +19,19 @@ const W = {
 const SR = "'Playfair Display', Georgia, serif";
 const SA = "'Inter', -apple-system, BlinkMacSystemFont, sans-serif";
 
+const CALC_METHODS = [
+  { v: 1, l: "MWL",         full: "Muslim World League" },
+  { v: 2, l: "ISNA",        full: "ISNA (North America)" },
+  { v: 3, l: "Egyptian",    full: "Egyptian General Authority" },
+  { v: 4, l: "Umm al-Qura", full: "Umm al-Qura, Makkah" },
+  { v: 5, l: "Karachi",     full: "Univ. of Islamic Sciences, Karachi" },
+];
+const FONT_SIZES = ["Small", "Normal", "Large", "X-Large"];
+const ASR_SCHOOLS = [
+  { v: 1, l: "Ḥanafī" },
+  { v: 0, l: "Shāfiʿī" },
+];
+
 function SectionLabel({ children }) {
   return (
     <div style={{
@@ -29,20 +42,24 @@ function SectionLabel({ children }) {
   );
 }
 
-function SettingRow({ label, value, toggle, checked, onToggle, last, danger }) {
+function SettingRow({ label, value, toggle, checked, onToggle, last, danger, onClick, chevron }) {
   return (
-    <div style={{
-      display: "flex", alignItems: "center", padding: "13px 16px",
-      borderBottom: last ? "none" : `1px solid ${W.border}`,
-      background: W.card,
-    }}>
+    <div
+      onClick={onClick}
+      style={{
+        display: "flex", alignItems: "center", padding: "13px 16px",
+        borderBottom: last ? "none" : `1px solid ${W.border}`,
+        background: W.card,
+        cursor: onClick ? "pointer" : "default",
+      }}
+    >
       <div style={{
         flex: 1, fontSize: 14, fontFamily: SA,
         color: danger ? "#8A2020" : W.text,
       }}>{label}</div>
       {toggle ? (
         <button
-          onClick={onToggle}
+          onClick={e => { e.stopPropagation(); onToggle && onToggle(); }}
           style={{
             width: 40, height: 23, borderRadius: 999, cursor: "pointer",
             position: "relative", border: "none", outline: "none",
@@ -59,9 +76,14 @@ function SettingRow({ label, value, toggle, checked, onToggle, last, danger }) {
             transition: "left 200ms ease",
           }} />
         </button>
-      ) : value ? (
-        <div style={{ fontSize: 13, color: W.muted, fontFamily: SA }}>{value}</div>
-      ) : null}
+      ) : (
+        <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+          {value && <div style={{ fontSize: 13, color: W.muted, fontFamily: SA }}>{value}</div>}
+          {(chevron || onClick) && !toggle && (
+            <div style={{ fontSize: 16, color: W.muted, lineHeight: 1 }}>›</div>
+          )}
+        </div>
+      )}
     </div>
   );
 }
@@ -76,16 +98,49 @@ export default function Profile({ authUser, onSignOut, notifEnabled, onNotifTogg
     quranGoal: true,
   });
 
+  const [calcMethod, setCalcMethod] = useState(() => {
+    const v = parseInt(localStorage.getItem("mp-prayer-method") || "1");
+    return CALC_METHODS.find(m => m.v === v) || CALC_METHODS[0];
+  });
+
+  const [asrSchool, setAsrSchool] = useState(() => {
+    const v = parseInt(localStorage.getItem("mp-prayer-school") || "1");
+    return ASR_SCHOOLS.find(s => s.v === v) || ASR_SCHOOLS[0];
+  });
+
+  const [fontSize, setFontSize] = useState(
+    () => localStorage.getItem("mp-arabic-font") || "Normal"
+  );
+
   function flipToggle(key) {
     const next = !toggles[key];
     setToggles(prev => ({ ...prev, [key]: next }));
     if (key === "prayerReminders" && onNotifToggle) onNotifToggle(next);
   }
 
+  function cycleCalcMethod() {
+    const idx = CALC_METHODS.findIndex(m => m.v === calcMethod.v);
+    const next = CALC_METHODS[(idx + 1) % CALC_METHODS.length];
+    setCalcMethod(next);
+    localStorage.setItem("mp-prayer-method", String(next.v));
+  }
+
+  function cycleAsrSchool() {
+    const next = asrSchool.v === 1 ? ASR_SCHOOLS[1] : ASR_SCHOOLS[0];
+    setAsrSchool(next);
+    localStorage.setItem("mp-prayer-school", String(next.v));
+  }
+
+  function cycleFontSize() {
+    const idx = FONT_SIZES.indexOf(fontSize);
+    const next = FONT_SIZES[(idx + 1) % FONT_SIZES.length];
+    setFontSize(next);
+    localStorage.setItem("mp-arabic-font", next);
+  }
+
   const displayName = authUser?.user_metadata?.full_name || authUser?.email?.split("@")[0] || "Guest";
   const initial     = displayName.charAt(0).toUpperCase();
 
-  const calcLabel = isSq ? "Metoda llogaritjes" : "Calculation method";
   const locationLabel = savedLocation?.name || (isSq ? "Nuk është vendosur" : "Not set");
 
   return (
@@ -153,8 +208,40 @@ export default function Profile({ authUser, onSignOut, notifEnabled, onNotifTogg
       <div style={{ margin: "20px 20px 0" }}>
         <SectionLabel>{isSq ? "Llogaria" : "Account"}</SectionLabel>
         <div style={{ background: W.card, border: `1px solid ${W.border}`, borderRadius: 14, boxShadow: W.shadow, overflow: "hidden" }}>
-          <SettingRow label={isSq ? "Vendndodhja" : "Location"} value={locationLabel} />
-          <SettingRow label={calcLabel} value="MWL" last />
+          <SettingRow
+            label={isSq ? "Vendndodhja" : "Location"}
+            value={locationLabel}
+            onClick={() => navigate && navigate("prayer")}
+          />
+          <SettingRow
+            label={isSq ? "Metoda llogaritjes" : "Calculation method"}
+            value={calcMethod.l}
+            onClick={cycleCalcMethod}
+            last
+          />
+        </div>
+        <div style={{ fontSize: 11, color: W.muted, fontFamily: SA, marginTop: 6, paddingLeft: 4 }}>
+          {isSq ? `${calcMethod.full} · Tap për të ndryshuar` : `${calcMethod.full} · Tap to cycle`}
+        </div>
+      </div>
+
+      {/* App settings */}
+      <div style={{ margin: "16px 20px 0" }}>
+        <SectionLabel>{isSq ? "Aplikacioni" : "App"}</SectionLabel>
+        <div style={{ background: W.card, border: `1px solid ${W.border}`, borderRadius: 14, boxShadow: W.shadow, overflow: "hidden" }}>
+          <SettingRow
+            label={isSq ? "Madhësia e shkronjave arabe" : "Arabic font size"}
+            value={isSq
+              ? { Small: "E vogël", Normal: "Normale", Large: "E madhe", "X-Large": "Shumë e madhe" }[fontSize]
+              : fontSize}
+            onClick={cycleFontSize}
+          />
+          <SettingRow
+            label={isSq ? "Llogaritja e Ikindisë" : "Asr calculation"}
+            value={asrSchool.l}
+            onClick={cycleAsrSchool}
+          />
+          <SettingRow label={isSq ? "Përkthimi" : "Translation"} value="Sahih International" last />
         </div>
       </div>
 
@@ -178,15 +265,6 @@ export default function Profile({ authUser, onSignOut, notifEnabled, onNotifTogg
             onToggle={() => flipToggle("quranGoal")}
             last
           />
-        </div>
-      </div>
-
-      {/* App settings */}
-      <div style={{ margin: "16px 20px 0" }}>
-        <SectionLabel>{isSq ? "Aplikacioni" : "App"}</SectionLabel>
-        <div style={{ background: W.card, border: `1px solid ${W.border}`, borderRadius: 14, boxShadow: W.shadow, overflow: "hidden" }}>
-          <SettingRow label={isSq ? "Madhësia e shkronjave arabe" : "Arabic font size"} value={isSq ? "Normale" : "Normal"} />
-          <SettingRow label={isSq ? "Përkthimi" : "Translation"} value="Sahih International" last />
         </div>
       </div>
 

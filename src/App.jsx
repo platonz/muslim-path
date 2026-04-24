@@ -951,8 +951,6 @@ function PrayerTimes({ savedLocation }) {
             )}
           </div>
 
-          <Select label="Calculation Method" value={method} onChange={e => { setMethod(e.target.value); localStorage.setItem("mp-prayer-method", e.target.value); }} options={METHODS} />
-          <Select label="Asr Calculation" value={school} onChange={e => { setSchool(e.target.value); localStorage.setItem("mp-prayer-school", e.target.value); }} options={[{ v: 1, l: "Ḥanafī — later Asr (BIK Kosovo)" }, { v: 0, l: "Shāfiʿī / Standard — earlier Asr" }]} />
           <div style={{ display: "flex", gap: 8 }}>
             <Btn onClick={() => search()} disabled={loading || gpsLoading} style={{ flex: 1 }}>{loading ? "Searching…" : "Get Prayer Times"}</Btn>
             <button
@@ -3715,7 +3713,8 @@ function QuranPage() {
   const isSq = i18n.language?.startsWith("sq");
   const transEdition = isSq ? "sq.nahi" : "en.sahih";
   const [surahs,       setSurahs]       = useState(() => _surahCache || []);
-  const [current,      setCurrent]      = useState(() => { const s = localStorage.getItem("quranSurah"); return s ? parseInt(s) : null; });
+  const [current,      setCurrent]      = useState(null);
+  const arabicFontSize = { Small: 20, Normal: 26, Large: 32, "X-Large": 38 }[localStorage.getItem("mp-arabic-font") || "Normal"] || 26;
   const [verses,       setVerses]       = useState([]);
   const [loadingList,  setLoadingList]  = useState(!_surahCache);
   const [loadingRead,  setLoadingRead]  = useState(false);
@@ -4089,19 +4088,19 @@ function QuranPage() {
                   padding: 2, transition: "color 0.15s", lineHeight: 1,
                 }}>{"🔖"}</button>
               </div>
-              <div style={{ fontSize: 26, fontFamily: ARABIC, color: TEXT, lineHeight: 2.2, flex: 1, textAlign: "right" }}>
+              <div style={{ fontSize: arabicFontSize, fontFamily: ARABIC, color: TEXT, lineHeight: 2.2, flex: 1, textAlign: "right" }}>
                 {v.ar}
               </div>
             </div>
             {/* Transliteration — always visible */}
             {v.tr && (
-              <div style={{ fontSize: 15, color: GOLD + "bb", lineHeight: 1.9, paddingLeft: 48, fontFamily: SANS, letterSpacing: "0.04em", fontStyle: "italic" }}>
+              <div style={{ fontSize: 14, color: GOLD + "bb", lineHeight: 1.8, fontFamily: SANS, letterSpacing: "0.04em", fontStyle: "italic" }}>
                 {v.tr}
               </div>
             )}
             {/* Translation */}
             {showTrans && (
-              <div style={{ fontSize: 17, color: TEXT, lineHeight: 1.9, paddingLeft: 48, fontFamily: SERIF, letterSpacing: "0.02em" }}>
+              <div style={{ fontSize: 16, color: TEXT, lineHeight: 1.85, fontFamily: SERIF, letterSpacing: "0.02em" }}>
                 {v.en}
               </div>
             )}
@@ -4133,8 +4132,44 @@ function QuranPage() {
 
   // ── SURAH LIST VIEW ────────────────────────────────────────────
   return (
-    <div style={{ maxWidth: 860, margin: "0 auto", padding: "40px 24px" }}>
+    <div style={{ maxWidth: 860, margin: "0 auto", padding: "40px 24px 100px" }}>
       <PageTitle icon="quran" title={t("pages.quran.title")} sub={t("pages.quran.sub")} />
+
+      {/* Continue reading banner */}
+      {(() => {
+        const savedNum = localStorage.getItem("quranSurah");
+        if (!savedNum || !surahs.length) return null;
+        const savedSurah = surahs.find(s => s.number === parseInt(savedNum));
+        if (!savedSurah) return null;
+        return (
+          <div
+            onClick={() => openSurah(savedSurah.number)}
+            style={{
+              marginBottom: 20, display: "flex", alignItems: "center", gap: 14,
+              background: "#FFFFFF", border: `1px solid ${GOLD}40`,
+              borderRadius: 14, padding: "14px 18px", cursor: "pointer",
+              boxShadow: "0 2px 12px rgba(26,25,21,0.07)",
+              transition: "background 0.15s",
+            }}
+            onMouseEnter={e => e.currentTarget.style.background = GREEN_L}
+            onMouseLeave={e => e.currentTarget.style.background = "#FFFFFF"}
+          >
+            <div style={{
+              width: 36, height: 36, borderRadius: 10, flexShrink: 0,
+              background: GREEN, display: "flex", alignItems: "center", justifyContent: "center",
+              fontSize: 12, fontFamily: SANS, fontWeight: 700, color: "#fff",
+            }}>{savedSurah.number}</div>
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <div style={{ fontSize: 11, color: GOLD, letterSpacing: "0.12em", textTransform: "uppercase", fontFamily: SANS, fontWeight: 600, marginBottom: 2 }}>
+                {isSq ? "Vazhdo leximin" : "Continue reading"}
+              </div>
+              <div style={{ fontSize: 15, color: TEXT, fontFamily: SERIF }}>{savedSurah.englishName}</div>
+            </div>
+            <div style={{ fontFamily: ARABIC, fontSize: 20, color: GOLD, direction: "rtl", flexShrink: 0 }}>{savedSurah.name}</div>
+            <div style={{ fontSize: 18, color: MUTED, flexShrink: 0 }}>›</div>
+          </div>
+        );
+      })()}
 
       {/* Bookmarks panel */}
       {bookmarks.length > 0 && (
