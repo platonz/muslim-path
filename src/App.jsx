@@ -879,9 +879,22 @@ function PrayerTimes({ savedLocation }) {
     return "Fajr";
   }
   const nextPrayer = getNextPrayer();
+  const PRAY_ONLY = ["Fajr","Dhuhr","Asr","Maghrib","Isha"];
+  const doneCount = times ? (() => {
+    const [ih,im] = times.timings.Isha.split(":").map(Number);
+    return (nextPrayer === "Fajr" && nowMins > ih*60+im) ? 5 : PRAY_ONLY.indexOf(nextPrayer ?? "Fajr");
+  })() : 0;
+  const qiblaDeg = times ? (() => {
+    const φ1 = times.meta.latitude * Math.PI / 180, λ1 = times.meta.longitude * Math.PI / 180;
+    const φ2 = 21.4225 * Math.PI / 180, λ2 = 39.8262 * Math.PI / 180;
+    const dλ = λ2 - λ1;
+    const y = Math.sin(dλ) * Math.cos(φ2);
+    const x = Math.cos(φ1) * Math.sin(φ2) - Math.sin(φ1) * Math.cos(φ2) * Math.cos(dλ);
+    return Math.round((Math.atan2(y, x) * 180 / Math.PI + 360) % 360);
+  })() : null;
 
   return (
-    <div style={{ maxWidth: 680, margin: "0 auto", padding: "40px 24px" }}>
+    <div style={{ maxWidth: 680, margin: "0 auto", padding: "40px 24px 90px" }}>
       <PageTitle icon="prayer" title={t("pages.prayer.title")} sub={t("pages.prayer.sub")} />
       <Card style={{ marginBottom: 20 }}>
         <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
@@ -962,35 +975,113 @@ function PrayerTimes({ savedLocation }) {
       {err && <p style={{ color: "#EF4444", fontSize: 12, letterSpacing: "0.03em" }}>{err}</p>}
 
       {times && (
-        <Card>
-          <div style={{ marginBottom: 16 }}>
-            <h3 style={{ margin: 0, fontWeight: 700, color: TEXT }}>{displayCity}</h3>
-            <p style={{ margin: "4px 0 0", fontSize: 13, color: MUTED }}>
-              {times.date.readable} · {countryCode === "XK" ? "Europe/Pristina" : times.meta.timezone}
-            </p>
+        <div>
+          {/* Completion card */}
+          <div style={{ background:"#fff", border:`1px solid #E0D5C0`, borderRadius:14, padding:"16px 20px", marginBottom:16, boxShadow:"0 2px 12px rgba(26,25,21,0.07)" }}>
+            <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", marginBottom:10 }}>
+              <div>
+                <div style={{ fontSize:13, color:"#9A8E7A", fontFamily:SANS, marginBottom:2 }}>
+                  {isSq ? "Kryerja sot" : "Today's completion"}
+                </div>
+                <div style={{ fontSize:24, fontWeight:700, color:"#2D5018", fontFamily:SANS }}>
+                  {doneCount}<span style={{ fontSize:14, color:"#9A8E7A", fontWeight:400 }}>/5</span>
+                </div>
+              </div>
+              <div style={{ fontSize:12, color:"#6B6050", fontFamily:SANS, textAlign:"right", maxWidth:160 }}>
+                <div style={{ fontWeight:600, color:TEXT }}>{displayCity}</div>
+                <div style={{ marginTop:2 }}>{times.date.readable}</div>
+              </div>
+            </div>
+            <div style={{ height:5, background:"#EDF5E3", borderRadius:99, overflow:"hidden" }}>
+              <div style={{ height:"100%", width:`${(doneCount/5)*100}%`, background:"#2D5018", borderRadius:99 }}/>
+            </div>
+            <div style={{ fontSize:12, color:"#6B6050", marginTop:6, fontFamily:SANS }}>
+              {doneCount < 5 && nextPrayer && (
+                isSq
+                  ? `Vazhdo — ${PR_SQ_PAGE[nextPrayer]||nextPrayer} është i ardhshëm`
+                  : `Keep going — ${PR_EN_PAGE[nextPrayer]||nextPrayer} is next`
+              )}
+              {doneCount === 5 && (isSq ? "Të gjitha namazet u falën sot!" : "All prayers completed today!")}
+            </div>
           </div>
-          <div style={{ display: "flex", flexDirection: "column" }}>
+
+          {/* Schedule */}
+          <div style={{ fontSize:11, fontWeight:600, letterSpacing:"0.06em", textTransform:"uppercase", color:"#9A8E7A", marginBottom:8, fontFamily:SANS }}>
+            {isSq ? "Orari i sotëm" : "Today's Schedule"}
+          </div>
+          <div style={{ background:"#fff", border:`1px solid #E0D5C0`, borderRadius:14, overflow:"hidden", boxShadow:"0 2px 12px rgba(26,25,21,0.07)", marginBottom:16 }}>
             {prayerKeys.map((k, i) => {
+              const isSunrise = k === "Sunrise";
+              const pIdx = PRAY_ONLY.indexOf(k);
+              const isDone = !isSunrise && pIdx < doneCount;
               const isNext = k === nextPrayer;
               const isLast = i === prayerKeys.length - 1;
               return (
                 <div key={k} style={{
-                  display: "flex", justifyContent: "space-between", alignItems: "center",
-                  padding: "13px 16px",
-                  background: isNext ? "#FAF5E8" : "transparent",
-                  borderLeft: isNext ? `3px solid #8A7235` : "3px solid transparent",
-                  borderBottom: isLast ? "none" : `1px solid ${BORDER}`,
+                  display:"flex", alignItems:"center", padding:"12px 16px",
+                  borderBottom: isLast ? "none" : `1px solid #EDF5E3`,
+                  background: isNext ? "#EDF5E3" : "#fff",
                 }}>
-                  <span style={{ fontWeight: isNext ? 600 : 400, color: isNext ? "#8A7235" : MUTED, fontSize: 12, letterSpacing: "0.1em", textTransform: "uppercase" }}>{isSq ? (PR_SQ_PAGE[k] || k) : (PR_EN_PAGE[k] || k)}</span>
-                  <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                    <span style={{ fontWeight: isNext ? 500 : 300, color: isNext ? TEXT : MUTED, fontSize: 18, fontVariantNumeric: "tabular-nums", fontFamily: SERIF, letterSpacing: "0.06em" }}>{times.timings[k]}</span>
-                    {isNext && <span style={{ fontSize: 9, background: "#8A7235", color: "#FFFFFF", padding: "2px 8px", borderRadius: 999, fontWeight: 700, letterSpacing: "0.12em" }}>NEXT</span>}
+                  {isSunrise ? (
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#B89D60" strokeWidth="1.8" strokeLinecap="round" style={{ marginRight:12, flexShrink:0 }}>
+                      <circle cx="12" cy="12" r="5"/>
+                      <line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
+                      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+                      <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
+                      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+                    </svg>
+                  ) : (
+                    <div style={{
+                      width:26, height:26, borderRadius:"50%", marginRight:12, flexShrink:0,
+                      background: isDone ? "#2D5018" : "#fff",
+                      border: `1.5px solid ${isDone ? "#2D5018" : "#D4E8BC"}`,
+                      display:"flex", alignItems:"center", justifyContent:"center",
+                    }}>
+                      {isDone && (
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                          <polyline points="20 6 9 17 4 12"/>
+                        </svg>
+                      )}
+                      {isNext && !isDone && <div style={{ width:8, height:8, borderRadius:"50%", background:"#2D5018" }}/>}
+                    </div>
+                  )}
+                  <div style={{ flex:1 }}>
+                    <div style={{ fontSize:14, fontWeight: isNext ? 600 : 500, color: isNext ? "#2D5018" : (isSunrise ? "#B89D60" : TEXT), fontFamily:SANS }}>
+                      {isSq ? (PR_SQ_PAGE[k]||k) : (PR_EN_PAGE[k]||k)}
+                    </div>
                   </div>
+                  <div style={{ fontSize:13, color: isNext ? "#2D5018" : MUTED, fontWeight: isNext ? 600 : 400, fontFamily:SANS }}>
+                    {times.timings[k]}
+                  </div>
+                  {isNext && (
+                    <div style={{ marginLeft:8, padding:"2px 8px", borderRadius:999, background:"#2D5018", color:"#fff", fontSize:10, fontWeight:700, fontFamily:SANS, letterSpacing:"0.04em" }}>
+                      {isSq ? "Tjetri" : "Next"}
+                    </div>
+                  )}
                 </div>
               );
             })}
           </div>
-        </Card>
+
+          {/* Qibla card */}
+          {qiblaDeg !== null && (
+            <div style={{ background:"#fff", border:`1px solid #E0D5C0`, borderRadius:14, padding:"14px 16px", display:"flex", alignItems:"center", gap:14, boxShadow:"0 2px 12px rgba(26,25,21,0.07)" }}>
+              <div style={{ width:44, height:44, borderRadius:12, background:"#EDF5E3", display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0 }}>
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2D5018" strokeWidth="1.8" strokeLinecap="round">
+                  <path d="M12 2L8 7H5L3 10l9 2 9-2-2-3h-3L12 2z"/><line x1="12" y1="12" x2="12" y2="22"/><path d="M5 22h14"/>
+                </svg>
+              </div>
+              <div style={{ flex:1 }}>
+                <div style={{ fontSize:14, fontWeight:600, color:TEXT, fontFamily:SANS }}>
+                  {isSq ? "Drejtimi i Kibles" : "Qibla Direction"}
+                </div>
+                <div style={{ fontSize:13, color:"#9A8E7A", fontFamily:SANS, marginTop:2 }}>
+                  {qiblaDeg}° {isSq ? "nga Veriu" : "from North"}
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
       )}
     </div>
   );
@@ -4118,35 +4209,40 @@ function QuranPage() {
 
       {/* Surah name matches */}
       {filtered.length > 0 && (
-        <div style={{ border: `1px solid ${BORDER}`, borderRadius: 14, boxShadow: "0 2px 12px rgba(26,25,21,0.07)", overflow: "hidden", marginBottom: crossResults.length > 0 ? 28 : 0 }}>
-          {filtered.map((s, i) => (
-            <div key={s.number} onClick={() => openSurah(s.number)}
-              style={{
-                display: "flex", alignItems: "center", gap: 16, padding: "14px 20px",
-                borderBottom: i < filtered.length - 1 ? `1px solid ${BORDER}` : "none",
-                cursor: "pointer", transition: "background 0.15s",
-                borderLeft: current === s.number ? `2px solid ${GOLD}` : "2px solid transparent",
-                background: "transparent",
-              }}
-              onMouseEnter={e => e.currentTarget.style.background = GREEN_L}
-              onMouseLeave={e => e.currentTarget.style.background = "transparent"}
-            >
-              <div style={{
-                width: 36, height: 36, border: `1px solid ${BORDER}`, borderRadius: 9, flexShrink: 0,
-                display: "flex", alignItems: "center", justifyContent: "center",
-                fontSize: 12, color: GOLD, fontFamily: SANS, fontWeight: 600,
-              }}>{s.number}</div>
-              <div style={{ flex: 1, minWidth: 0 }}>
-                <div style={{ fontSize: 14, color: TEXT, fontWeight: 500, fontFamily: SERIF, letterSpacing: "0.03em" }}>{s.englishName}</div>
-                <div style={{ fontSize: 11, color: MUTED, marginTop: 2 }}>
-                  {s.englishNameTranslation} · {s.numberOfAyahs} verses · {s.revelationType}
+        <div style={{ border: `1px solid #E0D5C0`, borderRadius: 14, boxShadow: "0 2px 12px rgba(26,25,21,0.07)", overflow: "hidden", marginBottom: crossResults.length > 0 ? 28 : 0, background: "#fff" }}>
+          {filtered.map((s, i) => {
+            const isOpened = current === s.number;
+            return (
+              <div key={s.number} onClick={() => openSurah(s.number)}
+                style={{
+                  display: "flex", alignItems: "center", gap: 14, padding: "13px 18px",
+                  borderBottom: i < filtered.length - 1 ? `1px solid #EDF5E3` : "none",
+                  cursor: "pointer", transition: "background 0.15s",
+                  background: "transparent",
+                }}
+                onMouseEnter={e => e.currentTarget.style.background = "#EDF5E3"}
+                onMouseLeave={e => e.currentTarget.style.background = "transparent"}
+              >
+                <div style={{
+                  width: 36, height: 36, borderRadius: 10, flexShrink: 0,
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  fontSize: 12, fontFamily: SANS, fontWeight: 700,
+                  background: isOpened ? "#2D5018" : "#FAF7EE",
+                  color: isOpened ? "#fff" : "#8A7235",
+                  border: `1px solid ${isOpened ? "#2D5018" : "#E0D5C0"}`,
+                }}>{s.number}</div>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{ fontSize: 14, color: TEXT, fontWeight: 600, fontFamily: SANS }}>{s.englishName}</div>
+                  <div style={{ fontSize: 11, color: MUTED, marginTop: 2, fontFamily: SANS }}>
+                    {s.numberOfAyahs} {isSq ? "ajete" : "ayahs"}{isOpened ? (isSq ? " · E hapur" : " · Opened") : ""}
+                  </div>
+                </div>
+                <div style={{ fontFamily: ARABIC, fontSize: 18, color: isOpened ? "#2D5018" : GOLD, direction: "rtl", flexShrink: 0, lineHeight: 1.6 }}>
+                  {s.name}
                 </div>
               </div>
-              <div style={{ fontFamily: ARABIC, fontSize: 20, color: GOLD, direction: "rtl", flexShrink: 0, lineHeight: 1.6 }}>
-                {s.name}
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
 
