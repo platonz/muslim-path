@@ -2427,36 +2427,34 @@ function LangBar({ page }) {
     window.location.href = newUrl;
   }
 
-  const btn = (lang, flag, label) => {
+  const btn = (lang, label) => {
     const active = current === lang;
     return (
       <button
         key={lang}
         onClick={() => switchLang(lang)}
         style={{
-          display: "flex", alignItems: "center", gap: 6,
-          padding: "5px 18px", borderRadius: 999,
-          border: `1px solid ${active ? GOLD : BORDER}`,
-          background: active ? `${GOLD}22` : "transparent",
-          color: active ? GOLD : MUTED,
+          padding: "4px 14px", borderRadius: 999,
+          border: `1.5px solid ${active ? "#1A1915" : "#C8B89A"}`,
+          background: active ? "#1A1915" : "transparent",
+          color: active ? "#fff" : "#6B6050",
           cursor: active ? "default" : "pointer",
-          fontSize: 12, fontWeight: 700,
-          letterSpacing: "0.08em", fontFamily: SANS,
-          transition: "all 0.2s",
+          fontSize: 11, fontWeight: 600,
+          letterSpacing: "0.06em", fontFamily: SANS,
+          transition: "all 0.15s",
         }}
-        onMouseEnter={e => { if (!active) { e.currentTarget.style.borderColor = GOLD + "80"; e.currentTarget.style.color = TEXT; } }}
-        onMouseLeave={e => { if (!active) { e.currentTarget.style.borderColor = BORDER; e.currentTarget.style.color = MUTED; } }}
+        onMouseEnter={e => { if (!active) { e.currentTarget.style.background = "#EDE8DC"; e.currentTarget.style.color = "#1A1915"; } }}
+        onMouseLeave={e => { if (!active) { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "#6B6050"; } }}
       >
-        <span style={{ fontSize: 16, lineHeight: 1 }}>{flag}</span>
         {label}
       </button>
     );
   };
 
   return (
-    <div style={{ display: "flex", justifyContent: "center", gap: 8, padding: "8px 16px" }}>
-      {btn("en", "🇬🇧", "EN")}
-      {btn("sq", "🇦🇱", "SQ")}
+    <div style={{ display: "flex", justifyContent: "center", gap: 8, padding: "10px 0", borderBottom: "1px solid #EDE8DC" }}>
+      {btn("en", "GB\u00a0EN")}
+      {btn("sq", "AL\u00a0SQ")}
     </div>
   );
 }

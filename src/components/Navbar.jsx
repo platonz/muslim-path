@@ -1,319 +1,383 @@
 import { useState, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import { useTranslation } from "react-i18next";
-import {
-  BORDER, GOLD, GREEN_L, TEXT, MUTED, SERIF, SANS,
-  NAV_ITEMS, TOOLS_ITEMS,
-} from "../constants";
+import { GOLD, TEXT, MUTED, SANS, NAV_ITEMS, TOOLS_ITEMS } from "../constants";
+
+const BG      = "rgba(250,247,238,0.95)";
+const BORDER  = "#E0D5C0";
+const DARK    = "#1A1915";
+const WARM700 = "#6B6050";
+const WARM100 = "#EDE8DC";
+
+// Primary desktop links — matches handoff
+const PRIMARY_LINKS = ["home", "prayer", "quran"];
+
+function IconSearch() {
+  return (
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+      <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+    </svg>
+  );
+}
+function IconSettings() {
+  return (
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+      <circle cx="12" cy="12" r="3"/>
+      <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+    </svg>
+  );
+}
+function IconChevron() {
+  return (
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+      <polyline points="6 9 12 15 18 9"/>
+    </svg>
+  );
+}
+function IconMenu() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+      <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+    </svg>
+  );
+}
+function IconClose() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+      <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+    </svg>
+  );
+}
 
 export default function Navbar({ page, setPage, onSettings, hasLocation, onSearch, authUser, onAuthClick, onSignOut }) {
   const { t, i18n } = useTranslation();
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [toolsOpen, setToolsOpen] = useState(false);
-  const [mobileToolsOpen, setMobileToolsOpen] = useState(false);
-  const [hovered, setHovered] = useState(null);
-  const toolsRef = useRef(null);
-  const toolsActive = TOOLS_ITEMS.some(tool => tool.id === page);
+  const [menuOpen, setMenuOpen]       = useState(false);
+  const [moreOpen, setMoreOpen]       = useState(false);
+  const [mobileMoreOpen, setMobileMoreOpen] = useState(false);
+  const moreRef = useRef(null);
 
-  // Close tools dropdown on outside click
+  const toolsActive   = TOOLS_ITEMS.some(tool => tool.id === page);
+  const primaryActive = PRIMARY_LINKS.includes(page);
+  const moreActive    = !primaryActive || toolsActive;
+
   useEffect(() => {
     function handle(e) {
-      if (toolsRef.current && !toolsRef.current.contains(e.target)) setToolsOpen(false);
+      if (moreRef.current && !moreRef.current.contains(e.target)) setMoreOpen(false);
     }
     document.addEventListener("mousedown", handle);
     return () => document.removeEventListener("mousedown", handle);
   }, []);
 
-  const isHome = page === "home";
-  const navBg   = "#2D5018";
-  const navBdr  = "#1A3010";
-  const navShdw = "0 2px 8px rgba(0,0,0,0.18)";
-  const navText = "rgba(255,255,255,0.72)";
-  const navActv = "#FFFFFF";
+  // All non-primary nav items go into "More"
+  const moreItems = NAV_ITEMS.filter(n => !PRIMARY_LINKS.includes(n.id));
+
+  const NavLink = ({ id }) => {
+    const isActive = page === id;
+    return (
+      <button
+        onClick={() => setPage(id)}
+        style={{
+          display: "flex", alignItems: "center", gap: 6,
+          padding: "6px 14px", borderRadius: 999,
+          border: "none", cursor: "pointer",
+          fontSize: 13, fontWeight: isActive ? 600 : 500,
+          background: isActive ? DARK : "transparent",
+          color: isActive ? "#fff" : WARM700,
+          fontFamily: SANS, transition: "all 0.15s", whiteSpace: "nowrap",
+        }}
+        onMouseEnter={e => { if (!isActive) { e.currentTarget.style.background = WARM100; e.currentTarget.style.color = DARK; } }}
+        onMouseLeave={e => { if (!isActive) { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = WARM700; } }}
+      >
+        {t(`nav.${id}`)}
+      </button>
+    );
+  };
+
+  const IconBtn = ({ onClick, title, children, dot }) => (
+    <button
+      onClick={onClick}
+      title={title}
+      style={{
+        width: 34, height: 34, border: `1px solid ${BORDER}`,
+        borderRadius: 999, background: "none", cursor: "pointer",
+        display: "flex", alignItems: "center", justifyContent: "center",
+        color: WARM700, transition: "all 0.15s", position: "relative",
+        flexShrink: 0,
+      }}
+      onMouseEnter={e => { e.currentTarget.style.background = WARM100; e.currentTarget.style.color = DARK; }}
+      onMouseLeave={e => { e.currentTarget.style.background = "none"; e.currentTarget.style.color = WARM700; }}
+    >
+      {children}
+      {dot && <span style={{ position: "absolute", top: 5, right: 5, width: 6, height: 6, borderRadius: "50%", background: GOLD, border: "1.5px solid #FAF7EE" }}/>}
+    </button>
+  );
 
   return (
-    <nav className="nav-bar" style={{
+    <nav style={{
       position: "sticky", top: 0, zIndex: 100,
-      background: navBg,
-      backdropFilter: "blur(12px)",
-      WebkitBackdropFilter: "blur(12px)",
-      borderBottom: `1px solid ${navBdr}`,
-      boxShadow: navShdw,
-      padding: "0 32px",
+      background: BG,
+      backdropFilter: "blur(14px)",
+      WebkitBackdropFilter: "blur(14px)",
+      borderBottom: `1px solid ${BORDER}`,
+      padding: "0 24px",
+      height: 56,
+      display: "flex", alignItems: "center",
     }}>
-      <div style={{ maxWidth: 1300, margin: "0 auto", display: "flex", alignItems: "center", justifyContent: "space-between", height: 64 }}>
-        {/* Logo */}
-        <button onClick={() => setPage("home")} style={{ background: "none", border: "none", cursor: "pointer", display: "flex", alignItems: "center", gap: 10 }}>
-          <img src="/logo.png" alt="Muslim's Path" style={{ width: 80, height: 80, objectFit: "contain" }} />
-        </button>
+      {/* Logo */}
+      <button
+        onClick={() => setPage("home")}
+        style={{ background: "none", border: "none", cursor: "pointer", display: "flex", alignItems: "center", gap: 10, flexShrink: 0, padding: 0 }}
+      >
+        <img src="/logo.png" alt="Muslims Path" style={{ width: 32, height: 32, objectFit: "contain" }}/>
+        <span style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: 15, fontWeight: 600, color: DARK, letterSpacing: "-0.01em", whiteSpace: "nowrap" }}>
+          Muslims Path
+        </span>
+      </button>
 
-        {/* Desktop nav */}
-        <div style={{ display: "flex", gap: 0, alignItems: "center" }} className="nav-desktop">
-          {NAV_ITEMS.filter(n => n.id !== "home").map(n => {
-            const isActive = page === n.id;
-            const isHov = hovered === n.id;
-            return (
-              <button key={n.id} onClick={() => setPage(n.id)}
-                onMouseEnter={() => setHovered(n.id)}
-                onMouseLeave={() => setHovered(null)}
-                style={{
-                  background: "transparent", border: "none",
-                  borderBottom: isActive ? `1px solid ${navActv}` : "1px solid transparent",
-                  cursor: "pointer", padding: "8px 14px", fontSize: 12,
-                  fontWeight: isActive ? 600 : 400,
-                  color: isActive ? navActv : isHov ? (isHome ? "#3a2a10" : TEXT) : navText,
-                  transition: "all 0.2s", letterSpacing: "0.04em",
-                  fontFamily: SANS, height: 64, borderRadius: 0,
-                }}>
-                {t(`nav.${n.id}`)}
-              </button>
-            );
-          })}
+      {/* Desktop nav links */}
+      <div className="nav-desktop" style={{ display: "flex", alignItems: "center", gap: 2, marginLeft: 28 }}>
+        {PRIMARY_LINKS.map(id => <NavLink key={id} id={id}/>)}
 
-          {/* Tools dropdown */}
-          <div ref={toolsRef} style={{ position: "relative", height: 64, display: "flex", alignItems: "center" }}>
-            <button
-              onClick={() => setToolsOpen(o => !o)}
-              onMouseEnter={() => setToolsOpen(true)}
-              style={{
-                background: "transparent", border: "none",
-                borderBottom: toolsActive ? `1px solid ${navActv}` : toolsOpen ? `1px solid ${navActv}60` : "1px solid transparent",
-                cursor: "pointer", padding: "8px 14px", fontSize: 12,
-                fontWeight: toolsActive ? 600 : 400,
-                color: toolsActive ? navActv : toolsOpen ? (isHome ? "#3a2a10" : TEXT) : navText,
-                transition: "all 0.2s", letterSpacing: "0.04em",
-                fontFamily: SANS,
-                height: 64, borderRadius: 0, display: "flex", alignItems: "center", gap: 5,
-              }}>
-              🛠 {t("nav.tools")} <span style={{ fontSize: 9, opacity: 0.6 }}>▾</span>
-            </button>
-            {toolsOpen && (
-              <div onMouseLeave={() => setToolsOpen(false)} style={{
-                position: "absolute", top: "100%", left: 0,
-                background: "#FFFFFF", border: `1px solid ${BORDER}`,
-                boxShadow: "0 4px 20px rgba(26,25,21,0.10)",
-                minWidth: 180, zIndex: 200, borderRadius: 10, overflow: "hidden",
-              }}>
-                {TOOLS_ITEMS.map(tool => (
-                  <button key={tool.id} onClick={() => { setPage(tool.id); setToolsOpen(false); }} style={{
-                    display: "flex", alignItems: "center", gap: 10, width: "100%",
-                    padding: "12px 18px", background: page === tool.id ? GREEN_L : "none",
-                    border: "none", borderLeft: page === tool.id ? `2px solid ${GOLD}` : "2px solid transparent",
-                    cursor: "pointer", fontSize: 12, color: page === tool.id ? GOLD : MUTED,
-                    fontWeight: page === tool.id ? 600 : 400,
-                    letterSpacing: "0.07em", textTransform: "uppercase", fontFamily: SANS,
-                    transition: "all 0.15s", textAlign: "left",
-                  }}
-                    onMouseEnter={e => { if (page !== tool.id) { e.currentTarget.style.background = GREEN_L; e.currentTarget.style.color = TEXT; } }}
-                    onMouseLeave={e => { if (page !== tool.id) { e.currentTarget.style.background = "none"; e.currentTarget.style.color = MUTED; } }}
-                  >
-                    <span>{tool.icon}</span>{t(`tools.${tool.id}`)}
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
-        </div>
-
-        {/* Right side: search + settings + lang switcher + auth + hamburger */}
-        <div style={{ display: "flex", alignItems: "center", gap: 10, flexShrink: 0 }}>
-          <button onClick={onSearch} title={t("nav.search")} aria-label={t("nav.search")} style={{
-            background: "transparent", border: "1px solid rgba(255,255,255,0.25)",
-            borderRadius: 8, cursor: "pointer", color: navText,
-            width: 34, height: 34, display: "flex", alignItems: "center", justifyContent: "center",
-            fontSize: 14, transition: "border-color 0.15s, color 0.15s",
-          }}
-            onMouseEnter={e => { e.currentTarget.style.borderColor = "rgba(255,255,255,0.6)"; e.currentTarget.style.color = "#FFFFFF"; }}
-            onMouseLeave={e => { e.currentTarget.style.borderColor = "rgba(255,255,255,0.25)"; e.currentTarget.style.color = navText; }}
-          >🔍</button>
-          <button onClick={onSettings} title={t("nav.settings")} aria-label={t("nav.settings")} style={{
-            background: "transparent",
-            border: `1px solid ${hasLocation ? "rgba(255,255,255,0.5)" : "rgba(255,255,255,0.25)"}`,
-            borderRadius: 8, cursor: "pointer", color: hasLocation ? "#FFFFFF" : navText,
-            width: 34, height: 34, display: "flex", alignItems: "center", justifyContent: "center",
-            fontSize: 13, transition: "border-color 0.15s, color 0.15s", position: "relative",
-          }}
-            onMouseEnter={e => { e.currentTarget.style.borderColor = "rgba(255,255,255,0.6)"; e.currentTarget.style.color = "#FFFFFF"; }}
-            onMouseLeave={e => { e.currentTarget.style.borderColor = hasLocation ? "rgba(255,255,255,0.5)" : "rgba(255,255,255,0.25)"; e.currentTarget.style.color = hasLocation ? "#FFFFFF" : navText; }}
+        {/* More dropdown */}
+        <div ref={moreRef} style={{ position: "relative" }}>
+          <button
+            onClick={() => setMoreOpen(o => !o)}
+            style={{
+              display: "flex", alignItems: "center", gap: 5,
+              padding: "6px 14px", borderRadius: 999,
+              border: "none", cursor: "pointer",
+              fontSize: 13, fontWeight: moreActive ? 600 : 500,
+              background: moreActive ? DARK : "transparent",
+              color: moreActive ? "#fff" : WARM700,
+              fontFamily: SANS, transition: "all 0.15s",
+            }}
+            onMouseEnter={e => { if (!moreActive) { e.currentTarget.style.background = WARM100; e.currentTarget.style.color = DARK; } }}
+            onMouseLeave={e => { if (!moreActive) { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = WARM700; } }}
           >
-            ⚙
-            {hasLocation && <span style={{ position: "absolute", top: 4, right: 4, width: 5, height: 5, borderRadius: "50%", background: "#B89D60" }} />}
+            {t("nav.more") || "More"} <IconChevron/>
           </button>
 
-          {/* Auth button */}
-          {authUser ? (
-            <div style={{ position: "relative" }} className="nav-auth-wrap">
-              <button title="Account" onClick={e => {
-                e.stopPropagation();
-                const m = document.getElementById("nav-user-menu");
-                if (m) m.style.display = m.style.display === "none" ? "block" : "none";
-              }} style={{
-                background: navActv, border: "none",
-                borderRadius: "50%", width: 32, height: 32, cursor: "pointer",
-                fontSize: 12, fontWeight: 700, color: "#FFFFFF",
-                display: "flex", alignItems: "center", justifyContent: "center",
-                flexShrink: 0,
-              }}>
-                {(authUser.user_metadata?.full_name || authUser.email || "U").charAt(0).toUpperCase()}
-              </button>
-              <div id="nav-user-menu" style={{
-                display: "none", position: "absolute", top: "calc(100% + 8px)", right: 0,
-                background: "#FFFFFF", border: `1px solid ${BORDER}`,
+          {moreOpen && (
+            <div
+              onMouseLeave={() => setMoreOpen(false)}
+              style={{
+                position: "absolute", top: "calc(100% + 8px)", left: 0,
+                background: "#fff", border: `1px solid ${BORDER}`,
                 boxShadow: "0 4px 20px rgba(26,25,21,0.10)",
-                minWidth: 200, zIndex: 300, padding: "8px 0", borderRadius: 10, overflow: "hidden",
-              }}>
-                <div style={{ padding: "10px 16px 8px", borderBottom: `1px solid ${BORDER}` }}>
-                  <div style={{ fontSize: 12, color: TEXT, marginBottom: 2 }}>{authUser.user_metadata?.full_name || ""}</div>
-                  <div style={{ fontSize: 11, color: MUTED }}>{authUser.email}</div>
-                </div>
-                <button onClick={() => { onSignOut(); document.getElementById("nav-user-menu").style.display = "none"; }} style={{
-                  width: "100%", background: "none", border: "none",
-                  padding: "10px 16px", textAlign: "left", cursor: "pointer",
-                  fontSize: 11, color: "#7a5c28", letterSpacing: "0.07em", textTransform: "uppercase",
-                  fontFamily: "'Inter', sans-serif",
+                minWidth: 200, zIndex: 200, borderRadius: 12, overflow: "hidden",
+                animation: "navSlideDown 0.18s cubic-bezier(0.22,1,0.36,1)",
+              }}
+            >
+              {moreItems.map(n => (
+                <button key={n.id} onClick={() => { setPage(n.id); setMoreOpen(false); }} style={{
+                  display: "flex", alignItems: "center", gap: 10, width: "100%",
+                  padding: "11px 16px", background: page === n.id ? WARM100 : "none",
+                  border: "none", borderLeft: page === n.id ? `3px solid ${GOLD}` : "3px solid transparent",
+                  cursor: "pointer", fontSize: 13, color: page === n.id ? DARK : WARM700,
+                  fontWeight: page === n.id ? 600 : 400, fontFamily: SANS, transition: "all 0.12s", textAlign: "left",
                 }}
-                  onMouseEnter={e => { e.currentTarget.style.color = "#e74c3c"; }}
-                  onMouseLeave={e => { e.currentTarget.style.color = "#7a5c28"; }}
-                >{t("nav.signOut")}</button>
-              </div>
+                  onMouseEnter={e => { if (page !== n.id) { e.currentTarget.style.background = WARM100; e.currentTarget.style.color = DARK; } }}
+                  onMouseLeave={e => { if (page !== n.id) { e.currentTarget.style.background = "none"; e.currentTarget.style.color = WARM700; } }}
+                >
+                  <span style={{ fontSize: 16 }}>{n.icon}</span>
+                  {t(`nav.${n.id}`)}
+                </button>
+              ))}
+              <div style={{ borderTop: `1px solid ${BORDER}` }}/>
+              {TOOLS_ITEMS.map(tool => (
+                <button key={tool.id} onClick={() => { setPage(tool.id); setMoreOpen(false); }} style={{
+                  display: "flex", alignItems: "center", gap: 10, width: "100%",
+                  padding: "11px 16px", background: page === tool.id ? WARM100 : "none",
+                  border: "none", borderLeft: page === tool.id ? `3px solid ${GOLD}` : "3px solid transparent",
+                  cursor: "pointer", fontSize: 13, color: page === tool.id ? DARK : WARM700,
+                  fontWeight: page === tool.id ? 600 : 400, fontFamily: SANS, transition: "all 0.12s", textAlign: "left",
+                }}
+                  onMouseEnter={e => { if (page !== tool.id) { e.currentTarget.style.background = WARM100; e.currentTarget.style.color = DARK; } }}
+                  onMouseLeave={e => { if (page !== tool.id) { e.currentTarget.style.background = "none"; e.currentTarget.style.color = WARM700; } }}
+                >
+                  <span style={{ fontSize: 16 }}>{tool.icon}</span>
+                  {t(`tools.${tool.id}`)}
+                </button>
+              ))}
             </div>
-          ) : (
-            <button onClick={onAuthClick} style={{
-              background: "rgba(255,255,255,0.15)",
-              border: "1px solid rgba(255,255,255,0.45)", cursor: "pointer",
-              padding: "7px 18px", fontSize: 12, fontWeight: 600,
-              color: "#FFFFFF",
-              borderRadius: 999,
-              letterSpacing: "0.03em",
-              fontFamily: "'Inter', sans-serif", transition: "background 0.15s",
-            }}
-              onMouseEnter={e => e.currentTarget.style.background = "rgba(255,255,255,0.25)"}
-              onMouseLeave={e => e.currentTarget.style.background = "rgba(255,255,255,0.15)"}
-            >{t("nav.signIn")}</button>
           )}
-          <button onClick={() => setMenuOpen(!menuOpen)} aria-label={menuOpen ? "Close menu" : "Open menu"} aria-expanded={menuOpen} style={{
-            display: "none", background: "transparent", border: `1px solid ${BORDER}`,
-            borderRadius: 2, cursor: "pointer", fontSize: 16, color: MUTED,
-            width: 36, height: 36, alignItems: "center", justifyContent: "center",
-          }} className="nav-mobile">{menuOpen ? "✕" : "☰"}</button>
         </div>
       </div>
 
-      {/* Mobile menu — rendered via portal so it escapes nav's stacking context */}
+      <div style={{ flex: 1 }}/>
+
+      {/* Right actions */}
+      <div style={{ display: "flex", alignItems: "center", gap: 8, flexShrink: 0 }}>
+        <IconBtn onClick={onSearch} title={t("nav.search")}><IconSearch/></IconBtn>
+        <IconBtn onClick={onSettings} title={t("nav.settings")} dot={hasLocation}><IconSettings/></IconBtn>
+
+        {authUser ? (
+          <div style={{ position: "relative" }} className="nav-auth-wrap">
+            <button
+              onClick={e => {
+                e.stopPropagation();
+                const m = document.getElementById("nav-user-menu");
+                if (m) m.style.display = m.style.display === "none" ? "block" : "none";
+              }}
+              style={{
+                width: 34, height: 34, borderRadius: "50%",
+                background: DARK, border: "none", cursor: "pointer",
+                fontSize: 13, fontWeight: 700, color: "#fff",
+                display: "flex", alignItems: "center", justifyContent: "center",
+              }}
+            >
+              {(authUser.user_metadata?.full_name || authUser.email || "U").charAt(0).toUpperCase()}
+            </button>
+            <div id="nav-user-menu" style={{
+              display: "none", position: "absolute", top: "calc(100% + 8px)", right: 0,
+              background: "#fff", border: `1px solid ${BORDER}`,
+              boxShadow: "0 4px 20px rgba(26,25,21,0.10)",
+              minWidth: 200, zIndex: 300, padding: "8px 0", borderRadius: 12, overflow: "hidden",
+              animation: "navSlideDown 0.18s cubic-bezier(0.22,1,0.36,1)",
+            }}>
+              <div style={{ padding: "10px 16px 8px", borderBottom: `1px solid ${BORDER}` }}>
+                <div style={{ fontSize: 12, color: DARK, marginBottom: 2 }}>{authUser.user_metadata?.full_name || ""}</div>
+                <div style={{ fontSize: 11, color: WARM700 }}>{authUser.email}</div>
+              </div>
+              <button onClick={() => { onSignOut(); document.getElementById("nav-user-menu").style.display = "none"; }} style={{
+                width: "100%", background: "none", border: "none",
+                padding: "10px 16px", textAlign: "left", cursor: "pointer",
+                fontSize: 12, color: "#c0392b", fontFamily: SANS,
+              }}
+                onMouseEnter={e => { e.currentTarget.style.background = "#fff5f5"; }}
+                onMouseLeave={e => { e.currentTarget.style.background = "none"; }}
+              >{t("nav.signOut")}</button>
+            </div>
+          </div>
+        ) : (
+          <button onClick={onAuthClick} style={{
+            padding: "7px 18px", borderRadius: 999,
+            background: DARK, border: "none", cursor: "pointer",
+            fontSize: 13, fontWeight: 600, color: "#fff",
+            fontFamily: SANS, transition: "all 0.15s", whiteSpace: "nowrap",
+          }}
+            onMouseEnter={e => { e.currentTarget.style.background = "#2d2d2d"; e.currentTarget.style.transform = "translateY(-1px)"; e.currentTarget.style.boxShadow = "0 4px 12px rgba(0,0,0,0.15)"; }}
+            onMouseLeave={e => { e.currentTarget.style.background = DARK; e.currentTarget.style.transform = ""; e.currentTarget.style.boxShadow = ""; }}
+          >
+            {t("nav.signIn")}
+          </button>
+        )}
+
+        {/* Mobile hamburger */}
+        <button
+          onClick={() => setMenuOpen(!menuOpen)}
+          className="nav-mobile"
+          aria-label={menuOpen ? "Close menu" : "Open menu"}
+          style={{
+            display: "none", width: 34, height: 34, border: `1px solid ${BORDER}`,
+            borderRadius: 8, background: "none", cursor: "pointer",
+            alignItems: "center", justifyContent: "center", color: WARM700,
+          }}
+        >
+          {menuOpen ? <IconClose/> : <IconMenu/>}
+        </button>
+      </div>
+
+      {/* Mobile menu */}
       {menuOpen && createPortal(<>
-        <div onClick={() => setMenuOpen(false)} style={{ position: "fixed", inset: 0, zIndex: 601 }} />
+        <div onClick={() => setMenuOpen(false)} style={{ position: "fixed", inset: 0, zIndex: 601 }}/>
         <div className="nav-mobile-menu" style={{
-          position: "fixed", top: 64, left: 0, right: 0, zIndex: 602,
-          borderTop: `1px solid ${BORDER}`,
-          padding: "8px 0 16px",
+          position: "fixed", top: 56, left: 0, right: 0, zIndex: 602,
+          background: "#FAF7EE", borderTop: `1px solid ${BORDER}`,
+          boxShadow: "0 4px 24px rgba(0,0,0,0.10)",
+          padding: "8px 0 20px",
           display: "flex", flexDirection: "column",
-          background: "#2D5018",
-          backdropFilter: "none",
-          boxShadow: "0 4px 24px rgba(0,0,0,0.20)",
-          maxHeight: "calc(100vh - 64px)", overflowY: "auto",
+          maxHeight: "calc(100vh - 56px)", overflowY: "auto",
         }}>
           {NAV_ITEMS.map(n => (
             <button key={n.id} onClick={() => { setPage(n.id); setMenuOpen(false); }} style={{
-              background: "none", border: "none", cursor: "pointer", textAlign: "left",
-              padding: "12px 32px", fontSize: 12,
-              color: page === n.id ? GOLD : MUTED,
+              background: page === n.id ? WARM100 : "none", border: "none", cursor: "pointer",
+              textAlign: "left", padding: "12px 24px", fontSize: 14,
+              color: page === n.id ? DARK : WARM700,
               fontWeight: page === n.id ? 600 : 400,
-              letterSpacing: "0.08em", textTransform: "uppercase",
               display: "flex", alignItems: "center", gap: 12, fontFamily: SANS,
-              borderLeft: page === n.id ? `2px solid ${GOLD}` : "2px solid transparent",
-            }}><span>{n.icon}</span>{t(`nav.${n.id}`)}</button>
+              borderLeft: page === n.id ? `3px solid ${GOLD}` : "3px solid transparent",
+            }}>
+              <span style={{ fontSize: 18 }}>{n.icon}</span>
+              {t(`nav.${n.id}`)}
+            </button>
           ))}
 
-          {/* Tools section in mobile */}
-          <button onClick={() => setMobileToolsOpen(o => !o)} style={{
-            background: "none", border: "none", cursor: "pointer", textAlign: "left",
-            padding: "12px 32px", fontSize: 12, color: toolsActive ? GOLD : MUTED,
-            fontWeight: toolsActive ? 600 : 400,
-            letterSpacing: "0.08em", textTransform: "uppercase",
+          <button onClick={() => setMobileMoreOpen(o => !o)} style={{
+            background: "none", border: "none", borderTop: `1px solid ${BORDER}`,
+            marginTop: 4, cursor: "pointer", textAlign: "left",
+            padding: "12px 24px", fontSize: 14,
+            color: WARM700, fontWeight: 400,
             display: "flex", alignItems: "center", gap: 12, fontFamily: SANS,
-            borderLeft: toolsActive ? `2px solid ${GOLD}` : "2px solid transparent",
-            borderTop: `1px solid ${BORDER}`, marginTop: 4,
+            borderLeft: "3px solid transparent",
           }}>
-            <span>🛠</span> {t("nav.tools")} <span style={{ marginLeft: "auto", fontSize: 10, opacity: 0.5 }}>{mobileToolsOpen ? "▲" : "▼"}</span>
+            🛠 {t("nav.tools")}
+            <span style={{ marginLeft: "auto", opacity: 0.5 }}>{mobileMoreOpen ? "▲" : "▼"}</span>
           </button>
-          {mobileToolsOpen && TOOLS_ITEMS.map(tool => (
+          {mobileMoreOpen && TOOLS_ITEMS.map(tool => (
             <button key={tool.id} onClick={() => { setPage(tool.id); setMenuOpen(false); }} style={{
-              background: page === tool.id ? GREEN_L : "none", border: "none", cursor: "pointer", textAlign: "left",
-              padding: "11px 32px 11px 52px", fontSize: 12,
-              color: page === tool.id ? GOLD : MUTED,
+              background: page === tool.id ? WARM100 : "none", border: "none", cursor: "pointer",
+              textAlign: "left", padding: "11px 24px 11px 52px", fontSize: 14,
+              color: page === tool.id ? DARK : WARM700,
               fontWeight: page === tool.id ? 600 : 400,
-              letterSpacing: "0.08em", textTransform: "uppercase",
               display: "flex", alignItems: "center", gap: 12, fontFamily: SANS,
-              borderLeft: page === tool.id ? `2px solid ${GOLD}` : "2px solid transparent",
-            }}><span>{tool.icon}</span>{t(`tools.${tool.id}`)}</button>
+              borderLeft: page === tool.id ? `3px solid ${GOLD}` : "3px solid transparent",
+            }}>
+              <span style={{ fontSize: 18 }}>{tool.icon}</span>
+              {t(`tools.${tool.id}`)}
+            </button>
           ))}
 
+          <div style={{ borderTop: `1px solid ${BORDER}`, marginTop: 8 }}/>
           <button onClick={() => { onSearch(); setMenuOpen(false); }} style={{
             background: "none", border: "none", cursor: "pointer", textAlign: "left",
-            padding: "12px 32px", fontSize: 12, color: MUTED,
-            display: "flex", alignItems: "center", gap: 12,
-            borderTop: `1px solid ${BORDER}`, marginTop: 8,
-            letterSpacing: "0.08em", textTransform: "uppercase", fontFamily: SANS,
-            borderLeft: "2px solid transparent",
+            padding: "12px 24px", fontSize: 14, color: WARM700,
+            display: "flex", alignItems: "center", gap: 12, fontFamily: SANS,
+            borderLeft: "3px solid transparent",
           }}>
-            <span>🔍</span> {t("nav.search")}
+            <IconSearch/> {t("nav.search")}
           </button>
           <button onClick={() => { onSettings(); setMenuOpen(false); }} style={{
             background: "none", border: "none", cursor: "pointer", textAlign: "left",
-            padding: "12px 32px", fontSize: 12, color: MUTED,
-            display: "flex", alignItems: "center", gap: 12,
-            letterSpacing: "0.08em", textTransform: "uppercase", fontFamily: SANS,
-            borderLeft: "2px solid transparent",
+            padding: "12px 24px", fontSize: 14, color: WARM700,
+            display: "flex", alignItems: "center", gap: 12, fontFamily: SANS,
+            borderLeft: "3px solid transparent",
           }}>
-            <span>⚙</span> {t("nav.settings")} {hasLocation && <span style={{ fontSize: 10, color: GOLD, border: `1px solid ${GOLD}60`, padding: "1px 7px", letterSpacing: "0.06em" }}>{t("nav.active")}</span>}
+            <IconSettings/> {t("nav.settings")}
+            {hasLocation && <span style={{ fontSize: 11, color: GOLD, border: `1px solid ${GOLD}60`, padding: "1px 7px", borderRadius: 4, marginLeft: 4 }}>Active</span>}
           </button>
 
           {authUser ? (
             <>
-              <div style={{ padding: "10px 32px 6px", borderTop: `1px solid ${BORDER}`, marginTop: 4 }}>
-                <div style={{ fontSize: 11, color: MUTED }}>{authUser.user_metadata?.full_name || authUser.email}</div>
+              <div style={{ padding: "10px 24px 6px", borderTop: `1px solid ${BORDER}`, marginTop: 4 }}>
+                <div style={{ fontSize: 12, color: WARM700 }}>{authUser.user_metadata?.full_name || authUser.email}</div>
               </div>
               <button onClick={() => { onSignOut(); setMenuOpen(false); }} style={{
                 background: "none", border: "none", cursor: "pointer", textAlign: "left",
-                padding: "10px 32px 14px", fontSize: 12, color: "#e74c3c",
-                display: "flex", alignItems: "center", gap: 12,
-                letterSpacing: "0.08em", textTransform: "uppercase", fontFamily: SANS,
-                borderLeft: "2px solid transparent",
-              }}>
-                <span>&#x2715;</span> {t("nav.signOut")}
-              </button>
+                padding: "10px 24px 14px", fontSize: 14, color: "#c0392b",
+                display: "flex", alignItems: "center", gap: 12, fontFamily: SANS,
+                borderLeft: "3px solid transparent",
+              }}>✕ {t("nav.signOut")}</button>
             </>
           ) : (
             <button onClick={() => { onAuthClick(); setMenuOpen(false); }} style={{
               background: "none", border: "none", cursor: "pointer", textAlign: "left",
-              padding: "12px 32px 16px", fontSize: 12, color: GOLD,
-              display: "flex", alignItems: "center", gap: 12,
+              padding: "12px 24px 16px", fontSize: 14, color: GOLD,
+              display: "flex", alignItems: "center", gap: 12, fontFamily: SANS,
+              borderLeft: "3px solid transparent",
               borderTop: `1px solid ${BORDER}`, marginTop: 4,
-              letterSpacing: "0.08em", textTransform: "uppercase", fontFamily: SANS,
-              borderLeft: "2px solid transparent",
             }}>
-              <span>&#x1F464;</span> {t("nav.signInUp")}
+              👤 {t("nav.signInUp")}
             </button>
           )}
         </div>
       </>, document.body)}
 
       <style>{`
-        @media (max-width: 900px) {
-          .nav-desktop { display: none !important; }
-          .nav-mobile { display: flex !important; }
-        }
-        @media (max-width: 560px) {
-          .nav-bar { padding: 0 14px !important; }
-          .nav-logo-sub { display: none !important; }
-        }
-        .home-prayer-strip { display: none !important; }
+        @media (max-width: 900px) { .nav-desktop { display: none !important; } .nav-mobile { display: flex !important; } }
         @keyframes navSlideDown { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
         .nav-mobile-menu { animation: navSlideDown 0.22s cubic-bezier(0.22,1,0.36,1); }
         #nav-user-menu { animation: navSlideDown 0.18s cubic-bezier(0.22,1,0.36,1); }
-        @media (max-width: 760px) {
-          .home-prayer-strip { display: flex !important; }
-        }
       `}</style>
     </nav>
   );
