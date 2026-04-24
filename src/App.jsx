@@ -2962,8 +2962,8 @@ export default function App() {
       <div className="app-blob app-blob-1" aria-hidden="true" />
       <div className="app-blob app-blob-2" aria-hidden="true" />
 
-      {/* ── Global Kaaba watermark (every page) ── */}
-      {page !== "home" && <KaabaWatermark fixed opacity={0.08} />}
+      {/* ── Global Kaaba watermark (non-home, non-quran pages) ── */}
+      {page !== "home" && page !== "quran" && <KaabaWatermark fixed opacity={0.08} />}
 
       <audio ref={audioRef} onTimeUpdate={onTimeUpdate} onEnded={() => skipLecture(1)} onLoadedMetadata={() => setDuration(audioRef.current?.duration || 0)} />
       <Navbar page={page} setPage={navigate} onSettings={() => setShowSettings(true)} hasLocation={!!savedLocation} onSearch={() => setShowSearch(true)} authUser={authUser} onAuthClick={() => setShowAuth(true)} onSignOut={handleSignOut} />
@@ -4031,31 +4031,34 @@ function QuranPage() {
   if (current && surah) return (
     <>
     <audio ref={audioRef} onEnded={handleAudioEnd} onError={() => { setAudioError(true); setPlayingVerse(null); }} style={{ display: "none" }} />
-    <div style={{ maxWidth: 860, margin: "0 auto", padding: "40px 24px", position: "relative", zIndex: 2, transition: "margin-right 0.3s", marginRight: showTafsir ? 340 : undefined }} ref={topRef}>
-      {/* Header */}
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 32, flexWrap: "wrap", gap: 12 }}>
-        <button onClick={back} style={{ background: "none", border: `1px solid ${BORDER}`, borderRadius: 8, color: MUTED, padding: "7px 16px", cursor: "pointer", fontSize: 12, fontFamily: SANS, letterSpacing: "0.06em" }}>
-          {t("quran.back")}
+
+    {/* ── Sticky reader toolbar ── */}
+    <div style={{
+      position: "sticky", top: 102, zIndex: 50,
+      background: "rgba(250, 247, 238, 0.97)",
+      backdropFilter: "blur(12px)",
+      WebkitBackdropFilter: "blur(12px)",
+      borderBottom: `1px solid ${BORDER}`,
+      boxShadow: "0 2px 8px rgba(26,25,21,0.06)",
+      transition: "margin-right 0.3s",
+      marginRight: showTafsir ? 320 : 0,
+    }}>
+      <div style={{ maxWidth: 900, margin: "0 auto", padding: "10px 24px", display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
+        <button onClick={back} style={{ background: "none", border: `1px solid ${BORDER}`, borderRadius: 8, color: MUTED, padding: "6px 14px", cursor: "pointer", fontSize: 11, fontFamily: SANS, letterSpacing: "0.06em", flexShrink: 0 }}>
+          ← {t("quran.back")}
         </button>
-        <div style={{ textAlign: "center", flex: 1 }}>
-          <div style={{ fontSize: 11, color: MUTED, letterSpacing: "0.14em", textTransform: "uppercase", marginBottom: 4 }}>
-            Surah {surah.number} · {surah.revelationType} · {surah.numberOfAyahs} verses
-            {fromCache && <span style={{ marginLeft:8, color:GOLD, fontSize:9, border:`1px solid ${GOLD}40`, padding:"1px 6px", letterSpacing:"0.1em" }}>CACHED</span>}
-          </div>
-          <div style={{ fontFamily: SERIF, fontSize: 22, color: TEXT }}>{surah.englishName}</div>
-          <div style={{ fontSize: 12, color: MUTED }}>{surah.englishNameTranslation}</div>
+        <div style={{ flex: 1, textAlign: "center", minWidth: 0 }}>
+          <span style={{ fontSize: 11, color: MUTED, fontFamily: SANS, letterSpacing: "0.10em", textTransform: "uppercase" }}>
+            {surah.number} · {surah.revelationType} · {surah.numberOfAyahs} {isSq ? "ajete" : "verses"}
+          </span>
+          <span style={{ marginLeft: 10, fontSize: 15, color: TEXT, fontFamily: SERIF }}>{surah.englishName}</span>
+          {fromCache && <span style={{ marginLeft: 8, color: GOLD, fontSize: 9, border: `1px solid ${GOLD}40`, padding: "1px 6px", letterSpacing: "0.1em" }}>CACHED</span>}
         </div>
-        <div style={{ display: "flex", gap: 8, flexWrap: "wrap", justifyContent: "flex-end" }}>
-          {/* Translation edition selector */}
-          <select
-            value={transEdition}
-            onChange={e => setTransEdition(e.target.value)}
-            style={{
-              background: GREEN_L, border: `1px solid ${BORDER}`, borderRadius: 8,
-              color: MUTED, padding: "7px 10px", cursor: "pointer",
-              fontSize: 11, fontFamily: SANS, outline: "none",
-            }}
-          >
+        <div style={{ display: "flex", gap: 8, flexShrink: 0, flexWrap: "wrap", justifyContent: "flex-end" }}>
+          <select value={transEdition} onChange={e => setTransEdition(e.target.value)} style={{
+            background: GREEN_L, border: `1px solid ${BORDER}`, borderRadius: 8,
+            color: MUTED, padding: "6px 10px", cursor: "pointer", fontSize: 11, fontFamily: SANS, outline: "none",
+          }}>
             <option value="en.sahih">EN — Sahih Intl</option>
             <option value="en.pickthall">EN — Pickthall</option>
             <option value="fr.hamidullah">FR — Hamidullah</option>
@@ -4063,44 +4066,38 @@ function QuranPage() {
             <option value="ur.jalandhry">UR — Jalandhry</option>
             <option value="sq.nahi">SQ — Nahi</option>
           </select>
-          {/* Translation toggle */}
           <button onClick={() => setShowTrans(s => !s)} style={{
             background: showTrans ? GREEN_L : "transparent", border: `1px solid ${showTrans ? GOLD : BORDER}`,
-            borderRadius: 8, color: showTrans ? GOLD : MUTED, padding: "7px 14px", cursor: "pointer",
+            borderRadius: 8, color: showTrans ? GOLD : MUTED, padding: "6px 12px", cursor: "pointer",
             fontSize: 11, fontFamily: SANS, letterSpacing: "0.06em",
           }}>{t("quran.showTrans")}</button>
-          {/* Reciter selector */}
-          <select
-            value={reciter}
-            onChange={e => { setReciter(e.target.value); setPlayingVerse(null); if (audioRef.current) { audioRef.current.pause(); audioRef.current.src = ""; } }}
-            style={{
-              background: GREEN_L, border: `1px solid ${BORDER}`, borderRadius: 8,
-              color: MUTED, padding: "7px 10px", cursor: "pointer",
-              fontSize: 11, fontFamily: SANS, outline: "none",
-            }}
-          >
+          <select value={reciter} onChange={e => { setReciter(e.target.value); setPlayingVerse(null); if (audioRef.current) { audioRef.current.pause(); audioRef.current.src = ""; } }} style={{
+            background: GREEN_L, border: `1px solid ${BORDER}`, borderRadius: 8,
+            color: MUTED, padding: "6px 10px", cursor: "pointer", fontSize: 11, fontFamily: SANS, outline: "none",
+          }}>
             {Object.entries(RECITERS).map(([key, label]) => (
               <option key={key} value={key}>{label}</option>
             ))}
           </select>
-          {/* Tafsir toggle */}
           <button onClick={() => {
             const opening = !showTafsir;
             setShowTafsir(opening);
-            if (opening && verses.length > 0 && !tafsirVerse) {
-              loadTafsir(verses[0]);
-            }
+            if (opening && verses.length > 0 && !tafsirVerse) loadTafsir(verses[0]);
           }} style={{
             background: showTafsir ? GREEN_L : "transparent", border: `1px solid ${showTafsir ? GOLD : BORDER}`,
-            borderRadius: 8, color: showTafsir ? GOLD : MUTED, padding: "7px 14px", cursor: "pointer",
+            borderRadius: 8, color: showTafsir ? GOLD : MUTED, padding: "6px 12px", cursor: "pointer",
             fontSize: 11, fontFamily: SANS, letterSpacing: "0.06em",
           }}>Tafsir</button>
         </div>
       </div>
+    </div>
+
+    {/* ── Main reading area ── */}
+    <div style={{ maxWidth: 760, margin: "0 auto", padding: "48px 24px 80px", transition: "margin-right 0.3s", marginRight: showTafsir ? 320 : undefined }} ref={topRef}>
 
       {/* Audio error banner */}
       {audioError && (
-        <div style={{ background: "#FFF3F3", border: "1px solid #E0AAAA", borderRadius: 8, padding: "10px 14px", marginBottom: 16, fontSize: 12, color: "#8A2020", fontFamily: SANS, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+        <div style={{ background: "#FFF3F3", border: "1px solid #E0AAAA", borderRadius: 8, padding: "10px 14px", marginBottom: 20, fontSize: 12, color: "#8A2020", fontFamily: SANS, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
           <span>Audio failed to load. Check your connection or try a different reciter.</span>
           <button onClick={() => setAudioError(false)} style={{ background: "none", border: "none", cursor: "pointer", color: "#8A2020", fontSize: 16, padding: "0 4px", lineHeight: 1 }}>×</button>
         </div>
@@ -4108,7 +4105,7 @@ function QuranPage() {
 
       {/* Verse search */}
       {verses.length > 0 && (
-        <div style={{ position: "relative", marginBottom: 28 }} ref={vsInputRef}>
+        <div style={{ position: "relative", marginBottom: 40 }} ref={vsInputRef}>
           <div style={{ position: "relative" }}>
             <input
               placeholder={isSq ? "Kërko fjalë apo varg… (min. 3 shkronja)" : "Search word or verse… (min. 3 letters)"}
@@ -4156,17 +4153,13 @@ function QuranPage() {
                     <span style={{ fontSize: 10, color: GOLD, letterSpacing: "0.12em", textTransform: "uppercase", fontFamily: SANS }}>
                       {verseResults.length}{verseResults.length === 30 ? "+" : ""} {isSq ? "ajete" : "verses"}
                     </span>
-                    <span style={{ fontSize: 10, color: MUTED, fontFamily: SANS }}>
-                      {surah?.englishName}
-                    </span>
+                    <span style={{ fontSize: 10, color: MUTED, fontFamily: SANS }}>{surah?.englishName}</span>
                   </div>
                   {verseResults.map(v => {
                     const q = verseSearch.toLowerCase();
-                    // build a snippet from whichever field matched
                     let snippet = v.en;
                     if (v.ar.includes(verseSearch)) snippet = v.ar;
                     else if (v.tr.toLowerCase().includes(q)) snippet = v.tr;
-                    // highlight
                     const re = new RegExp(`(${verseSearch.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")})`, "gi");
                     const parts = snippet.split(re);
                     return (
@@ -4211,17 +4204,36 @@ function QuranPage() {
         </div>
       )}
 
-      {/* Arabic title */}
-      <div style={{ textAlign: "center", marginBottom: 36 }}>
-        <div style={{ fontSize: 34, fontFamily: ARABIC, color: GOLD, direction: "rtl", letterSpacing: "0.04em", lineHeight: 1.6 }}>
+      {/* Ornate surah title */}
+      <div style={{ textAlign: "center", marginBottom: 48 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 28 }}>
+          <div style={{ flex: 1, height: 1, background: `linear-gradient(to right, transparent, ${GOLD}50)` }} />
+          <div style={{ display: "flex", gap: 5, alignItems: "center" }}>
+            <div style={{ width: 4, height: 4, borderRadius: "50%", background: GOLD, opacity: 0.5 }} />
+            <div style={{ width: 7, height: 7, borderRadius: "50%", background: GOLD, opacity: 0.85 }} />
+            <div style={{ width: 4, height: 4, borderRadius: "50%", background: GOLD, opacity: 0.5 }} />
+          </div>
+          <div style={{ flex: 1, height: 1, background: `linear-gradient(to left, transparent, ${GOLD}50)` }} />
+        </div>
+        <div style={{ fontSize: 48, fontFamily: ARABIC, color: GOLD, direction: "rtl", letterSpacing: "0.04em", lineHeight: 1.4, marginBottom: 14 }}>
           {surah.name}
         </div>
+        <div style={{ fontSize: 22, fontFamily: SERIF, color: TEXT, marginBottom: 4 }}>{surah.englishName}</div>
+        <div style={{ fontSize: 12, color: MUTED, letterSpacing: "0.12em", textTransform: "uppercase" }}>{surah.englishNameTranslation}</div>
         {surah.number !== 9 && (
-          <div style={{ fontSize: 20, fontFamily: ARABIC, color: MUTED, direction: "rtl", marginTop: 8, lineHeight: 2 }}>
+          <div style={{ marginTop: 22, fontSize: 22, fontFamily: ARABIC, color: TEXT, opacity: 0.65, direction: "rtl", lineHeight: 2.2 }}>
             بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ
           </div>
         )}
-        <div style={{ width: 60, height: 1, background: `linear-gradient(90deg, transparent, ${GOLD}60, transparent)`, margin: "20px auto 0" }} />
+        <div style={{ display: "flex", alignItems: "center", gap: 12, marginTop: 28 }}>
+          <div style={{ flex: 1, height: 1, background: `linear-gradient(to right, transparent, ${GOLD}50)` }} />
+          <div style={{ display: "flex", gap: 5, alignItems: "center" }}>
+            <div style={{ width: 4, height: 4, borderRadius: "50%", background: GOLD, opacity: 0.5 }} />
+            <div style={{ width: 7, height: 7, borderRadius: "50%", background: GOLD, opacity: 0.85 }} />
+            <div style={{ width: 4, height: 4, borderRadius: "50%", background: GOLD, opacity: 0.5 }} />
+          </div>
+          <div style={{ flex: 1, height: 1, background: `linear-gradient(to left, transparent, ${GOLD}50)` }} />
+        </div>
       </div>
 
       {loadingRead && (
@@ -4237,18 +4249,35 @@ function QuranPage() {
           const isActive  = playingVerse?.n === v.n;
           return (
           <div key={v.n} id={`verse-${v.n}`} style={{
-            padding: "28px 0", borderBottom: `1px solid ${BORDER}`,
-            display: "flex", flexDirection: "column", gap: 14,
+            padding: "32px 0",
+            borderBottom: `1px solid ${BORDER}`,
             background: isActive ? `${GOLD}08` : isBookmarked(v.n) ? "rgba(201,168,76,0.04)" : "transparent",
             borderLeft: isActive ? `3px solid ${GOLD}` : "3px solid transparent",
-            paddingLeft: isActive ? 14 : undefined,
+            paddingLeft: isActive ? 16 : 3,
             transition: "background 0.2s, border-left-color 0.2s",
           }}>
-            {/* Verse number + Arabic */}
-            <div style={{ display: "flex", alignItems: "flex-start", gap: 16 }}>
-              {/* Controls column — LEFT side */}
-              <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6, flexShrink: 0 }}>
-                {/* Play button */}
+            {/* Arabic text + controls row */}
+            <div style={{ position: "relative" }}>
+              {/* Arabic — full width, right-aligned RTL; verse badge inline at end */}
+              <div style={{ fontSize: arabicFontSize, fontFamily: ARABIC, color: TEXT, lineHeight: 2.2, textAlign: "right", direction: "rtl", paddingLeft: 44 }}>
+                {v.ar}&nbsp;
+                <span
+                  onClick={() => loadTafsir(v)}
+                  title="Load tafsir"
+                  style={{
+                    display: "inline-flex", alignItems: "center", justifyContent: "center",
+                    width: 26, height: 26, borderRadius: "50%",
+                    border: `1px solid ${tafsirVerse?.n === v.n ? GOLD : GOLD + "50"}`,
+                    fontSize: 10, color: tafsirVerse?.n === v.n ? GOLD : GOLD + "99",
+                    fontFamily: SANS, cursor: "pointer",
+                    background: tafsirVerse?.n === v.n ? GREEN_L : "transparent",
+                    verticalAlign: "middle", direction: "ltr",
+                    transition: "all 0.15s",
+                  }}
+                >{v.n}</span>
+              </div>
+              {/* Controls — absolute left */}
+              <div style={{ position: "absolute", left: 0, top: 4, display: "flex", flexDirection: "column", gap: 6, alignItems: "center" }}>
                 <button
                   onClick={() => playVerse(v)}
                   title={isActive ? "Pause" : "Play verse"}
@@ -4256,45 +4285,27 @@ function QuranPage() {
                     background: isActive ? GOLD : "none",
                     border: `1px solid ${isActive ? GOLD : BORDER}`,
                     borderRadius: "50%", cursor: "pointer",
-                    width: 28, height: 28, display: "flex", alignItems: "center", justifyContent: "center",
+                    width: 30, height: 30, display: "flex", alignItems: "center", justifyContent: "center",
                     fontSize: 11, color: isActive ? "#fff" : MUTED,
                     transition: "all 0.15s", padding: 0, flexShrink: 0,
                   }}
                 >{isActive && !audioRef.current?.paused ? "⏸" : "▶"}</button>
-                {/* Verse number badge — click to load tafsir */}
-                <div
-                  onClick={() => loadTafsir(v)}
-                  style={{
-                    width: 32, height: 32, borderRadius: "50%",
-                    border: `1px solid ${tafsirVerse?.n === v.n ? GOLD : GOLD + "50"}`,
-                    display: "flex", alignItems: "center", justifyContent: "center",
-                    fontSize: 11, color: tafsirVerse?.n === v.n ? GOLD : GOLD + "99", fontFamily: SANS,
-                    cursor: "pointer",
-                    background: tafsirVerse?.n === v.n ? GREEN_L : "transparent",
-                    transition: "all 0.15s",
-                  }}
-                  title="Load tafsir for this verse"
-                >{v.n}</div>
                 <button onClick={() => toggleBookmark(v)} title={isBookmarked(v.n) ? "Remove bookmark" : "Bookmark verse"} style={{
                   background: "none", border: "none", cursor: "pointer",
-                  fontSize: 14, color: isBookmarked(v.n) ? GOLD : MUTED,
+                  fontSize: 13, color: isBookmarked(v.n) ? GOLD : MUTED,
                   padding: 2, transition: "color 0.15s", lineHeight: 1,
                 }}>{"🔖"}</button>
               </div>
-              {/* Arabic text — fills remaining space, right-aligned RTL */}
-              <div style={{ fontSize: arabicFontSize, fontFamily: ARABIC, color: TEXT, lineHeight: 2.2, flex: 1, textAlign: "right", direction: "rtl" }}>
-                {v.ar}
-              </div>
             </div>
-            {/* Transliteration — always visible */}
+            {/* Transliteration */}
             {v.tr && (
-              <div style={{ fontSize: 14, color: GOLD + "bb", lineHeight: 1.8, fontFamily: SANS, letterSpacing: "0.04em", fontStyle: "italic" }}>
+              <div style={{ fontSize: 14, color: GOLD + "bb", lineHeight: 1.8, fontFamily: SANS, letterSpacing: "0.04em", fontStyle: "italic", marginTop: 16, paddingLeft: 44 }}>
                 {v.tr}
               </div>
             )}
             {/* Translation */}
             {showTrans && (
-              <div style={{ fontSize: 16, color: TEXT, lineHeight: 1.85, fontFamily: SERIF, letterSpacing: "0.02em" }}>
+              <div style={{ fontSize: 16, color: TEXT, lineHeight: 1.85, fontFamily: SERIF, letterSpacing: "0.02em", marginTop: 10, paddingLeft: 44 }}>
                 {v.en}
               </div>
             )}
@@ -4305,7 +4316,7 @@ function QuranPage() {
 
       {/* Prev / Next surah */}
       {!loadingRead && verses.length > 0 && (
-        <div style={{ display: "flex", justifyContent: "space-between", marginTop: 40, gap: 12 }}>
+        <div style={{ display: "flex", justifyContent: "space-between", marginTop: 48, gap: 12 }}>
           <button onClick={() => navSurah(-1)} disabled={current === 1} style={{
             flex: 1, padding: "12px 0", background: "transparent", border: `1px solid ${BORDER}`,
             borderRadius: 999, color: current === 1 ? BORDER : MUTED, cursor: current === 1 ? "default" : "pointer",
@@ -4332,7 +4343,6 @@ function QuranPage() {
         zIndex: 200, overflowY: "auto", display: "flex", flexDirection: "column",
         boxShadow: "-4px 0 24px rgba(26,25,21,0.10)",
       }}>
-        {/* Tafsir panel header */}
         <div style={{
           display: "flex", alignItems: "center", justifyContent: "space-between",
           padding: "16px 18px", borderBottom: `1px solid ${BORDER}`,
@@ -4359,8 +4369,6 @@ function QuranPage() {
             color: MUTED, lineHeight: 1, padding: "4px 8px",
           }}>×</button>
         </div>
-
-        {/* Tafsir content */}
         <div style={{ padding: "20px 18px", flex: 1 }}>
           {!tafsirVerse ? (
             <div style={{ color: MUTED, fontSize: 13, fontFamily: SANS, lineHeight: 1.7, textAlign: "center", paddingTop: 40 }}>
