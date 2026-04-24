@@ -4212,8 +4212,9 @@ function QuranPage() {
             transition: "background 0.2s, border-left-color 0.2s",
           }}>
             {/* Verse number + Arabic */}
-            <div style={{ display: "flex", alignItems: "flex-start", gap: 16, direction: "rtl" }}>
-              <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6, flexShrink: 0, direction: "ltr" }}>
+            <div style={{ display: "flex", alignItems: "flex-start", gap: 16 }}>
+              {/* Controls column — LEFT side */}
+              <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6, flexShrink: 0 }}>
                 {/* Play button */}
                 <button
                   onClick={() => playVerse(v)}
@@ -4246,7 +4247,8 @@ function QuranPage() {
                   padding: 2, transition: "color 0.15s", lineHeight: 1,
                 }}>{"🔖"}</button>
               </div>
-              <div style={{ fontSize: arabicFontSize, fontFamily: ARABIC, color: TEXT, lineHeight: 2.2, flex: 1, textAlign: "right" }}>
+              {/* Arabic text — fills remaining space, right-aligned RTL */}
+              <div style={{ fontSize: arabicFontSize, fontFamily: ARABIC, color: TEXT, lineHeight: 2.2, flex: 1, textAlign: "right", direction: "rtl" }}>
                 {v.ar}
               </div>
             </div>
