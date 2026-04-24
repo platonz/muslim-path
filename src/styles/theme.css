@@ -1,48 +1,128 @@
 /* ═══════════════════════════════════════════════════════════
    MUSLIM'S PATH — Design Token System
-   Warm Glassmorphism · Apple iOS–inspired
+   mdesign v2 · Flat Sand · Playfair + Inter
    ═══════════════════════════════════════════════════════════ */
 
 /* ─── COLOR TOKENS ──────────────────────────────────────── */
 :root {
-  --cream-bg:          #f0e6ce;
-  --cream-surface:     rgba(255, 252, 244, 0.72);
-  --cream-solid:       #faf5ec;
-  --cream-hover:       rgba(255, 252, 244, 0.90);
+  /* Page background */
+  --color-bg:          #FAF7EE;
+  --color-bg-deep:     #EDE0C4;
+  --color-bg-light:    #F5EDD8;
 
-  --gold-primary:      #c9a961;
-  --gold-dark:         #a07d3a;
-  --gold-border:       rgba(201, 168, 76, 0.25);
-  --gold-bg:           rgba(201, 168, 76, 0.10);
-  --gold-glow:         rgba(201, 168, 76, 0.18);
+  /* Card / Surface */
+  --surface:           #FFFFFF;
+  --surface-tint:      #FDFBF7;
 
-  --text-primary:      #3a2a10;
-  --text-secondary:    rgba(100, 75, 30, 0.60);
-  --text-muted:        #7a5c28;
+  /* Gold / Olive — primary accent */
+  --gold-900:          #4A3A10;
+  --gold-700:          #6B5320;
+  --gold-600:          #8A7235;
+  --gold-500:          #9A8142;
+  --gold-400:          #B89D60;
+  --gold-300:          #D4BA88;
+  --gold-200:          #E8D9A8;
+  --gold-100:          #F2EAD0;
+  --gold-50:           #FAF5E8;
 
-  --border-glass:      rgba(255, 255, 255, 0.80);
-  --border-warm:       #e2cfa4;
+  /* Dark / Near-black */
+  --dark-950:          #0E0D0B;
+  --dark-900:          #1A1915;
+  --dark-800:          #2A2820;
+  --dark-700:          #3A3828;
 
-  /* ─── RADIUS TOKENS ─────────────────────────────────── */
-  --radius-sm:    10px;
-  --radius-md:    16px;
-  --radius-lg:    20px;
-  --radius-pill:  999px;
+  /* Warm Neutral */
+  --warm-700:          #6B6050;
+  --warm-600:          #8A7E6E;
+  --warm-500:          #9A8E7A;
+  --warm-400:          #B5A888;
+  --warm-300:          #D4C9A8;
+  --warm-200:          #E0D5C0;
+  --warm-100:          #EDE8DC;
 
-  /* ─── SHADOW TOKENS (warm-tinted, never neutral gray) ── */
-  --shadow-glass-sm:
-    0 2px 12px rgba(160, 120, 50, 0.09),
-    0 1px 0   rgba(255, 255, 255, 0.85) inset;
-  --shadow-glass-md:
-    0 4px 24px rgba(160, 120, 50, 0.13),
-    0 1px 0   rgba(255, 255, 255, 0.82) inset;
-  --shadow-glass-lg:
-    0 8px 40px rgba(160, 120, 50, 0.17),
-    0 1px 0   rgba(255, 255, 255, 0.78) inset;
+  /* Green — prayer banner accent, logo */
+  --green-logo:        #2D5018;
+  --green-light:       #5A8035;
+
+  /* ─── SEMANTIC ROLES ──────────────────────────────────── */
+  --color-border:      var(--warm-200);
+  --color-border-mid:  var(--warm-300);
+
+  --color-action:      #B89D60;
+  --color-action-hover:#9A8142;
+  --color-action-text: #FFFFFF;
+
+  --fg-primary:        var(--dark-900);
+  --fg-secondary:      var(--warm-600);
+  --fg-muted:          var(--warm-500);
+  --fg-gold:           #B89D60;
+  --fg-inverse:        #FFFFFF;
+
+  --color-success:     #4A6B22;
+  --color-warning:     #8A6010;
+  --color-error:       #8A2020;
+
+  /* ─── SPACING (base 4px) ────────────────────────────── */
+  --space-1:  4px;
+  --space-2:  8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-5:  20px;
+  --space-6:  24px;
+  --space-8:  32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+
+  /* ─── BORDER RADIUS ─────────────────────────────────── */
+  --radius-sm:   6px;
+  --radius-md:   12px;
+  --radius-lg:   16px;
+  --radius-xl:   20px;
+  --radius-pill: 999px;
+  --radius-icon: 8px;
+
+  /* ─── SHADOWS ────────────────────────────────────────── */
+  --shadow-card: 0 2px 12px rgba(26, 25, 21, 0.07);
+  --shadow-sm:   0 1px 4px  rgba(26, 25, 21, 0.06);
+  --shadow-md:   0 4px 20px rgba(26, 25, 21, 0.10);
+  --shadow-lg:   0 8px 32px rgba(26, 25, 21, 0.14);
 
   /* ─── TYPOGRAPHY ─────────────────────────────────────── */
-  --font-serif: 'Cormorant Garamond', Georgia, serif;
-  --font-sans:  'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-serif:   'Playfair Display', Georgia, serif;
+  --font-sans:    'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-arabic:  'Amiri', serif;
+  --font-mono:    'Fira Code', monospace;
+
+  /* ─── ANIMATION ──────────────────────────────────────── */
+  --ease-default:  cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --ease-out:      cubic-bezier(0, 0, 0.58, 1);
+  --duration-fast: 150ms;
+  --duration-base: 200ms;
+  --duration-slow: 350ms;
+
+  /* ─── BACK-COMPAT ALIASES ─────────────────────────────
+     These map old glass-era var names to new flat tokens
+     so older inline styles don't break.                  */
+  --cream-bg:       var(--color-bg);
+  --cream-solid:    var(--surface);
+  --cream-surface:  var(--surface);
+  --cream-hover:    var(--surface-tint);
+  --gold-primary:   var(--gold-400);
+  --gold-dark:      var(--gold-600);
+  --gold-border:    rgba(184, 157, 96, 0.25);
+  --gold-bg:        var(--gold-50);
+  --gold-glow:      rgba(184, 157, 96, 0.18);
+  --text-primary:   var(--dark-900);
+  --text-secondary: var(--warm-600);
+  --text-muted:     var(--warm-500);
+  --border-glass:   var(--warm-200);
+  --border-warm:    var(--warm-200);
+
+  /* Shadow back-compat (old glass shadows → flat equivalents) */
+  --shadow-glass-sm: var(--shadow-sm);
+  --shadow-glass-md: var(--shadow-card);
+  --shadow-glass-lg: var(--shadow-md);
 }
 
 /* ─── GLOBAL RESET & BASE ───────────────────────────────── */
@@ -52,63 +132,58 @@ html { scroll-behavior: smooth; }
 
 body {
   margin: 0;
-  font-size: 17px;
-  background: #FAF7EE;
-  color: #1A1915;
+  font-size: 14px;
+  background: var(--color-bg);
+  color: var(--fg-primary);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-h1, h2, h3, h4 { font-family: var(--font-serif); }
+h1, h2, h3, h4 { font-family: var(--font-serif); margin: 0; }
 
 ::selection {
-  background: rgba(201, 168, 76, 0.22);
-  color: var(--text-primary);
+  background: rgba(184, 157, 96, 0.22);
+  color: var(--fg-primary);
 }
 
-::-webkit-scrollbar              { width: 5px; background: var(--cream-bg); }
-::-webkit-scrollbar-thumb        { background: #d4b87a; border-radius: 4px; }
-::-webkit-scrollbar-thumb:hover  { background: var(--gold-dark); }
+::-webkit-scrollbar              { width: 5px; background: var(--color-bg); }
+::-webkit-scrollbar-thumb        { background: var(--warm-300); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover  { background: var(--warm-400); }
 
 input::placeholder,
-textarea::placeholder { color: var(--text-secondary); opacity: 0.7; }
+textarea::placeholder { color: var(--fg-muted); opacity: 0.7; }
 
-option              { background: var(--cream-solid); color: var(--text-primary); }
+option              { background: var(--surface); color: var(--fg-primary); }
 input, select, textarea { color-scheme: light; }
 
-/* ─── GLASS CARD UTILITY ─────────────────────────────────
-   The core surface primitive. Apply className="glass-card"
-   to any content container.
-   ───────────────────────────────────────────────────────── */
+/* ─── CARD PRIMITIVE ─────────────────────────────────────
+   .mp-card: flat white card (mdesign v2 default surface)
+   .glass-card: now an alias — same flat style             */
+.mp-card,
 .glass-card {
-  background:               var(--cream-surface);
-  backdrop-filter:          blur(30px);
-  -webkit-backdrop-filter:  blur(30px);
-  border:                   1px solid var(--border-glass);
-  border-radius:            var(--radius-md);
-  box-shadow:               var(--shadow-glass-md);
-  transition: background 0.2s, box-shadow 0.2s, transform 0.2s;
+  background:    var(--surface);
+  border:        1px solid var(--color-border);
+  border-radius: 14px;
+  box-shadow:    var(--shadow-card);
+  transition:    background var(--duration-base),
+                 box-shadow var(--duration-base),
+                 transform  var(--duration-base),
+                 border-color var(--duration-base);
 }
 
-/* Fallback for browsers without backdrop-filter support */
-@supports not (backdrop-filter: blur(1px)) {
-  .glass-card {
-    background:    var(--cream-solid);
-    border-color:  var(--gold-border);
-  }
-}
-
+.mp-card-hover:hover,
 .glass-card-hover:hover {
-  background:   var(--cream-hover);
-  box-shadow:   var(--shadow-glass-lg);
+  background:   var(--surface-tint);
+  border-color: rgba(184, 157, 96, 0.30);
+  box-shadow:   var(--shadow-md);
   transform:    translateY(-2px);
 }
 
 /* ─── APP ROOT ───────────────────────────────────────────── */
 .app-root {
   min-height: 100vh;
-  background: #FAF7EE;
+  background: var(--color-bg);
   position: relative;
   overflow-x: clip;
 }
@@ -118,29 +193,8 @@ input, select, textarea { color-scheme: light; }
   z-index: 1;
 }
 
-/* ─── DECORATIVE GLOW BLOBS ─────────────────────────────── */
-.app-blob {
-  position: fixed;
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 0;
-}
-.app-blob-1 {
-  width: 560px; height: 560px;
-  top: -120px;  right: -120px;
-  background: radial-gradient(circle, rgba(201,168,76,0.18) 0%, transparent 70%);
-  filter: blur(80px);
-}
-.app-blob-2 {
-  width: 440px; height: 440px;
-  bottom: 60px; left: -100px;
-  background: radial-gradient(circle, rgba(201,168,76,0.12) 0%, transparent 70%);
-  filter: blur(80px);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .app-blob { display: none; }
-}
+/* Blobs are removed in mdesign v2 — hide them silently */
+.app-blob { display: none; }
 
 /* ─── PAGE CONTENT WRAPPER ───────────────────────────────── */
 .page-content {
@@ -158,7 +212,7 @@ input, select, textarea { color-scheme: light; }
   background: rgba(250, 247, 238, 0.96);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border-top: 1px solid #E0D5C0;
+  border-top: 1px solid var(--warm-200);
   box-shadow: 0 -1px 8px rgba(26, 25, 21, 0.06);
   padding: 8px 0 max(8px, env(safe-area-inset-bottom));
 }
@@ -177,13 +231,13 @@ input, select, textarea { color-scheme: light; }
 .section-divider__bar {
   width: 3px; height: 16px;
   border-radius: 2px;
-  background: linear-gradient(180deg, var(--gold-primary), var(--gold-dark));
+  background: var(--gold-400);
   flex-shrink: 0;
 }
 .section-divider__label {
   font-size: 11px;
-  font-weight: 700;
-  color: var(--gold-dark);
+  font-weight: 600;
+  color: var(--gold-600);
   font-family: var(--font-sans);
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -191,7 +245,18 @@ input, select, textarea { color-scheme: light; }
 .section-divider__line {
   flex: 1;
   height: 1px;
-  background: linear-gradient(to right, var(--gold-border), transparent);
+  background: linear-gradient(to right, var(--warm-200), transparent);
+}
+
+/* ─── SECTION LABEL (reusable) ───────────────────────────── */
+.section-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+  font-family: var(--font-sans);
+  margin-bottom: 8px;
 }
 
 /* ─── INHERITANCE PAGE GRIDS ────────────────────────────── */
@@ -211,7 +276,7 @@ input, select, textarea { color-scheme: light; }
   grid-template-columns: 2fr 1fr 1fr 1fr;
   gap: 8px;
   padding: 8px 0;
-  border-bottom: 2px solid var(--border-warm);
+  border-bottom: 2px solid var(--warm-200);
   margin-bottom: 4px;
 }
 .inherit-results-row {
@@ -275,7 +340,6 @@ input, select, textarea { color-scheme: light; }
 }
 
 /* ─── FLOATING PLAYER MOBILE OFFSET ────────────────────── */
-/* On mobile, push player above the tab bar (58px) */
 .floating-player-full {
   bottom: 0 !important;
 }

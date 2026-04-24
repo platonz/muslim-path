@@ -4,6 +4,8 @@ import i18n from "./i18n";
 import { BG, SURFACE, BORDER, GREEN, GREEN_L, GOLD, TEXT, MUTED, SERIF, SANS } from "./constants";
 import Navbar from "./components/Navbar";
 import Home from "./components/Home";
+import Dhikr from "./components/Dhikr";
+import Profile from "./components/Profile";
 import Icon from "./components/Icon";
 import KaabaWatermark from "./components/KaabaWatermark";
 import MobileTabBar from "./components/MobileTabBar";
@@ -2371,12 +2373,12 @@ function LangBar({ page }) {
 }
 
 // ─── APP ──────────────────────────────────────────────────────────
-const VALID_PAGES = ["home","prayer","zakat","inheritance","calendar","dates","library","audio","tasbeeh","quran","dua","asma","admin"];
+const VALID_PAGES = ["home","prayer","zakat","inheritance","calendar","dates","library","audio","tasbeeh","quran","dua","asma","admin","profile"];
 
 // ── Language-prefixed URL slug mapping ────────────────────────────
 const PAGE_SLUGS = {
-  en: { home:"", prayer:"prayer", zakat:"zakat", inheritance:"inheritance", calendar:"calendar", dates:"dates", library:"library", audio:"audio", tasbeeh:"tasbeeh", quran:"quran", dua:"dua", asma:"asma", admin:"admin" },
-  sq: { home:"", prayer:"namazi", zakat:"zekati", inheritance:"hiseja", calendar:"kalendari", dates:"datat", library:"biblioteka", audio:"ligjerata", tasbeeh:"tesbihe", quran:"kurani", dua:"dua", asma:"emrat", admin:"admin" },
+  en: { home:"", prayer:"prayer", zakat:"zakat", inheritance:"inheritance", calendar:"calendar", dates:"dates", library:"library", audio:"audio", tasbeeh:"tasbeeh", quran:"quran", dua:"dua", asma:"asma", admin:"admin", profile:"profile" },
+  sq: { home:"", prayer:"namazi", zakat:"zekati", inheritance:"hiseja", calendar:"kalendari", dates:"datat", library:"biblioteka", audio:"ligjerata", tasbeeh:"tesbihe", quran:"kurani", dua:"dua", asma:"emrat", admin:"admin", profile:"profili" },
 };
 function slugToPage(lang, slug) {
   const map = PAGE_SLUGS[lang] || PAGE_SLUGS.en;
@@ -2881,8 +2883,9 @@ export default function App() {
         {page === "dates" && <DateConverter />}
         {page === "library" && <Library navigate={navigate} />}
         {page === "audio" && <AudioPage {...audioProps} />}
-        {page === "tasbeeh" && <TasbeehPage />}
+        {page === "tasbeeh" && <Dhikr />}
         {page === "quran"   && <QuranPage />}
+        {page === "profile" && <Profile authUser={authUser} onSignOut={handleSignOut} notifEnabled={notifEnabled} onNotifToggle={handleNotifToggle} savedLocation={savedLocation} navigate={navigate} />}
         {page === "dua"     && <DuaPage favs={duaFavs} onFav={toggleDuaFav} />}
         {page === "asma"    && <AsmaPage />}
         {page === "admin"   && <AdminPage authSession={authSession} />}
@@ -2910,7 +2913,7 @@ export default function App() {
           bottom: current ? 80 : 24,
           left: 16,
           zIndex: 450,
-          background: "var(--cream-solid)",
+          background: "var(--surface)",
           border: `1px solid ${BORDER}`,
           borderRadius: "var(--radius-sm)",
           color: MUTED,
@@ -3828,7 +3831,7 @@ function QuranPage() {
     <div style={{ maxWidth: 780, margin: "0 auto", padding: "40px 24px" }} ref={topRef}>
       {/* Header */}
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 32, flexWrap: "wrap", gap: 12 }}>
-        <button onClick={back} style={{ background: "none", border: `1px solid ${BORDER}`, borderRadius: 2, color: MUTED, padding: "7px 16px", cursor: "pointer", fontSize: 12, fontFamily: SANS, letterSpacing: "0.06em" }}>
+        <button onClick={back} style={{ background: "none", border: `1px solid ${BORDER}`, borderRadius: 8, color: MUTED, padding: "7px 16px", cursor: "pointer", fontSize: 12, fontFamily: SANS, letterSpacing: "0.06em" }}>
           {t("quran.back")}
         </button>
         <div style={{ textAlign: "center", flex: 1 }}>
@@ -3842,7 +3845,7 @@ function QuranPage() {
         <div style={{ display: "flex", gap: 8 }}>
           <button onClick={() => setShowTrans(s => !s)} style={{
             background: showTrans ? GREEN_L : "transparent", border: `1px solid ${showTrans ? GOLD : BORDER}`,
-            borderRadius: 2, color: showTrans ? GOLD : MUTED, padding: "7px 14px", cursor: "pointer",
+            borderRadius: 8, color: showTrans ? GOLD : MUTED, padding: "7px 14px", cursor: "pointer",
             fontSize: 11, fontFamily: SANS, letterSpacing: "0.06em",
           }}>{t("quran.showTrans")}</button>
         </div>
@@ -3860,8 +3863,8 @@ function QuranPage() {
               onBlur={() => setTimeout(() => setVsOpen(false), 180)}
               style={{
                 width: "100%", padding: "10px 40px 10px 16px",
-                background: "#faf5ec", border: `1px solid ${verseSearch.length >= 3 ? GOLD + "80" : BORDER}`,
-                borderRadius: 2, color: TEXT, fontSize: 13, fontFamily: SANS,
+                background: "#FAF5E8", border: `1px solid ${verseSearch.length >= 3 ? GOLD + "80" : BORDER}`,
+                borderRadius: 10, color: TEXT, fontSize: 13, fontFamily: SANS,
                 outline: "none", boxSizing: "border-box", transition: "border-color 0.2s",
               }}
               onMouseEnter={e => { if (verseSearch.length < 3) e.target.style.borderColor = MUTED; }}
@@ -3883,9 +3886,10 @@ function QuranPage() {
           {vsOpen && verseSearch.trim().length >= 3 && (
             <div style={{
               position: "absolute", top: "100%", left: 0, right: 0, zIndex: 100,
-              background: "#f0e6ce", border: `1px solid ${GOLD}40`,
+              background: "#FFFFFF", border: `1px solid ${BORDER}`,
               borderTop: "none", maxHeight: 380, overflowY: "auto",
-              boxShadow: "0 8px 32px rgba(160,120,50,0.15)",
+              borderRadius: "0 0 12px 12px",
+              boxShadow: "0 8px 32px rgba(26,25,21,0.10)",
             }}>
               {verseResults.length === 0 ? (
                 <div style={{ padding: "14px 18px", color: MUTED, fontSize: 12, fontFamily: SANS, letterSpacing: "0.08em" }}>
@@ -4019,16 +4023,16 @@ function QuranPage() {
         <div style={{ display: "flex", justifyContent: "space-between", marginTop: 40, gap: 12 }}>
           <button onClick={() => navSurah(-1)} disabled={current === 1} style={{
             flex: 1, padding: "12px 0", background: "transparent", border: `1px solid ${BORDER}`,
-            borderRadius: 2, color: current === 1 ? BORDER : MUTED, cursor: current === 1 ? "default" : "pointer",
+            borderRadius: 999, color: current === 1 ? BORDER : MUTED, cursor: current === 1 ? "default" : "pointer",
             fontSize: 12, fontFamily: SANS, letterSpacing: "0.06em", transition: "all 0.2s",
           }}>← Previous Surah</button>
           <button onClick={back} style={{
             padding: "12px 24px", background: "transparent", border: `1px solid ${BORDER}`,
-            borderRadius: 2, color: MUTED, cursor: "pointer", fontSize: 12, fontFamily: SANS,
+            borderRadius: 999, color: MUTED, cursor: "pointer", fontSize: 12, fontFamily: SANS,
           }}>All Surahs</button>
           <button onClick={() => navSurah(1)} disabled={current === 114} style={{
             flex: 1, padding: "12px 0", background: "transparent", border: `1px solid ${BORDER}`,
-            borderRadius: 2, color: current === 114 ? BORDER : MUTED, cursor: current === 114 ? "default" : "pointer",
+            borderRadius: 999, color: current === 114 ? BORDER : MUTED, cursor: current === 114 ? "default" : "pointer",
             fontSize: 12, fontFamily: SANS, letterSpacing: "0.06em", transition: "all 0.2s",
           }}>Next Surah →</button>
         </div>
@@ -4043,7 +4047,7 @@ function QuranPage() {
 
       {/* Bookmarks panel */}
       {bookmarks.length > 0 && (
-        <div style={{ marginBottom: 28, border: "1px solid " + GOLD + "30", background: "rgba(255,252,244,0.85)" }}>
+        <div style={{ marginBottom: 28, border: `1px solid ${BORDER}`, borderRadius: 14, background: "#FFFFFF", boxShadow: "0 2px 12px rgba(26,25,21,0.07)", overflow: "hidden" }}>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "12px 18px", borderBottom: "1px solid " + BORDER }}>
             <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
               <span style={{ fontSize: 14 }}>{"🔖"}</span>
@@ -4096,9 +4100,9 @@ function QuranPage() {
         placeholder={isSq ? "Kërko sure ose përmbajtje Kurani… (3+ shkronja)" : "Search surah name or Quran content… (3+ letters)"}
         value={search} onChange={e => setSearch(e.target.value)}
         style={{
-          width: "100%", padding: "11px 16px", background: "#faf5ec",
+          width: "100%", padding: "11px 16px", background: "#FAF5E8",
           border: `1px solid ${search.trim().length >= 3 ? GOLD + "80" : BORDER}`,
-          borderRadius: 2, color: TEXT,
+          borderRadius: 10, color: TEXT,
           fontSize: 13, fontFamily: SANS, outline: "none", marginBottom: 24,
           boxSizing: "border-box", transition: "border-color 0.2s",
         }}
@@ -4114,7 +4118,7 @@ function QuranPage() {
 
       {/* Surah name matches */}
       {filtered.length > 0 && (
-        <div style={{ border: `1px solid ${BORDER}`, marginBottom: crossResults.length > 0 ? 28 : 0 }}>
+        <div style={{ border: `1px solid ${BORDER}`, borderRadius: 14, boxShadow: "0 2px 12px rgba(26,25,21,0.07)", overflow: "hidden", marginBottom: crossResults.length > 0 ? 28 : 0 }}>
           {filtered.map((s, i) => (
             <div key={s.number} onClick={() => openSurah(s.number)}
               style={{
@@ -4128,7 +4132,7 @@ function QuranPage() {
               onMouseLeave={e => e.currentTarget.style.background = "transparent"}
             >
               <div style={{
-                width: 36, height: 36, border: `1px solid ${BORDER}`, borderRadius: 2, flexShrink: 0,
+                width: 36, height: 36, border: `1px solid ${BORDER}`, borderRadius: 9, flexShrink: 0,
                 display: "flex", alignItems: "center", justifyContent: "center",
                 fontSize: 12, color: GOLD, fontFamily: SANS, fontWeight: 600,
               }}>{s.number}</div>
@@ -4148,8 +4152,8 @@ function QuranPage() {
 
       {/* Cross-surah verse content search results */}
       {crossResults.length > 0 && (
-        <div style={{ border: `1px solid ${GOLD}30` }}>
-          <div style={{ padding: "9px 16px", borderBottom: `1px solid ${BORDER}`, display: "flex", alignItems: "center", gap: 10, background: "#faf5ec" }}>
+        <div style={{ border: `1px solid ${BORDER}`, borderRadius: 14, boxShadow: "0 2px 12px rgba(26,25,21,0.07)", overflow: "hidden" }}>
+          <div style={{ padding: "9px 16px", borderBottom: `1px solid ${BORDER}`, display: "flex", alignItems: "center", gap: 10, background: "#FAF5E8" }}>
             <span style={{ fontSize: 10, color: GOLD, letterSpacing: "0.14em", textTransform: "uppercase", fontFamily: SANS, fontWeight: 600 }}>
               {isSq ? "Rezultate në përmbajtje" : "Verse content matches"}
             </span>
@@ -4287,7 +4291,7 @@ function TasbeehPage() {
       <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 40, justifyContent: "center" }}>
         {DHIKR_PRESETS.map((d, i) => (
           <button key={i} onClick={() => selectDhikr(i)} style={{
-            padding: "7px 14px", borderRadius: 2, cursor: "pointer", fontSize: 11,
+            padding: "7px 14px", borderRadius: 999, cursor: "pointer", fontSize: 11,
             fontFamily: SANS, fontWeight: 600, letterSpacing: "0.07em",
             border: `1px solid ${dhikrIdx === i ? GOLD : BORDER}`,
             background: dhikrIdx === i ? GREEN_L : "transparent",
@@ -4370,7 +4374,7 @@ function TasbeehPage() {
           </div>
           <div style={{ width: 1, height: 40, background: BORDER }} />
           <button onClick={reset} style={{
-            background: "none", border: `1px solid ${BORDER}`, borderRadius: 2,
+            background: "none", border: `1px solid ${BORDER}`, borderRadius: 999,
             cursor: "pointer", color: MUTED, fontSize: 11, fontWeight: 600,
             padding: "8px 16px", letterSpacing: "0.08em", fontFamily: SANS,
             transition: "all 0.2s",

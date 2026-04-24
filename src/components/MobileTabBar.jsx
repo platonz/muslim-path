@@ -5,8 +5,8 @@ const TABS = [
   { id: "home",    icon: "home",    en: "Home",    sq: "Shtëpia" },
   { id: "prayer",  icon: "prayer",  en: "Prayers", sq: "Kohët"   },
   { id: "quran",   icon: "quran",   en: "Quran",   sq: "Kurani"  },
-  { id: "dua",     icon: "dua",     en: "Dua",     sq: "Dua"     },
-  { id: "library", icon: "library", en: "More",    sq: "Më shumë"},
+  { id: "tasbeeh", icon: "tasbeeh", en: "Dhikr",   sq: "Dhikr"   },
+  { id: "profile", icon: "profile", en: "You",     sq: "Ti"      },
 ];
 
 export default function MobileTabBar({ page, navigate }) {
