@@ -3709,7 +3709,7 @@ let _fullVerseCache = null; // { edition: string, verses: [{surahNum,ayahNum,sur
 function QuranPage() {
   const { t } = useTranslation();
   const isSq = i18n.language?.startsWith("sq");
-  const transEdition = isSq ? "sq.nahi" : "en.sahih";
+  const [transEdition, setTransEdition] = useState(isSq ? "sq.nahi" : "en.sahih");
   const [surahs,       setSurahs]       = useState(() => _surahCache || []);
   const [current,      setCurrent]      = useState(null);
   const arabicFontSize = { Small: 20, Normal: 26, Large: 32, "X-Large": 38 }[localStorage.getItem("mp-arabic-font") || "Normal"] || 26;
@@ -3723,9 +3723,18 @@ function QuranPage() {
     try { return JSON.parse(localStorage.getItem("mp-quran-bkm") || "[]"); } catch { return []; }
   });
   const [fullLoading, setFullLoading] = useState(false);
+  const [playingVerse, setPlayingVerse] = useState(null);
+  const [reciter, setReciter] = useState("ar.alafasy");
+  const [showTafsir, setShowTafsir] = useState(false);
+  const [tafsirVerse, setTafsirVerse] = useState(null);
+  const [tafsirText, setTafsirText] = useState("");
+  const [tafsirLoading, setTafsirLoading] = useState(false);
+  const [tafsirId, setTafsirId] = useState(169);
   const topRef = useRef(null);
   const vsInputRef = useRef(null);
   const pendingVerseRef = useRef(null);
+  const audioRef = useRef(null);
+  const tafsirCache = useRef(new Map());
   const [verseSearch, setVerseSearch] = useState("");
   const [vsOpen, setVsOpen]           = useState(false);
 
@@ -3776,6 +3785,73 @@ function QuranPage() {
     return bookmarks.some(b => b.key === current + ":" + verseN);
   }
 
+  function getAudioUrl(globalN) {
+    return `https://cdn.islamic.network/quran/audio/128/${reciter}/${globalN}.mp3`;
+  }
+
+  function playVerse(v) {
+    if (!audioRef.current || !v.globalN) return;
+    if (playingVerse?.globalN === v.globalN) {
+      if (audioRef.current.paused) {
+        audioRef.current.play();
+        setPlayingVerse(v);
+      } else {
+        audioRef.current.pause();
+        setPlayingVerse(null);
+      }
+      return;
+    }
+    audioRef.current.src = getAudioUrl(v.globalN);
+    audioRef.current.play().catch(() => {});
+    setPlayingVerse(v);
+    setTimeout(() => {
+      const el = document.getElementById(`verse-${v.n}`);
+      if (el) el.scrollIntoView({ behavior: "smooth", block: "center" });
+    }, 80);
+  }
+
+  function handleAudioEnd() {
+    if (!playingVerse) return;
+    const idx = verses.findIndex(v => v.globalN === playingVerse.globalN);
+    if (idx >= 0 && idx < verses.length - 1) {
+      const next = verses[idx + 1];
+      if (audioRef.current && next.globalN) {
+        audioRef.current.src = getAudioUrl(next.globalN);
+        audioRef.current.play().catch(() => {});
+        setPlayingVerse(next);
+        setTimeout(() => {
+          const el = document.getElementById(`verse-${next.n}`);
+          if (el) el.scrollIntoView({ behavior: "smooth", block: "center" });
+        }, 100);
+      }
+    } else {
+      setPlayingVerse(null);
+    }
+  }
+
+  async function loadTafsir(v) {
+    setTafsirVerse(v);
+    setTafsirText("");
+    const key = `${tafsirId}:${current}:${v.n}`;
+    if (tafsirCache.current.has(key)) {
+      setTafsirText(tafsirCache.current.get(key));
+      return;
+    }
+    setTafsirLoading(true);
+    try {
+      const res = await fetch(`https://api.qurancdn.com/api/qdc/tafsirs/${tafsirId}/by_chapter/${current}`);
+      const data = await res.json();
+      const verseKey = `${current}:${v.n}`;
+      const entry = data.tafsirs?.find(t => t.verse_key === verseKey);
+      const text = entry?.text?.replace(/<[^>]+>/g, "").replace(/\s+/g, " ").trim() || "No tafsir found for this verse.";
+      tafsirCache.current.set(key, text);
+      setTafsirText(text);
+    } catch {
+      setTafsirText("Failed to load tafsir. Please try again.");
+    }
+    setTafsirLoading(false);
+  }
+
   // Load surah list — use module cache if available
   useEffect(() => {
     if (_surahCache) { setSurahs(_surahCache); setLoadingList(false); return; }
@@ -3794,12 +3870,16 @@ function QuranPage() {
     if (!current) return;
     setLoadingRead(true); setVerses([]); setFromCache(false);
     setVerseSearch(""); setVsOpen(false);
+    setPlayingVerse(null);
+    if (audioRef.current) { audioRef.current.pause(); audioRef.current.src = ""; }
 
     // Try offline cache first
     try {
       const cached = localStorage.getItem(`qv_${current}_${transEdition}`);
       if (cached) {
         const parsed = JSON.parse(cached);
+        // Invalidate cache if missing globalN (old format)
+        if (!parsed[0]?.globalN) { localStorage.removeItem(`qv_${current}_${transEdition}`); throw new Error("stale"); }
         setVerses(parsed);
         setLoadingRead(false);
         setFromCache(true);
@@ -3823,6 +3903,7 @@ function QuranPage() {
         const [ar, translit, trans] = d.data;
         const parsed = ar.ayahs.map((a, i) => ({
           n: a.numberInSurah,
+          globalN: a.number,
           ar: a.text,
           tr: translit.ayahs[i]?.text || "",
           en: trans.ayahs[i]?.text || "",
@@ -3842,7 +3923,7 @@ function QuranPage() {
         }
       })
       .catch(() => setLoadingRead(false));
-  }, [current]);
+  }, [current, transEdition]);
 
   // Load full Quran verse index when user starts typing (3+ chars)
   useEffect(() => {
@@ -3902,8 +3983,19 @@ function QuranPage() {
     setCurrent(num);
     localStorage.setItem("quranSurah", num);
   }
-  function back()          { setCurrent(null); localStorage.removeItem("quranSurah"); }
-  function navSurah(dir)   { const n = Math.min(114, Math.max(1, current + dir)); openSurah(n); }
+  function back() {
+    setCurrent(null);
+    localStorage.removeItem("quranSurah");
+    setPlayingVerse(null);
+    setShowTafsir(false);
+    if (audioRef.current) { audioRef.current.pause(); audioRef.current.src = ""; }
+  }
+  function navSurah(dir) {
+    const n = Math.min(114, Math.max(1, current + dir));
+    setPlayingVerse(null);
+    if (audioRef.current) { audioRef.current.pause(); audioRef.current.src = ""; }
+    openSurah(n);
+  }
 
   const surah    = surahs.find(s => s.number === current);
   const nSearch = normSearch(search);
@@ -3916,7 +4008,9 @@ function QuranPage() {
 
   // ── READER VIEW ────────────────────────────────────────────────
   if (current && surah) return (
-    <div style={{ maxWidth: 780, margin: "0 auto", padding: "40px 24px" }} ref={topRef}>
+    <>
+    <audio ref={audioRef} onEnded={handleAudioEnd} style={{ display: "none" }} />
+    <div style={{ maxWidth: 780, margin: "0 auto", padding: "40px 24px", transition: "margin-right 0.3s", marginRight: showTafsir ? 340 : undefined }} ref={topRef}>
       {/* Header */}
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 32, flexWrap: "wrap", gap: 12 }}>
         <button onClick={back} style={{ background: "none", border: `1px solid ${BORDER}`, borderRadius: 8, color: MUTED, padding: "7px 16px", cursor: "pointer", fontSize: 12, fontFamily: SANS, letterSpacing: "0.06em" }}>
@@ -3930,12 +4024,52 @@ function QuranPage() {
           <div style={{ fontFamily: SERIF, fontSize: 22, color: TEXT }}>{surah.englishName}</div>
           <div style={{ fontSize: 12, color: MUTED }}>{surah.englishNameTranslation}</div>
         </div>
-        <div style={{ display: "flex", gap: 8 }}>
+        <div style={{ display: "flex", gap: 8, flexWrap: "wrap", justifyContent: "flex-end" }}>
+          {/* Translation edition selector */}
+          <select
+            value={transEdition}
+            onChange={e => setTransEdition(e.target.value)}
+            style={{
+              background: GREEN_L, border: `1px solid ${BORDER}`, borderRadius: 8,
+              color: MUTED, padding: "7px 10px", cursor: "pointer",
+              fontSize: 11, fontFamily: SANS, outline: "none",
+            }}
+          >
+            <option value="en.sahih">EN — Sahih Intl</option>
+            <option value="en.pickthall">EN — Pickthall</option>
+            <option value="fr.hamidullah">FR — Hamidullah</option>
+            <option value="tr.diyanet">TR — Diyanet</option>
+            <option value="ur.jalandhry">UR — Jalandhry</option>
+            <option value="sq.nahi">SQ — Nahi</option>
+          </select>
+          {/* Translation toggle */}
           <button onClick={() => setShowTrans(s => !s)} style={{
             background: showTrans ? GREEN_L : "transparent", border: `1px solid ${showTrans ? GOLD : BORDER}`,
             borderRadius: 8, color: showTrans ? GOLD : MUTED, padding: "7px 14px", cursor: "pointer",
             fontSize: 11, fontFamily: SANS, letterSpacing: "0.06em",
           }}>{t("quran.showTrans")}</button>
+          {/* Reciter selector */}
+          <select
+            value={reciter}
+            onChange={e => { setReciter(e.target.value); setPlayingVerse(null); if (audioRef.current) { audioRef.current.pause(); audioRef.current.src = ""; } }}
+            style={{
+              background: GREEN_L, border: `1px solid ${BORDER}`, borderRadius: 8,
+              color: MUTED, padding: "7px 10px", cursor: "pointer",
+              fontSize: 11, fontFamily: SANS, outline: "none",
+            }}
+          >
+            <option value="ar.alafasy">Alafasy</option>
+            <option value="ar.abdulbasitmurattal">Abdul Basit</option>
+            <option value="ar.saadalghamdi">Saad Al-Ghamdi</option>
+            <option value="ar.husary">Husary</option>
+            <option value="ar.minshawi">Minshawi</option>
+          </select>
+          {/* Tafsir toggle */}
+          <button onClick={() => setShowTafsir(s => !s)} style={{
+            background: showTafsir ? GREEN_L : "transparent", border: `1px solid ${showTafsir ? GOLD : BORDER}`,
+            borderRadius: 8, color: showTafsir ? GOLD : MUTED, padding: "7px 14px", cursor: "pointer",
+            fontSize: 11, fontFamily: SANS, letterSpacing: "0.06em",
+          }}>Tafsir</button>
         </div>
       </div>
 
@@ -4065,21 +4199,47 @@ function QuranPage() {
 
       {/* Verses */}
       <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
-        {verses.map((v, i) => (
+        {verses.map((v, i) => {
+          const isPlaying = playingVerse?.globalN === v.globalN && audioRef.current && !audioRef.current.paused;
+          const isActive  = playingVerse?.globalN === v.globalN;
+          return (
           <div key={v.n} id={`verse-${v.n}`} style={{
             padding: "28px 0", borderBottom: `1px solid ${BORDER}`,
             display: "flex", flexDirection: "column", gap: 14,
-            background: isBookmarked(v.n) ? "rgba(201,168,76,0.04)" : "transparent",
-            transition: "background 0.2s",
+            background: isActive ? `${GOLD}08` : isBookmarked(v.n) ? "rgba(201,168,76,0.04)" : "transparent",
+            borderLeft: isActive ? `3px solid ${GOLD}` : "3px solid transparent",
+            paddingLeft: isActive ? 14 : undefined,
+            transition: "background 0.2s, border-left-color 0.2s",
           }}>
             {/* Verse number + Arabic */}
             <div style={{ display: "flex", alignItems: "flex-start", gap: 16, direction: "rtl" }}>
               <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6, flexShrink: 0, direction: "ltr" }}>
-                <div style={{
-                  width: 32, height: 32, borderRadius: "50%", border: `1px solid ${GOLD}50`,
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                  fontSize: 11, color: GOLD, fontFamily: SANS,
-                }}>{v.n}</div>
+                {/* Play button */}
+                <button
+                  onClick={() => playVerse(v)}
+                  title={isActive ? "Pause" : "Play verse"}
+                  style={{
+                    background: isActive ? GOLD : "none",
+                    border: `1px solid ${isActive ? GOLD : BORDER}`,
+                    borderRadius: "50%", cursor: "pointer",
+                    width: 28, height: 28, display: "flex", alignItems: "center", justifyContent: "center",
+                    fontSize: 11, color: isActive ? "#fff" : MUTED,
+                    transition: "all 0.15s", padding: 0, flexShrink: 0,
+                  }}
+                >{isActive && !audioRef.current?.paused ? "⏸" : "▶"}</button>
+                {/* Verse number badge — click to load tafsir */}
+                <div
+                  onClick={() => { if (showTafsir) loadTafsir(v); }}
+                  style={{
+                    width: 32, height: 32, borderRadius: "50%", border: `1px solid ${showTafsir && tafsirVerse?.n === v.n ? GOLD : GOLD + "50"}`,
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    fontSize: 11, color: showTafsir && tafsirVerse?.n === v.n ? GOLD : GOLD + "99", fontFamily: SANS,
+                    cursor: showTafsir ? "pointer" : "default",
+                    background: showTafsir && tafsirVerse?.n === v.n ? GREEN_L : "transparent",
+                    transition: "all 0.15s",
+                  }}
+                  title={showTafsir ? "Load tafsir for this verse" : undefined}
+                >{v.n}</div>
                 <button onClick={() => toggleBookmark(v)} title={isBookmarked(v.n) ? "Remove bookmark" : "Bookmark verse"} style={{
                   background: "none", border: "none", cursor: "pointer",
                   fontSize: 14, color: isBookmarked(v.n) ? GOLD : MUTED,
@@ -4103,7 +4263,8 @@ function QuranPage() {
               </div>
             )}
           </div>
-        ))}
+          );
+        })}
       </div>
 
       {/* Prev / Next surah */}
@@ -4126,6 +4287,72 @@ function QuranPage() {
         </div>
       )}
     </div>
+
+    {/* Tafsir side panel */}
+    {showTafsir && (
+      <div style={{
+        position: "fixed", right: 0, top: 0, height: "100%", width: 320,
+        background: SURFACE, borderLeft: `1px solid ${BORDER}`,
+        zIndex: 200, overflowY: "auto", display: "flex", flexDirection: "column",
+        boxShadow: "-4px 0 24px rgba(26,25,21,0.10)",
+      }}>
+        {/* Tafsir panel header */}
+        <div style={{
+          display: "flex", alignItems: "center", justifyContent: "space-between",
+          padding: "16px 18px", borderBottom: `1px solid ${BORDER}`,
+          position: "sticky", top: 0, background: SURFACE, zIndex: 1,
+        }}>
+          <div>
+            <div style={{ fontSize: 10, color: GOLD, letterSpacing: "0.14em", textTransform: "uppercase", fontFamily: SANS, fontWeight: 600 }}>Tafsir</div>
+            <select
+              value={tafsirId}
+              onChange={e => { setTafsirId(Number(e.target.value)); setTafsirText(""); setTafsirVerse(null); tafsirCache.current.clear(); }}
+              style={{
+                marginTop: 4, background: GREEN_L, border: `1px solid ${BORDER}`, borderRadius: 6,
+                color: TEXT, padding: "4px 8px", fontSize: 11, fontFamily: SANS, outline: "none", cursor: "pointer",
+              }}
+            >
+              <option value={169}>Ibn Kathir (EN)</option>
+              <option value={16}>Al-Muyassar (AR)</option>
+              <option value={90}>Al-Qurtubi (AR)</option>
+              <option value={94}>Al-Baghawi (AR)</option>
+            </select>
+          </div>
+          <button onClick={() => setShowTafsir(false)} style={{
+            background: "none", border: "none", cursor: "pointer", fontSize: 18,
+            color: MUTED, lineHeight: 1, padding: "4px 8px",
+          }}>×</button>
+        </div>
+
+        {/* Tafsir content */}
+        <div style={{ padding: "20px 18px", flex: 1 }}>
+          {!tafsirVerse ? (
+            <div style={{ color: MUTED, fontSize: 13, fontFamily: SANS, lineHeight: 1.7, textAlign: "center", paddingTop: 40 }}>
+              Click a verse number to load its tafsir.
+            </div>
+          ) : (
+            <>
+              <div style={{ marginBottom: 16, paddingBottom: 12, borderBottom: `1px solid ${BORDER}` }}>
+                <div style={{ fontSize: 11, color: GOLD, fontFamily: SANS, letterSpacing: "0.12em", textTransform: "uppercase" }}>
+                  {surah.englishName} · Verse {tafsirVerse.n}
+                </div>
+                <div style={{ marginTop: 8, fontSize: 18, fontFamily: ARABIC, color: TEXT, direction: "rtl", lineHeight: 2, textAlign: "right" }}>
+                  {tafsirVerse.ar}
+                </div>
+              </div>
+              {tafsirLoading ? (
+                <div style={{ color: MUTED, fontSize: 13, fontFamily: SANS, textAlign: "center", padding: 20 }}>Loading…</div>
+              ) : (
+                <div style={{ fontSize: 14, color: TEXT, lineHeight: 1.9, fontFamily: SANS }}>
+                  {tafsirText}
+                </div>
+              )}
+            </>
+          )}
+        </div>
+      </div>
+    )}
+    </>
   );
 
   // ── SURAH LIST VIEW ────────────────────────────────────────────
