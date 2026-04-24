@@ -54,6 +54,9 @@ const PR_SQ  = { Fajr:"Sabahu", Dhuhr:"Dreka", Asr:"Ikindia", Maghrib:"Akshami",
 const PR_EN  = { Fajr:"Fajr",   Dhuhr:"Dhuhr",  Asr:"Asr",     Maghrib:"Maghrib",  Isha:"Isha"  };
 
 const PRAYER_KEYS = ["Fajr","Dhuhr","Asr","Maghrib","Isha"];
+const STRIP_KEYS  = ["Imsak","Fajr","Dhuhr","Asr","Maghrib","Isha"];
+const STRIP_LBL_SQ = { Imsak:"Imsaku", Fajr:"Sabahu", Dhuhr:"Dreka", Asr:"Ikindia", Maghrib:"Akshami", Isha:"Jacia" };
+const STRIP_LBL_EN = { Imsak:"Imsak",  Fajr:"Fajr",   Dhuhr:"Dhuhr", Asr:"Asr",    Maghrib:"Maghrib",  Isha:"Isha"  };
 
 // ─── SURAH NAMES ─────────────────────────────────────────────────────
 const SURAH_NAMES = {
@@ -95,6 +98,46 @@ function fmtTime(t) {
   if (!t) return "--:--";
   const [h,m] = t.split(":").map(Number);
   return `${h%12||12}:${String(m).padStart(2,"0")} ${h>=12?"PM":"AM"}`;
+}
+
+function pad2(n) { return String(n).padStart(2, "0"); }
+
+// ─── ANALOG CLOCK ────────────────────────────────────────────────────
+function AnalogClock({ hour, minute, size = 64 }) {
+  const r = size / 2;
+  const cx = r, cy = r;
+  const hourAngle  = ((hour % 12) + minute / 60) * 30 - 90;
+  const minAngle   = minute * 6 - 90;
+  const toRad = deg => (deg * Math.PI) / 180;
+  const handEnd = (angle, len) => ({
+    x: cx + Math.cos(toRad(angle)) * len,
+    y: cy + Math.sin(toRad(angle)) * len,
+  });
+  const hEnd = handEnd(hourAngle, r * 0.52);
+  const mEnd = handEnd(minAngle,  r * 0.72);
+  const ticks = Array.from({ length: 12 }, (_, i) => {
+    const a = toRad(i * 30 - 90);
+    return {
+      x1: cx + Math.cos(a) * (r - 5),
+      y1: cy + Math.sin(a) * (r - 5),
+      x2: cx + Math.cos(a) * (r - 2),
+      y2: cy + Math.sin(a) * (r - 2),
+    };
+  });
+  return (
+    <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
+      <circle cx={cx} cy={cy} r={r - 2} fill="none" stroke="rgba(255,255,255,0.25)" strokeWidth={1.5}/>
+      {ticks.map((t, i) => (
+        <line key={i} x1={t.x1} y1={t.y1} x2={t.x2} y2={t.y2} stroke="rgba(255,255,255,0.4)" strokeWidth={i % 3 === 0 ? 2 : 1}/>
+      ))}
+      {/* hour hand */}
+      <line x1={cx} y1={cy} x2={hEnd.x} y2={hEnd.y} stroke="#FFFFFF" strokeWidth={2.5} strokeLinecap="round"/>
+      {/* minute hand */}
+      <line x1={cx} y1={cy} x2={mEnd.x} y2={mEnd.y} stroke={G.green300} strokeWidth={1.8} strokeLinecap="round"/>
+      {/* center dot */}
+      <circle cx={cx} cy={cy} r={3} fill="#FFFFFF"/>
+    </svg>
+  );
 }
 
 // ─── FEATURE CARD ─────────────────────────────────────────────────────
@@ -182,17 +225,15 @@ export default function Home({ quote, verseQuote, setPage, savedLocation, onSave
   const prayerMethod = parseInt(localStorage.getItem("mp-prayer-method") || "1");
   const prayerSchool = parseInt(localStorage.getItem("mp-prayer-school") || "1");
 
-  // Quran last opened surah
   const lastSurahNum = parseInt(localStorage.getItem("quranSurah") || "0");
   const lastSurahName = lastSurahNum > 0 ? (SURAH_NAMES[lastSurahNum] || `Surah ${lastSurahNum}`) : null;
 
-  // Dhikr state
   const [dhikrState] = useState(() => {
     try { return JSON.parse(localStorage.getItem("tasbeeh") || "{}"); } catch { return {}; }
   });
-  const dhikrIdx    = dhikrState.idx ?? 0;
-  const dhikrCount  = dhikrState.count ?? 0;
-  const dhikr       = DHIKR_PRESETS[Math.min(dhikrIdx, DHIKR_PRESETS.length - 1)];
+  const dhikrIdx   = dhikrState.idx ?? 0;
+  const dhikrCount = dhikrState.count ?? 0;
+  const dhikr      = DHIKR_PRESETS[Math.min(dhikrIdx, DHIKR_PRESETS.length - 1)];
 
   function photonToLoc(f) {
     const p = f.properties;
@@ -251,10 +292,10 @@ export default function Home({ quote, verseQuote, setPage, savedLocation, onSave
         const T = json.data.timings;
         setTimings(T);
         const nowM = new Date().getHours()*60 + new Date().getMinutes();
-        let found = null, foundIdx = -1;
+        let found = null;
         for (let i = 0; i < PRAYER_KEYS.length; i++) {
           const [h,m] = T[PRAYER_KEYS[i]].split(":").map(Number);
-          if (h*60+m > nowM) { found = { name:PRAYER_KEYS[i], time:T[PRAYER_KEYS[i]], totalMins:h*60+m }; foundIdx = i; break; }
+          if (h*60+m > nowM) { found = { name:PRAYER_KEYS[i], time:T[PRAYER_KEYS[i]], totalMins:h*60+m }; break; }
         }
         if (!found) {
           const [h,m] = T["Fajr"].split(":").map(Number);
@@ -276,13 +317,20 @@ export default function Home({ quote, verseQuote, setPage, savedLocation, onSave
   const DAY = isSq ? DAY_SQ : DAY_EN;
   const MON = isSq ? MON_SQ : MON_EN;
   const PR  = isSq ? PR_SQ  : PR_EN;
+  const SL  = isSq ? STRIP_LBL_SQ : STRIP_LBL_EN;
 
-  const nowMins  = now.getHours()*60 + now.getMinutes();
-  const dayPct   = Math.round((nowMins / (24*60)) * 100);
+  const nowSecs   = now.getHours()*3600 + now.getMinutes()*60 + now.getSeconds();
+  const nowMins   = now.getHours()*60 + now.getMinutes();
+  const dayPct    = Math.round((nowMins / (24*60)) * 100);
 
-  const minsLeft = nextPrayer ? nextPrayer.totalMins - nowMins : 0;
-  const hLeft = Math.floor(minsLeft/60), mLeft = minsLeft%60;
-  const inLabel = minsLeft <= 0 ? "" : hLeft > 0 ? `${hLeft}h ${mLeft}m` : `${mLeft}m`;
+  const totalSecLeft = nextPrayer ? nextPrayer.totalMins * 60 - nowSecs : 0;
+  const hLeft = Math.max(0, Math.floor(totalSecLeft / 3600));
+  const mLeft = Math.max(0, Math.floor((totalSecLeft % 3600) / 60));
+  const sLeft = Math.max(0, totalSecLeft % 60);
+  const inLabel = totalSecLeft <= 0 ? "" : hLeft > 0 ? `${hLeft}h ${mLeft}m` : `${mLeft}m`;
+
+  // Clock hands for prayer time
+  const [clockH, clockM] = nextPrayer?.time ? nextPrayer.time.split(":").map(Number) : [0, 0];
 
   const nextIdx = nextPrayer
     ? (nextPrayer.totalMins > 1440 ? 5 : PRAYER_KEYS.indexOf(nextPrayer.name))
@@ -294,6 +342,9 @@ export default function Home({ quote, verseQuote, setPage, savedLocation, onSave
     if (i === nextIdx && nextIdx < 5) return "next";
     return "future";
   }
+
+  // Verse of the day ref: "Quran 17:70" → "17:70"
+  const verseRef = verseQuote?.src?.replace("Quran ", "") || "";
 
   const FEATURES = [
     { id:"quran",   icon:"quran",   en:"Quran",    sq:"Kurani",      subEn:"Read & listen",         subSq:"Lexo & dëgo" },
@@ -378,26 +429,15 @@ export default function Home({ quote, verseQuote, setPage, savedLocation, onSave
         </div>
       )}
 
-      {/* ── Header ────────────────────────────────────────────────────── */}
-      <div style={{ padding:"16px 20px 0", display:"flex", justifyContent:"space-between", alignItems:"center" }}>
-        <div>
-          <div style={{ fontSize:12, color:W.muted, fontFamily:SA }}>{isSq ? "Es-selamu alejkum" : "Assalamu Alaikum"}</div>
-          <div style={{ fontSize:20, fontWeight:600, fontFamily:SR, color:W.text, marginTop:1 }}>
-            {DAY[today.getDay()]}, {today.getDate()} {MON[today.getMonth()]}
-          </div>
-          <div style={{ fontSize:11, color:W.muted, fontFamily:SA, marginTop:1 }}>
-            {hijri.day} {HM[hijri.month-1]} {hijri.year} AH
-          </div>
-        </div>
-        <img src="/logo.png" alt="" style={{ width:38, height:38, borderRadius:10, objectFit:"contain" }}/>
-      </div>
-
       {/* ── Next Prayer Banner ────────────────────────────────────────── */}
-      <div style={{ margin:"14px 20px 0", background:G.green700, borderRadius:18, padding:"18px 20px", position:"relative", overflow:"hidden" }}>
-        <div style={{ position:"absolute", right:-16, top:-16, width:100, height:100, borderRadius:"50%", background:"rgba(255,255,255,0.05)", pointerEvents:"none" }}/>
-        <div style={{ position:"absolute", right:20, bottom:-30, width:80, height:80, borderRadius:"50%", background:"rgba(255,255,255,0.04)", pointerEvents:"none" }}/>
+      <div style={{ margin:"14px 20px 0", background:`linear-gradient(135deg,#1A2F0E 0%,${G.green700} 40%,#3A6320 70%,#4A7A28 100%)`, borderRadius:18, padding:"18px 20px 14px", position:"relative", overflow:"hidden" }}>
+        {/* geometric pattern overlay */}
+        <div style={{ position:"absolute", inset:0, backgroundImage:`url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='rgba(255,255,255,0.04)' stroke-width='1'%3E%3Cpolygon points='30,2 58,16 58,44 30,58 2,44 2,16'/%3E%3Cpolygon points='30,12 48,21 48,39 30,48 12,39 12,21'/%3E%3C/g%3E%3C/svg%3E")`, pointerEvents:"none" }}/>
+        {/* gold radial accent */}
+        <div style={{ position:"absolute", inset:0, background:"radial-gradient(ellipse at 70% 0%,rgba(184,157,96,0.18) 0%,transparent 60%)", pointerEvents:"none" }}/>
 
-        <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start" }}>
+        {/* top row: label + location */}
+        <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center" }}>
           <div style={{ fontSize:11, fontWeight:600, letterSpacing:"0.06em", textTransform:"uppercase", color:G.green300, fontFamily:SA }}>
             {isSq ? "Namazi i ardhshëm" : "Next Prayer"}
           </div>
@@ -412,20 +452,47 @@ export default function Home({ quote, verseQuote, setPage, savedLocation, onSave
           </button>
         </div>
 
-        <div style={{ fontSize:28, fontWeight:600, fontFamily:SR, color:"white", marginTop:4 }} onClick={() => setPage("prayer")}>
-          {nextPrayer
-            ? `${PR[nextPrayer.name]} · ${fmtTime(nextPrayer.time)}`
-            : savedLocation
-              ? "…"
-              : (isSq ? "Vendosni qytetin" : "Set your location")}
+        {/* main row: name+countdown left, clock right */}
+        <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", marginTop:10, gap:12 }}>
+          <div style={{ flex:1 }}>
+            <div
+              style={{ fontSize:30, fontWeight:700, fontFamily:SR, color:"white", lineHeight:1.1, cursor:"pointer" }}
+              onClick={() => setPage("prayer")}
+            >
+              {nextPrayer
+                ? (PR[nextPrayer.name] || nextPrayer.name)
+                : savedLocation ? "…" : (isSq ? "Vendos qytetin" : "Set location")}
+            </div>
+            {nextPrayer && (
+              <div style={{ fontSize:13, color:G.green300, marginTop:3, fontFamily:SA }}>
+                {fmtTime(nextPrayer.time)}{inLabel ? ` · ${isSq?"në":"in"} ${inLabel}` : ""}
+              </div>
+            )}
+            {/* Countdown */}
+            {nextPrayer && totalSecLeft > 0 && (
+              <div style={{ marginTop:10 }}>
+                <div style={{ fontSize:32, fontWeight:700, color:"#FFFFFF", fontFamily:"'Courier New', monospace", letterSpacing:"0.04em", lineHeight:1 }}>
+                  {pad2(hLeft)}:{pad2(mLeft)}:{pad2(sLeft)}
+                </div>
+                <div style={{ fontSize:10, color:G.green300, fontFamily:SA, letterSpacing:"0.08em", textTransform:"uppercase", marginTop:3 }}>
+                  {isSq ? "Deri në Ezan" : "Until Adhan"}
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Analog clock */}
+          {nextPrayer && (
+            <div style={{ flexShrink:0, display:"flex", flexDirection:"column", alignItems:"center", gap:4 }}>
+              <AnalogClock hour={clockH} minute={clockM} size={72}/>
+              <div style={{ fontSize:13, fontWeight:600, color:"rgba(255,255,255,0.85)", fontFamily:SA, textAlign:"center" }}>
+                {pad2(clockH % 12 || 12)}:{pad2(clockM)}
+              </div>
+            </div>
+          )}
         </div>
 
-        {nextPrayer && inLabel && (
-          <div style={{ fontSize:13, color:G.green300, marginTop:3, fontFamily:SA }}>
-            {isSq ? `Në ${inLabel}` : `In ${inLabel}`}{savedLocation?.name ? ` · ${savedLocation.name}` : ""}
-          </div>
-        )}
-
+        {/* day progress */}
         <div style={{ marginTop:14, height:4, background:"rgba(255,255,255,0.15)", borderRadius:99, overflow:"hidden" }}>
           <div style={{ height:"100%", width:`${dayPct}%`, background:G.green300, borderRadius:99 }}/>
         </div>
@@ -434,98 +501,185 @@ export default function Home({ quote, verseQuote, setPage, savedLocation, onSave
         </div>
       </div>
 
-      {/* ── Today's Prayers ──────────────────────────────────────────── */}
-      <div style={{ margin:"20px 20px 0" }}>
-        <div style={{ fontSize:11, fontWeight:600, letterSpacing:"0.06em", textTransform:"uppercase", color:W.muted, marginBottom:8, fontFamily:SA }}>
-          {isSq ? "Namazet e sotme" : "Today's Prayers"}
-        </div>
-        <div style={{ background:"#fff", border:`1px solid ${W.borderLight}`, borderRadius:14, overflow:"hidden", boxShadow:W.shadow }}>
-          {PRAYER_KEYS.map((key, i) => {
-            const status = prayerStatus(i);
-            const isLast = i === PRAYER_KEYS.length - 1;
-            return (
-              <div key={key} style={{
-                display:"flex", alignItems:"center", padding:"11px 16px",
-                borderBottom: isLast ? "none" : `1px solid ${G.green50}`,
-                background: status === "next" ? G.green50 : "#fff",
-              }}>
-                <div style={{
-                  width:24, height:24, borderRadius:"50%", marginRight:12, flexShrink:0,
-                  background: status === "done" ? G.green700 : "#fff",
-                  border: `1.5px solid ${status === "done" ? G.green700 : G.green100}`,
-                  display:"flex", alignItems:"center", justifyContent:"center",
+      {/* ── Prayer Times Strip ────────────────────────────────────────── */}
+      {timings && (
+        <div style={{ margin:"12px 20px 0" }}>
+          <div style={{
+            display:"flex", gap:6, overflowX:"auto", paddingBottom:2,
+            scrollbarWidth:"none", msOverflowStyle:"none",
+          }}
+            className="hide-scrollbar"
+          >
+            {STRIP_KEYS.map((key, i) => {
+              const isPrayer = PRAYER_KEYS.includes(key);
+              const pIdx     = PRAYER_KEYS.indexOf(key);
+              const status   = isPrayer ? prayerStatus(pIdx) : (pIdx === -1 && nextIdx > 0 ? "done" : "future");
+              const isNext   = isPrayer && status === "next";
+              const isDone   = isPrayer && status === "done";
+              const time     = timings?.[key];
+              return (
+                <div key={key} style={{
+                  flexShrink:0, textAlign:"center",
+                  padding:"8px 12px", borderRadius:12,
+                  background: isNext ? G.green700 : isDone ? G.green50 : "#fff",
+                  border: `1px solid ${isNext ? G.green600 : isDone ? G.green100 : W.borderLight}`,
+                  minWidth:58,
                 }}>
-                  {status === "done" && (
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                      <polyline points="20 6 9 17 4 12"/>
-                    </svg>
-                  )}
-                  {status === "next" && (
-                    <div style={{ width:7, height:7, borderRadius:"50%", background:G.green700 }}/>
-                  )}
-                </div>
-                <div style={{ flex:1 }}>
-                  <div style={{ fontSize:14, fontWeight: status === "next" ? 600 : 500, color: status === "next" ? G.green700 : W.text, fontFamily:SA }}>
-                    {PR[key]}
+                  <div style={{ fontSize:10, fontWeight:600, letterSpacing:"0.05em", textTransform:"uppercase", fontFamily:SA, color: isNext ? G.green300 : isDone ? G.green500 : W.muted, marginBottom:4 }}>
+                    {SL[key]}
                   </div>
-                </div>
-                <div style={{ fontSize:13, color: status === "next" ? G.green700 : W.muted, fontWeight: status === "next" ? 600 : 400, fontFamily:SA }}>
-                  {timings?.[key] ? fmtTime(timings[key]) : "--:--"}
-                </div>
-                {status === "next" && (
-                  <div style={{ marginLeft:8, padding:"2px 8px", borderRadius:999, background:G.green700, color:"#fff", fontSize:10, fontWeight:700, fontFamily:SA, letterSpacing:"0.04em" }}>
-                    {isSq ? "Tjetri" : "Next"}
+                  <div style={{ fontSize:13, fontWeight: isNext ? 700 : 500, color: isNext ? "#fff" : isDone ? G.green700 : W.text, fontFamily:SA }}>
+                    {time ? fmtTime(time).replace(" AM","").replace(" PM","") : "--:--"}
                   </div>
-                )}
-              </div>
-            );
-          })}
+                  {isDone && (
+                    <div style={{ marginTop:4, display:"flex", justifyContent:"center" }}>
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke={G.green500} strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                        <polyline points="20 6 9 17 4 12"/>
+                      </svg>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
         </div>
-      </div>
+      )}
 
-      {/* ── Continue Reading ─────────────────────────────────────────── */}
-      <div style={{ margin:"20px 20px 0" }}>
-        <div style={{ fontSize:11, fontWeight:600, letterSpacing:"0.06em", textTransform:"uppercase", color:W.muted, marginBottom:8, fontFamily:SA }}>
-          {isSq ? "Vazhdo Leximin" : "Continue Reading"}
-        </div>
+      {/* ── Quran Card (dark green) ───────────────────────────────────── */}
+      <div style={{ margin:"16px 20px 0" }}>
         <div
           onClick={() => setPage("quran")}
-          style={{ background:"#fff", border:`1px solid ${W.borderLight}`, borderRadius:14, padding:16, cursor:"pointer", boxShadow:W.shadow, transition:"box-shadow 0.18s,transform 0.18s" }}
-          onMouseEnter={e => { e.currentTarget.style.boxShadow=W.shadowHov; e.currentTarget.style.transform="translateY(-2px)"; }}
-          onMouseLeave={e => { e.currentTarget.style.boxShadow=W.shadow; e.currentTarget.style.transform=""; }}
+          style={{
+            background: G.green700, borderRadius:16, padding:"18px 20px",
+            cursor:"pointer", position:"relative", overflow:"hidden",
+            boxShadow:"0 4px 16px rgba(45,80,24,0.25)",
+            transition:"transform 0.18s, box-shadow 0.18s",
+          }}
+          onMouseEnter={e => { e.currentTarget.style.transform="translateY(-2px)"; e.currentTarget.style.boxShadow="0 8px 24px rgba(45,80,24,0.35)"; }}
+          onMouseLeave={e => { e.currentTarget.style.transform=""; e.currentTarget.style.boxShadow="0 4px 16px rgba(45,80,24,0.25)"; }}
         >
-          <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center" }}>
-            <div>
-              {lastSurahName ? (
+          <div style={{ position:"absolute", right:-10, top:-10, width:80, height:80, borderRadius:"50%", background:"rgba(255,255,255,0.05)", pointerEvents:"none" }}/>
+          <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start" }}>
+            <div style={{ flex:1, minWidth:0 }}>
+              <div style={{ fontSize:10, fontWeight:700, letterSpacing:"0.10em", textTransform:"uppercase", color:G.green300, fontFamily:SA, marginBottom:4 }}>
+                {isSq ? "Kurani" : "Quran"}
+              </div>
+              <div style={{ fontSize:18, fontWeight:700, fontFamily:SR, color:"#FFFFFF", marginBottom:2 }}>
+                {isSq ? "Lexo, Dëgo, Studyo" : "Read, Listen, Study"}
+              </div>
+              <div style={{ fontSize:12, color:"rgba(255,255,255,0.65)", fontFamily:SA, marginBottom:14 }}>
+                {isSq ? "Me transliterim & tefsir" : "With transliteration & tafsir"}
+              </div>
+
+              {verseQuote && (
                 <>
-                  <div style={{ fontSize:11, fontWeight:600, letterSpacing:"0.06em", textTransform:"uppercase", color:G.green700, fontFamily:SA, marginBottom:4 }}>
-                    {lastSurahName}
+                  <div style={{ fontSize:9, fontWeight:700, letterSpacing:"0.10em", textTransform:"uppercase", color:W.gold, fontFamily:SA, marginBottom:6 }}>
+                    {isSq ? `Ajeti i ditës · ${verseRef}` : `Verse of the Day · ${verseRef}`}
                   </div>
-                  <div style={{ fontSize:15, fontWeight:600, fontFamily:SR, color:W.text }}>
-                    {isSq ? "Vazhdo ku ndave" : "Continue where you left off"}
+                  <div style={{ fontSize:15, fontFamily:AA, color:"rgba(255,255,255,0.90)", direction:"rtl", lineHeight:1.8, marginBottom:6 }}>
+                    {/* Arabic placeholder — show reference since we have translation only */}
                   </div>
-                </>
-              ) : (
-                <>
-                  <div style={{ fontSize:11, fontWeight:600, letterSpacing:"0.06em", textTransform:"uppercase", color:G.green700, fontFamily:SA, marginBottom:4 }}>
-                    {isSq ? "Kurani" : "Quran"}
-                  </div>
-                  <div style={{ fontSize:15, fontWeight:600, fontFamily:SR, color:W.text }}>
-                    {isSq ? "Fillo të lexosh sot" : "Start reading today"}
+                  <div style={{ fontSize:12, fontStyle:"italic", color:"rgba(255,255,255,0.75)", fontFamily:SR, lineHeight:1.5 }}>
+                    "{isSq && verseQuote.sq ? verseQuote.sq : verseQuote.text}"
                   </div>
                 </>
               )}
-              <div style={{ fontSize:12, color:W.muted, marginTop:2, fontFamily:SA }}>
-                {isSq ? "114 sure · Arabisht & përkthim" : "114 surahs · Arabic & translation"}
+            </div>
+            <div style={{ marginLeft:12, flexShrink:0 }}>
+              <Icon name="chevron" size={20} color="rgba(255,255,255,0.6)" sw={2}/>
+            </div>
+          </div>
+          {lastSurahName && (
+            <div style={{ marginTop:12, paddingTop:10, borderTop:"1px solid rgba(255,255,255,0.12)", display:"flex", alignItems:"center", gap:6 }}>
+              <span style={{ fontSize:10, color:G.green300, fontFamily:SA }}>
+                {isSq ? "Vazhdo:" : "Continue:"} <strong style={{color:"rgba(255,255,255,0.8)"}}>{lastSurahName}</strong>
+              </span>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* ── Hadith of the Day ────────────────────────────────────────── */}
+      {quote && (
+        <div style={{ margin:"16px 20px 0" }}>
+          <div style={{
+            background:"#fff",
+            border:`1px solid ${W.borderLight}`,
+            borderLeft:`3px solid ${W.gold}`,
+            borderRadius:14, padding:"16px 18px",
+            boxShadow:W.shadowSm,
+          }}>
+            <div style={{ fontSize:10, fontWeight:700, letterSpacing:"0.10em", textTransform:"uppercase", color:W.gold, fontFamily:SA, marginBottom:8 }}>
+              {isSq ? "Hadithi i ditës" : "Hadith of the Day"}
+            </div>
+            <div style={{ fontSize:14, fontStyle:"italic", color:W.text, fontFamily:SR, lineHeight:1.65, marginBottom:8 }}>
+              "{isSq && quote.sq ? quote.sq : quote.text}"
+            </div>
+            <div style={{ fontSize:11, color:W.mutedDark, fontFamily:SA }}>
+              — {quote.src}{quote.ref ? ` · ${quote.ref}` : ""}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ── Calendar + Dua Row ───────────────────────────────────────── */}
+      <div style={{ padding:"0 20px", marginTop:16 }}>
+        <div className="home-grid-2">
+
+          {/* Calendar */}
+          <div
+            onClick={() => setPage("dates")}
+            style={{ borderRadius:18, overflow:"hidden", cursor:"pointer", background:"#fff", border:`1px solid ${W.borderLight}`, boxShadow:W.shadowSm, transition:"transform 0.18s,box-shadow 0.18s" }}
+            onMouseEnter={e => { e.currentTarget.style.transform="translateY(-2px)"; e.currentTarget.style.boxShadow=W.shadowHov; }}
+            onMouseLeave={e => { e.currentTarget.style.transform=""; e.currentTarget.style.boxShadow=W.shadowSm; }}
+          >
+            <div style={{ background:`linear-gradient(135deg,${W.gold},${W.goldDark})`, padding:"10px 14px", display:"flex", alignItems:"center", justifyContent:"space-between" }}>
+              <div style={{ fontSize:10, fontWeight:600, letterSpacing:"0.08em", textTransform:"uppercase", color:"rgba(255,255,255,0.8)", fontFamily:SA }}>
+                {MON[today.getMonth()]} {today.getFullYear()}
+              </div>
+              <div style={{ fontFamily:AA, fontSize:13, color:"#fff", direction:"rtl" }}>
+                {hijri.day} {HM[hijri.month - 1]}
               </div>
             </div>
-            <Icon name="chevron" size={20} color={G.green700} sw={2}/>
+            <div style={{ padding:"12px 14px" }}>
+              <div style={{ fontFamily:"'Courier New', monospace", fontSize:34, fontWeight:700, color:W.text, lineHeight:1 }}>
+                {today.getDate()}
+              </div>
+              <div style={{ fontSize:12, color:W.muted, marginTop:3, fontFamily:SA }}>
+                {DAY[today.getDay()]}
+              </div>
+              <div style={{ marginTop:8, padding:"5px 8px", background:W.warmBg, borderRadius:8, display:"flex", alignItems:"center", gap:5 }}>
+                <div style={{ width:5, height:5, background:W.gold, borderRadius:"50%", flexShrink:0 }}/>
+                <div style={{ fontSize:10, color:W.mutedDark, fontFamily:SA }}>
+                  {hijri.day} {HM[hijri.month - 1]} {hijri.year}
+                </div>
+              </div>
+            </div>
           </div>
+
+          {/* Dua */}
+          <div
+            onClick={() => setPage("dua")}
+            style={{ borderRadius:18, background:"linear-gradient(160deg,#FBF7EE 0%,#F3EBDA 100%)", border:`1px solid ${W.border}`, padding:"18px 16px", cursor:"pointer", transition:"transform 0.18s,box-shadow 0.18s", boxShadow:W.shadowSm }}
+            onMouseEnter={e => { e.currentTarget.style.transform="translateY(-2px)"; e.currentTarget.style.boxShadow=W.shadowHov; }}
+            onMouseLeave={e => { e.currentTarget.style.transform=""; e.currentTarget.style.boxShadow=W.shadowSm; }}
+          >
+            <div style={{ width:38, height:38, borderRadius:"50%", background:"rgba(184,157,96,0.15)", display:"flex", alignItems:"center", justifyContent:"center", marginBottom:12 }}>
+              <Icon name="dua" size={18} color={W.goldDark} sw={1.8}/>
+            </div>
+            <div style={{ fontSize:16, fontWeight:600, fontFamily:SR, color:W.text, marginBottom:4 }}>
+              {isSq ? "Dua" : "Dua"}
+            </div>
+            <div style={{ fontSize:12, color:W.muted, fontFamily:SA, lineHeight:1.5 }}>
+              {isSq ? "Lutje për çdo moment" : "Supplications for every moment"}
+            </div>
+          </div>
+
         </div>
       </div>
 
       {/* ── Daily Dhikr ──────────────────────────────────────────────── */}
-      <div style={{ margin:"20px 20px 0" }}>
+      <div style={{ margin:"16px 20px 0" }}>
         <div style={{ fontSize:11, fontWeight:600, letterSpacing:"0.06em", textTransform:"uppercase", color:W.muted, marginBottom:8, fontFamily:SA }}>
           {isSq ? "Dhikr-u i ditës" : "Daily Dhikr"}
         </div>
@@ -581,6 +735,9 @@ export default function Home({ quote, verseQuote, setPage, savedLocation, onSave
         </div>
       </div>
 
+      <style>{`
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+      `}</style>
     </div>
   );
 }
