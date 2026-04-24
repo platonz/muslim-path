@@ -3732,7 +3732,14 @@ function QuranPage() {
   const [fullLoading, setFullLoading] = useState(false);
   const [playingVerse, setPlayingVerse] = useState(null);
   const [audioError, setAudioError] = useState(false);
-  const [reciter, setReciter] = useState("ar.alafasy");
+  const [reciter, setReciter] = useState("Alafasy_128kbps");
+  const RECITERS = {
+    "Alafasy_128kbps":              "Alafasy",
+    "AbdulBaset_Murattal_128kbps":  "Abdul Basit",
+    "Saad_Al-Ghamid_128kbps":       "Saad Al-Ghamdi",
+    "Husary_128kbps":               "Husary",
+    "Minshawi_128kbps":             "Minshawi",
+  };
   const [showTafsir, setShowTafsir] = useState(false);
   const [tafsirVerse, setTafsirVerse] = useState(null);
   const [tafsirText, setTafsirText] = useState("");
@@ -3793,13 +3800,15 @@ function QuranPage() {
     return bookmarks.some(b => b.key === current + ":" + verseN);
   }
 
-  function getAudioUrl(globalN) {
-    return `https://cdn.islamic.network/quran/audio/128/${reciter}/${globalN}.mp3`;
+  function getAudioUrl(surahN, verseN) {
+    const s = String(surahN).padStart(3, "0");
+    const v = String(verseN).padStart(3, "0");
+    return `https://everyayah.com/data/${reciter}/${s}${v}.mp3`;
   }
 
   function playVerse(v) {
-    if (!audioRef.current || !v.globalN) return;
-    if (playingVerse?.globalN === v.globalN) {
+    if (!audioRef.current || !v.n) return;
+    if (playingVerse?.n === v.n) {
       if (audioRef.current.paused) {
         audioRef.current.play();
         setPlayingVerse(v);
@@ -3810,7 +3819,7 @@ function QuranPage() {
       return;
     }
     setAudioError(false);
-    audioRef.current.src = getAudioUrl(v.globalN);
+    audioRef.current.src = getAudioUrl(current, v.n);
     audioRef.current.play().catch(() => {
       setAudioError(true);
       setPlayingVerse(null);
@@ -3824,11 +3833,11 @@ function QuranPage() {
 
   function handleAudioEnd() {
     if (!playingVerse) return;
-    const idx = verses.findIndex(v => v.globalN === playingVerse.globalN);
+    const idx = verses.findIndex(v => v.n === playingVerse.n);
     if (idx >= 0 && idx < verses.length - 1) {
       const next = verses[idx + 1];
-      if (audioRef.current && next.globalN) {
-        audioRef.current.src = getAudioUrl(next.globalN);
+      if (audioRef.current && next.n) {
+        audioRef.current.src = getAudioUrl(current, next.n);
         audioRef.current.play().catch(() => { setAudioError(true); setPlayingVerse(null); });
         setPlayingVerse(next);
         setTimeout(() => {
@@ -3852,11 +3861,10 @@ function QuranPage() {
     }
     setTafsirLoading(true);
     try {
-      const res = await fetch(`https://api.qurancdn.com/api/qdc/tafsirs/${tafsirId}/by_chapter/${current}`);
-      const data = await res.json();
       const verseKey = `${current}:${v.n}`;
-      const entry = data.tafsirs?.find(t => t.verse_key === verseKey);
-      const text = entry?.text?.replace(/<[^>]+>/g, "").replace(/\s+/g, " ").trim() || "No tafsir found for this verse.";
+      const res = await fetch(`https://api.qurancdn.com/api/qdc/tafsirs/${tafsirId}/by_ayah/${verseKey}`);
+      const data = await res.json();
+      const text = data.tafsir?.text?.replace(/<[^>]+>/g, "").replace(/\s+/g, " ").trim() || "No tafsir found for this verse.";
       tafsirCache.current.set(key, text);
       setTafsirText(text);
     } catch {
@@ -3883,7 +3891,7 @@ function QuranPage() {
     if (!current) return;
     setLoadingRead(true); setVerses([]); setFromCache(false);
     setVerseSearch(""); setVsOpen(false);
-    setPlayingVerse(null);
+    setPlayingVerse(null); setAudioError(false);
     if (audioRef.current) { audioRef.current.pause(); audioRef.current.src = ""; }
 
     // Try offline cache first
@@ -4022,8 +4030,8 @@ function QuranPage() {
   // ── READER VIEW ────────────────────────────────────────────────
   if (current && surah) return (
     <>
-    <audio ref={audioRef} onEnded={handleAudioEnd} style={{ display: "none" }} />
-    <div style={{ maxWidth: 780, margin: "0 auto", padding: "40px 24px", transition: "margin-right 0.3s", marginRight: showTafsir ? 340 : undefined }} ref={topRef}>
+    <audio ref={audioRef} onEnded={handleAudioEnd} onError={() => { setAudioError(true); setPlayingVerse(null); }} style={{ display: "none" }} />
+    <div style={{ maxWidth: 860, margin: "0 auto", padding: "40px 24px", position: "relative", zIndex: 2, transition: "margin-right 0.3s", marginRight: showTafsir ? 340 : undefined }} ref={topRef}>
       {/* Header */}
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 32, flexWrap: "wrap", gap: 12 }}>
         <button onClick={back} style={{ background: "none", border: `1px solid ${BORDER}`, borderRadius: 8, color: MUTED, padding: "7px 16px", cursor: "pointer", fontSize: 12, fontFamily: SANS, letterSpacing: "0.06em" }}>
@@ -4071,11 +4079,9 @@ function QuranPage() {
               fontSize: 11, fontFamily: SANS, outline: "none",
             }}
           >
-            <option value="ar.alafasy">Alafasy</option>
-            <option value="ar.abdulbasitmurattal">Abdul Basit</option>
-            <option value="ar.saadalghamdi">Saad Al-Ghamdi</option>
-            <option value="ar.husary">Husary</option>
-            <option value="ar.minshawi">Minshawi</option>
+            {Object.entries(RECITERS).map(([key, label]) => (
+              <option key={key} value={key}>{label}</option>
+            ))}
           </select>
           {/* Tafsir toggle */}
           <button onClick={() => {
@@ -4227,8 +4233,8 @@ function QuranPage() {
       {/* Verses */}
       <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
         {verses.map((v, i) => {
-          const isPlaying = playingVerse?.globalN === v.globalN && audioRef.current && !audioRef.current.paused;
-          const isActive  = playingVerse?.globalN === v.globalN;
+          const isPlaying = playingVerse?.n === v.n && audioRef.current && !audioRef.current.paused;
+          const isActive  = playingVerse?.n === v.n;
           return (
           <div key={v.n} id={`verse-${v.n}`} style={{
             padding: "28px 0", borderBottom: `1px solid ${BORDER}`,
@@ -4358,7 +4364,7 @@ function QuranPage() {
         <div style={{ padding: "20px 18px", flex: 1 }}>
           {!tafsirVerse ? (
             <div style={{ color: MUTED, fontSize: 13, fontFamily: SANS, lineHeight: 1.7, textAlign: "center", paddingTop: 40 }}>
-              Loading…
+              Tap a verse number to load tafsir.
             </div>
           ) : (
             <>
