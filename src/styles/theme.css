@@ -362,3 +362,37 @@ input, select, textarea { color-scheme: light; }
   from { opacity: 0; }
   to   { opacity: 1; }
 }
+@keyframes pulse-ring {
+  0%   { box-shadow: 0 0 0 0 rgba(184,157,96,0.7); }
+  70%  { box-shadow: 0 0 0 6px rgba(184,157,96,0); }
+  100% { box-shadow: 0 0 0 0 rgba(184,157,96,0); }
+}
+
+/* ─── HOME: PRAYER HERO GRID ────────────────────────────── */
+.prayer-hero-grid {
+  display: grid;
+  grid-template-columns: 1fr 260px;
+  gap: 24px;
+  position: relative;
+  z-index: 1;
+}
+.prayer-name-big { font-size: 56px; }
+@media (max-width: 720px) {
+  .prayer-hero-grid { grid-template-columns: 1fr; }
+  .prayer-right-col { display: none; }
+  .prayer-name-big  { font-size: 40px; }
+}
+
+/* ─── HOME: CONTENT GRIDS ───────────────────────────────── */
+.home-grid-2     { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+.home-grid-3     { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+.home-grid-4     { display: grid; grid-template-columns: repeat(4,1fr); gap: 14px; margin-bottom: 20px; }
+.home-grid-tools { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+
+@media (max-width: 720px) {
+  .home-grid-2, .home-grid-3, .home-grid-4 { grid-template-columns: 1fr 1fr; }
+  .home-grid-tools { grid-template-columns: 1fr; }
+}
+@media (max-width: 480px) {
+  .home-grid-2, .home-grid-3, .home-grid-4, .home-grid-tools { grid-template-columns: 1fr; }
+}
