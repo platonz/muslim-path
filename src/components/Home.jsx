@@ -222,7 +222,7 @@ export default function Home({ quote, verseQuote, setPage, savedLocation, onSave
   const isMobile = window.innerWidth < 768;
   const [installDismissed, setInstallDismissed] = useState(() => !!localStorage.getItem("mp-install-dismissed"));
 
-  const prayerMethod = parseInt(localStorage.getItem("mp-prayer-method") || "1");
+  const prayerMethod = parseInt(localStorage.getItem("mp-prayer-method") || "99");
   const prayerSchool = parseInt(localStorage.getItem("mp-prayer-school") || "1");
 
   const lastSurahNum = parseInt(localStorage.getItem("quranSurah") || "0");
@@ -285,7 +285,10 @@ export default function Home({ quote, verseQuote, setPage, savedLocation, onSave
     if (!savedLocation) return;
     const d = new Date();
     const dateStr = `${d.getDate()}-${d.getMonth()+1}-${d.getFullYear()}`;
-    fetch(`https://api.aladhan.com/v1/timings/${dateStr}?latitude=${savedLocation.lat}&longitude=${savedLocation.lon}&method=${prayerMethod}&school=${prayerSchool}`)
+    const homeParams = prayerMethod === 99
+      ? `method=99&school=1&methodSettings=15,null,15`
+      : `method=${prayerMethod}&school=${prayerSchool}`;
+    fetch(`https://api.aladhan.com/v1/timings/${dateStr}?latitude=${savedLocation.lat}&longitude=${savedLocation.lon}&${homeParams}`)
       .then(r => r.json())
       .then(json => {
         if (json.code !== 200) return;

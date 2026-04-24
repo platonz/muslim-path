@@ -20,11 +20,12 @@ const SR = "'Playfair Display', Georgia, serif";
 const SA = "'Inter', -apple-system, BlinkMacSystemFont, sans-serif";
 
 const CALC_METHODS = [
-  { v: 1, l: "MWL",         full: "Muslim World League" },
-  { v: 2, l: "ISNA",        full: "ISNA (North America)" },
-  { v: 3, l: "Egyptian",    full: "Egyptian General Authority" },
-  { v: 4, l: "Umm al-Qura", full: "Umm al-Qura, Makkah" },
-  { v: 5, l: "Karachi",     full: "Univ. of Islamic Sciences, Karachi" },
+  { v: 99, l: "BIK",         full: "Bashkësia Islame e Kosovës" },
+  { v: 1,  l: "MWL",         full: "Muslim World League" },
+  { v: 2,  l: "ISNA",        full: "ISNA (North America)" },
+  { v: 3,  l: "Egyptian",    full: "Egyptian General Authority" },
+  { v: 4,  l: "Umm al-Qura", full: "Umm al-Qura, Makkah" },
+  { v: 5,  l: "Karachi",     full: "Univ. of Islamic Sciences, Karachi" },
 ];
 const FONT_SIZES = ["Small", "Normal", "Large", "X-Large"];
 const ASR_SCHOOLS = [
