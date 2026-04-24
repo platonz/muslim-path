@@ -3731,6 +3731,7 @@ function QuranPage() {
   });
   const [fullLoading, setFullLoading] = useState(false);
   const [playingVerse, setPlayingVerse] = useState(null);
+  const [audioError, setAudioError] = useState(false);
   const [reciter, setReciter] = useState("ar.alafasy");
   const [showTafsir, setShowTafsir] = useState(false);
   const [tafsirVerse, setTafsirVerse] = useState(null);
@@ -3808,8 +3809,12 @@ function QuranPage() {
       }
       return;
     }
+    setAudioError(false);
     audioRef.current.src = getAudioUrl(v.globalN);
-    audioRef.current.play().catch(() => {});
+    audioRef.current.play().catch(() => {
+      setAudioError(true);
+      setPlayingVerse(null);
+    });
     setPlayingVerse(v);
     setTimeout(() => {
       const el = document.getElementById(`verse-${v.n}`);
@@ -3824,7 +3829,7 @@ function QuranPage() {
       const next = verses[idx + 1];
       if (audioRef.current && next.globalN) {
         audioRef.current.src = getAudioUrl(next.globalN);
-        audioRef.current.play().catch(() => {});
+        audioRef.current.play().catch(() => { setAudioError(true); setPlayingVerse(null); });
         setPlayingVerse(next);
         setTimeout(() => {
           const el = document.getElementById(`verse-${next.n}`);
@@ -3837,6 +3842,7 @@ function QuranPage() {
   }
 
   async function loadTafsir(v) {
+    setShowTafsir(true);
     setTafsirVerse(v);
     setTafsirText("");
     const key = `${tafsirId}:${current}:${v.n}`;
@@ -4072,13 +4078,27 @@ function QuranPage() {
             <option value="ar.minshawi">Minshawi</option>
           </select>
           {/* Tafsir toggle */}
-          <button onClick={() => setShowTafsir(s => !s)} style={{
+          <button onClick={() => {
+            const opening = !showTafsir;
+            setShowTafsir(opening);
+            if (opening && verses.length > 0 && !tafsirVerse) {
+              loadTafsir(verses[0]);
+            }
+          }} style={{
             background: showTafsir ? GREEN_L : "transparent", border: `1px solid ${showTafsir ? GOLD : BORDER}`,
             borderRadius: 8, color: showTafsir ? GOLD : MUTED, padding: "7px 14px", cursor: "pointer",
             fontSize: 11, fontFamily: SANS, letterSpacing: "0.06em",
           }}>Tafsir</button>
         </div>
       </div>
+
+      {/* Audio error banner */}
+      {audioError && (
+        <div style={{ background: "#FFF3F3", border: "1px solid #E0AAAA", borderRadius: 8, padding: "10px 14px", marginBottom: 16, fontSize: 12, color: "#8A2020", fontFamily: SANS, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+          <span>Audio failed to load. Check your connection or try a different reciter.</span>
+          <button onClick={() => setAudioError(false)} style={{ background: "none", border: "none", cursor: "pointer", color: "#8A2020", fontSize: 16, padding: "0 4px", lineHeight: 1 }}>×</button>
+        </div>
+      )}
 
       {/* Verse search */}
       {verses.length > 0 && (
@@ -4237,16 +4257,17 @@ function QuranPage() {
                 >{isActive && !audioRef.current?.paused ? "⏸" : "▶"}</button>
                 {/* Verse number badge — click to load tafsir */}
                 <div
-                  onClick={() => { if (showTafsir) loadTafsir(v); }}
+                  onClick={() => loadTafsir(v)}
                   style={{
-                    width: 32, height: 32, borderRadius: "50%", border: `1px solid ${showTafsir && tafsirVerse?.n === v.n ? GOLD : GOLD + "50"}`,
+                    width: 32, height: 32, borderRadius: "50%",
+                    border: `1px solid ${tafsirVerse?.n === v.n ? GOLD : GOLD + "50"}`,
                     display: "flex", alignItems: "center", justifyContent: "center",
-                    fontSize: 11, color: showTafsir && tafsirVerse?.n === v.n ? GOLD : GOLD + "99", fontFamily: SANS,
-                    cursor: showTafsir ? "pointer" : "default",
-                    background: showTafsir && tafsirVerse?.n === v.n ? GREEN_L : "transparent",
+                    fontSize: 11, color: tafsirVerse?.n === v.n ? GOLD : GOLD + "99", fontFamily: SANS,
+                    cursor: "pointer",
+                    background: tafsirVerse?.n === v.n ? GREEN_L : "transparent",
                     transition: "all 0.15s",
                   }}
-                  title={showTafsir ? "Load tafsir for this verse" : undefined}
+                  title="Load tafsir for this verse"
                 >{v.n}</div>
                 <button onClick={() => toggleBookmark(v)} title={isBookmarked(v.n) ? "Remove bookmark" : "Bookmark verse"} style={{
                   background: "none", border: "none", cursor: "pointer",
@@ -4337,7 +4358,7 @@ function QuranPage() {
         <div style={{ padding: "20px 18px", flex: 1 }}>
           {!tafsirVerse ? (
             <div style={{ color: MUTED, fontSize: 13, fontFamily: SANS, lineHeight: 1.7, textAlign: "center", paddingTop: 40 }}>
-              Click a verse number to load its tafsir.
+              Loading…
             </div>
           ) : (
             <>
