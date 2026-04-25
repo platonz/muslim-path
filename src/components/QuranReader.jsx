@@ -716,71 +716,46 @@ export default function QuranReader() {
             </div>
           ) : (
             <>
-              {/* ── Surah Hero ─────────────────────────────────────── */}
-              <div style={{ background: T.olive, padding: "16px 40px", flexShrink: 0, position: "relative", overflow: "hidden" }}>
-                <div style={{ position: "absolute", inset: 0, backgroundImage: "repeating-linear-gradient(45deg, transparent, transparent 20px, rgba(255,255,255,0.015) 20px, rgba(255,255,255,0.015) 21px)", pointerEvents: "none" }} />
-
-                {/* Top row: back + controls */}
-                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 20, position: "relative", zIndex: 1 }}>
-                  <button
-                    onClick={() => {
-                      if (isMobile) { setSidebarOpen(true); }
-                      else { setCurrent(null); localStorage.removeItem("quranSurah"); setPlayingVerse(null); if (audioRef.current) { audioRef.current.pause(); } }
-                    }}
-                    style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 12, fontWeight: 500, color: "rgba(255,255,255,0.55)", background: "rgba(255,255,255,0.08)", border: "none", borderRadius: 20, padding: "6px 14px", cursor: "pointer", fontFamily: T.fontBody, transition: "all 150ms" }}
-                    onMouseEnter={e => { e.currentTarget.style.background = "rgba(255,255,255,0.14)"; e.currentTarget.style.color = "white"; }}
-                    onMouseLeave={e => { e.currentTarget.style.background = "rgba(255,255,255,0.08)"; e.currentTarget.style.color = "rgba(255,255,255,0.55)"; }}
-                  >
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><polyline points="15 18 9 12 15 6" /></svg>
-                    {isSq ? "Të gjitha" : "All surahs"}
-                  </button>
-
-                  <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
-                    <select value={transEdition} onChange={e => setTransEdition(e.target.value)} style={{ background: "rgba(0,0,0,0.25)", border: "1px solid rgba(255,255,255,0.12)", borderRadius: 20, padding: "5px 14px", fontFamily: T.fontBody, fontSize: 12, fontWeight: 500, color: "rgba(255,255,255,0.75)", cursor: "pointer", outline: "none", appearance: "none" }}>
-                      <option value="en.sahih">EN — Sahih Int'l</option>
-                      <option value="en.pickthall">EN — Pickthall</option>
-                      <option value="fr.hamidullah">FR — Hamidullah</option>
-                      <option value="tr.diyanet">TR — Diyanet</option>
-                      <option value="ur.jalandhry">UR — Jalandhry</option>
-                      <option value="sq.nahi">SQ — Nahi</option>
-                    </select>
-                    <button onClick={() => setShowTranslation(v => !v)} className="qr-ctrl-pill" style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 12, fontWeight: 500, color: showTranslation ? "white" : "rgba(255,255,255,0.75)", background: showTranslation ? T.gold600 : "rgba(0,0,0,0.25)", border: `1px solid ${showTranslation ? T.gold600 : "rgba(255,255,255,0.12)"}`, borderRadius: 20, padding: "5px 14px", cursor: "pointer", fontFamily: T.fontBody, transition: "all 150ms", whiteSpace: "nowrap" }}>
-                      {isSq ? "Përkthim" : "Translation"}
-                    </button>
-                    <button onClick={() => setShowTranslit(v => !v)} className="qr-ctrl-pill" style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 12, fontWeight: 500, color: showTranslit ? "white" : "rgba(255,255,255,0.75)", background: showTranslit ? T.gold600 : "rgba(0,0,0,0.25)", border: `1px solid ${showTranslit ? T.gold600 : "rgba(255,255,255,0.12)"}`, borderRadius: 20, padding: "5px 14px", cursor: "pointer", fontFamily: T.fontBody, transition: "all 150ms", whiteSpace: "nowrap" }}>
-                      {isSq ? "Transliterim" : "Transliteration"}
-                    </button>
-                    <select value={reciter} onChange={e => { setReciter(e.target.value); setPlayingVerse(null); if (audioRef.current) { audioRef.current.pause(); } }} style={{ background: "rgba(0,0,0,0.25)", border: "1px solid rgba(255,255,255,0.12)", borderRadius: 20, padding: "5px 14px", fontFamily: T.fontBody, fontSize: 12, fontWeight: 500, color: "rgba(255,255,255,0.75)", cursor: "pointer", outline: "none", appearance: "none" }}>
-                      {Object.entries(RECITERS).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
-                    </select>
-                  </div>
+              {/* ── Surah Header (compact) ──────────────────────────── */}
+              <div style={{ background: T.olive, padding: "0 16px", height: 44, flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8 }}>
+                <button
+                  onClick={() => {
+                    if (isMobile) { setSidebarOpen(true); }
+                    else { setCurrent(null); localStorage.removeItem("quranSurah"); setPlayingVerse(null); if (audioRef.current) { audioRef.current.pause(); } }
+                  }}
+                  style={{ display: "flex", alignItems: "center", gap: 5, fontSize: 11, fontWeight: 500, color: "rgba(255,255,255,0.6)", background: "rgba(255,255,255,0.08)", border: "none", borderRadius: 20, padding: "5px 12px", cursor: "pointer", fontFamily: T.fontBody, flexShrink: 0 }}
+                >
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><polyline points="15 18 9 12 15 6" /></svg>
+                  {isSq ? "Të gjitha" : "All"}
+                </button>
+                <div style={{ textAlign: "center", flex: 1 }}>
+                  <span style={{ fontFamily: T.fontBody, fontSize: 13, fontWeight: 600, color: "white", letterSpacing: "0.02em" }}>{surah.englishName}</span>
+                  <span style={{ fontFamily: T.fontBody, fontSize: 11, color: "rgba(255,255,255,0.45)", marginLeft: 6 }}>· {surah.numberOfAyahs} {isSq ? "ajete" : "verses"}</span>
                 </div>
-
-                {/* Hero content */}
-                <div style={{ textAlign: "center", position: "relative", zIndex: 1 }}>
-                  <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: T.gold300, marginBottom: 12, fontFamily: T.fontBody }}>
-                    {isSq ? "Sure" : "Surah"} {surah.number} · {surah.revelationType} · {surah.numberOfAyahs} {isSq ? "ajete" : "verses"}
-                    {fromCache && <span style={{ marginLeft: 8, border: `1px solid ${T.gold300}40`, padding: "1px 6px", letterSpacing: "0.1em" }}>CACHED</span>}
-                  </div>
-                  <div style={{ fontFamily: T.fontArabic, fontSize: 44, color: "white", direction: "rtl", lineHeight: 1.2, marginBottom: 6, textShadow: "0 2px 20px rgba(0,0,0,0.3)" }}>
-                    سُورَةُ {surah.name}
-                  </div>
-                  <div style={{ fontFamily: T.fontDisplay, fontSize: 22, fontWeight: 600, color: "white" }}>{surah.englishName}</div>
-                  <div style={{ fontSize: 12, fontWeight: 500, letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(255,255,255,0.45)", marginTop: 4, fontFamily: T.fontBody }}>{surah.englishNameTranslation}</div>
-                  {surah.number !== 9 && (
-                    <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 12, marginTop: 18 }}>
-                      <div style={{ flex: 1, maxWidth: 80, height: 1, background: "linear-gradient(to right, transparent, rgba(212,186,136,0.5))" }} />
-                      <div style={{ fontFamily: T.fontArabic, fontSize: 26, color: "rgba(255,255,255,0.75)", direction: "rtl" }}>بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>
-                      <div style={{ flex: 1, maxWidth: 80, height: 1, background: "linear-gradient(to left, transparent, rgba(212,186,136,0.5))" }} />
-                    </div>
-                  )}
-                </div>
+                <div style={{ width: 60, flexShrink: 0 }} />
               </div>
 
               {/* ── Toolbar ────────────────────────────────────────── */}
-              <div style={{ background: T.surface, borderBottom: `1px solid ${T.warm200}`, padding: "10px 32px", display: "flex", alignItems: "center", gap: 10, flexShrink: 0, flexWrap: "wrap" }}>
+              <div style={{ background: T.surface, borderBottom: `1px solid ${T.warm200}`, padding: "8px 12px", display: "flex", alignItems: "center", gap: 6, flexShrink: 0, flexWrap: "wrap" }}>
                 <button className="qr-toolbar-btn" onClick={() => setArabicFontSize(s => Math.max(20, s - 4))} style={{ display: "flex", alignItems: "center", gap: 5, fontSize: 12, fontWeight: 500, color: T.warm600, background: "none", border: `1px solid ${T.warm200}`, borderRadius: 20, padding: "5px 12px", cursor: "pointer", fontFamily: T.fontBody, transition: "all 150ms" }}>A−</button>
                 <button className="qr-toolbar-btn" onClick={() => setArabicFontSize(s => Math.min(52, s + 4))} style={{ display: "flex", alignItems: "center", gap: 5, fontSize: 12, fontWeight: 500, color: T.warm600, background: "none", border: `1px solid ${T.warm200}`, borderRadius: 20, padding: "5px 12px", cursor: "pointer", fontFamily: T.fontBody, transition: "all 150ms" }}>A+</button>
+                <select value={transEdition} onChange={e => setTransEdition(e.target.value)} style={{ background: T.gold50, border: `1px solid ${T.warm200}`, borderRadius: 20, padding: "5px 10px", fontFamily: T.fontBody, fontSize: 11, fontWeight: 500, color: T.warm600, cursor: "pointer", outline: "none", appearance: "none" }}>
+                  <option value="en.sahih">EN — Sahih Int'l</option>
+                  <option value="en.pickthall">EN — Pickthall</option>
+                  <option value="fr.hamidullah">FR — Hamidullah</option>
+                  <option value="tr.diyanet">TR — Diyanet</option>
+                  <option value="ur.jalandhry">UR — Jalandhry</option>
+                  <option value="sq.nahi">SQ — Nahi</option>
+                </select>
+                <button onClick={() => setShowTranslation(v => !v)} style={{ fontSize: 11, fontWeight: 500, color: showTranslation ? "white" : T.warm600, background: showTranslation ? T.olive : "none", border: `1px solid ${showTranslation ? T.olive : T.warm200}`, borderRadius: 20, padding: "5px 12px", cursor: "pointer", fontFamily: T.fontBody, whiteSpace: "nowrap" }}>
+                  {isSq ? "Përkthim" : "Translation"}
+                </button>
+                <button onClick={() => setShowTranslit(v => !v)} style={{ fontSize: 11, fontWeight: 500, color: showTranslit ? "white" : T.warm600, background: showTranslit ? T.olive : "none", border: `1px solid ${showTranslit ? T.olive : T.warm200}`, borderRadius: 20, padding: "5px 12px", cursor: "pointer", fontFamily: T.fontBody, whiteSpace: "nowrap" }}>
+                  {isSq ? "Transliterim" : "Translit"}
+                </button>
+                <select value={reciter} onChange={e => { setReciter(e.target.value); setPlayingVerse(null); if (audioRef.current) { audioRef.current.pause(); } }} style={{ background: T.gold50, border: `1px solid ${T.warm200}`, borderRadius: 20, padding: "5px 10px", fontFamily: T.fontBody, fontSize: 11, fontWeight: 500, color: T.warm600, cursor: "pointer", outline: "none", appearance: "none" }}>
+                  {Object.entries(RECITERS).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
+                </select>
 
                 {/* Verse search */}
                 <div ref={vsInputRef} style={{ position: "relative", flex: 1, minWidth: 160, maxWidth: 320 }}>
