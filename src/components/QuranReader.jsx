@@ -57,11 +57,12 @@ const RECITERS = [
   { id: 8, label: "Abu Bakr Al-Shatri" },
 ];
 
+// quran.com API v4 tafsir IDs (CORS-enabled, no key needed)
 const TAFSIR_SOURCES = [
-  { id: "ibn_kathir",    label: "Ibn Kathir (EN)" },
-  { id: "maarif",        label: "Ma'arif al-Qur'an (EN)" },
-  { id: "muyassar",      label: "Al-Muyassar (AR)" },
-  { id: "ibn_kathir_ar", label: "Ibn Kathir (AR)" },
+  { id: "169", label: "Ibn Kathir (EN)" },
+  { id: "168", label: "Ma'arif al-Qur'an (EN)" },
+  { id: "16",  label: "Al-Muyassar (AR)" },
+  { id: "14",  label: "Ibn Kathir (AR)" },
 ];
 
 // ─── VERSE MEDALLION ─────────────────────────────────────────────────────────
@@ -259,7 +260,7 @@ export default function QuranReader() {
   const [tafsirVerse,     setTafsirVerse]     = useState(null);
   const [tafsirText,      setTafsirText]      = useState("");
   const [tafsirLoading,   setTafsirLoading]   = useState(false);
-  const [tafsirId,        setTafsirId]        = useState("ibn_kathir");
+  const [tafsirId,        setTafsirId]        = useState("169");
   const [fromCache,       setFromCache]       = useState(false);
   const [isMobile,       setIsMobile]        = useState(() => window.innerWidth < 768);
   const [sidebarOpen,    setSidebarOpen]     = useState(() => window.innerWidth >= 768);
@@ -491,12 +492,15 @@ export default function QuranReader() {
     }
     setTafsirLoading(true);
     try {
-      const res = await ummahFetch(`https://ummahapi.com/api/tafsir/${srcId}/surah/${current}/ayah/${v.n}`);
+      const res = await fetch(`https://api.quran.com/api/v4/tafsirs/${srcId}/by_ayah/${v.globalN}`);
       if (!res.ok) {
-        setTafsirText("No tafsir available for this verse. Ibn Kathir often covers multiple verses in one entry — try the previous verse.");
+        setTafsirText("No tafsir available for this verse.");
       } else {
         const data = await res.json();
-        const text = data.data?.tafsir?.text?.replace(/<[^>]+>/g, "").replace(/\s+/g, " ").trim() || "No tafsir available for this verse.";
+        const text = (data.tafsir?.text || "")
+          .replace(/<[^>]+>/g, "")
+          .replace(/\s+/g, " ")
+          .trim() || "No tafsir available for this verse.";
         tafsirCache.current.set(key, text);
         setTafsirText(text);
       }
