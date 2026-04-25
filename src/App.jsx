@@ -9,6 +9,7 @@ import Profile from "./components/Profile";
 import Icon from "./components/Icon";
 import KaabaWatermark from "./components/KaabaWatermark";
 import MobileTabBar from "./components/MobileTabBar";
+import QuranReader from "./components/QuranReader";
 
 // ─── QUOTES ────────────────────────────────────────────────────────
 const QUOTES = [
@@ -2978,7 +2979,7 @@ export default function App() {
         {page === "library" && <Library navigate={navigate} />}
         {page === "audio" && <AudioPage {...audioProps} />}
         {page === "tasbeeh" && <Dhikr />}
-        {page === "quran"   && <QuranPage />}
+        {page === "quran"   && <QuranReader />}
         {page === "profile" && <Profile authUser={authUser} onSignOut={handleSignOut} notifEnabled={notifEnabled} onNotifToggle={handleNotifToggle} savedLocation={savedLocation} navigate={navigate} />}
         {page === "dua"     && <DuaPage favs={duaFavs} onFav={toggleDuaFav} />}
         {page === "asma"    && <AsmaPage />}
