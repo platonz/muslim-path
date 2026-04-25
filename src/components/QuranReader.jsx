@@ -492,7 +492,7 @@ export default function QuranReader() {
     }
     setTafsirLoading(true);
     try {
-      const res = await fetch(`https://api.quran.com/api/v4/tafsirs/${srcId}/by_ayah/${v.globalN}`);
+      const res = await fetch(`https://api.quran.com/api/v4/tafsirs/${srcId}/by_ayah/${current}:${v.n}`);
       if (!res.ok) {
         setTafsirText("No tafsir available for this verse.");
       } else {
