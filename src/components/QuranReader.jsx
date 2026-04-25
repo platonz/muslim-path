@@ -58,9 +58,16 @@ const RECITERS = [
 ];
 
 // quran.com API v4 tafsir IDs (CORS-enabled, no key needed)
-const TAFSIR_SOURCES = [
+const TAFSIR_SOURCES_EN = [
   { id: "169", label: "Ibn Kathir (EN)" },
   { id: "168", label: "Ma'arif al-Qur'an (EN)" },
+];
+
+// Albanian translations used as tafsir sources (alquran.cloud)
+const TAFSIR_SOURCES_SQ = [
+  { id: "sq.ahmeti", label: "Sherif Ahmeti (SQ)" },
+  { id: "sq.mehdiu", label: "Feti Mehdiu (SQ)" },
+  { id: "sq.nahi",   label: "Hasan Nahi (SQ)" },
 ];
 
 // ─── VERSE MEDALLION ─────────────────────────────────────────────────────────
@@ -99,8 +106,8 @@ function ActionBtn({ children, title, active, onClick }) {
 }
 
 // ─── TAFSIR MODAL ─────────────────────────────────────────────────────────────
-function TafsirModal({ verse, surahName, onClose, onPrev, onNext, hasPrev, hasNext, tafsirId, onTafsirIdChange, tafsirText, tafsirLoading }) {
-  const [tab, setTab] = useState(TAFSIR_SOURCES[0].id);
+function TafsirModal({ verse, surahName, onClose, onPrev, onNext, hasPrev, hasNext, tafsirId, onTafsirIdChange, tafsirText, tafsirLoading, sources }) {
+  const [tab, setTab] = useState(sources[0].id);
   const bodyRef = useRef(null);
 
   useEffect(() => {
@@ -112,6 +119,9 @@ function TafsirModal({ verse, surahName, onClose, onPrev, onNext, hasPrev, hasNe
   useEffect(() => {
     if (bodyRef.current) bodyRef.current.scrollTop = 0;
   }, [verse, tab]);
+
+  // Reset tab when source list changes (language switch)
+  useEffect(() => { setTab(sources[0].id); }, [sources]);
 
   // Sync tab → tafsirId
   useEffect(() => { onTafsirIdChange(tab); }, [tab]);
@@ -155,7 +165,7 @@ function TafsirModal({ verse, surahName, onClose, onPrev, onNext, hasPrev, hasNe
 
         {/* Tabs */}
         <div style={{ display: "flex", gap: 4, padding: "0 24px", flexShrink: 0, borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
-          {TAFSIR_SOURCES.map(src => (
+          {sources.map(src => (
             <button
               key={src.id}
               onClick={() => setTab(src.id)}
@@ -246,7 +256,8 @@ export default function QuranReader({ playQuranAudio, globalCurrentId, globalPla
   const [tafsirVerse,     setTafsirVerse]     = useState(null);
   const [tafsirText,      setTafsirText]      = useState("");
   const [tafsirLoading,   setTafsirLoading]   = useState(false);
-  const [tafsirId,        setTafsirId]        = useState("169");
+  const tafsirSources = isSq ? TAFSIR_SOURCES_SQ : TAFSIR_SOURCES_EN;
+  const [tafsirId,        setTafsirId]        = useState(() => isSq ? "sq.ahmeti" : "169");
   const [fromCache,       setFromCache]       = useState(false);
   const [isMobile,       setIsMobile]        = useState(() => window.innerWidth < 768);
   const [sidebarOpen,    setSidebarOpen]     = useState(() => window.innerWidth >= 768);
@@ -469,12 +480,17 @@ export default function QuranReader({ playQuranAudio, globalCurrentId, globalPla
     }
     setTafsirLoading(true);
     try {
-      const res = await fetch(`https://api.quran.com/api/v4/tafsirs/${srcId}/by_ayah/${current}:${v.n}`);
+      const isAlbanian = srcId.startsWith("sq.");
+      const url = isAlbanian
+        ? `https://api.alquran.cloud/v1/ayah/${current}:${v.n}/${srcId}`
+        : `https://api.quran.com/api/v4/tafsirs/${srcId}/by_ayah/${current}:${v.n}`;
+      const res = await fetch(url);
       if (!res.ok) {
         setTafsirText("No tafsir available for this verse.");
       } else {
         const data = await res.json();
-        const text = (data.tafsir?.text || "")
+        const raw = isAlbanian ? data.data?.text : data.tafsir?.text;
+        const text = (raw || "")
           .replace(/<[^>]+>/g, "")
           .replace(/\s+/g, " ")
           .trim() || "No tafsir available for this verse.";
@@ -959,6 +975,7 @@ export default function QuranReader({ playQuranAudio, globalCurrentId, globalPla
           }}
           tafsirText={tafsirText}
           tafsirLoading={tafsirLoading}
+          sources={tafsirSources}
         />
       )}
     </>
