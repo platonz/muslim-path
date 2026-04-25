@@ -61,8 +61,6 @@ const RECITERS = [
 const TAFSIR_SOURCES = [
   { id: "169", label: "Ibn Kathir (EN)" },
   { id: "168", label: "Ma'arif al-Qur'an (EN)" },
-  { id: "16",  label: "Al-Muyassar (AR)" },
-  { id: "14",  label: "Ibn Kathir (AR)" },
 ];
 
 // ─── VERSE MEDALLION ─────────────────────────────────────────────────────────
@@ -148,11 +146,8 @@ function TafsirModal({ verse, surahName, onClose, onPrev, onNext, hasPrev, hasNe
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><path d="M18 6 6 18M6 6l12 12" /></svg>
             </button>
           </div>
-          <div style={{ fontFamily: T.fontArabic, fontSize: 24, color: "rgba(255,255,255,0.9)", direction: "rtl", textAlign: "right", lineHeight: 1.8, padding: "10px 14px", background: "rgba(255,255,255,0.04)", borderRadius: 10, border: "1px solid rgba(212,186,136,0.15)" }}>
-            {verse.ar}
-          </div>
           {verse.en && (
-            <div style={{ marginTop: 10, fontSize: 13, color: "rgba(255,255,255,0.5)", lineHeight: 1.7, fontStyle: "italic", fontFamily: T.fontBody, paddingLeft: 12, borderLeft: `3px solid ${T.gold600}` }}>
+            <div style={{ fontSize: 15, color: "rgba(255,255,255,0.88)", lineHeight: 1.75, fontStyle: "italic", fontFamily: T.fontBody, padding: "10px 14px", background: "rgba(255,255,255,0.04)", borderRadius: 10, border: "1px solid rgba(212,186,136,0.15)" }}>
               {verse.en}
             </div>
           )}
@@ -195,32 +190,23 @@ function TafsirModal({ verse, surahName, onClose, onPrev, onNext, hasPrev, hasNe
         </div>
 
         {/* Footer */}
-        <div style={{ padding: "14px 24px", borderTop: "1px solid rgba(255,255,255,0.07)", display: "flex", alignItems: "center", justifyContent: "space-between", flexShrink: 0 }}>
-          <select
-            value={tab}
-            onChange={e => setTab(e.target.value)}
-            style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 8, padding: "6px 12px", fontFamily: T.fontBody, fontSize: 12, color: "rgba(255,255,255,0.6)", cursor: "pointer", outline: "none" }}
+        <div style={{ padding: "14px 24px", borderTop: "1px solid rgba(255,255,255,0.07)", display: "flex", alignItems: "center", justifyContent: "center", gap: 12, flexShrink: 0 }}>
+          <button
+            disabled={!hasPrev}
+            onClick={onPrev}
+            style={{ display: "flex", alignItems: "center", gap: 5, padding: "8px 20px", borderRadius: 20, fontSize: 12, fontWeight: 500, border: "1px solid rgba(255,255,255,0.1)", background: "none", color: hasPrev ? "rgba(255,255,255,0.6)" : "rgba(255,255,255,0.2)", cursor: hasPrev ? "pointer" : "not-allowed", fontFamily: T.fontBody, transition: "all 150ms" }}
           >
-            {TAFSIR_SOURCES.map(src => <option key={src.id} value={src.id}>{src.label}</option>)}
-          </select>
-          <div style={{ display: "flex", gap: 8 }}>
-            <button
-              disabled={!hasPrev}
-              onClick={onPrev}
-              style={{ display: "flex", alignItems: "center", gap: 5, padding: "7px 14px", borderRadius: 20, fontSize: 12, fontWeight: 500, border: "1px solid rgba(255,255,255,0.1)", background: "none", color: hasPrev ? "rgba(255,255,255,0.5)" : "rgba(255,255,255,0.2)", cursor: hasPrev ? "pointer" : "not-allowed", fontFamily: T.fontBody, transition: "all 150ms" }}
-            >
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><polyline points="15 18 9 12 15 6" /></svg>
-              Previous
-            </button>
-            <button
-              disabled={!hasNext}
-              onClick={onNext}
-              style={{ display: "flex", alignItems: "center", gap: 5, padding: "7px 14px", borderRadius: 20, fontSize: 12, fontWeight: 500, border: "none", background: T.gold600, color: "white", cursor: hasNext ? "pointer" : "not-allowed", fontFamily: T.fontBody, opacity: hasNext ? 1 : 0.5, transition: "all 150ms" }}
-            >
-              Next
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><polyline points="9 18 15 12 9 6" /></svg>
-            </button>
-          </div>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><polyline points="15 18 9 12 15 6" /></svg>
+            Previous
+          </button>
+          <button
+            disabled={!hasNext}
+            onClick={onNext}
+            style={{ display: "flex", alignItems: "center", gap: 5, padding: "8px 20px", borderRadius: 20, fontSize: 12, fontWeight: 500, border: "none", background: T.gold600, color: "white", cursor: hasNext ? "pointer" : "not-allowed", fontFamily: T.fontBody, opacity: hasNext ? 1 : 0.5, transition: "all 150ms" }}
+          >
+            Next
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><polyline points="9 18 15 12 9 6" /></svg>
+          </button>
         </div>
       </div>
     </div>,
