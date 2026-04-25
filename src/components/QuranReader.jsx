@@ -250,6 +250,7 @@ export default function QuranReader({ playQuranAudio, globalCurrentId, globalPla
   const [fromCache,       setFromCache]       = useState(false);
   const [isMobile,       setIsMobile]        = useState(() => window.innerWidth < 768);
   const [sidebarOpen,    setSidebarOpen]     = useState(() => window.innerWidth >= 768);
+  const [loadingSurahPlay, setLoadingSurahPlay] = useState(null);
 
   const tafsirCache     = useRef(new Map());
   const audioUrlCache   = useRef(new Map());
@@ -399,6 +400,32 @@ export default function QuranReader({ playQuranAudio, globalCurrentId, globalPla
   }, [verseSearch, transEdition]);
 
   // ── Audio ──────────────────────────────────────────────────────────────────
+  async function playSurahFromList(surahNum, surahName, e) {
+    e.stopPropagation();
+    if (globalCurrentId?.startsWith(`quran-${surahNum}-`)) { onTogglePlay?.(); return; }
+    setLoadingSurahPlay(surahNum);
+    try {
+      let sv;
+      try {
+        const cached = localStorage.getItem(`qv_${surahNum}_${transEdition}`);
+        if (cached) { const p = JSON.parse(cached); if (p[0]?.globalN) sv = p; }
+      } catch {}
+      if (!sv) {
+        const res = await fetch(`https://api.alquran.cloud/v1/surah/${surahNum}/editions/quran-uthmani,en.transliteration,${transEdition}`);
+        const d = await res.json();
+        const [ar, translit, trans] = d.data;
+        sv = ar.ayahs.map((a, i) => ({ n: a.numberInSurah, globalN: a.number, ar: a.text, tr: translit.ayahs[i]?.text || "", en: trans.ayahs[i]?.text || "" }));
+        try { localStorage.setItem(`qv_${surahNum}_${transEdition}`, JSON.stringify(sv)); } catch {}
+      }
+      const url = await getAudioUrl(surahNum, 1, reciter);
+      if (!url) return;
+      if (quranPlaylistRef) quranPlaylistRef.current = { verses: sv, surahN: surahNum, surahName, reciter };
+      const id = `quran-${surahNum}-1`;
+      playQuranAudio?.(url, { id, title: `${surahName} · 1`, type: "quran", surahN: surahNum, surahName, verseN: 1 });
+    } catch {}
+    setLoadingSurahPlay(null);
+  }
+
   async function getAudioUrl(surahN, verseN, reciterId) {
     const key = `${reciterId}:${surahN}:${verseN}`;
     if (audioUrlCache.current.has(key)) return audioUrlCache.current.get(key);
@@ -628,6 +655,38 @@ export default function QuranReader({ playQuranAudio, globalCurrentId, globalPla
                         {s.numberOfAyahs} {isSq ? "ajete" : "verses"} · {s.revelationType}
                       </div>
                     </div>
+                    {(() => {
+                      const isPlayingThis = globalCurrentId?.startsWith(`quran-${s.number}-`);
+                      const isLoading = loadingSurahPlay === s.number;
+                      return (
+                        <button
+                          onClick={(e) => playSurahFromList(s.number, s.englishName, e)}
+                          style={{
+                            width: 30, height: 30, borderRadius: "50%", flexShrink: 0,
+                            background: isPlayingThis ? "rgba(212,186,136,0.22)" : "rgba(255,255,255,0.06)",
+                            border: `1px solid ${isPlayingThis ? "rgba(212,186,136,0.4)" : "rgba(255,255,255,0.1)"}`,
+                            display: "flex", alignItems: "center", justifyContent: "center",
+                            cursor: "pointer", color: isPlayingThis ? T.gold300 : "rgba(255,255,255,0.5)",
+                            transition: "all 150ms", padding: 0,
+                          }}
+                        >
+                          {isLoading ? (
+                            <svg width="12" height="12" viewBox="0 0 12 12" style={{ animation: "spin 1s linear infinite" }}>
+                              <circle cx="6" cy="6" r="5" fill="none" stroke="currentColor" strokeWidth="1.5" strokeDasharray="20" strokeDashoffset="5" strokeLinecap="round"/>
+                            </svg>
+                          ) : isPlayingThis && globalPlaying ? (
+                            <svg width="10" height="10" viewBox="0 0 10 10" fill="currentColor">
+                              <rect x="1.5" y="1" width="2.5" height="8" rx="1"/>
+                              <rect x="6" y="1" width="2.5" height="8" rx="1"/>
+                            </svg>
+                          ) : (
+                            <svg width="10" height="10" viewBox="0 0 10 10" fill="currentColor" style={{ marginLeft: 1 }}>
+                              <path d="M2 1.5l7 3.5-7 3.5V1.5z"/>
+                            </svg>
+                          )}
+                        </button>
+                      );
+                    })()}
                   </div>
                 );
               })
