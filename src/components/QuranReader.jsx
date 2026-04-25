@@ -255,11 +255,41 @@ export default function QuranReader() {
   const [tafsirLoading,   setTafsirLoading]   = useState(false);
   const [tafsirId,        setTafsirId]        = useState(169);
   const [fromCache,       setFromCache]       = useState(false);
+  const [isMobile,       setIsMobile]        = useState(() => window.innerWidth < 768);
+  const [sidebarOpen,    setSidebarOpen]     = useState(() => window.innerWidth >= 768);
 
-  const audioRef       = useRef(null);
-  const tafsirCache    = useRef(new Map());
+  const audioRef        = useRef(null);
+  const tafsirCache     = useRef(new Map());
   const pendingVerseRef = useRef(null);
-  const vsInputRef     = useRef(null);
+  const vsInputRef      = useRef(null);
+  const touchStartX     = useRef(null);
+  const touchStartY     = useRef(null);
+
+  // Mobile resize detection
+  useEffect(() => {
+    const handle = () => {
+      const mobile = window.innerWidth < 768;
+      setIsMobile(mobile);
+      if (!mobile) setSidebarOpen(true);
+    };
+    window.addEventListener("resize", handle);
+    return () => window.removeEventListener("resize", handle);
+  }, []);
+
+  // Swipe-to-open/close sidebar on mobile
+  function onTouchStart(e) {
+    touchStartX.current = e.touches[0].clientX;
+    touchStartY.current = e.touches[0].clientY;
+  }
+  function onTouchEnd(e) {
+    if (touchStartX.current === null) return;
+    const dx = e.changedTouches[0].clientX - touchStartX.current;
+    const dy = Math.abs(e.changedTouches[0].clientY - touchStartY.current);
+    if (dy > Math.abs(dx)) { touchStartX.current = null; return; }
+    if (dx > 50 && touchStartX.current < 40) setSidebarOpen(true);
+    if (dx < -50 && sidebarOpen) setSidebarOpen(false);
+    touchStartX.current = null;
+  }
 
   // ── Derived ────────────────────────────────────────────────────────────────
   const surah = surahs.find(s => s.number === current) ?? null;
@@ -477,6 +507,7 @@ export default function QuranReader() {
     if (verseN) pendingVerseRef.current = verseN;
     setCurrent(num);
     localStorage.setItem("quranSurah", num);
+    if (isMobile) setSidebarOpen(false);
   }
 
   function navSurah(dir) {
@@ -511,18 +542,47 @@ export default function QuranReader() {
 
       <audio ref={audioRef} onEnded={handleAudioEnd} onError={() => { setAudioError(true); setPlayingVerse(null); }} style={{ display: "none" }} />
 
+      {/* ── Mobile backdrop ────────────────────────────────────────────── */}
+      {isMobile && sidebarOpen && (
+        <div
+          onClick={() => setSidebarOpen(false)}
+          style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.45)", zIndex: 199, top: 102 }}
+        />
+      )}
+
       {/* ── Outer layout: sidebar + reader ─────────────────────────────── */}
-      <div style={{ display: "flex", height: "calc(100vh - 102px)", overflow: "hidden", background: T.sand }}>
+      <div
+        style={{ display: "flex", height: "calc(100vh - 102px)", overflow: "hidden", background: T.sand, position: "relative" }}
+        onTouchStart={onTouchStart}
+        onTouchEnd={onTouchEnd}
+      >
 
         {/* ════════════════════════════════════════
             SIDEBAR
         ════════════════════════════════════════ */}
-        <aside style={{ width: 300, background: T.dark900, display: "flex", flexDirection: "column", borderRight: "1px solid rgba(255,255,255,0.06)", flexShrink: 0 }}>
+        <aside style={isMobile ? {
+          position: "fixed", top: 102, left: 0, bottom: 0, width: 300,
+          background: T.dark900, display: "flex", flexDirection: "column",
+          borderRight: "1px solid rgba(255,255,255,0.06)",
+          transform: sidebarOpen ? "translateX(0)" : "translateX(-100%)",
+          transition: "transform 260ms cubic-bezier(0.25,0.46,0.45,0.94)",
+          zIndex: 200, overflowY: "hidden",
+        } : {
+          width: 300, background: T.dark900, display: "flex", flexDirection: "column",
+          borderRight: "1px solid rgba(255,255,255,0.06)", flexShrink: 0,
+        }}>
 
           {/* Sidebar header */}
-          <div style={{ padding: "20px 20px 12px", flexShrink: 0 }}>
-            <div style={{ fontFamily: T.fontDisplay, fontSize: 20, fontWeight: 600, color: "white", marginBottom: 12 }}>
-              {isSq ? "Kurani" : "Quran"}
+          <div style={{ padding: "16px 20px 12px", flexShrink: 0 }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12 }}>
+              <div style={{ fontFamily: T.fontDisplay, fontSize: 20, fontWeight: 600, color: "white" }}>
+                {isSq ? "Kurani" : "Quran"}
+              </div>
+              {isMobile && (
+                <button onClick={() => setSidebarOpen(false)} style={{ width: 32, height: 32, borderRadius: 8, background: "rgba(255,255,255,0.08)", border: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", color: "rgba(255,255,255,0.6)", flexShrink: 0 }}>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+                </button>
+              )}
             </div>
             <div style={{ display: "flex", alignItems: "center", gap: 8, background: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 10, padding: "0 12px" }}>
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.35)" strokeWidth="2" strokeLinecap="round"><circle cx="11" cy="11" r="8" /><path d="m21 21-4.35-4.35" /></svg>
@@ -536,7 +596,7 @@ export default function QuranReader() {
           </div>
 
           {/* Sidebar tabs */}
-          <div style={{ display: "flex", padding: "0 20px", gap: 4, marginBottom: 8, flexShrink: 0 }}>
+          <div style={{ display: "flex", flexDirection: isMobile ? "column" : "row", padding: "0 20px", gap: 4, marginBottom: 8, flexShrink: 0 }}>
             {[
               { id: "surah", label: isSq ? "Sure" : "Surah" },
               { id: "bookmarks", label: isSq ? "Shënime" : "Bookmarks" },
@@ -585,9 +645,6 @@ export default function QuranReader() {
                         {s.numberOfAyahs} {isSq ? "ajete" : "verses"} · {s.revelationType}
                       </div>
                     </div>
-                    <div style={{ fontFamily: T.fontArabic, fontSize: 16, color: isActive ? T.gold400 : "rgba(255,255,255,0.4)", direction: "rtl", flexShrink: 0 }}>
-                      {s.name}
-                    </div>
                   </div>
                 );
               })
@@ -608,7 +665,6 @@ export default function QuranReader() {
                       <div style={{ fontSize: 13, color: "rgba(255,255,255,0.88)", fontFamily: T.fontBody }}>{b.surahEn} · {isSq ? "Varg" : "Verse"} {b.verse}</div>
                       <div style={{ fontSize: 11, color: "rgba(255,255,255,0.35)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{b.preview}</div>
                     </div>
-                    <div style={{ fontFamily: T.fontArabic, fontSize: 16, color: T.gold400, flexShrink: 0, direction: "rtl" }}>{b.surahAr}</div>
                   </div>
                 ))
               )
@@ -624,6 +680,12 @@ export default function QuranReader() {
           {!current || !surah ? (
             /* ── Landing ───────────────────────────────────────────── */
             <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: 48, textAlign: "center" }}>
+              {isMobile && (
+                <button onClick={() => setSidebarOpen(true)} style={{ display: "flex", alignItems: "center", gap: 8, padding: "10px 20px", background: T.dark900, border: "none", borderRadius: 24, cursor: "pointer", color: "white", fontSize: 14, fontWeight: 600, fontFamily: T.fontBody, marginBottom: 32 }}>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+                  {isSq ? "Shfaq suret" : "Browse Surahs"}
+                </button>
+              )}
               <div style={{ fontFamily: T.fontArabic, fontSize: 56, color: T.gold600, direction: "rtl", lineHeight: 1.4, marginBottom: 20, opacity: 0.7 }}>
                 بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ
               </div>
@@ -661,7 +723,10 @@ export default function QuranReader() {
                 {/* Top row: back + controls */}
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 20, position: "relative", zIndex: 1 }}>
                   <button
-                    onClick={() => { setCurrent(null); localStorage.removeItem("quranSurah"); setPlayingVerse(null); if (audioRef.current) { audioRef.current.pause(); } }}
+                    onClick={() => {
+                      if (isMobile) { setSidebarOpen(true); }
+                      else { setCurrent(null); localStorage.removeItem("quranSurah"); setPlayingVerse(null); if (audioRef.current) { audioRef.current.pause(); } }
+                    }}
                     style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 12, fontWeight: 500, color: "rgba(255,255,255,0.55)", background: "rgba(255,255,255,0.08)", border: "none", borderRadius: 20, padding: "6px 14px", cursor: "pointer", fontFamily: T.fontBody, transition: "all 150ms" }}
                     onMouseEnter={e => { e.currentTarget.style.background = "rgba(255,255,255,0.14)"; e.currentTarget.style.color = "white"; }}
                     onMouseLeave={e => { e.currentTarget.style.background = "rgba(255,255,255,0.08)"; e.currentTarget.style.color = "rgba(255,255,255,0.55)"; }}
