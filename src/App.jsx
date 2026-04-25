@@ -3019,7 +3019,7 @@ export default function App() {
 
       <audio ref={audioRef} onTimeUpdate={onTimeUpdate} onEnded={handleAudioEnd} onLoadedMetadata={() => setDuration(audioRef.current?.duration || 0)} />
       <Navbar page={page} setPage={navigate} onSettings={() => setShowSettings(true)} hasLocation={!!savedLocation} onSearch={() => setShowSearch(true)} authUser={authUser} onAuthClick={() => setShowAuth(true)} onSignOut={handleSignOut} />
-      <LangBar page={page} />
+      {page === "home" && <LangBar page={page} />}
       <main>
         {page === "home" && <Home quote={quote} verseQuote={verseQuote} setPage={navigate} savedLocation={savedLocation} onSaveLocation={loc => { saveSavedLocation(loc); handleSaveLocation(loc); }} showInstall={showInstall} onInstall={handleInstall} onDismissInstall={dismissInstall} />}
         {page === "prayer" && <PrayerTimes savedLocation={savedLocation} />}
@@ -3062,7 +3062,7 @@ export default function App() {
         />
       )}
       {/* Back button — top-left on mobile, bottom-left on desktop */}
-      {navHistory.length > 0 && (
+      {page !== "home" && navHistory.length > 0 && (
         <button onClick={goBack} title="Go back" className="back-btn" style={{
           position: "fixed",
           bottom: current ? 80 : 24,
