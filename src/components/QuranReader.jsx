@@ -31,7 +31,7 @@ const T = {
 
 // ─── UMMAH API ───────────────────────────────────────────────────────────────
 const UMMAH_KEY = "umh_19513cb42f6754b8129635dd79f7ddc01d237fad";
-const ummahFetch = (url) => fetch(url, { headers: { "X-API-Key": UMMAH_KEY } });
+const ummahFetch = (url) => fetch(`${url}?apikey=${UMMAH_KEY}`);
 
 // ─── MODULE-LEVEL CACHES ─────────────────────────────────────────────────────
 let _surahCache = null;
