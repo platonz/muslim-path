@@ -750,6 +750,19 @@ const LECTURES = [
   { id:18, title:"Vendimi dhe Përcaktimi — Pjesa 2",            file:"vendimi dhe përcaktimi-2.mp3" },
 ].map(l => ({ ...l, url: R2 + "/audio/Ligjerata/" + encodeURIComponent(l.file) }));
 
+// ─── QURAN AUDIO URL RESOLVER ─────────────────────────────────────
+const _UMMAH_KEY = "umh_19513cb42f6754b8129635dd79f7ddc01d237fad";
+const _quranUrlCache = new Map();
+async function resolveQuranUrl(surahN, verseN, reciterId) {
+  const key = `${reciterId}:${surahN}:${verseN}`;
+  if (_quranUrlCache.has(key)) return _quranUrlCache.get(key);
+  const res = await fetch(`https://ummahapi.com/api/quran/surah/${surahN}/ayah/${verseN}?apikey=${_UMMAH_KEY}`);
+  const data = await res.json();
+  const entry = Array.isArray(data.data?.audio) ? data.data.audio.find(a => a.reciter_id === reciterId) : null;
+  const url = entry?.ayah_audio || null;
+  if (url) _quranUrlCache.set(key, url);
+  return url;
+}
 
 // ─── PRAYER TIMES ─────────────────────────────────────────────────
 function PrayerTimes({ savedLocation }) {
@@ -2485,7 +2498,8 @@ function pageToUrl(pageId, lang) {
 }
 
 // ─── FLOATING MINI-PLAYER ─────────────────────────────────────────
-function FloatingPlayer({ current, playing, play, skip, stop, progress, duration, fmt, navigate, minimized, setMinimized }) {
+function FloatingPlayer({ current, playing, play, togglePlay, skip, stop, progress, duration, fmt, navigate, minimized, setMinimized }) {
+  const onPlayPause = current?.type === "quran" ? togglePlay : () => play(current);
   if (!current) return null;
   const pct = duration ? (progress / duration) * 100 : 0;
 
@@ -2529,7 +2543,7 @@ function FloatingPlayer({ current, playing, play, skip, stop, progress, duration
 
         {/* Play/Pause inline */}
         <button
-          onClick={e => { e.stopPropagation(); play(current); }}
+          onClick={e => { e.stopPropagation(); onPlayPause(); }}
           title={playing ? "Pause" : "Resume"}
           style={{
             width: 28, height: 28, borderRadius: "50%",
@@ -2563,12 +2577,12 @@ function FloatingPlayer({ current, playing, play, skip, stop, progress, duration
       <div style={{ maxWidth: 900, margin: "0 auto", display: "flex", alignItems: "center", gap: 12, height: 68 }}>
         {/* Logo */}
         <img
-          src="/logo.png" alt="" onClick={() => navigate("audio")}
+          src="/logo.png" alt="" onClick={() => navigate(current?.type === "quran" ? "quran" : "audio")}
           style={{ width: 32, height: 32, objectFit: "contain", cursor: "pointer", opacity: playing ? 0.9 : 0.45, flexShrink: 0, transition: "opacity 0.3s" }}
         />
 
         {/* Track title + status */}
-        <div onClick={() => navigate("audio")} style={{ flex: 1, minWidth: 0, cursor: "pointer" }}>
+        <div onClick={() => navigate(current?.type === "quran" ? "quran" : "audio")} style={{ flex: 1, minWidth: 0, cursor: "pointer" }}>
           <div style={{ fontSize: 9, color: playing ? GOLD : MUTED, letterSpacing: "0.16em", textTransform: "uppercase", marginBottom: 2, transition: "color 0.3s" }}>
             {playing ? "Now Playing" : "Paused"}
           </div>
@@ -2588,7 +2602,7 @@ function FloatingPlayer({ current, playing, play, skip, stop, progress, duration
 
           {/* Pause / Resume */}
           <button
-            onClick={() => play(current)}
+            onClick={onPlayPause}
             title={playing ? "Pause" : "Resume"}
             style={{
               width: 40, height: 40, borderRadius: "50%",
@@ -2758,6 +2772,7 @@ export default function App() {
   const [duration, setDuration] = useState(0);
   const [playerMinimized, setPlayerMinimized] = useState(false);
   const audioRef = useRef(null);
+  const quranPlaylistRef = useRef(null); // { verses, surahN, surahName, reciter }
 
   useEffect(() => {
     if (!SUPA_URL) return;
@@ -2777,6 +2792,41 @@ export default function App() {
     }
   }
 
+  function togglePlay() {
+    if (!audioRef.current) return;
+    if (playing) { audioRef.current.pause(); setPlaying(false); }
+    else { audioRef.current.play(); setPlaying(true); }
+  }
+
+  function playQuranAudio(url, meta) {
+    if (current?.id === meta.id) { togglePlay(); return; }
+    setCurrent({ ...meta, url });
+    setProgress(0);
+    setPlaying(true);
+  }
+
+  async function skipQuranVerse(dir) {
+    const ctx = quranPlaylistRef.current;
+    if (!ctx || !current) return;
+    const { verses, surahN, surahName, reciter } = ctx;
+    const idx = verses.findIndex(v => v.n === current.verseN);
+    const next = verses[idx + dir];
+    if (!next) return;
+    try {
+      const url = await resolveQuranUrl(surahN, next.n, reciter);
+      if (!url) return;
+      const id = `quran-${surahN}-${next.n}`;
+      setCurrent({ id, title: `${surahName} · ${next.n}`, url, type: "quran", surahN, surahName, verseN: next.n });
+      setProgress(0);
+      setPlaying(true);
+    } catch {}
+  }
+
+  function handleAudioEnd() {
+    if (current?.type === "quran") skipQuranVerse(1);
+    else skipLecture(1);
+  }
+
   useEffect(() => {
     if (!current || !audioRef.current) return;
     audioRef.current.src = current.url;
@@ -2784,13 +2834,13 @@ export default function App() {
     if ("mediaSession" in navigator) {
       navigator.mediaSession.metadata = new MediaMetadata({
         title: current.title,
-        artist: "Muslim's Path",
-        album: "Ligjerata Islame",
+        artist: current.type === "quran" ? (current.surahName || "Quran") : "Muslim's Path",
+        album: current.type === "quran" ? "Quran" : "Ligjerata Islame",
       });
       navigator.mediaSession.setActionHandler("play", () => { audioRef.current.play(); setPlaying(true); });
       navigator.mediaSession.setActionHandler("pause", () => { audioRef.current.pause(); setPlaying(false); });
-      navigator.mediaSession.setActionHandler("previoustrack", () => skipLecture(-1));
-      navigator.mediaSession.setActionHandler("nexttrack", () => skipLecture(1));
+      navigator.mediaSession.setActionHandler("previoustrack", () => current?.type === "quran" ? skipQuranVerse(-1) : skipLecture(-1));
+      navigator.mediaSession.setActionHandler("nexttrack", () => current?.type === "quran" ? skipQuranVerse(1) : skipLecture(1));
       navigator.mediaSession.setActionHandler("seekbackward", () => { audioRef.current.currentTime = Math.max(0, audioRef.current.currentTime - 5); });
       navigator.mediaSession.setActionHandler("seekforward", () => { audioRef.current.currentTime = Math.min(audioRef.current.duration || 0, audioRef.current.currentTime + 5); });
     }
@@ -2955,7 +3005,8 @@ export default function App() {
     window.history.pushState({}, "", pageToUrl(prev, lang));
   }
 
-  const audioProps = { lectures, current, playing, play: playLecture, skip: skipLecture, stop: stopAudio, seek: seekAudio, progress, duration, fmt: fmtTime, audioRef, minimized: playerMinimized, setMinimized: setPlayerMinimized };
+  const skipTrack = current?.type === "quran" ? skipQuranVerse : skipLecture;
+  const audioProps = { lectures, current, playing, play: playLecture, playQuranAudio, togglePlay, skip: skipTrack, stop: stopAudio, seek: seekAudio, progress, duration, fmt: fmtTime, audioRef, minimized: playerMinimized, setMinimized: setPlayerMinimized };
 
   return (
     <div className="app-root" style={{ paddingBottom: current && !playerMinimized ? 68 : 0 }}>
@@ -2966,7 +3017,7 @@ export default function App() {
       {/* ── Global Kaaba watermark (non-home, non-quran pages) ── */}
       {page !== "home" && page !== "quran" && <KaabaWatermark fixed opacity={0.08} />}
 
-      <audio ref={audioRef} onTimeUpdate={onTimeUpdate} onEnded={() => skipLecture(1)} onLoadedMetadata={() => setDuration(audioRef.current?.duration || 0)} />
+      <audio ref={audioRef} onTimeUpdate={onTimeUpdate} onEnded={handleAudioEnd} onLoadedMetadata={() => setDuration(audioRef.current?.duration || 0)} />
       <Navbar page={page} setPage={navigate} onSettings={() => setShowSettings(true)} hasLocation={!!savedLocation} onSearch={() => setShowSearch(true)} authUser={authUser} onAuthClick={() => setShowAuth(true)} onSignOut={handleSignOut} />
       <LangBar page={page} />
       <main>
@@ -2979,7 +3030,16 @@ export default function App() {
         {page === "library" && <Library navigate={navigate} />}
         {page === "audio" && <AudioPage {...audioProps} />}
         {page === "tasbeeh" && <Dhikr />}
-        {page === "quran"   && <QuranReader />}
+        {page === "quran"   && <QuranReader
+          playQuranAudio={playQuranAudio}
+          globalCurrentId={current?.type === "quran" ? current.id : null}
+          globalPlaying={playing && current?.type === "quran"}
+          globalVerseN={current?.type === "quran" ? current.verseN : null}
+          quranPlaylistRef={quranPlaylistRef}
+          onTogglePlay={togglePlay}
+          onSkip={skipTrack}
+          onStopQuranAudio={() => { if (current?.type === "quran") stopAudio(); }}
+        />}
         {page === "profile" && <Profile authUser={authUser} onSignOut={handleSignOut} notifEnabled={notifEnabled} onNotifToggle={handleNotifToggle} savedLocation={savedLocation} navigate={navigate} />}
         {page === "dua"     && <DuaPage favs={duaFavs} onFav={toggleDuaFav} />}
         {page === "asma"    && <AsmaPage />}

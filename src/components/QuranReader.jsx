@@ -229,7 +229,7 @@ function TafsirModal({ verse, surahName, onClose, onPrev, onNext, hasPrev, hasNe
 }
 
 // ─── MAIN COMPONENT ───────────────────────────────────────────────────────────
-export default function QuranReader() {
+export default function QuranReader({ playQuranAudio, globalCurrentId, globalPlaying, globalVerseN, quranPlaylistRef, onTogglePlay, onSkip, onStopQuranAudio }) {
   const { t } = useTranslation();
   const isSq = i18n.language?.startsWith("sq");
 
@@ -265,7 +265,6 @@ export default function QuranReader() {
   const [isMobile,       setIsMobile]        = useState(() => window.innerWidth < 768);
   const [sidebarOpen,    setSidebarOpen]     = useState(() => window.innerWidth >= 768);
 
-  const audioRef        = useRef(null);
   const tafsirCache     = useRef(new Map());
   const audioUrlCache   = useRef(new Map());
   const pendingVerseRef = useRef(null);
@@ -332,10 +331,6 @@ export default function QuranReader() {
     return results;
   }, [verseSearch, transEdition, fullLoading]);
 
-  const currentPlayingVerse = playingVerse
-    ? verses.find(v => v.n === playingVerse.n) ?? null
-    : null;
-
   // ── Load surah list ────────────────────────────────────────────────────────
   useEffect(() => {
     if (_surahCache) { setSurahs(_surahCache); setLoadingList(false); return; }
@@ -351,7 +346,7 @@ export default function QuranReader() {
     setLoadingRead(true); setVerses([]); setFromCache(false);
     setVerseSearch(""); setVsOpen(false);
     setPlayingVerse(null); setAudioError(false);
-    if (audioRef.current) { audioRef.current.pause(); }
+    onStopQuranAudio?.();
 
     try {
       const cached = localStorage.getItem(`qv_${current}_${transEdition}`);
@@ -432,52 +427,21 @@ export default function QuranReader() {
   }
 
   async function playVerse(v) {
-    if (!audioRef.current || !v.n) return;
-    if (playingVerse?.n === v.n) {
-      if (audioRef.current.paused) { audioRef.current.play(); setPlayingVerse(v); }
-      else { audioRef.current.pause(); setPlayingVerse(null); }
-      return;
-    }
+    if (!v.n) return;
+    const id = `quran-${current}-${v.n}`;
+    if (globalCurrentId === id) { onTogglePlay?.(); return; }
     setAudioError(false);
     try {
       const url = await getAudioUrl(current, v.n, reciter);
       if (!url) { setAudioError(true); return; }
-      audioRef.current.src = url;
-      audioRef.current.play().catch(() => { setAudioError(true); setPlayingVerse(null); });
+      const meta = { id, title: `${surah?.englishName ?? "Surah " + current} · ${v.n}`, type: "quran", surahN: current, surahName: surah?.englishName ?? "", verseN: v.n };
+      if (quranPlaylistRef) quranPlaylistRef.current = { verses, surahN: current, surahName: surah?.englishName ?? "", reciter };
+      playQuranAudio?.(url, meta);
       setPlayingVerse(v);
       setTimeout(() => { const el = document.getElementById(`qrv-${v.n}`); el?.scrollIntoView({ behavior: "smooth", block: "center" }); }, 80);
     } catch {
       setAudioError(true);
     }
-  }
-
-  async function handleAudioEnd() {
-    if (!playingVerse) return;
-    const idx = verses.findIndex(v => v.n === playingVerse.n);
-    if (idx >= 0 && idx < verses.length - 1) {
-      const next = verses[idx + 1];
-      if (audioRef.current && next.n) {
-        try {
-          const url = await getAudioUrl(current, next.n, reciter);
-          if (!url) { setAudioError(true); setPlayingVerse(null); return; }
-          audioRef.current.src = url;
-          audioRef.current.play().catch(() => { setAudioError(true); setPlayingVerse(null); });
-          setPlayingVerse(next);
-          setTimeout(() => { const el = document.getElementById(`qrv-${next.n}`); el?.scrollIntoView({ behavior: "smooth", block: "center" }); }, 100);
-        } catch {
-          setAudioError(true); setPlayingVerse(null);
-        }
-      }
-    } else {
-      setPlayingVerse(null);
-    }
-  }
-
-  function skipVerse(dir) {
-    if (!playingVerse) return;
-    const idx = verses.findIndex(v => v.n === playingVerse.n);
-    const next = verses[idx + dir];
-    if (next) playVerse(next);
   }
 
   // ── Tafsir ─────────────────────────────────────────────────────────────────
@@ -548,7 +512,7 @@ export default function QuranReader() {
   function navSurah(dir) {
     const n = Math.min(114, Math.max(1, current + dir));
     setPlayingVerse(null);
-    if (audioRef.current) { audioRef.current.pause(); }
+    onStopQuranAudio?.();
     openSurah(n);
   }
 
@@ -574,8 +538,6 @@ export default function QuranReader() {
         .qr-ctrl-pill:hover { background: rgba(0,0,0,0.4) !important; color: white !important; }
         .qr-tafsir-btn:hover { background: ${T.gold100} !important; border-color: ${T.gold500} !important; }
       `}</style>
-
-      <audio ref={audioRef} onEnded={handleAudioEnd} onError={() => { setAudioError(true); setPlayingVerse(null); }} style={{ display: "none" }} />
 
       {/* ── Mobile backdrop ────────────────────────────────────────────── */}
       {isMobile && sidebarOpen && (
@@ -756,7 +718,7 @@ export default function QuranReader() {
                 <button
                   onClick={() => {
                     if (isMobile) { setSidebarOpen(true); }
-                    else { setCurrent(null); localStorage.removeItem("quranSurah"); setPlayingVerse(null); if (audioRef.current) { audioRef.current.pause(); } }
+                    else { setCurrent(null); localStorage.removeItem("quranSurah"); setPlayingVerse(null); onStopQuranAudio?.(); }
                   }}
                   style={{ display: "flex", alignItems: "center", gap: 5, fontSize: 11, fontWeight: 500, color: "rgba(255,255,255,0.6)", background: "rgba(255,255,255,0.08)", border: "none", borderRadius: 20, padding: "5px 12px", cursor: "pointer", fontFamily: T.fontBody, flexShrink: 0 }}
                 >
@@ -788,7 +750,7 @@ export default function QuranReader() {
                 <button onClick={() => setShowTranslit(v => !v)} style={{ fontSize: 11, fontWeight: 500, color: showTranslit ? "white" : T.warm600, background: showTranslit ? T.olive : "none", border: `1px solid ${showTranslit ? T.olive : T.warm200}`, borderRadius: 20, padding: "5px 12px", cursor: "pointer", fontFamily: T.fontBody, whiteSpace: "nowrap" }}>
                   {isSq ? "Transliterim" : "Translit"}
                 </button>
-                <select value={reciter} onChange={e => { setReciter(Number(e.target.value)); audioUrlCache.current.clear(); setPlayingVerse(null); if (audioRef.current) { audioRef.current.pause(); } }} style={{ background: T.gold50, border: `1px solid ${T.warm200}`, borderRadius: 20, padding: "5px 10px", fontFamily: T.fontBody, fontSize: 11, fontWeight: 500, color: T.warm600, cursor: "pointer", outline: "none", appearance: "none" }}>
+                <select value={reciter} onChange={e => { setReciter(Number(e.target.value)); audioUrlCache.current.clear(); setPlayingVerse(null); onStopQuranAudio?.(); }} style={{ background: T.gold50, border: `1px solid ${T.warm200}`, borderRadius: 20, padding: "5px 10px", fontFamily: T.fontBody, fontSize: 11, fontWeight: 500, color: T.warm600, cursor: "pointer", outline: "none", appearance: "none" }}>
                   {RECITERS.map(r => <option key={r.id} value={r.id}>{r.label}</option>)}
                 </select>
 
@@ -845,7 +807,7 @@ export default function QuranReader() {
                     {isSq ? "Duke ngarkuar ajetet…" : "Loading verses…"}
                   </div>
                 ) : verses.map(v => {
-                  const isActive = playingVerse?.n === v.n;
+                  const isActive = globalCurrentId === `quran-${current}-${v.n}`;
                   return (
                     <div
                       key={v.n}
@@ -874,10 +836,10 @@ export default function QuranReader() {
                         {/* Play */}
                         <button
                           onClick={e => { e.stopPropagation(); playVerse(v); }}
-                          title={isActive && audioRef.current && !audioRef.current.paused ? "Pause" : "Play verse"}
+                          title={isActive && globalPlaying ? "Pause" : "Play verse"}
                           style={{ width: 28, height: 28, borderRadius: "50%", background: isActive ? T.gold500 : T.gold600, border: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", color: "white", transition: "all 150ms", flexShrink: 0 }}
                         >
-                          {isActive && audioRef.current && !audioRef.current.paused
+                          {isActive && globalPlaying
                             ? <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16" rx="1" /><rect x="14" y="4" width="4" height="16" rx="1" /></svg>
                             : <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3" /></svg>
                           }
@@ -931,68 +893,6 @@ export default function QuranReader() {
           )}
         </main>
       </div>
-
-      {/* ════════════════════════════════════════
-          AUDIO BAR (fixed at bottom)
-      ════════════════════════════════════════ */}
-      {current && (
-        <div style={{ position: "fixed", bottom: 0, left: 300, right: 0, background: T.dark900, borderTop: "1px solid rgba(255,255,255,0.08)", padding: "0 24px", height: 72, display: "flex", alignItems: "center", gap: 16, zIndex: 50 }}>
-          {/* Info */}
-          <div style={{ width: 160, flexShrink: 0 }}>
-            <div style={{ fontSize: 13, fontWeight: 600, color: "white", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", fontFamily: T.fontBody }}>
-              {surah?.englishName ?? ""} {playingVerse ? `· ${isSq ? "Varg" : "Verse"} ${playingVerse.n}` : ""}
-            </div>
-            <div style={{ fontSize: 11, color: "rgba(255,255,255,0.4)", fontFamily: T.fontBody }}>
-              {RECITERS.find(r => r.id === reciter)?.label ?? ""}
-            </div>
-          </div>
-
-          {/* Controls */}
-          <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
-            <button onClick={() => skipVerse(-1)} style={{ width: 36, height: 36, borderRadius: 8, background: "none", border: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", color: "rgba(255,255,255,0.5)", transition: "all 150ms" }} onMouseEnter={e => { e.currentTarget.style.background = "rgba(255,255,255,0.08)"; e.currentTarget.style.color = "white"; }} onMouseLeave={e => { e.currentTarget.style.background = "none"; e.currentTarget.style.color = "rgba(255,255,255,0.5)"; }}>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="19 20 9 12 19 4" /><line x1="5" y1="4" x2="5" y2="20" stroke="currentColor" strokeWidth="2" /></svg>
-            </button>
-            <button
-              onClick={() => {
-                if (playingVerse && audioRef.current) {
-                  if (audioRef.current.paused) { audioRef.current.play(); }
-                  else { audioRef.current.pause(); setPlayingVerse(null); }
-                }
-              }}
-              style={{ width: 44, height: 44, borderRadius: "50%", background: T.gold600, border: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", color: "white", margin: "0 4px", transition: "all 150ms" }}
-              onMouseEnter={e => e.currentTarget.style.background = T.gold500}
-              onMouseLeave={e => e.currentTarget.style.background = T.gold600}
-            >
-              {playingVerse && audioRef.current && !audioRef.current.paused
-                ? <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16" rx="1" /><rect x="14" y="4" width="4" height="16" rx="1" /></svg>
-                : <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3" /></svg>
-              }
-            </button>
-            <button onClick={() => skipVerse(1)} style={{ width: 36, height: 36, borderRadius: 8, background: "none", border: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", color: "rgba(255,255,255,0.5)", transition: "all 150ms" }} onMouseEnter={e => { e.currentTarget.style.background = "rgba(255,255,255,0.08)"; e.currentTarget.style.color = "white"; }} onMouseLeave={e => { e.currentTarget.style.background = "none"; e.currentTarget.style.color = "rgba(255,255,255,0.5)"; }}>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 4 15 12 5 20" /><line x1="19" y1="4" x2="19" y2="20" stroke="currentColor" strokeWidth="2" /></svg>
-            </button>
-          </div>
-
-          {/* Progress (placeholder — no time tracking in this version) */}
-          <div style={{ flex: 1, display: "flex", alignItems: "center", gap: 10, minWidth: 0 }}>
-            <div style={{ flex: 1, height: 4, background: "rgba(255,255,255,0.12)", borderRadius: 99, position: "relative" }}>
-              <div style={{ height: "100%", width: playingVerse ? "50%" : "0%", background: T.gold600, borderRadius: 99, transition: "width 0.3s" }} />
-            </div>
-          </div>
-
-          {/* Current verse display */}
-          {playingVerse && (
-            <div style={{ flexShrink: 0, width: 140, textAlign: "right" }}>
-              <div style={{ fontSize: 11, fontWeight: 600, color: T.gold400, fontFamily: T.fontBody }}>
-                {isSq ? "Varg" : "Verse"} {playingVerse.n}
-              </div>
-              <div style={{ fontFamily: T.fontArabic, fontSize: 15, color: "rgba(255,255,255,0.6)", direction: "rtl", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                {playingVerse.ar}
-              </div>
-            </div>
-          )}
-        </div>
-      )}
 
       {/* ════════════════════════════════════════
           TAFSIR MODAL
