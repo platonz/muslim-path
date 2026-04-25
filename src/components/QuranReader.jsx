@@ -29,6 +29,10 @@ const T = {
   fontDisplay:"'Playfair Display', Georgia, serif",
 };
 
+// ─── UMMAH API ───────────────────────────────────────────────────────────────
+const UMMAH_KEY = "umh_19513cb42f6754b8129635dd79f7ddc01d237fad";
+const ummahFetch = (url) => fetch(url, { headers: { "X-API-Key": UMMAH_KEY } });
+
 // ─── MODULE-LEVEL CACHES ─────────────────────────────────────────────────────
 let _surahCache = null;
 let _fullVerseCache = null;
@@ -43,19 +47,21 @@ function normSearch(s) {
     .toLowerCase();
 }
 
-const RECITERS = {
-  "Alafasy_128kbps":             "Alafasy",
-  "AbdulBaset_Murattal_128kbps": "Abdul Basit",
-  "Saad_Al-Ghamid_128kbps":      "Saad Al-Ghamdi",
-  "Husary_128kbps":              "Husary",
-  "Minshawi_128kbps":            "Minshawi",
-};
+const RECITERS = [
+  { id: 1, label: "Mishary Alafasy" },
+  { id: 2, label: "Al-Sudais" },
+  { id: 3, label: "Abdul Basit (Murattal)" },
+  { id: 4, label: "Abdul Basit (Mujawwad)" },
+  { id: 6, label: "Saad Al-Ghamdi" },
+  { id: 7, label: "Hani Ar-Rifai" },
+  { id: 8, label: "Abu Bakr Al-Shatri" },
+];
 
 const TAFSIR_SOURCES = [
-  { id: 169, label: "Ibn Kathir (EN)" },
-  { id: 16,  label: "Al-Muyassar (AR)" },
-  { id: 90,  label: "Al-Qurtubi (AR)" },
-  { id: 94,  label: "Al-Baghawi (AR)" },
+  { id: "ibn_kathir",    label: "Ibn Kathir (EN)" },
+  { id: "maarif",        label: "Ma'arif al-Qur'an (EN)" },
+  { id: "muyassar",      label: "Al-Muyassar (AR)" },
+  { id: "ibn_kathir_ar", label: "Ibn Kathir (AR)" },
 ];
 
 // ─── VERSE MEDALLION ─────────────────────────────────────────────────────────
@@ -191,7 +197,7 @@ function TafsirModal({ verse, surahName, onClose, onPrev, onNext, hasPrev, hasNe
         <div style={{ padding: "14px 24px", borderTop: "1px solid rgba(255,255,255,0.07)", display: "flex", alignItems: "center", justifyContent: "space-between", flexShrink: 0 }}>
           <select
             value={tab}
-            onChange={e => setTab(Number(e.target.value))}
+            onChange={e => setTab(e.target.value)}
             style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 8, padding: "6px 12px", fontFamily: T.fontBody, fontSize: 12, color: "rgba(255,255,255,0.6)", cursor: "pointer", outline: "none" }}
           >
             {TAFSIR_SOURCES.map(src => <option key={src.id} value={src.id}>{src.label}</option>)}
@@ -241,7 +247,7 @@ export default function QuranReader() {
   const [arabicFontSize,  setArabicFontSize]  = useState(32);
   const [sidebarSearch,   setSidebarSearch]   = useState("");
   const [sidebarTab,      setSidebarTab]      = useState("surah"); // "surah" | "bookmarks"
-  const [reciter,         setReciter]         = useState("Alafasy_128kbps");
+  const [reciter,         setReciter]         = useState(1);
   const [playingVerse,    setPlayingVerse]     = useState(null);
   const [audioError,      setAudioError]      = useState(false);
   const [bookmarks,       setBookmarks]       = useState(() => {
@@ -253,13 +259,14 @@ export default function QuranReader() {
   const [tafsirVerse,     setTafsirVerse]     = useState(null);
   const [tafsirText,      setTafsirText]      = useState("");
   const [tafsirLoading,   setTafsirLoading]   = useState(false);
-  const [tafsirId,        setTafsirId]        = useState(169);
+  const [tafsirId,        setTafsirId]        = useState("ibn_kathir");
   const [fromCache,       setFromCache]       = useState(false);
   const [isMobile,       setIsMobile]        = useState(() => window.innerWidth < 768);
   const [sidebarOpen,    setSidebarOpen]     = useState(() => window.innerWidth >= 768);
 
   const audioRef        = useRef(null);
   const tafsirCache     = useRef(new Map());
+  const audioUrlCache   = useRef(new Map());
   const pendingVerseRef = useRef(null);
   const vsInputRef      = useRef(null);
   const touchStartX     = useRef(null);
@@ -410,13 +417,20 @@ export default function QuranReader() {
   }, [verseSearch, transEdition]);
 
   // ── Audio ──────────────────────────────────────────────────────────────────
-  function getAudioUrl(surahN, verseN) {
-    const s = String(surahN).padStart(3, "0");
-    const v = String(verseN).padStart(3, "0");
-    return `https://everyayah.com/data/${reciter}/${s}${v}.mp3`;
+  async function getAudioUrl(surahN, verseN, reciterId) {
+    const key = `${reciterId}:${surahN}:${verseN}`;
+    if (audioUrlCache.current.has(key)) return audioUrlCache.current.get(key);
+    const res = await ummahFetch(`https://ummahapi.com/api/quran/surah/${surahN}/ayah/${verseN}`);
+    const data = await res.json();
+    const entry = Array.isArray(data.data?.audio)
+      ? data.data.audio.find(a => a.reciter_id === reciterId)
+      : null;
+    const url = entry?.ayah_audio || null;
+    if (url) audioUrlCache.current.set(key, url);
+    return url;
   }
 
-  function playVerse(v) {
+  async function playVerse(v) {
     if (!audioRef.current || !v.n) return;
     if (playingVerse?.n === v.n) {
       if (audioRef.current.paused) { audioRef.current.play(); setPlayingVerse(v); }
@@ -424,22 +438,34 @@ export default function QuranReader() {
       return;
     }
     setAudioError(false);
-    audioRef.current.src = getAudioUrl(current, v.n);
-    audioRef.current.play().catch(() => { setAudioError(true); setPlayingVerse(null); });
-    setPlayingVerse(v);
-    setTimeout(() => { const el = document.getElementById(`qrv-${v.n}`); el?.scrollIntoView({ behavior: "smooth", block: "center" }); }, 80);
+    try {
+      const url = await getAudioUrl(current, v.n, reciter);
+      if (!url) { setAudioError(true); return; }
+      audioRef.current.src = url;
+      audioRef.current.play().catch(() => { setAudioError(true); setPlayingVerse(null); });
+      setPlayingVerse(v);
+      setTimeout(() => { const el = document.getElementById(`qrv-${v.n}`); el?.scrollIntoView({ behavior: "smooth", block: "center" }); }, 80);
+    } catch {
+      setAudioError(true);
+    }
   }
 
-  function handleAudioEnd() {
+  async function handleAudioEnd() {
     if (!playingVerse) return;
     const idx = verses.findIndex(v => v.n === playingVerse.n);
     if (idx >= 0 && idx < verses.length - 1) {
       const next = verses[idx + 1];
       if (audioRef.current && next.n) {
-        audioRef.current.src = getAudioUrl(current, next.n);
-        audioRef.current.play().catch(() => { setAudioError(true); setPlayingVerse(null); });
-        setPlayingVerse(next);
-        setTimeout(() => { const el = document.getElementById(`qrv-${next.n}`); el?.scrollIntoView({ behavior: "smooth", block: "center" }); }, 100);
+        try {
+          const url = await getAudioUrl(current, next.n, reciter);
+          if (!url) { setAudioError(true); setPlayingVerse(null); return; }
+          audioRef.current.src = url;
+          audioRef.current.play().catch(() => { setAudioError(true); setPlayingVerse(null); });
+          setPlayingVerse(next);
+          setTimeout(() => { const el = document.getElementById(`qrv-${next.n}`); el?.scrollIntoView({ behavior: "smooth", block: "center" }); }, 100);
+        } catch {
+          setAudioError(true); setPlayingVerse(null);
+        }
       }
     } else {
       setPlayingVerse(null);
@@ -464,9 +490,9 @@ export default function QuranReader() {
     }
     setTafsirLoading(true);
     try {
-      const res = await fetch(`https://api.qurancdn.com/api/qdc/tafsirs/${tafsirId}/by_ayah/${current}:${v.n}`);
+      const res = await ummahFetch(`https://ummahapi.com/api/tafsir/${tafsirId}/surah/${current}/ayah/${v.n}`);
       const data = await res.json();
-      const text = data.tafsir?.text?.replace(/<[^>]+>/g, "").replace(/\s+/g, " ").trim() || "No tafsir found for this verse.";
+      const text = data.data?.tafsir?.text?.replace(/<[^>]+>/g, "").replace(/\s+/g, " ").trim() || "No tafsir found for this verse.";
       tafsirCache.current.set(key, text);
       setTafsirText(text);
     } catch {
@@ -753,8 +779,8 @@ export default function QuranReader() {
                 <button onClick={() => setShowTranslit(v => !v)} style={{ fontSize: 11, fontWeight: 500, color: showTranslit ? "white" : T.warm600, background: showTranslit ? T.olive : "none", border: `1px solid ${showTranslit ? T.olive : T.warm200}`, borderRadius: 20, padding: "5px 12px", cursor: "pointer", fontFamily: T.fontBody, whiteSpace: "nowrap" }}>
                   {isSq ? "Transliterim" : "Translit"}
                 </button>
-                <select value={reciter} onChange={e => { setReciter(e.target.value); setPlayingVerse(null); if (audioRef.current) { audioRef.current.pause(); } }} style={{ background: T.gold50, border: `1px solid ${T.warm200}`, borderRadius: 20, padding: "5px 10px", fontFamily: T.fontBody, fontSize: 11, fontWeight: 500, color: T.warm600, cursor: "pointer", outline: "none", appearance: "none" }}>
-                  {Object.entries(RECITERS).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
+                <select value={reciter} onChange={e => { setReciter(Number(e.target.value)); audioUrlCache.current.clear(); setPlayingVerse(null); if (audioRef.current) { audioRef.current.pause(); } }} style={{ background: T.gold50, border: `1px solid ${T.warm200}`, borderRadius: 20, padding: "5px 10px", fontFamily: T.fontBody, fontSize: 11, fontWeight: 500, color: T.warm600, cursor: "pointer", outline: "none", appearance: "none" }}>
+                  {RECITERS.map(r => <option key={r.id} value={r.id}>{r.label}</option>)}
                 </select>
 
                 {/* Verse search */}
@@ -908,7 +934,7 @@ export default function QuranReader() {
               {surah?.englishName ?? ""} {playingVerse ? `· ${isSq ? "Varg" : "Verse"} ${playingVerse.n}` : ""}
             </div>
             <div style={{ fontSize: 11, color: "rgba(255,255,255,0.4)", fontFamily: T.fontBody }}>
-              {RECITERS[reciter] || reciter}
+              {RECITERS.find(r => r.id === reciter)?.label ?? ""}
             </div>
           </div>
 
