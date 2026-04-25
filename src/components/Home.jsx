@@ -57,6 +57,7 @@ const PRAYER_KEYS = ["Fajr","Dhuhr","Asr","Maghrib","Isha"];
 const STRIP_KEYS  = ["Fajr","Dhuhr","Asr","Maghrib","Isha"];
 const STRIP_LBL_SQ = { Imsak:"Imsaku", Fajr:"Sabahu", Dhuhr:"Dreka", Asr:"Ikindia", Maghrib:"Akshami", Isha:"Jacia" };
 const STRIP_LBL_EN = { Imsak:"Imsak",  Fajr:"Fajr",   Dhuhr:"Dhuhr", Asr:"Asr",    Maghrib:"Maghrib",  Isha:"Isha"  };
+const DEFAULT_TIMINGS = { Fajr:"04:15", Dhuhr:"12:36", Asr:"16:26", Maghrib:"19:37", Isha:"21:20" };
 
 // ─── SURAH NAMES ─────────────────────────────────────────────────────
 const SURAH_NAMES = {
@@ -505,16 +506,18 @@ export default function Home({ quote, verseQuote, setPage, savedLocation, onSave
       </div>
 
       {/* ── Prayer Times Strip ────────────────────────────────────────── */}
-      {timings && (
+      {(() => {
+        const displayTimings = timings || DEFAULT_TIMINGS;
+        return (
         <div style={{ margin:"12px 20px 0" }}>
           <div style={{ display:"flex", gap:6 }}>
             {STRIP_KEYS.map((key, i) => {
               const isPrayer = PRAYER_KEYS.includes(key);
               const pIdx     = PRAYER_KEYS.indexOf(key);
-              const status   = isPrayer ? prayerStatus(pIdx) : (pIdx === -1 && nextIdx > 0 ? "done" : "future");
+              const status   = (timings && isPrayer) ? prayerStatus(pIdx) : "future";
               const isNext   = isPrayer && status === "next";
               const isDone   = isPrayer && status === "done";
-              const time     = timings?.[key];
+              const time     = displayTimings?.[key];
               return (
                 <div key={key} style={{
                   flex:1, textAlign:"center",
@@ -541,7 +544,8 @@ export default function Home({ quote, verseQuote, setPage, savedLocation, onSave
             })}
           </div>
         </div>
-      )}
+        );
+      })()}
 
       {/* ── Quran Card (dark green) ───────────────────────────────────── */}
       <div style={{ margin:"16px 20px 0" }}>
