@@ -52,9 +52,72 @@ function IconClose() {
 export default function Navbar({ page, setPage, onSettings, hasLocation, onSearch, authUser, onAuthClick, onSignOut }) {
   const { t, i18n } = useTranslation();
   const [menuOpen, setMenuOpen]       = useState(false);
+  const [menuClosing, setMenuClosing] = useState(false);
+  const [menuDragOffset, setMenuDragOffset] = useState(0);
   const [moreOpen, setMoreOpen]       = useState(false);
   const [mobileMoreOpen, setMobileMoreOpen] = useState(false);
   const moreRef = useRef(null);
+  const dragStartY = useRef(null);
+  const dragStartX = useRef(null);
+  const dragActive = useRef(false);
+
+  function openMenu()  { setMenuOpen(true); setMenuClosing(false); setMenuDragOffset(0); }
+  function closeMenu() {
+    setMenuDragOffset(0);
+    setMenuClosing(true);
+    setTimeout(() => { setMenuOpen(false); setMenuClosing(false); }, 230);
+  }
+
+  // Swipe-up on open menu to dismiss it
+  function onMenuTouchStart(e) {
+    dragStartY.current = e.touches[0].clientY;
+    dragStartX.current = e.touches[0].clientX;
+    dragActive.current = false;
+  }
+  function onMenuTouchMove(e) {
+    if (dragStartY.current === null) return;
+    const dy = dragStartY.current - e.touches[0].clientY;   // positive = swiped up
+    const dx = Math.abs(e.touches[0].clientX - dragStartX.current);
+    if (!dragActive.current) {
+      if (Math.abs(dy) > 6 && Math.abs(dy) > dx) dragActive.current = true;
+      else return;
+    }
+    if (dy > 0) {
+      setMenuDragOffset(dy);
+      e.preventDefault();
+    }
+  }
+  function onMenuTouchEnd() {
+    if (menuDragOffset > 80) closeMenu();
+    else setMenuDragOffset(0);
+    dragStartY.current = null;
+    dragActive.current = false;
+  }
+
+  // Swipe-down from top of screen to open menu
+  useEffect(() => {
+    let startY = null;
+    let startX = null;
+    function onTouchStart(e) {
+      if (!menuOpen && e.touches[0].clientY < 100) {
+        startY = e.touches[0].clientY;
+        startX = e.touches[0].clientX;
+      }
+    }
+    function onTouchEnd(e) {
+      if (startY === null) return;
+      const dy = e.changedTouches[0].clientY - startY;
+      const dx = Math.abs(e.changedTouches[0].clientX - startX);
+      if (dy > 60 && dx < 60) openMenu();
+      startY = null;
+    }
+    document.addEventListener("touchstart", onTouchStart, { passive: true });
+    document.addEventListener("touchend", onTouchEnd, { passive: true });
+    return () => {
+      document.removeEventListener("touchstart", onTouchStart);
+      document.removeEventListener("touchend", onTouchEnd);
+    };
+  }, [menuOpen]);
 
   const toolsActive   = TOOLS_ITEMS.some(tool => tool.id === page);
   const primaryActive = PRIMARY_LINKS.includes(page);
@@ -265,7 +328,7 @@ export default function Navbar({ page, setPage, onSettings, hasLocation, onSearc
 
         {/* Mobile hamburger */}
         <button
-          onClick={() => setMenuOpen(!menuOpen)}
+          onClick={() => menuOpen ? closeMenu() : openMenu()}
           className="nav-mobile"
           aria-label={menuOpen ? "Close menu" : "Open menu"}
           style={{
@@ -280,17 +343,37 @@ export default function Navbar({ page, setPage, onSettings, hasLocation, onSearc
 
       {/* Mobile menu */}
       {menuOpen && createPortal(<>
-        <div onClick={() => setMenuOpen(false)} style={{ position: "fixed", inset: 0, zIndex: 601 }}/>
-        <div className="nav-mobile-menu" style={{
-          position: "fixed", top: 56, left: 0, right: 0, zIndex: 602,
-          background: "#FAF7EE", borderTop: `1px solid ${BORDER}`,
-          boxShadow: "0 4px 24px rgba(0,0,0,0.10)",
-          padding: "8px 0 20px",
-          display: "flex", flexDirection: "column",
-          maxHeight: "calc(100vh - 56px)", overflowY: "auto",
-        }}>
+        <div onClick={closeMenu} style={{
+          position: "fixed", inset: 0, zIndex: 601,
+          background: "rgba(0,0,0,0.18)",
+          animation: menuClosing ? "fadeOut 0.23s forwards" : "fadeIn 0.18s forwards",
+        }}/>
+        <div
+          className="nav-mobile-menu"
+          onTouchStart={onMenuTouchStart}
+          onTouchMove={onMenuTouchMove}
+          onTouchEnd={onMenuTouchEnd}
+          style={{
+            position: "fixed", top: 56, left: 0, right: 0, zIndex: 602,
+            background: "#FAF7EE", borderTop: `1px solid ${BORDER}`,
+            boxShadow: "0 4px 24px rgba(0,0,0,0.10)",
+            padding: "0 0 20px",
+            display: "flex", flexDirection: "column",
+            maxHeight: "calc(100vh - 56px)", overflowY: menuDragOffset > 0 ? "hidden" : "auto",
+            transform: menuDragOffset > 0 ? `translateY(${-menuDragOffset}px)` : undefined,
+            transition: menuDragOffset > 0 ? "none" : undefined,
+            animation: menuClosing
+              ? "navSlideUp 0.23s cubic-bezier(0.22,1,0.36,1) forwards"
+              : "navSlideDown 0.25s cubic-bezier(0.22,1,0.36,1)",
+            willChange: "transform",
+          }}
+        >
+          {/* Drag handle */}
+          <div style={{ display: "flex", justifyContent: "center", padding: "10px 0 6px", flexShrink: 0, touchAction: "none" }}>
+            <div style={{ width: 36, height: 4, borderRadius: 2, background: "#D4C9B0" }}/>
+          </div>
           {NAV_ITEMS.map(n => (
-            <button key={n.id} onClick={() => { setPage(n.id); setMenuOpen(false); }} style={{
+            <button key={n.id} onClick={() => { setPage(n.id); closeMenu(); }} style={{
               background: page === n.id ? WARM100 : "none", border: "none", cursor: "pointer",
               textAlign: "left", padding: "12px 24px", fontSize: 14,
               color: page === n.id ? DARK : WARM700,
@@ -315,7 +398,7 @@ export default function Navbar({ page, setPage, onSettings, hasLocation, onSearc
             <span style={{ marginLeft: "auto", opacity: 0.5 }}>{mobileMoreOpen ? "▲" : "▼"}</span>
           </button>
           {mobileMoreOpen && TOOLS_ITEMS.map(tool => (
-            <button key={tool.id} onClick={() => { setPage(tool.id); setMenuOpen(false); }} style={{
+            <button key={tool.id} onClick={() => { setPage(tool.id); closeMenu(); }} style={{
               background: page === tool.id ? WARM100 : "none", border: "none", cursor: "pointer",
               textAlign: "left", padding: "11px 24px 11px 52px", fontSize: 14,
               color: page === tool.id ? DARK : WARM700,
@@ -329,7 +412,7 @@ export default function Navbar({ page, setPage, onSettings, hasLocation, onSearc
           ))}
 
           <div style={{ borderTop: `1px solid ${BORDER}`, marginTop: 8 }}/>
-          <button onClick={() => { onSearch(); setMenuOpen(false); }} style={{
+          <button onClick={() => { onSearch(); closeMenu(); }} style={{
             background: "none", border: "none", cursor: "pointer", textAlign: "left",
             padding: "12px 24px", fontSize: 14, color: WARM700,
             display: "flex", alignItems: "center", gap: 12, fontFamily: SANS,
@@ -337,7 +420,7 @@ export default function Navbar({ page, setPage, onSettings, hasLocation, onSearc
           }}>
             <IconSearch/> {t("nav.search")}
           </button>
-          <button onClick={() => { onSettings(); setMenuOpen(false); }} style={{
+          <button onClick={() => { onSettings(); closeMenu(); }} style={{
             background: "none", border: "none", cursor: "pointer", textAlign: "left",
             padding: "12px 24px", fontSize: 14, color: WARM700,
             display: "flex", alignItems: "center", gap: 12, fontFamily: SANS,
@@ -352,7 +435,7 @@ export default function Navbar({ page, setPage, onSettings, hasLocation, onSearc
               <div style={{ padding: "10px 24px 6px", borderTop: `1px solid ${BORDER}`, marginTop: 4 }}>
                 <div style={{ fontSize: 12, color: WARM700 }}>{authUser.user_metadata?.full_name || authUser.email}</div>
               </div>
-              <button onClick={() => { onSignOut(); setMenuOpen(false); }} style={{
+              <button onClick={() => { onSignOut(); closeMenu(); }} style={{
                 background: "none", border: "none", cursor: "pointer", textAlign: "left",
                 padding: "10px 24px 14px", fontSize: 14, color: "#c0392b",
                 display: "flex", alignItems: "center", gap: 12, fontFamily: SANS,
@@ -360,7 +443,7 @@ export default function Navbar({ page, setPage, onSettings, hasLocation, onSearc
               }}>✕ {t("nav.signOut")}</button>
             </>
           ) : (
-            <button onClick={() => { onAuthClick(); setMenuOpen(false); }} style={{
+            <button onClick={() => { onAuthClick(); closeMenu(); }} style={{
               background: "none", border: "none", cursor: "pointer", textAlign: "left",
               padding: "12px 24px 16px", fontSize: 14, color: GOLD,
               display: "flex", alignItems: "center", gap: 12, fontFamily: SANS,
@@ -375,8 +458,10 @@ export default function Navbar({ page, setPage, onSettings, hasLocation, onSearc
 
       <style>{`
         @media (max-width: 900px) { .nav-desktop { display: none !important; } .nav-mobile { display: flex !important; } }
-        @keyframes navSlideDown { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
-        .nav-mobile-menu { animation: navSlideDown 0.22s cubic-bezier(0.22,1,0.36,1); }
+        @keyframes navSlideDown { from { opacity: 0.7; transform: translateY(-100%); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes navSlideUp   { from { opacity: 1; transform: translateY(0); }      to { opacity: 0.7; transform: translateY(-100%); } }
+        @keyframes fadeIn  { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes fadeOut { from { opacity: 1; } to { opacity: 0; } }
         #nav-user-menu { animation: navSlideDown 0.18s cubic-bezier(0.22,1,0.36,1); }
       `}</style>
     </nav>
