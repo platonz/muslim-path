@@ -54,7 +54,7 @@ const PR_SQ  = { Fajr:"Sabahu", Dhuhr:"Dreka", Asr:"Ikindia", Maghrib:"Akshami",
 const PR_EN  = { Fajr:"Fajr",   Dhuhr:"Dhuhr",  Asr:"Asr",     Maghrib:"Maghrib",  Isha:"Isha"  };
 
 const PRAYER_KEYS = ["Fajr","Dhuhr","Asr","Maghrib","Isha"];
-const STRIP_KEYS  = ["Imsak","Fajr","Dhuhr","Asr","Maghrib","Isha"];
+const STRIP_KEYS  = ["Fajr","Dhuhr","Asr","Maghrib","Isha"];
 const STRIP_LBL_SQ = { Imsak:"Imsaku", Fajr:"Sabahu", Dhuhr:"Dreka", Asr:"Ikindia", Maghrib:"Akshami", Isha:"Jacia" };
 const STRIP_LBL_EN = { Imsak:"Imsak",  Fajr:"Fajr",   Dhuhr:"Dhuhr", Asr:"Asr",    Maghrib:"Maghrib",  Isha:"Isha"  };
 
@@ -507,12 +507,7 @@ export default function Home({ quote, verseQuote, setPage, savedLocation, onSave
       {/* ── Prayer Times Strip ────────────────────────────────────────── */}
       {timings && (
         <div style={{ margin:"12px 20px 0" }}>
-          <div style={{
-            display:"flex", gap:6, overflowX:"auto", paddingBottom:2,
-            scrollbarWidth:"none", msOverflowStyle:"none",
-          }}
-            className="hide-scrollbar"
-          >
+          <div style={{ display:"flex", gap:6 }}>
             {STRIP_KEYS.map((key, i) => {
               const isPrayer = PRAYER_KEYS.includes(key);
               const pIdx     = PRAYER_KEYS.indexOf(key);
@@ -522,11 +517,11 @@ export default function Home({ quote, verseQuote, setPage, savedLocation, onSave
               const time     = timings?.[key];
               return (
                 <div key={key} style={{
-                  flexShrink:0, textAlign:"center",
-                  padding:"8px 12px", borderRadius:12,
+                  flex:1, textAlign:"center",
+                  padding:"8px 4px", borderRadius:12,
                   background: isNext ? G.green700 : isDone ? G.green50 : "#fff",
                   border: `1px solid ${isNext ? G.green600 : isDone ? G.green100 : W.borderLight}`,
-                  minWidth:58,
+                  minWidth:0,
                 }}>
                   <div style={{ fontSize:10, fontWeight:600, letterSpacing:"0.05em", textTransform:"uppercase", fontFamily:SA, color: isNext ? G.green300 : isDone ? G.green500 : W.muted, marginBottom:4 }}>
                     {SL[key]}
@@ -568,7 +563,7 @@ export default function Home({ quote, verseQuote, setPage, savedLocation, onSave
                 {isSq ? "Kurani" : "Quran"}
               </div>
               <div style={{ fontSize:18, fontWeight:700, fontFamily:SR, color:"#FFFFFF", marginBottom:2 }}>
-                {isSq ? "Lexo, Dëgo, Studyo" : "Read, Listen, Study"}
+                {isSq ? "Lexo, Dëgjo, Studio" : "Read, Listen, Study"}
               </div>
               <div style={{ fontSize:12, color:"rgba(255,255,255,0.65)", fontFamily:SA, marginBottom:14 }}>
                 {isSq ? "Me transliterim & tefsir" : "With transliteration & tafsir"}
