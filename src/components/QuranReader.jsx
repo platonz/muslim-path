@@ -480,17 +480,18 @@ export default function QuranReader() {
   }
 
   // ── Tafsir ─────────────────────────────────────────────────────────────────
-  async function loadTafsir(v) {
+  async function loadTafsir(v, id) {
+    const srcId = id !== undefined ? id : tafsirId;
     setTafsirVerse(v);
     setTafsirText("");
-    const key = `${tafsirId}:${current}:${v.n}`;
+    const key = `${srcId}:${current}:${v.n}`;
     if (tafsirCache.current.has(key)) {
       setTafsirText(tafsirCache.current.get(key));
       return;
     }
     setTafsirLoading(true);
     try {
-      const res = await ummahFetch(`https://ummahapi.com/api/tafsir/${tafsirId}/surah/${current}/ayah/${v.n}`);
+      const res = await ummahFetch(`https://ummahapi.com/api/tafsir/${srcId}/surah/${current}/ayah/${v.n}`);
       const data = await res.json();
       const text = data.data?.tafsir?.text?.replace(/<[^>]+>/g, "").replace(/\s+/g, " ").trim() || "No tafsir found for this verse.";
       tafsirCache.current.set(key, text);
@@ -998,7 +999,11 @@ export default function QuranReader() {
           hasPrev={verses.findIndex(v => v.n === tafsirVerse.n) > 0}
           hasNext={verses.findIndex(v => v.n === tafsirVerse.n) < verses.length - 1}
           tafsirId={tafsirId}
-          onTafsirIdChange={setTafsirId}
+          onTafsirIdChange={newId => {
+            if (newId === tafsirId) return;
+            setTafsirId(newId);
+            if (tafsirVerse) loadTafsir(tafsirVerse, newId);
+          }}
           tafsirText={tafsirText}
           tafsirLoading={tafsirLoading}
         />

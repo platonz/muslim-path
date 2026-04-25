@@ -4,7 +4,11 @@
       "Bash(cat index.html)",
       "Bash(cat public/index.html)",
       "Bash(npm run *)",
-      "Bash(npx vite *)"
+      "Bash(npx vite *)",
+      "WebFetch(domain:api.aladhan.com)",
+      "WebFetch(domain:ummahapi.com)",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)"
     ]
   }
 }
