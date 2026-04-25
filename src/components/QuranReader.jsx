@@ -241,6 +241,7 @@ export default function QuranReader({ playQuranAudio, globalCurrentId, globalPla
   const [transEdition,    setTransEdition]    = useState(isSq ? "sq.nahi" : "en.sahih");
   const [showTranslation, setShowTranslation] = useState(true);
   const [showTranslit,    setShowTranslit]    = useState(false);
+  const [toolbarOpen,     setToolbarOpen]     = useState(false);
   const [arabicFontSize,  setArabicFontSize]  = useState(32);
   const [sidebarSearch,   setSidebarSearch]   = useState("");
   const [sidebarTab,      setSidebarTab]      = useState("surah"); // "surah" | "bookmarks"
@@ -263,12 +264,13 @@ export default function QuranReader({ playQuranAudio, globalCurrentId, globalPla
   const [sidebarOpen,    setSidebarOpen]     = useState(() => window.innerWidth >= 768);
   const [loadingSurahPlay, setLoadingSurahPlay] = useState(null);
 
-  const tafsirCache     = useRef(new Map());
-  const audioUrlCache   = useRef(new Map());
-  const pendingVerseRef = useRef(null);
-  const vsInputRef      = useRef(null);
-  const touchStartX     = useRef(null);
-  const touchStartY     = useRef(null);
+  const tafsirCache      = useRef(new Map());
+  const audioUrlCache    = useRef(new Map());
+  const pendingVerseRef  = useRef(null);
+  const vsInputRef       = useRef(null);
+  const touchStartX      = useRef(null);
+  const touchStartY      = useRef(null);
+  const toolbarHandleRef = useRef(null);
 
   // Mobile resize detection
   useEffect(() => {
@@ -280,6 +282,30 @@ export default function QuranReader({ playQuranAudio, globalCurrentId, globalPla
     window.addEventListener("resize", handle);
     return () => window.removeEventListener("resize", handle);
   }, []);
+
+  // Swipe up/down on toolbar handle to show/hide toolbar
+  useEffect(() => {
+    const el = toolbarHandleRef.current;
+    if (!el) return;
+    let startY = null;
+    const onStart = e => { startY = (e.touches ? e.touches[0] : e).clientY; };
+    const onEnd = e => {
+      if (startY === null) return;
+      const dy = (e.changedTouches ? e.changedTouches[0] : e).clientY - startY;
+      if (Math.abs(dy) > 20) setToolbarOpen(dy < 0);
+      startY = null;
+    };
+    el.addEventListener("touchstart", onStart, { passive: true });
+    el.addEventListener("touchend", onEnd, { passive: true });
+    el.addEventListener("mousedown", onStart);
+    window.addEventListener("mouseup", onEnd);
+    return () => {
+      el.removeEventListener("touchstart", onStart);
+      el.removeEventListener("touchend", onEnd);
+      el.removeEventListener("mousedown", onStart);
+      window.removeEventListener("mouseup", onEnd);
+    };
+  });
 
   // Swipe-to-open/close sidebar on mobile
   function onTouchStart(e) {
@@ -793,8 +819,17 @@ export default function QuranReader({ playQuranAudio, globalCurrentId, globalPla
                 <div style={{ width: 60, flexShrink: 0 }} />
               </div>
 
+              {/* ── Toolbar handle ─────────────────────────────────── */}
+              <div
+                ref={toolbarHandleRef}
+                onClick={() => setToolbarOpen(v => !v)}
+                style={{ background: T.surface, borderBottom: toolbarOpen ? "none" : `1px solid ${T.warm200}`, display: "flex", alignItems: "center", justifyContent: "center", padding: "5px 0", cursor: "pointer", flexShrink: 0, userSelect: "none" }}
+              >
+                <div style={{ width: 36, height: 4, borderRadius: 99, background: toolbarOpen ? T.gold400 : T.warm300, transition: "background 150ms" }} />
+              </div>
+
               {/* ── Toolbar ────────────────────────────────────────── */}
-              <div style={{ background: T.surface, borderBottom: `1px solid ${T.warm200}`, padding: "8px 12px", display: "flex", alignItems: "center", gap: 6, flexShrink: 0, flexWrap: "wrap" }}>
+              <div style={{ background: T.surface, borderBottom: `1px solid ${T.warm200}`, padding: "8px 12px", display: toolbarOpen ? "flex" : "none", alignItems: "center", gap: 6, flexShrink: 0, flexWrap: "wrap" }}>
                 <button className="qr-toolbar-btn" onClick={() => setArabicFontSize(s => Math.max(20, s - 4))} style={{ display: "flex", alignItems: "center", gap: 5, fontSize: 12, fontWeight: 500, color: T.warm600, background: "none", border: `1px solid ${T.warm200}`, borderRadius: 20, padding: "5px 12px", cursor: "pointer", fontFamily: T.fontBody, transition: "all 150ms" }}>A−</button>
                 <button className="qr-toolbar-btn" onClick={() => setArabicFontSize(s => Math.min(52, s + 4))} style={{ display: "flex", alignItems: "center", gap: 5, fontSize: 12, fontWeight: 500, color: T.warm600, background: "none", border: `1px solid ${T.warm200}`, borderRadius: 20, padding: "5px 12px", cursor: "pointer", fontFamily: T.fontBody, transition: "all 150ms" }}>A+</button>
                 <select value={transEdition} onChange={e => setTransEdition(e.target.value)} style={{ background: T.gold50, border: `1px solid ${T.warm200}`, borderRadius: 20, padding: "5px 10px", fontFamily: T.fontBody, fontSize: 11, fontWeight: 500, color: T.warm600, cursor: "pointer", outline: "none", appearance: "none" }}>
