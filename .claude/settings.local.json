@@ -8,7 +8,15 @@
       "WebFetch(domain:api.aladhan.com)",
       "WebFetch(domain:ummahapi.com)",
       "Bash(git add *)",
-      "Bash(git commit -m ' *)"
+      "Bash(git commit -m ' *)",
+      "Bash(git log *)",
+      "Bash(ls .git/MERGE_HEAD .git/REBASE_HEAD .git/CHERRY_PICK_HEAD)",
+      "Bash(git -C \"D:\\\\Claude Outputs\\\\muslims-path\" add .claude/settings.local.json public/icon-192.png public/icon-512.png inject_asma.py inject_duas.py)",
+      "Bash(git -C 'D:\\\\Claude Outputs\\\\muslims-path' commit -m ' *)",
+      "Bash(git -C \"D:\\\\Claude Outputs\\\\muslims-path\" push origin main)",
+      "Bash(git -C \"D:\\\\Claude Outputs\\\\muslims-path\\\\.claude\\\\worktrees\\\\cool-dewdney-a07248\" add .claude/settings.local.json)",
+      "Bash(git -C 'D:\\\\Claude Outputs\\\\muslims-path\\\\.claude\\\\worktrees\\\\cool-dewdney-a07248' commit -m ' *)",
+      "Bash(git -C \"D:\\\\Claude Outputs\\\\muslims-path\\\\.claude\\\\worktrees\\\\cool-dewdney-a07248\" push --set-upstream origin 2ndrepo/cool-dewdney-a07248)"
     ]
   }
 }
