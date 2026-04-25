@@ -492,12 +492,16 @@ export default function QuranReader() {
     setTafsirLoading(true);
     try {
       const res = await ummahFetch(`https://ummahapi.com/api/tafsir/${srcId}/surah/${current}/ayah/${v.n}`);
-      const data = await res.json();
-      const text = data.data?.tafsir?.text?.replace(/<[^>]+>/g, "").replace(/\s+/g, " ").trim() || "No tafsir found for this verse.";
-      tafsirCache.current.set(key, text);
-      setTafsirText(text);
+      if (!res.ok) {
+        setTafsirText("No tafsir available for this verse. Ibn Kathir often covers multiple verses in one entry — try the previous verse.");
+      } else {
+        const data = await res.json();
+        const text = data.data?.tafsir?.text?.replace(/<[^>]+>/g, "").replace(/\s+/g, " ").trim() || "No tafsir available for this verse.";
+        tafsirCache.current.set(key, text);
+        setTafsirText(text);
+      }
     } catch {
-      setTafsirText("Failed to load tafsir. Please try again.");
+      setTafsirText("Failed to load tafsir. Please check your connection and try again.");
     }
     setTafsirLoading(false);
   }
