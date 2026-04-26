@@ -160,12 +160,34 @@ export default function Navbar({ page, setPage, onSettings, hasLocation, onSearc
   const [mobileMoreOpen, setMobileMoreOpen] = useState(false);
 
   const moreRef      = useRef(null);
+  const backdropRef  = useRef(null);
   const dragStartY   = useRef(null);
   const dragStartX   = useRef(null);
   const dragActive   = useRef(false);
   const prevTouchY   = useRef(0);
   const prevTouchT   = useRef(0);
   const touchVel     = useRef(0);  // px/ms, positive = moving up
+
+  // Lock body scroll while menu is open to prevent content scrolling behind overlay
+  useEffect(() => {
+    if (menuOpen) {
+      document.body.style.overflow = "hidden";
+      document.body.style.touchAction = "none";
+    }
+    return () => {
+      document.body.style.overflow = "";
+      document.body.style.touchAction = "";
+    };
+  }, [menuOpen]);
+
+  // Non-passive touchmove on backdrop to block scroll-through (React JSX handlers can't preventDefault passive events)
+  useEffect(() => {
+    const el = backdropRef.current;
+    if (!el) return;
+    const prevent = e => e.preventDefault();
+    el.addEventListener("touchmove", prevent, { passive: false });
+    return () => el.removeEventListener("touchmove", prevent);
+  }, [menuOpen]);
 
   function openMenu()  { setMenuOpen(true); setMenuClosing(false); setMenuDragOffset(0); }
   function closeMenu() {
@@ -474,9 +496,10 @@ export default function Navbar({ page, setPage, onSettings, hasLocation, onSearc
 
       {/* Mobile menu */}
       {menuOpen && createPortal(<>
-        <div onClick={closeMenu} style={{
+        <div ref={backdropRef} onClick={closeMenu} style={{
           position: "fixed", inset: 0, zIndex: 601,
           background: "rgba(0,0,0,0.18)",
+          touchAction: "none",
           animation: menuClosing ? "backdropOut 0.26s forwards" : "backdropIn 0.2s forwards",
         }}/>
         <div
