@@ -769,8 +769,6 @@ function PrayerTimes({ savedLocation }) {
   const { t, i18n } = useTranslation();
   const isSq = i18n.language?.startsWith("sq");
   const [city, setCity] = useState("");
-  const [method, setMethod] = useState(() => parseInt(localStorage.getItem("mp-prayer-method") || "99"));
-  const [school, setSchool] = useState(() => parseInt(localStorage.getItem("mp-prayer-school") || "1"));
   const [times, setTimes] = useState(null);
   const [loading, setLoading] = useState(false);
   const [err, setErr] = useState("");
@@ -847,11 +845,6 @@ function PrayerTimes({ savedLocation }) {
     return () => document.removeEventListener("mousedown", handle);
   }, []);
 
-  function aladhanParams(m, s) {
-    const base = `method=${m}&school=${m === 99 ? 1 : s}`;
-    return m === 99 ? `${base}&methodSettings=15,null,15` : base;
-  }
-
   async function search(cityName, coords) {
     const q = cityName || city;
     if (!q.trim()) return;
@@ -862,16 +855,16 @@ function PrayerTimes({ savedLocation }) {
       const d = `${date.getDate()}-${date.getMonth()+1}-${date.getFullYear()}`;
       let url;
       if (coords) {
-        url = `https://api.aladhan.com/v1/timings/${d}?latitude=${coords.lat}&longitude=${coords.lon}&${aladhanParams(method, school)}`;
+        url = `https://api.aladhan.com/v1/timings/${d}?latitude=${coords.lat}&longitude=${coords.lon}&method=99&school=0&methodSettings=15,null,18`;
       } else {
         // Fallback: geocode first, then use coordinates
         const geo = await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(q)}&format=json&limit=1`, { headers: { "Accept-Language": "en" } });
         const geoJson = await geo.json();
         if (geoJson.length > 0) {
           const { lat, lon } = geoJson[0];
-          url = `https://api.aladhan.com/v1/timings/${d}?latitude=${lat}&longitude=${lon}&${aladhanParams(method, school)}`;
+          url = `https://api.aladhan.com/v1/timings/${d}?latitude=${lat}&longitude=${lon}&method=99&school=0&methodSettings=15,null,18`;
         } else {
-          url = `https://api.aladhan.com/v1/timingsByCity/${d}?city=${encodeURIComponent(q)}&country=&${aladhanParams(method, school)}`;
+          url = `https://api.aladhan.com/v1/timingsByCity/${d}?city=${encodeURIComponent(q)}&country=&method=99&school=0&methodSettings=15,null,18`;
         }
       }
       const res = await fetch(url);
@@ -2895,10 +2888,7 @@ export default function App() {
     const d = new Date();
     const dateStr = `${d.getDate()}-${d.getMonth()+1}-${d.getFullYear()}`;
     try {
-      const savedMethod = parseInt(localStorage.getItem("mp-prayer-method") || "99");
-      const savedSchool = parseInt(localStorage.getItem("mp-prayer-school") || "1");
-      const notifParams = savedMethod === 99 ? `method=99&school=1&methodSettings=15,null,15` : `method=${savedMethod}&school=${savedSchool}`;
-      const res = await fetch(`https://api.aladhan.com/v1/timings/${dateStr}?latitude=${loc.lat}&longitude=${loc.lon}&${notifParams}`);
+      const res = await fetch(`https://api.aladhan.com/v1/timings/${dateStr}?latitude=${loc.lat}&longitude=${loc.lon}&method=99&school=0&methodSettings=15,null,18`);
       const json = await res.json();
       if (json.code !== 200) return;
       const now = Date.now();

@@ -19,19 +19,7 @@ const W = {
 const SR = "'Playfair Display', Georgia, serif";
 const SA = "'Inter', -apple-system, BlinkMacSystemFont, sans-serif";
 
-const CALC_METHODS = [
-  { v: 99, l: "BIK",         full: "Bashkësia Islame e Kosovës" },
-  { v: 1,  l: "MWL",         full: "Muslim World League" },
-  { v: 2,  l: "ISNA",        full: "ISNA (North America)" },
-  { v: 3,  l: "Egyptian",    full: "Egyptian General Authority" },
-  { v: 4,  l: "Umm al-Qura", full: "Umm al-Qura, Makkah" },
-  { v: 5,  l: "Karachi",     full: "Univ. of Islamic Sciences, Karachi" },
-];
 const FONT_SIZES = ["Small", "Normal", "Large", "X-Large"];
-const ASR_SCHOOLS = [
-  { v: 1, l: "Ḥanafī" },
-  { v: 0, l: "Shāfiʿī" },
-];
 
 function SectionLabel({ children }) {
   return (
@@ -99,16 +87,6 @@ export default function Profile({ authUser, onSignOut, notifEnabled, onNotifTogg
     quranGoal: true,
   });
 
-  const [calcMethod, setCalcMethod] = useState(() => {
-    const v = parseInt(localStorage.getItem("mp-prayer-method") || "1");
-    return CALC_METHODS.find(m => m.v === v) || CALC_METHODS[0];
-  });
-
-  const [asrSchool, setAsrSchool] = useState(() => {
-    const v = parseInt(localStorage.getItem("mp-prayer-school") || "1");
-    return ASR_SCHOOLS.find(s => s.v === v) || ASR_SCHOOLS[0];
-  });
-
   const [fontSize, setFontSize] = useState(
     () => localStorage.getItem("mp-arabic-font") || "Normal"
   );
@@ -117,19 +95,6 @@ export default function Profile({ authUser, onSignOut, notifEnabled, onNotifTogg
     const next = !toggles[key];
     setToggles(prev => ({ ...prev, [key]: next }));
     if (key === "prayerReminders" && onNotifToggle) onNotifToggle(next);
-  }
-
-  function cycleCalcMethod() {
-    const idx = CALC_METHODS.findIndex(m => m.v === calcMethod.v);
-    const next = CALC_METHODS[(idx + 1) % CALC_METHODS.length];
-    setCalcMethod(next);
-    localStorage.setItem("mp-prayer-method", String(next.v));
-  }
-
-  function cycleAsrSchool() {
-    const next = asrSchool.v === 1 ? ASR_SCHOOLS[1] : ASR_SCHOOLS[0];
-    setAsrSchool(next);
-    localStorage.setItem("mp-prayer-school", String(next.v));
   }
 
   function cycleFontSize() {
@@ -214,15 +179,6 @@ export default function Profile({ authUser, onSignOut, notifEnabled, onNotifTogg
             value={locationLabel}
             onClick={() => navigate && navigate("prayer")}
           />
-          <SettingRow
-            label={isSq ? "Metoda llogaritjes" : "Calculation method"}
-            value={calcMethod.l}
-            onClick={cycleCalcMethod}
-            last
-          />
-        </div>
-        <div style={{ fontSize: 11, color: W.muted, fontFamily: SA, marginTop: 6, paddingLeft: 4 }}>
-          {isSq ? `${calcMethod.full} · Tap për të ndryshuar` : `${calcMethod.full} · Tap to cycle`}
         </div>
       </div>
 
@@ -236,11 +192,6 @@ export default function Profile({ authUser, onSignOut, notifEnabled, onNotifTogg
               ? { Small: "E vogël", Normal: "Normale", Large: "E madhe", "X-Large": "Shumë e madhe" }[fontSize]
               : fontSize}
             onClick={cycleFontSize}
-          />
-          <SettingRow
-            label={isSq ? "Llogaritja e Ikindisë" : "Asr calculation"}
-            value={asrSchool.l}
-            onClick={cycleAsrSchool}
           />
           <SettingRow label={isSq ? "Përkthimi" : "Translation"} value="Sahih International" last />
         </div>
