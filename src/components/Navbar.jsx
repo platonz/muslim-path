@@ -9,8 +9,96 @@ const DARK    = "#1A1915";
 const WARM700 = "#6B6050";
 const WARM100 = "#EDE8DC";
 
-// Primary desktop links — matches handoff
 const PRIMARY_LINKS = ["home", "prayer", "quran"];
+
+// Monochromatic SVG icons for nav items
+const NAV_ICONS = {
+  home: (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+      <polyline points="9,22 9,12 15,12 15,22"/>
+    </svg>
+  ),
+  prayer: (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M12 3C9 3 7 5.5 7 8v11h10V8c0-2.5-2-5-5-5z"/>
+      <line x1="4" y1="19" x2="20" y2="19"/>
+      <line x1="9" y1="19" x2="9" y2="14"/>
+      <line x1="15" y1="19" x2="15" y2="14"/>
+      <rect x="9" y="14" width="6" height="5"/>
+    </svg>
+  ),
+  dua: (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M18 11V6a2 2 0 0 0-4 0v5"/>
+      <path d="M14 10V4a2 2 0 0 0-4 0v6"/>
+      <path d="M10 10.5V6a2 2 0 0 0-4 0v8.5"/>
+      <path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-16 0V9"/>
+    </svg>
+  ),
+  calendar: (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="3" y="4" width="18" height="18" rx="2"/>
+      <line x1="16" y1="2" x2="16" y2="6"/>
+      <line x1="8" y1="2" x2="8" y2="6"/>
+      <line x1="3" y1="10" x2="21" y2="10"/>
+    </svg>
+  ),
+  library: (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+      <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+    </svg>
+  ),
+  audio: (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+      <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+      <line x1="12" y1="19" x2="12" y2="23"/>
+      <line x1="8" y1="23" x2="16" y2="23"/>
+    </svg>
+  ),
+  tasbeeh: (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="12" cy="12" r="8"/>
+      <circle cx="12" cy="4.5" r="1.5" fill="currentColor" stroke="none"/>
+      <circle cx="17.8" cy="7.2" r="1.5" fill="currentColor" stroke="none"/>
+      <circle cx="19.5" cy="13.5" r="1.5" fill="currentColor" stroke="none"/>
+      <line x1="12" y1="1" x2="12" y2="3"/>
+    </svg>
+  ),
+  quran: (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+      <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+    </svg>
+  ),
+  asma: (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/>
+    </svg>
+  ),
+  zakat: (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <line x1="12" y1="1" x2="12" y2="23"/>
+      <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+    </svg>
+  ),
+  inheritance: (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <line x1="6" y1="3" x2="6" y2="15"/>
+      <circle cx="18" cy="6" r="3"/>
+      <circle cx="6" cy="18" r="3"/>
+      <path d="M18 9a9 9 0 0 1-9 9"/>
+    </svg>
+  ),
+  dates: (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <polyline points="1,4 1,10 7,10"/>
+      <path d="M3.51 15a9 9 0 1 0 .49-3.51"/>
+    </svg>
+  ),
+};
 
 function IconSearch() {
   return (
@@ -34,64 +122,100 @@ function IconChevron() {
     </svg>
   );
 }
-function IconMenu() {
+
+// Animated hamburger ↔ X morph
+function IconHamburger({ open }) {
+  const s = {
+    transition: "transform 0.28s cubic-bezier(0.22,1,0.36,1), opacity 0.22s ease",
+    transformOrigin: "9px 9px",
+  };
   return (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-      <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
-    </svg>
-  );
-}
-function IconClose() {
-  return (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
-      <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+    <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+      <line
+        x1="2" y1="4.5" x2="16" y2="4.5"
+        stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"
+        style={{ ...s, transform: open ? "translateY(4.5px) rotate(45deg)" : "none" }}
+      />
+      <line
+        x1="2" y1="9" x2="16" y2="9"
+        stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"
+        style={{ ...s, opacity: open ? 0 : 1, transform: open ? "scaleX(0.5)" : "none" }}
+      />
+      <line
+        x1="2" y1="13.5" x2="16" y2="13.5"
+        stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"
+        style={{ ...s, transform: open ? "translateY(-4.5px) rotate(-45deg)" : "none" }}
+      />
     </svg>
   );
 }
 
 export default function Navbar({ page, setPage, onSettings, hasLocation, onSearch, authUser, onAuthClick, onSignOut }) {
   const { t, i18n } = useTranslation();
-  const [menuOpen, setMenuOpen]       = useState(false);
-  const [menuClosing, setMenuClosing] = useState(false);
+  const [menuOpen, setMenuOpen]         = useState(false);
+  const [menuClosing, setMenuClosing]   = useState(false);
   const [menuDragOffset, setMenuDragOffset] = useState(0);
-  const [moreOpen, setMoreOpen]       = useState(false);
+  const [menuDragging, setMenuDragging] = useState(false);
+  const [moreOpen, setMoreOpen]         = useState(false);
   const [mobileMoreOpen, setMobileMoreOpen] = useState(false);
-  const moreRef = useRef(null);
-  const dragStartY = useRef(null);
-  const dragStartX = useRef(null);
-  const dragActive = useRef(false);
+
+  const moreRef      = useRef(null);
+  const dragStartY   = useRef(null);
+  const dragStartX   = useRef(null);
+  const dragActive   = useRef(false);
+  const prevTouchY   = useRef(0);
+  const prevTouchT   = useRef(0);
+  const touchVel     = useRef(0);  // px/ms, positive = moving up
 
   function openMenu()  { setMenuOpen(true); setMenuClosing(false); setMenuDragOffset(0); }
   function closeMenu() {
     setMenuDragOffset(0);
+    setMenuDragging(false);
     setMenuClosing(true);
-    setTimeout(() => { setMenuOpen(false); setMenuClosing(false); }, 230);
+    setTimeout(() => { setMenuOpen(false); setMenuClosing(false); }, 260);
   }
 
-  // Swipe-up on open menu to dismiss it
+  // Swipe on open menu (both up and down) to dismiss
   function onMenuTouchStart(e) {
-    dragStartY.current = e.touches[0].clientY;
-    dragStartX.current = e.touches[0].clientX;
-    dragActive.current = false;
+    dragStartY.current  = e.touches[0].clientY;
+    dragStartX.current  = e.touches[0].clientX;
+    dragActive.current  = false;
+    prevTouchY.current  = e.touches[0].clientY;
+    prevTouchT.current  = Date.now();
+    touchVel.current    = 0;
+    setMenuDragging(true);
   }
   function onMenuTouchMove(e) {
     if (dragStartY.current === null) return;
-    const dy = dragStartY.current - e.touches[0].clientY;   // positive = swiped up
+    const currentY = e.touches[0].clientY;
+    const dy = dragStartY.current - currentY;  // positive = moved up, negative = moved down
     const dx = Math.abs(e.touches[0].clientX - dragStartX.current);
     if (!dragActive.current) {
       if (Math.abs(dy) > 6 && Math.abs(dy) > dx) dragActive.current = true;
       else return;
     }
-    if (dy > 0) {
-      setMenuDragOffset(dy);
-      e.preventDefault();
-    }
+    const now = Date.now();
+    const dt  = now - prevTouchT.current;
+    if (dt > 0) touchVel.current = (prevTouchY.current - currentY) / dt;
+    prevTouchY.current = currentY;
+    prevTouchT.current = now;
+    setMenuDragOffset(dy);
+    e.preventDefault();
   }
   function onMenuTouchEnd() {
-    if (menuDragOffset > 80) closeMenu();
-    else setMenuDragOffset(0);
+    const abs = Math.abs(menuDragOffset);
+    const vel = Math.abs(touchVel.current);
+    const shouldClose = abs > 60 || (vel > 0.8 && abs > 15);
+    if (shouldClose) {
+      closeMenu();
+    } else {
+      // Spring snap-back: set dragging false and offset 0 in same render so browser animates
+      setMenuDragging(false);
+      setMenuDragOffset(0);
+    }
     dragStartY.current = null;
     dragActive.current = false;
+    touchVel.current   = 0;
   }
 
   // Swipe-down from top of screen to open menu
@@ -131,7 +255,6 @@ export default function Navbar({ page, setPage, onSettings, hasLocation, onSearc
     return () => document.removeEventListener("mousedown", handle);
   }, []);
 
-  // All non-primary nav items go into "More"
   const moreItems = NAV_ITEMS.filter(n => !PRIMARY_LINKS.includes(n.id));
 
   const NavLink = ({ id }) => {
@@ -174,6 +297,14 @@ export default function Navbar({ page, setPage, onSettings, hasLocation, onSearc
       {dot && <span style={{ position: "absolute", top: 5, right: 5, width: 6, height: 6, borderRadius: "50%", background: GOLD, border: "1.5px solid #FAF7EE" }}/>}
     </button>
   );
+
+  // Drag offset: positive = dragged up (menu moves up), negative = dragged down (menu moves down)
+  const dragTransform = menuDragOffset !== 0 ? `translateY(${-menuDragOffset}px)` : undefined;
+  const dragTransition = menuDragging
+    ? "none"
+    : menuDragOffset === 0
+      ? undefined
+      : "transform 0.42s cubic-bezier(0.34,1.56,0.64,1)";
 
   return (
     <nav style={{
@@ -228,7 +359,7 @@ export default function Navbar({ page, setPage, onSettings, hasLocation, onSearc
                 background: "#fff", border: `1px solid ${BORDER}`,
                 boxShadow: "0 4px 20px rgba(26,25,21,0.10)",
                 minWidth: 200, zIndex: 200, borderRadius: 12, overflow: "hidden",
-                animation: "navSlideDown 0.18s cubic-bezier(0.22,1,0.36,1)",
+                animation: "menuOpen 0.18s cubic-bezier(0.22,1,0.36,1)",
               }}
             >
               {moreItems.map(n => (
@@ -242,7 +373,7 @@ export default function Navbar({ page, setPage, onSettings, hasLocation, onSearc
                   onMouseEnter={e => { if (page !== n.id) { e.currentTarget.style.background = WARM100; e.currentTarget.style.color = DARK; } }}
                   onMouseLeave={e => { if (page !== n.id) { e.currentTarget.style.background = "none"; e.currentTarget.style.color = WARM700; } }}
                 >
-                  <span style={{ fontSize: 16 }}>{n.icon}</span>
+                  <span style={{ display: "flex", color: WARM700 }}>{NAV_ICONS[n.id]}</span>
                   {t(`nav.${n.id}`)}
                 </button>
               ))}
@@ -258,7 +389,7 @@ export default function Navbar({ page, setPage, onSettings, hasLocation, onSearc
                   onMouseEnter={e => { if (page !== tool.id) { e.currentTarget.style.background = WARM100; e.currentTarget.style.color = DARK; } }}
                   onMouseLeave={e => { if (page !== tool.id) { e.currentTarget.style.background = "none"; e.currentTarget.style.color = WARM700; } }}
                 >
-                  <span style={{ fontSize: 16 }}>{tool.icon}</span>
+                  <span style={{ display: "flex", color: WARM700 }}>{NAV_ICONS[tool.id]}</span>
                   {t(`tools.${tool.id}`)}
                 </button>
               ))}
@@ -296,7 +427,7 @@ export default function Navbar({ page, setPage, onSettings, hasLocation, onSearc
               background: "#fff", border: `1px solid ${BORDER}`,
               boxShadow: "0 4px 20px rgba(26,25,21,0.10)",
               minWidth: 200, zIndex: 300, padding: "8px 0", borderRadius: 12, overflow: "hidden",
-              animation: "navSlideDown 0.18s cubic-bezier(0.22,1,0.36,1)",
+              animation: "menuOpen 0.18s cubic-bezier(0.22,1,0.36,1)",
             }}>
               <div style={{ padding: "10px 16px 8px", borderBottom: `1px solid ${BORDER}` }}>
                 <div style={{ fontSize: 12, color: DARK, marginBottom: 2 }}>{authUser.user_metadata?.full_name || ""}</div>
@@ -326,7 +457,7 @@ export default function Navbar({ page, setPage, onSettings, hasLocation, onSearc
           </button>
         )}
 
-        {/* Mobile hamburger */}
+        {/* Mobile hamburger — animated morph */}
         <button
           onClick={() => menuOpen ? closeMenu() : openMenu()}
           className="nav-mobile"
@@ -337,7 +468,7 @@ export default function Navbar({ page, setPage, onSettings, hasLocation, onSearc
             alignItems: "center", justifyContent: "center", color: WARM700,
           }}
         >
-          {menuOpen ? <IconClose/> : <IconMenu/>}
+          <IconHamburger open={menuOpen}/>
         </button>
       </div>
 
@@ -346,7 +477,7 @@ export default function Navbar({ page, setPage, onSettings, hasLocation, onSearc
         <div onClick={closeMenu} style={{
           position: "fixed", inset: 0, zIndex: 601,
           background: "rgba(0,0,0,0.18)",
-          animation: menuClosing ? "fadeOut 0.23s forwards" : "fadeIn 0.18s forwards",
+          animation: menuClosing ? "backdropOut 0.26s forwards" : "backdropIn 0.2s forwards",
         }}/>
         <div
           className="nav-mobile-menu"
@@ -356,22 +487,24 @@ export default function Navbar({ page, setPage, onSettings, hasLocation, onSearc
           style={{
             position: "fixed", top: 56, left: 0, right: 0, zIndex: 602,
             background: "#FAF7EE", borderTop: `1px solid ${BORDER}`,
-            boxShadow: "0 4px 24px rgba(0,0,0,0.10)",
+            boxShadow: "0 8px 32px rgba(0,0,0,0.12)",
             padding: "0 0 20px",
             display: "flex", flexDirection: "column",
-            maxHeight: "calc(100vh - 56px)", overflowY: menuDragOffset > 0 ? "hidden" : "auto",
-            transform: menuDragOffset > 0 ? `translateY(${-menuDragOffset}px)` : undefined,
-            transition: menuDragOffset > 0 ? "none" : undefined,
+            maxHeight: "calc(100vh - 56px)",
+            overflowY: menuDragging || menuDragOffset !== 0 ? "hidden" : "auto",
+            transform: dragTransform,
+            transition: dragTransition,
             animation: menuClosing
-              ? "navSlideUp 0.23s cubic-bezier(0.22,1,0.36,1) forwards"
-              : "navSlideDown 0.25s cubic-bezier(0.22,1,0.36,1)",
-            willChange: "transform",
+              ? "menuClose 0.26s cubic-bezier(0.4,0,1,1) forwards"
+              : "menuOpen 0.3s cubic-bezier(0.22,1,0.36,1)",
+            willChange: "transform, opacity",
           }}
         >
           {/* Drag handle */}
           <div style={{ display: "flex", justifyContent: "center", padding: "10px 0 6px", flexShrink: 0, touchAction: "none" }}>
             <div style={{ width: 36, height: 4, borderRadius: 2, background: "#D4C9B0" }}/>
           </div>
+
           {NAV_ITEMS.map(n => (
             <button key={n.id} onClick={() => { setPage(n.id); closeMenu(); }} style={{
               background: page === n.id ? WARM100 : "none", border: "none", cursor: "pointer",
@@ -381,7 +514,9 @@ export default function Navbar({ page, setPage, onSettings, hasLocation, onSearc
               display: "flex", alignItems: "center", gap: 12, fontFamily: SANS,
               borderLeft: page === n.id ? `3px solid ${GOLD}` : "3px solid transparent",
             }}>
-              <span style={{ fontSize: 18 }}>{n.icon}</span>
+              <span style={{ display: "flex", opacity: 0.7, color: page === n.id ? DARK : WARM700 }}>
+                {NAV_ICONS[n.id]}
+              </span>
               {t(`nav.${n.id}`)}
             </button>
           ))}
@@ -394,8 +529,13 @@ export default function Navbar({ page, setPage, onSettings, hasLocation, onSearc
             display: "flex", alignItems: "center", gap: 12, fontFamily: SANS,
             borderLeft: "3px solid transparent",
           }}>
-            🛠 {t("nav.tools")}
-            <span style={{ marginLeft: "auto", opacity: 0.5 }}>{mobileMoreOpen ? "▲" : "▼"}</span>
+            <span style={{ display: "flex", opacity: 0.7 }}>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="12" cy="12" r="3"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/>
+              </svg>
+            </span>
+            {t("nav.tools")}
+            <span style={{ marginLeft: "auto", opacity: 0.4, fontSize: 10 }}>{mobileMoreOpen ? "▲" : "▼"}</span>
           </button>
           {mobileMoreOpen && TOOLS_ITEMS.map(tool => (
             <button key={tool.id} onClick={() => { setPage(tool.id); closeMenu(); }} style={{
@@ -406,7 +546,9 @@ export default function Navbar({ page, setPage, onSettings, hasLocation, onSearc
               display: "flex", alignItems: "center", gap: 12, fontFamily: SANS,
               borderLeft: page === tool.id ? `3px solid ${GOLD}` : "3px solid transparent",
             }}>
-              <span style={{ fontSize: 18 }}>{tool.icon}</span>
+              <span style={{ display: "flex", opacity: 0.7, color: page === tool.id ? DARK : WARM700 }}>
+                {NAV_ICONS[tool.id]}
+              </span>
               {t(`tools.${tool.id}`)}
             </button>
           ))}
@@ -418,7 +560,8 @@ export default function Navbar({ page, setPage, onSettings, hasLocation, onSearc
             display: "flex", alignItems: "center", gap: 12, fontFamily: SANS,
             borderLeft: "3px solid transparent",
           }}>
-            <IconSearch/> {t("nav.search")}
+            <span style={{ display: "flex", opacity: 0.7 }}><IconSearch/></span>
+            {t("nav.search")}
           </button>
           <button onClick={() => { onSettings(); closeMenu(); }} style={{
             background: "none", border: "none", cursor: "pointer", textAlign: "left",
@@ -426,7 +569,8 @@ export default function Navbar({ page, setPage, onSettings, hasLocation, onSearc
             display: "flex", alignItems: "center", gap: 12, fontFamily: SANS,
             borderLeft: "3px solid transparent",
           }}>
-            <IconSettings/> {t("nav.settings")}
+            <span style={{ display: "flex", opacity: 0.7 }}><IconSettings/></span>
+            {t("nav.settings")}
             {hasLocation && <span style={{ fontSize: 11, color: GOLD, border: `1px solid ${GOLD}60`, padding: "1px 7px", borderRadius: 4, marginLeft: 4 }}>Active</span>}
           </button>
 
@@ -440,7 +584,10 @@ export default function Navbar({ page, setPage, onSettings, hasLocation, onSearc
                 padding: "10px 24px 14px", fontSize: 14, color: "#c0392b",
                 display: "flex", alignItems: "center", gap: 12, fontFamily: SANS,
                 borderLeft: "3px solid transparent",
-              }}>✕ {t("nav.signOut")}</button>
+              }}>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                {t("nav.signOut")}
+              </button>
             </>
           ) : (
             <button onClick={() => { onAuthClick(); closeMenu(); }} style={{
@@ -450,19 +597,29 @@ export default function Navbar({ page, setPage, onSettings, hasLocation, onSearc
               borderLeft: "3px solid transparent",
               borderTop: `1px solid ${BORDER}`, marginTop: 4,
             }}>
-              👤 {t("nav.signInUp")}
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              {t("nav.signInUp")}
             </button>
           )}
         </div>
       </>, document.body)}
 
       <style>{`
-        @media (max-width: 900px) { .nav-desktop { display: none !important; } .nav-mobile { display: flex !important; } }
-        @keyframes navSlideDown { from { opacity: 0.7; transform: translateY(-100%); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes navSlideUp   { from { opacity: 1; transform: translateY(0); }      to { opacity: 0.7; transform: translateY(-100%); } }
-        @keyframes fadeIn  { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes fadeOut { from { opacity: 1; } to { opacity: 0; } }
-        #nav-user-menu { animation: navSlideDown 0.18s cubic-bezier(0.22,1,0.36,1); }
+        @media (max-width: 900px) {
+          .nav-desktop { display: none !important; }
+          .nav-mobile  { display: flex !important; }
+        }
+        @keyframes menuOpen {
+          from { opacity: 0; transform: translateY(-12px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes menuClose {
+          from { opacity: 1; transform: translateY(0); }
+          to   { opacity: 0; transform: translateY(-12px); }
+        }
+        @keyframes backdropIn  { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes backdropOut { from { opacity: 1; } to { opacity: 0; } }
+        #nav-user-menu { animation: menuOpen 0.18s cubic-bezier(0.22,1,0.36,1); }
       `}</style>
     </nav>
   );
