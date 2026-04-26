@@ -70,6 +70,201 @@ const TAFSIR_SOURCES_SQ = [
   { id: "sq.nahi",   label: "Hasan Nahi (SQ)" },
 ];
 
+// ─── SURAH RIBBON ────────────────────────────────────────────────────────────
+function SurahRibbon({ onOpen, isSq }) {
+  const [dragX, setDragX] = useState(0);
+  const [dragging, setDragging] = useState(false);
+  const [pulsing, setPulsing] = useState(false);
+  const startXRef = useRef(null);
+  const dragXRef = useRef(0);
+
+  // Pulse hint on first render
+  useEffect(() => {
+    const t = setTimeout(() => setPulsing(true), 800);
+    const t2 = setTimeout(() => setPulsing(false), 2200);
+    return () => { clearTimeout(t); clearTimeout(t2); };
+  }, []);
+
+  const open = useCallback(() => { setDragX(0); dragXRef.current = 0; onOpen(); }, [onOpen]);
+
+  const handleTouchStart = (e) => {
+    startXRef.current = e.touches[0].clientX;
+    setDragging(true);
+  };
+  const handleTouchMove = (e) => {
+    if (startXRef.current === null) return;
+    const dx = Math.max(0, e.touches[0].clientX - startXRef.current);
+    dragXRef.current = dx;
+    setDragX(dx);
+  };
+  const handleTouchEnd = () => {
+    if (dragXRef.current > 55) { open(); } else { setDragX(0); dragXRef.current = 0; }
+    setDragging(false);
+    startXRef.current = null;
+  };
+
+  const handleMouseDown = (e) => {
+    startXRef.current = e.clientX;
+    setDragging(true);
+    const onMove = (e) => {
+      const dx = Math.max(0, e.clientX - startXRef.current);
+      dragXRef.current = dx;
+      setDragX(dx);
+    };
+    const onUp = () => {
+      if (dragXRef.current > 55) { open(); } else { setDragX(0); dragXRef.current = 0; }
+      setDragging(false);
+      startXRef.current = null;
+      window.removeEventListener("mousemove", onMove);
+      window.removeEventListener("mouseup", onUp);
+    };
+    window.addEventListener("mousemove", onMove);
+    window.addEventListener("mouseup", onUp);
+  };
+
+  const progress = Math.min(1, dragX / 120);
+  const glowAlpha = 0.18 + progress * 0.35;
+
+  return (
+    <div
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
+      onMouseDown={handleMouseDown}
+      onClick={dragX < 5 ? open : undefined}
+      style={{
+        position: "fixed",
+        left: dragX,
+        top: "50%",
+        transform: "translateY(-50%)",
+        zIndex: 198,
+        cursor: dragging ? "grabbing" : "grab",
+        userSelect: "none",
+        touchAction: "pan-y",
+        WebkitUserSelect: "none",
+        transition: dragging ? "none" : "left 300ms cubic-bezier(0.34,1.56,0.64,1)",
+      }}
+    >
+      {/* Shadow trail */}
+      {dragX > 4 && (
+        <div style={{
+          position: "absolute",
+          left: -dragX * 0.6,
+          top: 8,
+          width: dragX * 0.6 + 28,
+          height: 80,
+          background: `linear-gradient(90deg, transparent, rgba(138,114,53,${glowAlpha * 0.5}))`,
+          borderRadius: "0 16px 16px 0",
+          pointerEvents: "none",
+        }} />
+      )}
+
+      {/* Ribbon body */}
+      <div style={{
+        width: 28,
+        height: 104,
+        background: `linear-gradient(160deg, ${T.dark800} 0%, ${T.dark900} 100%)`,
+        borderRadius: "0 18px 18px 0",
+        border: `1px solid rgba(212,186,136,${0.22 + progress * 0.3})`,
+        borderLeft: "none",
+        boxShadow: `
+          4px 0 20px rgba(0,0,0,0.5),
+          inset -1px 0 0 rgba(212,186,136,0.08),
+          0 0 0 ${Math.round(progress * 8)}px rgba(138,114,53,${glowAlpha})
+        `,
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        gap: 7,
+        position: "relative",
+        overflow: "hidden",
+        transform: `scaleX(${1 + progress * 0.12}) ${pulsing && !dragging ? "scaleX(1.06)" : ""}`,
+        transformOrigin: "left center",
+        transition: dragging ? "box-shadow 80ms" : "transform 300ms cubic-bezier(0.34,1.56,0.64,1), box-shadow 200ms",
+      }}>
+        {/* Gold edge accent */}
+        <div style={{
+          position: "absolute",
+          right: 0,
+          top: "15%",
+          bottom: "15%",
+          width: 2,
+          borderRadius: 2,
+          background: `linear-gradient(180deg, transparent, ${T.gold400} 30%, ${T.gold300} 70%, transparent)`,
+          opacity: 0.55 + progress * 0.45,
+          transition: "opacity 150ms",
+        }} />
+
+        {/* Top dot */}
+        <div style={{
+          width: 4, height: 4, borderRadius: "50%",
+          background: T.gold500, opacity: 0.5 + progress * 0.4,
+          transition: "opacity 150ms",
+        }} />
+
+        {/* Book icon */}
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
+          stroke={`rgba(212,186,136,${0.7 + progress * 0.3})`}
+          strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"
+          style={{ transition: "stroke 150ms", flexShrink: 0 }}>
+          <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+          <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+        </svg>
+
+        {/* Rotated label */}
+        <div style={{
+          writingMode: "vertical-rl",
+          transform: "rotate(180deg)",
+          fontSize: 9,
+          fontWeight: 700,
+          letterSpacing: "0.14em",
+          textTransform: "uppercase",
+          color: T.gold300,
+          fontFamily: T.fontBody,
+          opacity: 0.75 + progress * 0.25,
+          lineHeight: 1,
+        }}>
+          {isSq ? "Sure" : "Surahs"}
+        </div>
+
+        {/* Bottom dot */}
+        <div style={{
+          width: 4, height: 4, borderRadius: "50%",
+          background: T.gold500, opacity: 0.5 + progress * 0.4,
+          transition: "opacity 150ms",
+        }} />
+
+        {/* Shimmer overlay on drag */}
+        {progress > 0 && (
+          <div style={{
+            position: "absolute",
+            inset: 0,
+            background: `linear-gradient(90deg, transparent 40%, rgba(212,186,136,${progress * 0.12}))`,
+            pointerEvents: "none",
+          }} />
+        )}
+      </div>
+
+      {/* Drag hint chevron */}
+      <div style={{
+        position: "absolute",
+        right: -18,
+        top: "50%",
+        transform: `translateY(-50%) translateX(${progress * 6}px)`,
+        opacity: dragging ? 0.9 : (pulsing ? 0.7 : 0.45),
+        transition: dragging ? "none" : "opacity 400ms, transform 300ms",
+        pointerEvents: "none",
+      }}>
+        <svg width="12" height="20" viewBox="0 0 12 20" fill="none"
+          stroke={T.gold400} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <polyline points="2 4 10 10 2 16"/>
+        </svg>
+      </div>
+    </div>
+  );
+}
+
 // ─── VERSE MEDALLION ─────────────────────────────────────────────────────────
 function VerseMedallion({ num }) {
   return (
@@ -600,6 +795,11 @@ export default function QuranReader({ playQuranAudio, globalCurrentId, globalPla
           onClick={() => setSidebarOpen(false)}
           style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.45)", zIndex: 199, top: 102 }}
         />
+      )}
+
+      {/* ── Surah ribbon pull-tab (mobile, sidebar closed) ─────────────── */}
+      {isMobile && !sidebarOpen && (
+        <SurahRibbon onOpen={() => setSidebarOpen(true)} isSq={isSq} />
       )}
 
       {/* ── Outer layout: sidebar + reader ─────────────────────────────── */}
