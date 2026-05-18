@@ -3,7 +3,6 @@ import Icon from "./Icon";
 
 const TABS = [
   { id: "home",    icon: "home",    en: "Home",    sq: "Shtëpia" },
-  { id: "prayer",  icon: "prayer",  en: "Prayers", sq: "Kohët"   },
   { id: "quran",   icon: "quran",   en: "Quran",   sq: "Kurani"  },
   { id: "tasbeeh", icon: "tasbeeh", en: "Dhikr",   sq: "Dhikr"   },
   { id: "profile", icon: "profile", en: "You",     sq: "Ti"      },

@@ -9,7 +9,7 @@ const DARK    = "#1A1915";
 const WARM700 = "#6B6050";
 const WARM100 = "#EDE8DC";
 
-const PRIMARY_LINKS = ["home", "prayer", "quran"];
+const PRIMARY_LINKS = ["home", "quran"];
 
 // Monochromatic SVG icons for nav items
 const NAV_ICONS = {
@@ -17,15 +17,6 @@ const NAV_ICONS = {
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
       <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
       <polyline points="9,22 9,12 15,12 15,22"/>
-    </svg>
-  ),
-  prayer: (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M12 3C9 3 7 5.5 7 8v11h10V8c0-2.5-2-5-5-5z"/>
-      <line x1="4" y1="19" x2="20" y2="19"/>
-      <line x1="9" y1="19" x2="9" y2="14"/>
-      <line x1="15" y1="19" x2="15" y2="14"/>
-      <rect x="9" y="14" width="6" height="5"/>
     </svg>
   ),
   dua: (
@@ -107,14 +98,6 @@ function IconSearch() {
     </svg>
   );
 }
-function IconSettings() {
-  return (
-    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-      <circle cx="12" cy="12" r="3"/>
-      <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
-    </svg>
-  );
-}
 function IconChevron() {
   return (
     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
@@ -150,7 +133,7 @@ function IconHamburger({ open }) {
   );
 }
 
-export default function Navbar({ page, setPage, onSettings, hasLocation, onSearch, authUser, onAuthClick, onSignOut }) {
+export default function Navbar({ page, setPage, onSearch, authUser, onAuthClick, onSignOut }) {
   const { t, i18n } = useTranslation();
   const [menuOpen, setMenuOpen]         = useState(false);
   const [menuClosing, setMenuClosing]   = useState(false);
@@ -425,7 +408,6 @@ export default function Navbar({ page, setPage, onSettings, hasLocation, onSearc
       {/* Right actions */}
       <div style={{ display: "flex", alignItems: "center", gap: 8, flexShrink: 0 }}>
         <IconBtn onClick={onSearch} title={t("nav.search")}><IconSearch/></IconBtn>
-        <IconBtn onClick={onSettings} title={t("nav.settings")} dot={hasLocation}><IconSettings/></IconBtn>
 
         {authUser ? (
           <div style={{ position: "relative" }} className="nav-auth-wrap">
@@ -586,17 +568,6 @@ export default function Navbar({ page, setPage, onSettings, hasLocation, onSearc
             <span style={{ display: "flex", opacity: 0.7 }}><IconSearch/></span>
             {t("nav.search")}
           </button>
-          <button onClick={() => { onSettings(); closeMenu(); }} style={{
-            background: "none", border: "none", cursor: "pointer", textAlign: "left",
-            padding: "12px 24px", fontSize: 14, color: WARM700,
-            display: "flex", alignItems: "center", gap: 12, fontFamily: SANS,
-            borderLeft: "3px solid transparent",
-          }}>
-            <span style={{ display: "flex", opacity: 0.7 }}><IconSettings/></span>
-            {t("nav.settings")}
-            {hasLocation && <span style={{ fontSize: 11, color: GOLD, border: `1px solid ${GOLD}60`, padding: "1px 7px", borderRadius: 4, marginLeft: 4 }}>Active</span>}
-          </button>
-
           {authUser ? (
             <>
               <div style={{ padding: "10px 24px 6px", borderTop: `1px solid ${BORDER}`, marginTop: 4 }}>

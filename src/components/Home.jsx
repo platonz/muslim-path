@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import i18n from "../i18n";
 import Icon from "./Icon";
@@ -50,15 +50,6 @@ const DAY_SQ = ["E diel","E hënë","E martë","E mërkurë","E enjte","E premte
 const DAY_EN = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
 const MON_SQ = ["janar","shkurt","mars","prill","maj","qershor","korrik","gusht","shtator","tetor","nëntor","dhjetor"];
 const MON_EN = ["January","February","March","April","May","June","July","August","September","October","November","December"];
-const PR_SQ  = { Fajr:"Sabahu", Dhuhr:"Dreka", Asr:"Ikindia", Maghrib:"Akshami", Isha:"Jacia" };
-const PR_EN  = { Fajr:"Fajr",   Dhuhr:"Dhuhr",  Asr:"Asr",     Maghrib:"Maghrib",  Isha:"Isha"  };
-
-const PRAYER_KEYS = ["Fajr","Dhuhr","Asr","Maghrib","Isha"];
-const STRIP_KEYS  = ["Fajr","Dhuhr","Asr","Maghrib","Isha"];
-const STRIP_LBL_SQ = { Imsak:"Imsaku", Fajr:"Sabahu", Dhuhr:"Dreka", Asr:"Ikindia", Maghrib:"Akshami", Isha:"Jacia" };
-const STRIP_LBL_EN = { Imsak:"Imsak",  Fajr:"Fajr",   Dhuhr:"Dhuhr", Asr:"Asr",    Maghrib:"Maghrib",  Isha:"Isha"  };
-const DEFAULT_TIMINGS = { Fajr:"04:15", Dhuhr:"12:36", Asr:"16:26", Maghrib:"19:37", Isha:"21:20" };
-
 // ─── SURAH NAMES ─────────────────────────────────────────────────────
 const SURAH_NAMES = {
   1:"Al-Fatihah",2:"Al-Baqarah",3:"Ali 'Imran",4:"An-Nisa",5:"Al-Ma'idah",
@@ -94,52 +85,6 @@ const DHIKR_PRESETS = [
   { label:"Astaghfirullāh",  arabic:"أَسْتَغْفِرُ اللَّهَ",         target:100 },
   { label:"Ṣalawāt",         arabic:"اللَّهُمَّ صَلِّ عَلَى مُحَمَّد", target:100 },
 ];
-
-function fmtTime(t) {
-  if (!t) return "--:--";
-  const [h,m] = t.split(":").map(Number);
-  return `${h%12||12}:${String(m).padStart(2,"0")} ${h>=12?"PM":"AM"}`;
-}
-
-function pad2(n) { return String(n).padStart(2, "0"); }
-
-// ─── ANALOG CLOCK ────────────────────────────────────────────────────
-function AnalogClock({ hour, minute, size = 64 }) {
-  const r = size / 2;
-  const cx = r, cy = r;
-  const hourAngle  = ((hour % 12) + minute / 60) * 30 - 90;
-  const minAngle   = minute * 6 - 90;
-  const toRad = deg => (deg * Math.PI) / 180;
-  const handEnd = (angle, len) => ({
-    x: cx + Math.cos(toRad(angle)) * len,
-    y: cy + Math.sin(toRad(angle)) * len,
-  });
-  const hEnd = handEnd(hourAngle, r * 0.52);
-  const mEnd = handEnd(minAngle,  r * 0.72);
-  const ticks = Array.from({ length: 12 }, (_, i) => {
-    const a = toRad(i * 30 - 90);
-    return {
-      x1: cx + Math.cos(a) * (r - 5),
-      y1: cy + Math.sin(a) * (r - 5),
-      x2: cx + Math.cos(a) * (r - 2),
-      y2: cy + Math.sin(a) * (r - 2),
-    };
-  });
-  return (
-    <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
-      <circle cx={cx} cy={cy} r={r - 2} fill="none" stroke="rgba(255,255,255,0.25)" strokeWidth={1.5}/>
-      {ticks.map((t, i) => (
-        <line key={i} x1={t.x1} y1={t.y1} x2={t.x2} y2={t.y2} stroke="rgba(255,255,255,0.4)" strokeWidth={i % 3 === 0 ? 2 : 1}/>
-      ))}
-      {/* hour hand */}
-      <line x1={cx} y1={cy} x2={hEnd.x} y2={hEnd.y} stroke="#FFFFFF" strokeWidth={2.5} strokeLinecap="round"/>
-      {/* minute hand */}
-      <line x1={cx} y1={cy} x2={mEnd.x} y2={mEnd.y} stroke={G.green300} strokeWidth={1.8} strokeLinecap="round"/>
-      {/* center dot */}
-      <circle cx={cx} cy={cy} r={3} fill="#FFFFFF"/>
-    </svg>
-  );
-}
 
 // ─── FEATURE CARD ─────────────────────────────────────────────────────
 function FeatureCard({ icon, title, sub, onClick }) {
@@ -203,20 +148,8 @@ function ToolRow({ icon, title, sub, onClick }) {
 }
 
 // ─── MAIN COMPONENT ───────────────────────────────────────────────────
-export default function Home({ quote, verseQuote, setPage, savedLocation, onSaveLocation, showInstall, onInstall }) {
+export default function Home({ quote, verseQuote, setPage, showInstall, onInstall }) {
   const isSq = i18n.language?.startsWith("sq");
-
-  const [timings, setTimings]       = useState(null);
-  const [nextPrayer, setNextPrayer] = useState(null);
-  const [now, setNow]               = useState(new Date());
-
-  const [showLocSearch, setShowLocSearch] = useState(false);
-  const [locQuery, setLocQuery]     = useState("");
-  const [locSuggs, setLocSuggs]     = useState([]);
-  const [locLoading, setLocLoading] = useState(false);
-  const [locGpsLoading, setLocGpsLoading] = useState(false);
-  const locDebounce = useRef(null);
-  const locInputRef = useRef(null);
 
   const isStandalone = window.matchMedia("(display-mode: standalone)").matches || !!navigator.standalone;
   const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
@@ -233,113 +166,12 @@ export default function Home({ quote, verseQuote, setPage, savedLocation, onSave
   const dhikrCount = dhikrState.count ?? 0;
   const dhikr      = DHIKR_PRESETS[Math.min(dhikrIdx, DHIKR_PRESETS.length - 1)];
 
-  function photonToLoc(f) {
-    const p = f.properties;
-    const parts = [p.name || p.city || p.town || p.village, p.state !== p.country ? p.state : null, p.country].filter(Boolean);
-    return { name: parts.slice(0,2).join(", "), lat: f.geometry.coordinates[1], lon: f.geometry.coordinates[0], country: (p.countrycode||"").toUpperCase() };
-  }
-
-  useEffect(() => {
-    if (locQuery.length < 2) { setLocSuggs([]); return; }
-    clearTimeout(locDebounce.current);
-    locDebounce.current = setTimeout(async () => {
-      setLocLoading(true);
-      try {
-        const res  = await fetch(`https://photon.komoot.io/api/?q=${encodeURIComponent(locQuery)}&limit=8&lang=en`);
-        const json = await res.json();
-        setLocSuggs((json.features || []).map(photonToLoc).slice(0, 6));
-      } catch { setLocSuggs([]); }
-      setLocLoading(false);
-    }, 300);
-  }, [locQuery]);
-
-  function pickLocation(loc) {
-    onSaveLocation && onSaveLocation(loc);
-    setShowLocSearch(false);
-    setLocQuery("");
-    setLocSuggs([]);
-  }
-
-  async function locGPS() {
-    if (!navigator.geolocation) return;
-    setLocGpsLoading(true);
-    navigator.geolocation.getCurrentPosition(
-      async ({ coords }) => {
-        try {
-          const res  = await fetch(`https://photon.komoot.io/reverse?lon=${coords.longitude}&lat=${coords.latitude}&limit=1`);
-          const json = await res.json();
-          const loc  = json.features?.[0] ? photonToLoc(json.features[0]) : { name:"My Location", lat:coords.latitude, lon:coords.longitude, country:"" };
-          loc.lat = coords.latitude; loc.lon = coords.longitude;
-          pickLocation(loc);
-        } catch { pickLocation({ name:"My Location", lat:coords.latitude, lon:coords.longitude, country:"" }); }
-        setLocGpsLoading(false);
-      },
-      () => setLocGpsLoading(false),
-      { timeout: 10000 }
-    );
-  }
-
-  useEffect(() => {
-    if (!savedLocation) return;
-    const d = new Date();
-    const dateStr = `${d.getDate()}-${d.getMonth()+1}-${d.getFullYear()}`;
-    fetch(`https://api.aladhan.com/v1/timings/${dateStr}?latitude=${savedLocation.lat}&longitude=${savedLocation.lon}&method=99&school=0&methodSettings=15,null,18`)
-      .then(r => r.json())
-      .then(json => {
-        if (json.code !== 200) return;
-        const T = json.data.timings;
-        setTimings(T);
-        const nowM = new Date().getHours()*60 + new Date().getMinutes();
-        let found = null;
-        for (let i = 0; i < PRAYER_KEYS.length; i++) {
-          const [h,m] = T[PRAYER_KEYS[i]].split(":").map(Number);
-          if (h*60+m > nowM) { found = { name:PRAYER_KEYS[i], time:T[PRAYER_KEYS[i]], totalMins:h*60+m }; break; }
-        }
-        if (!found) {
-          const [h,m] = T["Fajr"].split(":").map(Number);
-          found = { name:"Fajr", time:T["Fajr"], totalMins:24*60+h*60+m };
-        }
-        setNextPrayer(found);
-      }).catch(() => {});
-  }, [savedLocation]);
-
-  useEffect(() => {
-    const id = setInterval(() => setNow(new Date()), 1000);
-    return () => clearInterval(id);
-  }, []);
-
   // ── Derived values ────────────────────────────────────────────────
-  const today  = now;
+  const today  = new Date();
   const hijri  = toHijri(today.getFullYear(), today.getMonth()+1, today.getDate());
   const HM  = isSq ? HM_SQ : HM_EN;
   const DAY = isSq ? DAY_SQ : DAY_EN;
   const MON = isSq ? MON_SQ : MON_EN;
-  const PR  = isSq ? PR_SQ  : PR_EN;
-  const SL  = isSq ? STRIP_LBL_SQ : STRIP_LBL_EN;
-
-  const nowSecs   = now.getHours()*3600 + now.getMinutes()*60 + now.getSeconds();
-  const nowMins   = now.getHours()*60 + now.getMinutes();
-  const dayPct    = Math.round((nowMins / (24*60)) * 100);
-
-  const totalSecLeft = nextPrayer ? nextPrayer.totalMins * 60 - nowSecs : 0;
-  const hLeft = Math.max(0, Math.floor(totalSecLeft / 3600));
-  const mLeft = Math.max(0, Math.floor((totalSecLeft % 3600) / 60));
-  const sLeft = Math.max(0, totalSecLeft % 60);
-  const inLabel = totalSecLeft <= 0 ? "" : hLeft > 0 ? `${hLeft}h ${mLeft}m` : `${mLeft}m`;
-
-  // Clock hands for prayer time
-  const [clockH, clockM] = nextPrayer?.time ? nextPrayer.time.split(":").map(Number) : [0, 0];
-
-  const nextIdx = nextPrayer
-    ? (nextPrayer.totalMins > 1440 ? 5 : PRAYER_KEYS.indexOf(nextPrayer.name))
-    : -1;
-
-  function prayerStatus(i) {
-    if (nextIdx === -1) return "future";
-    if (i < nextIdx)   return "done";
-    if (i === nextIdx && nextIdx < 5) return "next";
-    return "future";
-  }
 
   // Verse of the day ref: "Quran 17:70" → "17:70"
   const verseRef = verseQuote?.src?.replace("Quran ", "") || "";
@@ -395,151 +227,6 @@ export default function Home({ quote, verseQuote, setPage, savedLocation, onSave
           </div>
         </div>
       )}
-
-      {/* ── Location search panel ──────────────────────────────────── */}
-      {showLocSearch && (
-        <div style={{ margin:"12px 20px 0", background:"#fff", border:`1px solid ${W.border}`, borderRadius:14, padding:"14px 16px", boxShadow:W.shadow, position:"relative", zIndex:20 }}>
-          <button onClick={locGPS} disabled={locGpsLoading} style={{ width:"100%", display:"flex", alignItems:"center", justifyContent:"center", gap:8, padding:"9px 12px", marginBottom:8, borderRadius:999, border:`1px solid ${W.goldBorder}`, background:W.goldBg, color:W.goldDark, fontSize:12, fontWeight:600, cursor:locGpsLoading?"wait":"pointer", fontFamily:SA }}>
-            <span>{locGpsLoading ? "⏳" : "📡"}</span>
-            {locGpsLoading ? (isSq ? "Duke gjetur…" : "Finding location…") : (isSq ? "Përdor GPS-in tim" : "Use my GPS location")}
-          </button>
-          <div style={{ position:"relative" }}>
-            <input
-              ref={locInputRef}
-              value={locQuery}
-              onChange={e => setLocQuery(e.target.value)}
-              placeholder={isSq ? "Kërko qytetin…" : "Search city…"}
-              style={{ width:"100%", padding:"9px 14px", borderRadius:10, border:`1px solid ${W.border}`, fontSize:13, color:W.text, background:"#fff", outline:"none", fontFamily:SA, boxSizing:"border-box" }}
-            />
-            {locLoading && <span style={{ position:"absolute", right:10, top:"50%", transform:"translateY(-50%)", fontSize:12 }}>⏳</span>}
-          </div>
-          {locSuggs.length > 0 && (
-            <div style={{ position:"absolute", left:16, right:16, top:"100%", zIndex:50, background:"#fff", border:`1px solid ${W.border}`, borderRadius:10, boxShadow:"0 4px 20px rgba(26,25,21,0.10)", marginTop:4, overflow:"hidden" }}>
-              {locSuggs.map((s,i) => (
-                <button key={i} onMouseDown={() => pickLocation(s)}
-                  style={{ display:"block", width:"100%", textAlign:"left", padding:"10px 14px", border:"none", background:"none", cursor:"pointer", fontSize:13, color:W.text, fontFamily:SA, borderBottom:i<locSuggs.length-1?`1px solid ${W.border}`:"none" }}
-                  onMouseEnter={e => e.currentTarget.style.background=W.goldBg}
-                  onMouseLeave={e => e.currentTarget.style.background="none"}
-                >📍 {s.name}</button>
-              ))}
-            </div>
-          )}
-        </div>
-      )}
-
-      {/* ── Next Prayer Banner ────────────────────────────────────────── */}
-      <div style={{ margin:"14px 20px 0", background:`linear-gradient(135deg,#1A2F0E 0%,${G.green700} 40%,#3A6320 70%,#4A7A28 100%)`, borderRadius:18, padding:"18px 20px 14px", position:"relative", overflow:"hidden" }}>
-        {/* geometric pattern overlay */}
-        <div style={{ position:"absolute", inset:0, backgroundImage:`url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='rgba(255,255,255,0.04)' stroke-width='1'%3E%3Cpolygon points='30,2 58,16 58,44 30,58 2,44 2,16'/%3E%3Cpolygon points='30,12 48,21 48,39 30,48 12,39 12,21'/%3E%3C/g%3E%3C/svg%3E")`, pointerEvents:"none" }}/>
-        {/* gold radial accent */}
-        <div style={{ position:"absolute", inset:0, background:"radial-gradient(ellipse at 70% 0%,rgba(184,157,96,0.18) 0%,transparent 60%)", pointerEvents:"none" }}/>
-
-        {/* top row: label + location */}
-        <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center" }}>
-          <div style={{ fontSize:11, fontWeight:600, letterSpacing:"0.06em", textTransform:"uppercase", color:G.green300, fontFamily:SA }}>
-            {isSq ? "Namazi i ardhshëm" : "Next Prayer"}
-          </div>
-          <button
-            onClick={() => { setShowLocSearch(v => !v); setTimeout(() => locInputRef.current?.focus(), 60); }}
-            style={{ display:"flex", alignItems:"center", gap:4, background:"none", border:"none", cursor:"pointer", padding:0 }}
-          >
-            <Icon name="loc" size={11} color={G.green300} sw={2}/>
-            <span style={{ fontSize:11, color:G.green300, fontFamily:SA }}>
-              {savedLocation?.name || (isSq ? "Vendos qytetin" : "Set location")}
-            </span>
-          </button>
-        </div>
-
-        {/* main row: name+countdown left, clock right */}
-        <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", marginTop:10, gap:12 }}>
-          <div style={{ flex:1 }}>
-            <div
-              style={{ fontSize:30, fontWeight:700, fontFamily:SR, color:"white", lineHeight:1.1, cursor:"pointer" }}
-              onClick={() => setPage("prayer")}
-            >
-              {nextPrayer
-                ? (PR[nextPrayer.name] || nextPrayer.name)
-                : savedLocation ? "…" : (isSq ? "Vendos qytetin" : "Set location")}
-            </div>
-            {nextPrayer && (
-              <div style={{ fontSize:13, color:G.green300, marginTop:3, fontFamily:SA }}>
-                {fmtTime(nextPrayer.time)}{inLabel ? ` · ${isSq?"në":"in"} ${inLabel}` : ""}
-              </div>
-            )}
-            {/* Countdown */}
-            {nextPrayer && totalSecLeft > 0 && (
-              <div style={{ marginTop:10 }}>
-                <div style={{ fontSize:32, fontWeight:700, color:"#FFFFFF", fontFamily:"'Courier New', monospace", letterSpacing:"0.04em", lineHeight:1 }}>
-                  {pad2(hLeft)}:{pad2(mLeft)}:{pad2(sLeft)}
-                </div>
-                <div style={{ fontSize:10, color:G.green300, fontFamily:SA, letterSpacing:"0.08em", textTransform:"uppercase", marginTop:3 }}>
-                  {isSq ? "Deri në Ezan" : "Until Adhan"}
-                </div>
-              </div>
-            )}
-          </div>
-
-          {/* Analog clock */}
-          {nextPrayer && (
-            <div style={{ flexShrink:0, display:"flex", flexDirection:"column", alignItems:"center", gap:4 }}>
-              <AnalogClock hour={clockH} minute={clockM} size={72}/>
-              <div style={{ fontSize:13, fontWeight:600, color:"rgba(255,255,255,0.85)", fontFamily:SA, textAlign:"center" }}>
-                {pad2(clockH % 12 || 12)}:{pad2(clockM)}
-              </div>
-            </div>
-          )}
-        </div>
-
-        {/* day progress */}
-        <div style={{ marginTop:14, height:4, background:"rgba(255,255,255,0.15)", borderRadius:99, overflow:"hidden" }}>
-          <div style={{ height:"100%", width:`${dayPct}%`, background:G.green300, borderRadius:99 }}/>
-        </div>
-        <div style={{ fontSize:10, color:G.green300, marginTop:4, fontFamily:SA }}>
-          {isSq ? `Dita ${dayPct}% e kaluar` : `Day ${dayPct}% elapsed`}
-        </div>
-      </div>
-
-      {/* ── Prayer Times Strip ────────────────────────────────────────── */}
-      {(() => {
-        const displayTimings = timings || DEFAULT_TIMINGS;
-        return (
-        <div style={{ margin:"12px 20px 0" }}>
-          <div style={{ display:"flex", gap:6 }}>
-            {STRIP_KEYS.map((key, i) => {
-              const isPrayer = PRAYER_KEYS.includes(key);
-              const pIdx     = PRAYER_KEYS.indexOf(key);
-              const status   = (timings && isPrayer) ? prayerStatus(pIdx) : "future";
-              const isNext   = isPrayer && status === "next";
-              const isDone   = isPrayer && status === "done";
-              const time     = displayTimings?.[key];
-              return (
-                <div key={key} style={{
-                  flex:1, textAlign:"center",
-                  padding:"8px 4px", borderRadius:12,
-                  background: isNext ? G.green700 : isDone ? G.green50 : "#fff",
-                  border: `1px solid ${isNext ? G.green600 : isDone ? G.green100 : W.borderLight}`,
-                  minWidth:0,
-                }}>
-                  <div style={{ fontSize:10, fontWeight:600, letterSpacing:"0.05em", textTransform:"uppercase", fontFamily:SA, color: isNext ? G.green300 : isDone ? G.green500 : W.muted, marginBottom:4 }}>
-                    {SL[key]}
-                  </div>
-                  <div style={{ fontSize:13, fontWeight: isNext ? 700 : 500, color: isNext ? "#fff" : isDone ? G.green700 : W.text, fontFamily:SA }}>
-                    {time ? fmtTime(time).replace(" AM","").replace(" PM","") : "--:--"}
-                  </div>
-                  {isDone && (
-                    <div style={{ marginTop:4, display:"flex", justifyContent:"center" }}>
-                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke={G.green500} strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                        <polyline points="20 6 9 17 4 12"/>
-                      </svg>
-                    </div>
-                  )}
-                </div>
-              );
-            })}
-          </div>
-        </div>
-        );
-      })()}
 
       {/* ── Quran Card (dark green) ───────────────────────────────────── */}
       <div style={{ margin:"16px 20px 0" }}>

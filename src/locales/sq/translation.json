@@ -1,7 +1,6 @@
 {
   "nav": {
     "home": "Ballina",
-    "prayer": "Kohët e Namazit",
     "dua": "Dua",
     "calendar": "Kalendari",
     "library": "Biblioteka",
@@ -26,14 +25,7 @@
     "dates": "Datat"
   },
   "hero": {
-    "subtitle": "Mjete dhe Burime për Jetën Tuaj Islame të Përditshme",
-    "setLocation": "⚙ Vendosni vendndodhjen tuaj për të parë kohët e namazit",
-    "setLocationFull": "⚙ Vendosni vendndodhjen në Cilësime për të parë kohët e namazit"
-  },
-  "prayer": {
-    "next": "Namazi i Ardhshëm",
-    "in": "në",
-    "now": "Tani"
+    "subtitle": "Mjete dhe Burime për Jetën Tuaj Islame të Përditshme"
   },
   "lang": {
     "en": "EN",
@@ -97,21 +89,7 @@
     "noBookmarks": "Nuk ka shënime ende",
     "back": "← Kthehu te suret"
   },
-  "settings": {
-    "title": "Cilësimet",
-    "location": "Vendndodhja për Namaz",
-    "cityPlaceholder": "Emri i qytetit…",
-    "search": "Kërko",
-    "notifications": "Njoftime Namazi",
-    "notifOn": "Aktiv",
-    "notifOff": "Joaktiv",
-    "save": "Ruaj Vendndodhjen",
-    "saved": "Ruajtur",
-    "clear": "Pastro",
-    "language": "Gjuha"
-  },
   "pages": {
-    "prayer":      { "title": "Kohët e Namazit",    "sub": "Shkruani qytetin tuaj për kohët e namazit sot" },
     "calendar":    { "title": "Kalendari Islamik",  "sub": "Datat hixhri, ngjarjet e rëndësishme dhe Ditët e Bardha çdo muaj" },
     "library":     { "title": "Libraria Islamike",  "sub": "" },
     "quran":       { "title": "Kurani Famëlartë",   "sub": "114 sure · Arabisht me transliterim dhe përkthim shqip" }

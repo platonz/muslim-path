@@ -1,7 +1,6 @@
 {
   "nav": {
     "home": "Home",
-    "prayer": "Prayer Times",
     "dua": "Dua",
     "calendar": "Calendar",
     "library": "Library",
@@ -26,14 +25,7 @@
     "dates": "Dates"
   },
   "hero": {
-    "subtitle": "Tools & Resources for Your Daily Islamic Life",
-    "setLocation": "⚙ Set your location to see prayer times",
-    "setLocationFull": "⚙ Set your location in Settings to see prayer times here"
-  },
-  "prayer": {
-    "next": "Next Prayer",
-    "in": "in",
-    "now": "Now"
+    "subtitle": "Tools & Resources for Your Daily Islamic Life"
   },
   "lang": {
     "en": "EN",
@@ -97,21 +89,7 @@
     "noBookmarks": "No bookmarks yet",
     "back": "← Back to surahs"
   },
-  "settings": {
-    "title": "Settings",
-    "location": "Prayer Location",
-    "cityPlaceholder": "City name…",
-    "search": "Search",
-    "notifications": "Prayer Notifications",
-    "notifOn": "On",
-    "notifOff": "Off",
-    "save": "Save Location",
-    "saved": "Saved",
-    "clear": "Clear",
-    "language": "Language"
-  },
   "pages": {
-    "prayer":      { "title": "Prayer Times",       "sub": "Enter your city to get today's prayer schedule" },
     "calendar":    { "title": "Islamic Calendar",   "sub": "Hijri dates, significant events, and White Days for every month" },
     "library":     { "title": "Islamic Library",    "sub": "" },
     "quran":       { "title": "The Noble Quran",    "sub": "114 surahs · Arabic with transliteration and translation" }

@@ -19,8 +19,6 @@ export default function Icon({ name, size = 20, color = "currentColor", sw = 1.6
     /* ── Navigation & pages ── */
     case "home":
       return <svg {...p}><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>;
-    case "prayer":
-      return <svg {...p}><path d="M12 2L8 7H5L3 10l9 2 9-2-2-3h-3L12 2z"/><line x1="12" y1="12" x2="12" y2="22"/><path d="M5 22h14"/></svg>;
     case "quran":
       return <svg {...p}><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>;
     case "calendar":

@@ -177,16 +177,6 @@ const LIBRARY = [
 
 const CATEGORIES = ["All", ...Array.from(new Set(LIBRARY.map(b => b.cat)))];
 
-// ─── PRAYER METHODS ────────────────────────────────────────────────
-const METHODS = [
-  { v: 1, l: "Muslim World League" },
-  { v: 2, l: "ISNA (North America)" },
-  { v: 3, l: "Egyptian General Authority" },
-  { v: 4, l: "Umm al-Qura, Makkah" },
-  { v: 5, l: "University of Islamic Sciences, Karachi" },
-];
-
-const PRAYER_NAMES = ["Fajr","Sunrise","Dhuhr","Asr","Maghrib","Isha"];
 const HIJRI_MONTHS = ["Muharram","Safar","Rabi' al-Awwal","Rabi' al-Thani","Jumada al-Awwal","Jumada al-Thani","Rajab","Sha'ban","Ramadan","Shawwal","Dhu al-Qi'dah","Dhu al-Hijjah"];
 
 // ─── UTILITIES ─────────────────────────────────────────────────────
@@ -762,338 +752,6 @@ async function resolveQuranUrl(surahN, verseN, reciterId) {
   const url = entry?.ayah_audio || null;
   if (url) _quranUrlCache.set(key, url);
   return url;
-}
-
-// ─── PRAYER TIMES ─────────────────────────────────────────────────
-function PrayerTimes({ savedLocation }) {
-  const { t, i18n } = useTranslation();
-  const isSq = i18n.language?.startsWith("sq");
-  const [city, setCity] = useState("");
-  const [times, setTimes] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [err, setErr] = useState("");
-  const [date] = useState(new Date());
-  const [suggestions, setSuggestions] = useState([]);
-  const [showSugg, setShowSugg] = useState(false);
-  const [suggLoading, setSuggLoading] = useState(false);
-  const [displayCity, setDisplayCity] = useState("");
-  const [countryCode, setCountryCode] = useState("");
-  const [gpsLoading, setGpsLoading] = useState(false);
-
-  async function useGPS() {
-    if (!navigator.geolocation) { setErr("Geolocation not supported by your browser"); return; }
-    setGpsLoading(true); setErr("");
-    navigator.geolocation.getCurrentPosition(
-      async ({ coords }) => {
-        try {
-          const res = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${coords.latitude}&lon=${coords.longitude}&format=json&addressdetails=1`, { headers: { "Accept-Language": "en" } });
-          const json = await res.json();
-          const name = [json.address?.city || json.address?.town || json.address?.village || json.address?.county, json.address?.country].filter(Boolean).join(", ");
-          const cityName = name || "My Location";
-          setCity(cityName);
-          setCountryCode(json.address?.country_code?.toUpperCase() || "");
-          search(cityName, { lat: coords.latitude, lon: coords.longitude });
-        } catch {
-          setCity("My Location");
-          search("My Location", { lat: coords.latitude, lon: coords.longitude });
-        }
-        setGpsLoading(false);
-      },
-      () => { setErr("Location access denied. Please search for a city manually."); setGpsLoading(false); },
-      { timeout: 10000 }
-    );
-  }
-
-  // Auto-load from saved location
-  useEffect(() => {
-    if (savedLocation && !times) {
-      setCity(savedLocation.name);
-      setDisplayCity(savedLocation.name);
-      setCountryCode(savedLocation.country || "");
-      search(savedLocation.name, { lat: savedLocation.lat, lon: savedLocation.lon });
-    }
-  }, [savedLocation]);
-  const debounceRef = useRef(null);
-  const wrapRef = useRef(null);
-
-  // Fetch city suggestions
-  useEffect(() => {
-    if (city.length < 2) { setSuggestions([]); setShowSugg(false); return; }
-    clearTimeout(debounceRef.current);
-    debounceRef.current = setTimeout(async () => {
-      setSuggLoading(true);
-      try {
-        const res = await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(city)}&format=json&limit=8&addressdetails=1`, { headers: { "Accept-Language": "en" } });
-        const json = await res.json();
-        const cities = json.map(r => ({
-            name: r.display_name.split(",").slice(0,3).join(", "),
-            lat: parseFloat(r.lat),
-            lon: parseFloat(r.lon),
-            country: r.address?.country_code?.toUpperCase() || "",
-          }));
-        setSuggestions(cities.slice(0, 6));
-        setShowSugg(true);
-      } catch { setSuggestions([]); }
-      setSuggLoading(false);
-    }, 350);
-  }, [city]);
-
-  // Close on outside click
-  useEffect(() => {
-    function handle(e) { if (wrapRef.current && !wrapRef.current.contains(e.target)) setShowSugg(false); }
-    document.addEventListener("mousedown", handle);
-    return () => document.removeEventListener("mousedown", handle);
-  }, []);
-
-  async function search(cityName, coords) {
-    const q = cityName || city;
-    if (!q.trim()) return;
-    setShowSugg(false);
-    setDisplayCity(cityName || city);
-    setLoading(true); setErr(""); setTimes(null);
-    try {
-      const d = `${date.getDate()}-${date.getMonth()+1}-${date.getFullYear()}`;
-      let url;
-      if (coords) {
-        url = `https://api.aladhan.com/v1/timings/${d}?latitude=${coords.lat}&longitude=${coords.lon}&method=99&school=0&methodSettings=15,null,18`;
-      } else {
-        // Fallback: geocode first, then use coordinates
-        const geo = await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(q)}&format=json&limit=1`, { headers: { "Accept-Language": "en" } });
-        const geoJson = await geo.json();
-        if (geoJson.length > 0) {
-          const { lat, lon } = geoJson[0];
-          url = `https://api.aladhan.com/v1/timings/${d}?latitude=${lat}&longitude=${lon}&method=99&school=0&methodSettings=15,null,18`;
-        } else {
-          url = `https://api.aladhan.com/v1/timingsByCity/${d}?city=${encodeURIComponent(q)}&country=&method=99&school=0&methodSettings=15,null,18`;
-        }
-      }
-      const res = await fetch(url);
-      const json = await res.json();
-      if (json.code !== 200) throw new Error(json.data || "City not found");
-      setTimes(json.data);
-    } catch(e) { setErr("Could not find prayer times. Please try a different city name."); }
-    setLoading(false);
-  }
-
-  const prayerKeys = ["Fajr", "Sunrise", "Dhuhr", "Asr", "Maghrib", "Isha"];
-  const PR_SQ_PAGE = { Fajr:"Sabahu", Sunrise:"Lindja", Dhuhr:"Dreka", Asr:"Ikindia", Maghrib:"Akshami", Isha:"Jacia" };
-  const PR_EN_PAGE = { Fajr:"Fajr", Sunrise:"Sunrise", Dhuhr:"Dhuhr", Asr:"Asr", Maghrib:"Maghrib", Isha:"Isha" };
-  const now = new Date();
-  const nowMins = now.getHours()*60 + now.getMinutes();
-
-  function getNextPrayer() {
-    if (!times) return null;
-    for (const k of ["Fajr","Dhuhr","Asr","Maghrib","Isha"]) {
-      const [h,m] = times.timings[k].split(":").map(Number);
-      if (h*60+m > nowMins) return k;
-    }
-    return "Fajr";
-  }
-  const nextPrayer = getNextPrayer();
-  const PRAY_ONLY = ["Fajr","Dhuhr","Asr","Maghrib","Isha"];
-  const doneCount = times ? (() => {
-    const [ih,im] = times.timings.Isha.split(":").map(Number);
-    return (nextPrayer === "Fajr" && nowMins > ih*60+im) ? 5 : PRAY_ONLY.indexOf(nextPrayer ?? "Fajr");
-  })() : 0;
-  const qiblaDeg = times ? (() => {
-    const φ1 = times.meta.latitude * Math.PI / 180, λ1 = times.meta.longitude * Math.PI / 180;
-    const φ2 = 21.4225 * Math.PI / 180, λ2 = 39.8262 * Math.PI / 180;
-    const dλ = λ2 - λ1;
-    const y = Math.sin(dλ) * Math.cos(φ2);
-    const x = Math.cos(φ1) * Math.sin(φ2) - Math.sin(φ1) * Math.cos(φ2) * Math.cos(dλ);
-    return Math.round((Math.atan2(y, x) * 180 / Math.PI + 360) % 360);
-  })() : null;
-
-  return (
-    <div style={{ maxWidth: 680, margin: "0 auto", padding: "40px 24px 90px" }}>
-      <PageTitle icon="prayer" title={t("pages.prayer.title")} sub={t("pages.prayer.sub")} />
-      <Card style={{ marginBottom: 20 }}>
-        <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-
-          {/* City input with autocomplete */}
-          <div style={{ position: "relative" }} ref={wrapRef}>
-            <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-              <label style={{ fontSize: 13, fontWeight: 600, color: TEXT }}>City</label>
-              <div style={{ position: "relative" }}>
-                <input
-                  placeholder="e.g. London, Cairo, Karachi"
-                  value={city}
-                  onChange={e => setCity(e.target.value)}
-                  onKeyDown={e => e.key === "Enter" && search()}
-                  onFocus={() => suggestions.length > 0 && setShowSugg(true)}
-                  style={{
-                    width: "100%", padding: "9px 36px 9px 12px", borderRadius: 8,
-                    border: `1px solid ${BORDER}`, fontSize: 14, color: TEXT,
-                    background: SURFACE, outline: "none", boxSizing: "border-box",
-                  }}
-                  onFocusCapture={e => e.target.style.borderColor = GREEN}
-                  onBlur={e => e.target.style.borderColor = BORDER}
-                />
-                {suggLoading && (
-                  <div style={{ position: "absolute", right: 10, top: "50%", transform: "translateY(-50%)", fontSize: 14, color: MUTED }}>⏳</div>
-                )}
-              </div>
-            </div>
-
-            {/* Suggestions dropdown */}
-            {showSugg && suggestions.length > 0 && (
-              <div style={{
-                position: "absolute", top: "100%", left: 0, right: 0, zIndex: 200,
-                background: SURFACE, border: `1px solid ${BORDER}`,
-                borderRadius: 10, boxShadow: "0 8px 24px rgba(0,0,0,0.12)",
-                marginTop: 4, overflow: "hidden",
-              }}>
-                {suggestions.map((s, i) => (
-                  <button key={i} onMouseDown={() => { setCity(s.name); setCountryCode(s.country); search(s.name, { lat: s.lat, lon: s.lon }); setShowSugg(false); }}
-                    style={{
-                      display: "block", width: "100%", textAlign: "left",
-                      padding: "10px 14px", border: "none", background: "none",
-                      cursor: "pointer", fontSize: 14, color: TEXT,
-                      borderBottom: i < suggestions.length - 1 ? `1px solid ${BORDER}` : "none",
-                      transition: "background 0.1s",
-                    }}
-                    onMouseEnter={e => e.currentTarget.style.background = GREEN_L}
-                    onMouseLeave={e => e.currentTarget.style.background = "none"}
-                  >
-                    <span style={{ marginRight: 8 }}>📍</span>{s.name}
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
-
-          <div style={{ display: "flex", gap: 8 }}>
-            <Btn onClick={() => search()} disabled={loading || gpsLoading} style={{ flex: 1 }}>{loading ? "Searching…" : "Get Prayer Times"}</Btn>
-            <button
-              onClick={useGPS}
-              disabled={gpsLoading || loading}
-              title="Use GPS location"
-              style={{
-                flexShrink: 0, padding: "0 14px", borderRadius: 999,
-                border: `1px solid ${BORDER}`, background: "#FAF5E8", color: "#8A7235",
-                fontSize: 18, cursor: (gpsLoading || loading) ? "wait" : "pointer",
-                transition: "all 0.2s",
-              }}
-              onMouseEnter={e => e.currentTarget.style.background = "#F0EAD8"}
-              onMouseLeave={e => e.currentTarget.style.background = "#FAF5E8"}
-            >{gpsLoading ? "⏳" : "📡"}</button>
-          </div>
-        </div>
-      </Card>
-
-      {err && <p style={{ color: "#EF4444", fontSize: 12, letterSpacing: "0.03em" }}>{err}</p>}
-
-      {times && (
-        <div>
-          {/* Completion card */}
-          <div style={{ background:"#fff", border:`1px solid #E0D5C0`, borderRadius:14, padding:"16px 20px", marginBottom:16, boxShadow:"0 2px 12px rgba(26,25,21,0.07)" }}>
-            <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", marginBottom:10 }}>
-              <div>
-                <div style={{ fontSize:13, color:"#9A8E7A", fontFamily:SANS, marginBottom:2 }}>
-                  {isSq ? "Kryerja sot" : "Today's completion"}
-                </div>
-                <div style={{ fontSize:24, fontWeight:700, color:"#2D5018", fontFamily:SANS }}>
-                  {doneCount}<span style={{ fontSize:14, color:"#9A8E7A", fontWeight:400 }}>/5</span>
-                </div>
-              </div>
-              <div style={{ fontSize:12, color:"#6B6050", fontFamily:SANS, textAlign:"right", maxWidth:160 }}>
-                <div style={{ fontWeight:600, color:TEXT }}>{displayCity}</div>
-                <div style={{ marginTop:2 }}>{times.date.readable}</div>
-              </div>
-            </div>
-            <div style={{ height:5, background:"#EDF5E3", borderRadius:99, overflow:"hidden" }}>
-              <div style={{ height:"100%", width:`${(doneCount/5)*100}%`, background:"#2D5018", borderRadius:99 }}/>
-            </div>
-            <div style={{ fontSize:12, color:"#6B6050", marginTop:6, fontFamily:SANS }}>
-              {doneCount < 5 && nextPrayer && (
-                isSq
-                  ? `Vazhdo — ${PR_SQ_PAGE[nextPrayer]||nextPrayer} është i ardhshëm`
-                  : `Keep going — ${PR_EN_PAGE[nextPrayer]||nextPrayer} is next`
-              )}
-              {doneCount === 5 && (isSq ? "Të gjitha namazet u falën sot!" : "All prayers completed today!")}
-            </div>
-          </div>
-
-          {/* Schedule */}
-          <div style={{ fontSize:11, fontWeight:600, letterSpacing:"0.06em", textTransform:"uppercase", color:"#9A8E7A", marginBottom:8, fontFamily:SANS }}>
-            {isSq ? "Orari i sotëm" : "Today's Schedule"}
-          </div>
-          <div style={{ background:"#fff", border:`1px solid #E0D5C0`, borderRadius:14, overflow:"hidden", boxShadow:"0 2px 12px rgba(26,25,21,0.07)", marginBottom:16 }}>
-            {prayerKeys.map((k, i) => {
-              const isSunrise = k === "Sunrise";
-              const pIdx = PRAY_ONLY.indexOf(k);
-              const isDone = !isSunrise && pIdx < doneCount;
-              const isNext = k === nextPrayer;
-              const isLast = i === prayerKeys.length - 1;
-              return (
-                <div key={k} style={{
-                  display:"flex", alignItems:"center", padding:"12px 16px",
-                  borderBottom: isLast ? "none" : `1px solid #EDF5E3`,
-                  background: isNext ? "#EDF5E3" : "#fff",
-                }}>
-                  {isSunrise ? (
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#B89D60" strokeWidth="1.8" strokeLinecap="round" style={{ marginRight:12, flexShrink:0 }}>
-                      <circle cx="12" cy="12" r="5"/>
-                      <line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
-                      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
-                      <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
-                      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
-                    </svg>
-                  ) : (
-                    <div style={{
-                      width:26, height:26, borderRadius:"50%", marginRight:12, flexShrink:0,
-                      background: isDone ? "#2D5018" : "#fff",
-                      border: `1.5px solid ${isDone ? "#2D5018" : "#D4E8BC"}`,
-                      display:"flex", alignItems:"center", justifyContent:"center",
-                    }}>
-                      {isDone && (
-                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                          <polyline points="20 6 9 17 4 12"/>
-                        </svg>
-                      )}
-                      {isNext && !isDone && <div style={{ width:8, height:8, borderRadius:"50%", background:"#2D5018" }}/>}
-                    </div>
-                  )}
-                  <div style={{ flex:1 }}>
-                    <div style={{ fontSize:14, fontWeight: isNext ? 600 : 500, color: isNext ? "#2D5018" : (isSunrise ? "#B89D60" : TEXT), fontFamily:SANS }}>
-                      {isSq ? (PR_SQ_PAGE[k]||k) : (PR_EN_PAGE[k]||k)}
-                    </div>
-                  </div>
-                  <div style={{ fontSize:13, color: isNext ? "#2D5018" : MUTED, fontWeight: isNext ? 600 : 400, fontFamily:SANS }}>
-                    {times.timings[k]}
-                  </div>
-                  {isNext && (
-                    <div style={{ marginLeft:8, padding:"2px 8px", borderRadius:999, background:"#2D5018", color:"#fff", fontSize:10, fontWeight:700, fontFamily:SANS, letterSpacing:"0.04em" }}>
-                      {isSq ? "Tjetri" : "Next"}
-                    </div>
-                  )}
-                </div>
-              );
-            })}
-          </div>
-
-          {/* Qibla card */}
-          {qiblaDeg !== null && (
-            <div style={{ background:"#fff", border:`1px solid #E0D5C0`, borderRadius:14, padding:"14px 16px", display:"flex", alignItems:"center", gap:14, boxShadow:"0 2px 12px rgba(26,25,21,0.07)" }}>
-              <div style={{ width:44, height:44, borderRadius:12, background:"#EDF5E3", display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0 }}>
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2D5018" strokeWidth="1.8" strokeLinecap="round">
-                  <path d="M12 2L8 7H5L3 10l9 2 9-2-2-3h-3L12 2z"/><line x1="12" y1="12" x2="12" y2="22"/><path d="M5 22h14"/>
-                </svg>
-              </div>
-              <div style={{ flex:1 }}>
-                <div style={{ fontSize:14, fontWeight:600, color:TEXT, fontFamily:SANS }}>
-                  {isSq ? "Drejtimi i Kibles" : "Qibla Direction"}
-                </div>
-                <div style={{ fontSize:13, color:"#9A8E7A", fontFamily:SANS, marginTop:2 }}>
-                  {qiblaDeg}° {isSq ? "nga Veriu" : "from North"}
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
-      )}
-    </div>
-  );
 }
 
 // ─── ZAKAT ────────────────────────────────────────────────────────
@@ -1875,207 +1533,6 @@ function IslamicCalendar() {
   );
 }
 
-// ─── SETTINGS HELPERS ─────────────────────────────────────────────
-function loadSavedLocation() {
-  try { return JSON.parse(localStorage.getItem("mp-location") || "null"); } catch { return null; }
-}
-function saveSavedLocation(loc) {
-  try { localStorage.setItem("mp-location", JSON.stringify(loc)); } catch {}
-}
-
-// ─── SETTINGS MODAL ───────────────────────────────────────────────
-function SettingsModal({ onClose, savedLocation, onSave, notifEnabled, onNotifToggle }) {
-  const [city, setCity] = useState(savedLocation?.name || "");
-  const [suggestions, setSuggestions] = useState([]);
-  const [showSugg, setShowSugg] = useState(false);
-  const [suggLoading, setSuggLoading] = useState(false);
-  const [selected, setSelected] = useState(savedLocation || null);
-  const [saved, setSaved] = useState(false);
-  const [gpsLoading, setGpsLoading] = useState(false);
-  const [gpsErr, setGpsErr] = useState("");
-  const debounceRef = useRef(null);
-  const wrapRef = useRef(null);
-
-  async function useGPS() {
-    if (!navigator.geolocation) { setGpsErr("Geolocation not supported"); return; }
-    setGpsLoading(true); setGpsErr("");
-    navigator.geolocation.getCurrentPosition(
-      async ({ coords }) => {
-        try {
-          const res = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${coords.latitude}&lon=${coords.longitude}&format=json&addressdetails=1`, { headers: { "Accept-Language": "en" } });
-          const json = await res.json();
-          const name = [json.address?.city || json.address?.town || json.address?.village || json.address?.county, json.address?.country].filter(Boolean).join(", ");
-          const loc = { name: name || "My Location", lat: coords.latitude, lon: coords.longitude, country: json.address?.country_code?.toUpperCase() || "" };
-          setCity(loc.name); setSelected(loc);
-        } catch {
-          setSelected({ name: "My Location", lat: coords.latitude, lon: coords.longitude, country: "" });
-          setCity("My Location");
-        }
-        setGpsLoading(false);
-      },
-      (err) => { setGpsErr("Location access denied. Please search manually."); setGpsLoading(false); },
-      { timeout: 10000 }
-    );
-  }
-
-  useEffect(() => {
-    if (city.length < 2) { setSuggestions([]); setShowSugg(false); return; }
-    if (selected && city === selected.name) return;
-    clearTimeout(debounceRef.current);
-    debounceRef.current = setTimeout(async () => {
-      setSuggLoading(true);
-      try {
-        const res = await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(city)}&format=json&limit=8&addressdetails=1`, { headers: { "Accept-Language": "en" } });
-        const json = await res.json();
-        const cities = json.map(r => ({ name: r.display_name.split(",").slice(0,3).join(", "), lat: parseFloat(r.lat), lon: parseFloat(r.lon), country: r.address?.country_code?.toUpperCase() || "" }));
-        setSuggestions(cities.slice(0, 6));
-        setShowSugg(true);
-      } catch { setSuggestions([]); }
-      setSuggLoading(false);
-    }, 350);
-  }, [city]);
-
-  useEffect(() => {
-    function handle(e) { if (wrapRef.current && !wrapRef.current.contains(e.target)) setShowSugg(false); }
-    document.addEventListener("mousedown", handle);
-    return () => document.removeEventListener("mousedown", handle);
-  }, []);
-
-  function pick(s) { setCity(s.name); setSelected(s); setShowSugg(false); setSuggestions([]); }
-
-  function save() {
-    if (!selected) return;
-    saveSavedLocation(selected);
-    onSave(selected);
-    setSaved(true);
-    setTimeout(() => { setSaved(false); onClose(); }, 800);
-  }
-
-  function clear() { setCity(""); setSelected(null); saveSavedLocation(null); onSave(null); }
-
-  return (
-    <div onClick={onClose} style={{ position:"fixed", inset:0, zIndex:1000, background:"rgba(0,0,0,0.45)", backdropFilter:"blur(4px)", display:"flex", alignItems:"center", justifyContent:"center", padding:24 }}>
-      <div onClick={e => e.stopPropagation()} style={{ background:"#faf5ec", borderRadius:16, maxWidth:460, width:"100%", boxShadow:`0 16px 60px rgba(160,120,50,0.22), 0 0 0 1px ${GOLD}20`, overflow:"hidden" }}>
-
-        {/* Header */}
-        <div style={{ background:`linear-gradient(135deg,${SURFACE},#f0e8d0)`, borderBottom:`1px solid ${GOLD}30`, padding:"22px 28px", display:"flex", justifyContent:"space-between", alignItems:"center" }}>
-          <div>
-            <div style={{ fontSize:20, fontWeight:400, color:TEXT, fontFamily:SERIF, letterSpacing:"0.06em" }}>Settings</div>
-            <div style={{ fontSize:11, color:MUTED, marginTop:4, letterSpacing:"0.08em" }}>Location · Prayer Times</div>
-          </div>
-          <button onClick={onClose} style={{ background:"transparent", border:`1px solid ${BORDER}`, borderRadius:2, color:MUTED, width:32, height:32, cursor:"pointer", fontSize:14 }}>✕</button>
-        </div>
-
-        <div style={{ padding:24 }}>
-          {/* Current location display */}
-          {savedLocation && (
-            <div style={{ background:GREEN_L, border:`1px solid ${GOLD}40`, borderRadius:2, padding:"14px 18px", marginBottom:20, display:"flex", justifyContent:"space-between", alignItems:"center" }}>
-              <div>
-                <div style={{ fontSize:10, fontWeight:600, color:GOLD, textTransform:"uppercase", letterSpacing:"0.12em" }}>Active Location</div>
-                <div style={{ fontSize:14, fontWeight:500, color:TEXT, marginTop:4, letterSpacing:"0.03em" }}>📍 {savedLocation.name}</div>
-              </div>
-              <button onClick={clear} style={{ background:"none", border:`1px solid ${BORDER}`, borderRadius:2, padding:"5px 12px", fontSize:11, color:MUTED, cursor:"pointer", letterSpacing:"0.06em", textTransform:"uppercase" }}>Remove</button>
-            </div>
-          )}
-
-          {/* GPS button */}
-          <button onClick={useGPS} disabled={gpsLoading} style={{ width:"100%", display:"flex", alignItems:"center", justifyContent:"center", gap:8, padding:"11px", marginBottom:14, borderRadius:"var(--radius-sm)", border:`1px solid ${GOLD}50`, background:GREEN_L, color:GOLD, fontSize:13, fontWeight:600, cursor:gpsLoading ? "wait" : "pointer", transition:"all 0.2s", fontFamily:SANS }}>
-            <span style={{ fontSize:16 }}>📡</span>
-            {gpsLoading ? "Getting location…" : "Use my GPS location"}
-          </button>
-          {gpsErr && <p style={{ margin:"-8px 0 12px", fontSize:11, color:"#c0392b", textAlign:"center" }}>{gpsErr}</p>}
-
-          <div style={{ display:"flex", alignItems:"center", gap:8, marginBottom:14 }}>
-            <div style={{ flex:1, height:1, background:BORDER }} />
-            <span style={{ fontSize:11, color:MUTED, letterSpacing:"0.08em" }}>OR</span>
-            <div style={{ flex:1, height:1, background:BORDER }} />
-          </div>
-
-          {/* City search */}
-          <div style={{ position:"relative", marginBottom:16 }} ref={wrapRef}>
-            <label style={{ fontSize:13, fontWeight:600, color:TEXT, display:"block", marginBottom:6 }}>Search City</label>
-            <div style={{ position:"relative" }}>
-              <input
-                placeholder="e.g. London, Prishtina, Dubai…"
-                value={city}
-                onChange={e => { setCity(e.target.value); setSelected(null); }}
-                onFocus={() => suggestions.length > 0 && setShowSugg(true)}
-                style={{ width:"100%", padding:"10px 36px 10px 12px", borderRadius:8, border:`1px solid ${BORDER}`, fontSize:14, color:TEXT, background:SURFACE, outline:"none", boxSizing:"border-box" }}
-                onFocusCapture={e => e.target.style.borderColor = GREEN}
-                onBlur={e => e.target.style.borderColor = BORDER}
-              />
-              {suggLoading && <div style={{ position:"absolute", right:10, top:"50%", transform:"translateY(-50%)", fontSize:12, color:MUTED }}>⏳</div>}
-            </div>
-
-            {showSugg && suggestions.length > 0 && (
-              <div style={{ position:"absolute", top:"100%", left:0, right:0, zIndex:200, background:SURFACE, border:`1px solid ${BORDER}`, borderRadius:10, boxShadow:"0 8px 24px rgba(0,0,0,0.12)", marginTop:4, overflow:"hidden" }}>
-                {suggestions.map((s, i) => (
-                  <button key={i} onMouseDown={() => pick(s)} style={{ display:"block", width:"100%", textAlign:"left", padding:"10px 14px", border:"none", background:"none", cursor:"pointer", fontSize:14, color:TEXT, borderBottom: i < suggestions.length-1 ? `1px solid ${BORDER}` : "none", transition:"background 0.1s" }}
-                    onMouseEnter={e => e.currentTarget.style.background=GREEN_L}
-                    onMouseLeave={e => e.currentTarget.style.background="none"}
-                  >
-                    <span style={{ marginRight:8 }}>📍</span>{s.name}
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
-
-          {selected && (
-            <div style={{ background:GREEN_L, border:`1px solid ${GOLD}30`, borderRadius:2, padding:"10px 14px", marginBottom:16, fontSize:12, color:GOLD, letterSpacing:"0.04em" }}>
-              ✦ {selected.name} &nbsp;·&nbsp; {selected.lat.toFixed(3)}°N {selected.lon.toFixed(3)}°E
-            </div>
-          )}
-
-          <button onClick={save} disabled={!selected || saved} style={{ width:"100%", padding:"13px", borderRadius:2, border:`1px solid ${selected && !saved ? GOLD : BORDER}`, background: saved ? GREEN_L : selected ? `linear-gradient(135deg,${GOLD},#A8893C)` : "#faf5ec", color: saved ? GOLD : selected ? "#f0e6ce" : MUTED, fontSize:12, fontWeight:700, cursor: selected && !saved ? "pointer" : "not-allowed", transition:"all 0.2s", letterSpacing:"0.12em", textTransform:"uppercase", fontFamily:SANS }}>
-            {saved ? "✅ Saved!" : "Save Location"}
-          </button>
-
-          <p style={{ margin:"14px 0 0", fontSize:12, color:MUTED, textAlign:"center" }}>
-            Prayer times will auto-load with this location on every visit.
-          </p>
-
-          {/* Prayer Notification Toggle */}
-          <div style={{ marginTop:24, paddingTop:20, borderTop:`1px solid ${BORDER}` }}>
-            <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center" }}>
-              <div>
-                <div style={{ fontSize:13, fontWeight:600, color:TEXT }}>Prayer Notifications</div>
-                <div style={{ fontSize:11, color:MUTED, marginTop:3, letterSpacing:"0.03em" }}>
-                  Browser alert at each prayer time
-                  {!savedLocation && <span style={{ color:GOLD }}> — save a location first</span>}
-                </div>
-              </div>
-              <button
-                disabled={!savedLocation}
-                onClick={() => onNotifToggle(!notifEnabled)}
-                style={{
-                  width:46, height:26, borderRadius:13,
-                  background: notifEnabled ? GOLD : BORDER,
-                  border:"none", cursor: savedLocation ? "pointer" : "not-allowed",
-                  position:"relative", transition:"background 0.25s", flexShrink:0,
-                  opacity: savedLocation ? 1 : 0.4,
-                }}
-              >
-                <span style={{
-                  position:"absolute", top:3, left: notifEnabled ? 23 : 3,
-                  width:20, height:20, borderRadius:"50%",
-                  background: notifEnabled ? "#f0e6ce" : MUTED,
-                  transition:"left 0.25s",
-                }} />
-              </button>
-            </div>
-            {notifEnabled && savedLocation && (
-              <div style={{ marginTop:10, fontSize:11, color:GOLD, background:GREEN_L, border:`1px solid ${GOLD}30`, borderRadius:2, padding:"8px 12px" }}>
-                🔔 Notifications scheduled for today's prayers in {savedLocation.name}
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
 // ─── GLOBAL SEARCH ────────────────────────────────────────────────
 function GlobalSearch({ onClose, navigate, lectures }) {
   const [query, setQuery] = useState("");
@@ -2471,12 +1928,12 @@ function LangBar({ page }) {
 }
 
 // ─── APP ──────────────────────────────────────────────────────────
-const VALID_PAGES = ["home","prayer","zakat","inheritance","calendar","dates","library","audio","tasbeeh","quran","dua","asma","admin","profile"];
+const VALID_PAGES = ["home","zakat","inheritance","calendar","dates","library","audio","tasbeeh","quran","dua","asma","admin","profile"];
 
 // ── Language-prefixed URL slug mapping ────────────────────────────
 const PAGE_SLUGS = {
-  en: { home:"", prayer:"prayer", zakat:"zakat", inheritance:"inheritance", calendar:"calendar", dates:"dates", library:"library", audio:"audio", tasbeeh:"tasbeeh", quran:"quran", dua:"dua", asma:"asma", admin:"admin", profile:"profile" },
-  sq: { home:"", prayer:"namazi", zakat:"zekati", inheritance:"hiseja", calendar:"kalendari", dates:"datat", library:"biblioteka", audio:"ligjerata", tasbeeh:"tesbihe", quran:"kurani", dua:"dua", asma:"emrat", admin:"admin", profile:"profili" },
+  en: { home:"", zakat:"zakat", inheritance:"inheritance", calendar:"calendar", dates:"dates", library:"library", audio:"audio", tasbeeh:"tasbeeh", quran:"quran", dua:"dua", asma:"asma", admin:"admin", profile:"profile" },
+  sq: { home:"", zakat:"zekati", inheritance:"hiseja", calendar:"kalendari", dates:"datat", library:"biblioteka", audio:"ligjerata", tasbeeh:"tesbihe", quran:"kurani", dua:"dua", asma:"emrat", admin:"admin", profile:"profili" },
 };
 function slugToPage(lang, slug) {
   const map = PAGE_SLUGS[lang] || PAGE_SLUGS.en;
@@ -2668,10 +2125,7 @@ export default function App() {
   const QURAN_QUOTES  = QUOTES.filter(q =>  q.src?.startsWith("Quran"));
   const [quote]       = useState(() => HADITH_QUOTES[Math.floor(Math.random() * HADITH_QUOTES.length)]);
   const [verseQuote]  = useState(() => QURAN_QUOTES [Math.floor(Math.random() * QURAN_QUOTES.length)]);
-  const [savedLocation, setSavedLocation] = useState(() => loadSavedLocation());
-  const [showSettings, setShowSettings] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
-  const [notifEnabled, setNotifEnabled] = useState(() => localStorage.getItem("mp-notifs") === "1");
   const [duaFavs, setDuaFavs] = useState(() => {
     try { return new Set(JSON.parse(localStorage.getItem("mp-dua-favs") || "[]")); } catch { return new Set(); }
   });
@@ -2684,7 +2138,6 @@ export default function App() {
       return next;
     });
   }
-  const notifTimers = useRef([]);
 
   // ── PWA install prompt ────────────────────────────────────────
   const deferredPrompt = useRef(null);
@@ -2874,54 +2327,6 @@ export default function App() {
   }
   // ──────────────────────────────────────────────────────────────
 
-  // ── Prayer notifications ───────────────────────────────────────
-  async function schedulePrayerNotifs(loc) {
-    if (!loc || !("Notification" in window)) return;
-    let perm = Notification.permission;
-    if (perm === "denied") return;
-    if (perm !== "granted") perm = await Notification.requestPermission();
-    if (perm !== "granted") return;
-
-    notifTimers.current.forEach(t => clearTimeout(t));
-    notifTimers.current = [];
-
-    const d = new Date();
-    const dateStr = `${d.getDate()}-${d.getMonth()+1}-${d.getFullYear()}`;
-    try {
-      const res = await fetch(`https://api.aladhan.com/v1/timings/${dateStr}?latitude=${loc.lat}&longitude=${loc.lon}&method=99&school=0&methodSettings=15,null,18`);
-      const json = await res.json();
-      if (json.code !== 200) return;
-      const now = Date.now();
-      for (const name of ["Fajr","Dhuhr","Asr","Maghrib","Isha"]) {
-        const [h, m] = json.data.timings[name].split(":").map(Number);
-        const pDate = new Date(); pDate.setHours(h, m, 0, 0);
-        const ms = pDate.getTime() - now;
-        if (ms > 0) {
-          const t = setTimeout(() => {
-            new Notification(`🕌 ${name} — Time to Pray`, {
-              body: `${name} prayer time has begun in ${loc.name}`,
-              icon: "/logo.png",
-            });
-          }, ms);
-          notifTimers.current.push(t);
-        }
-      }
-    } catch {}
-  }
-
-  useEffect(() => {
-    if (notifEnabled && savedLocation) schedulePrayerNotifs(savedLocation);
-    else { notifTimers.current.forEach(t => clearTimeout(t)); notifTimers.current = []; }
-  }, [notifEnabled, savedLocation]);
-
-  function handleNotifToggle(val) {
-    setNotifEnabled(val);
-    try { localStorage.setItem("mp-notifs", val ? "1" : "0"); } catch {}
-  }
-  // ──────────────────────────────────────────────────────────────
-
-  function handleSaveLocation(loc) { setSavedLocation(loc); }
-
   // Ctrl+K / Cmd+K opens search
   useEffect(() => {
     function onKey(e) {
@@ -2950,9 +2355,7 @@ export default function App() {
 
   // Dynamic <title> + <meta description> per page
   const PAGE_META = {
-    home:        { title: "Muslim's Path — Daily Islamic Companion",          desc: "Prayer times, Quran, Duas, Tasbeeh, Islamic calendar and more — all in one app." },
-    prayer:      { title: "Prayer Times — Muslim's Path",                      desc: "Accurate daily prayer times (Fajr, Dhuhr, Asr, Maghrib, Isha) for any city worldwide." },
-
+    home:        { title: "Muslim's Path — Daily Islamic Companion",          desc: "Quran, Duas, Tasbeeh, Islamic calendar and more — all in one app." },
     quran:       { title: "Quran — Muslim's Path",                             desc: "Read the Holy Quran with Arabic text, transliteration and English translation." },
     dua:         { title: "Dua & Dhikr — Muslim's Path",                       desc: "Morning & evening adhkar, daily supplications and situational remembrances." },
     asma:        { title: "99 Names of Allah — Muslim's Path",                 desc: "Al-Asma ul-Husna — the 99 Beautiful Names of Allah with meanings and transliteration." },
@@ -3008,11 +2411,10 @@ export default function App() {
       {page !== "home" && page !== "quran" && <KaabaWatermark fixed opacity={0.08} />}
 
       <audio ref={audioRef} onTimeUpdate={onTimeUpdate} onEnded={handleAudioEnd} onLoadedMetadata={() => setDuration(audioRef.current?.duration || 0)} />
-      <Navbar page={page} setPage={navigate} onSettings={() => setShowSettings(true)} hasLocation={!!savedLocation} onSearch={() => setShowSearch(true)} authUser={authUser} onAuthClick={() => setShowAuth(true)} onSignOut={handleSignOut} />
+      <Navbar page={page} setPage={navigate} onSearch={() => setShowSearch(true)} authUser={authUser} onAuthClick={() => setShowAuth(true)} onSignOut={handleSignOut} />
       {page === "home" && <LangBar page={page} />}
       <main>
-        {page === "home" && <Home quote={quote} verseQuote={verseQuote} setPage={navigate} savedLocation={savedLocation} onSaveLocation={loc => { saveSavedLocation(loc); handleSaveLocation(loc); }} showInstall={showInstall} onInstall={handleInstall} onDismissInstall={dismissInstall} />}
-        {page === "prayer" && <PrayerTimes savedLocation={savedLocation} />}
+        {page === "home" && <Home quote={quote} verseQuote={verseQuote} setPage={navigate} showInstall={showInstall} onInstall={handleInstall} onDismissInstall={dismissInstall} />}
         {page === "zakat" && <Zakat />}
         {page === "inheritance" && <Inheritance />}
         {page === "calendar" && <IslamicCalendar />}
@@ -3030,20 +2432,11 @@ export default function App() {
           onSkip={skipTrack}
           onStopQuranAudio={() => { if (current?.type === "quran") stopAudio(); }}
         />}
-        {page === "profile" && <Profile authUser={authUser} onSignOut={handleSignOut} notifEnabled={notifEnabled} onNotifToggle={handleNotifToggle} savedLocation={savedLocation} navigate={navigate} />}
+        {page === "profile" && <Profile authUser={authUser} onSignOut={handleSignOut} navigate={navigate} />}
         {page === "dua"     && <DuaPage favs={duaFavs} onFav={toggleDuaFav} />}
         {page === "asma"    && <AsmaPage />}
         {page === "admin"   && <AdminPage authSession={authSession} />}
       </main>
-      {showSettings && (
-        <SettingsModal
-          onClose={() => setShowSettings(false)}
-          savedLocation={savedLocation}
-          onSave={handleSaveLocation}
-          notifEnabled={notifEnabled}
-          onNotifToggle={handleNotifToggle}
-        />
-      )}
       {showSearch && (
         <GlobalSearch
           onClose={() => setShowSearch(false)}

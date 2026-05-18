@@ -77,12 +77,11 @@ function SettingRow({ label, value, toggle, checked, onToggle, last, danger, onC
   );
 }
 
-export default function Profile({ authUser, onSignOut, notifEnabled, onNotifToggle, savedLocation, navigate }) {
+export default function Profile({ authUser, onSignOut, navigate }) {
   const { i18n: _i18n } = useTranslation();
   const isSq = _i18n.language?.startsWith("sq");
 
   const [toggles, setToggles] = useState({
-    prayerReminders: notifEnabled ?? false,
     dhikrReminder: false,
     quranGoal: true,
   });
@@ -92,9 +91,7 @@ export default function Profile({ authUser, onSignOut, notifEnabled, onNotifTogg
   );
 
   function flipToggle(key) {
-    const next = !toggles[key];
-    setToggles(prev => ({ ...prev, [key]: next }));
-    if (key === "prayerReminders" && onNotifToggle) onNotifToggle(next);
+    setToggles(prev => ({ ...prev, [key]: !prev[key] }));
   }
 
   function cycleFontSize() {
@@ -106,8 +103,6 @@ export default function Profile({ authUser, onSignOut, notifEnabled, onNotifTogg
 
   const displayName = authUser?.user_metadata?.full_name || authUser?.email?.split("@")[0] || "Guest";
   const initial     = displayName.charAt(0).toUpperCase();
-
-  const locationLabel = savedLocation?.name || (isSq ? "Nuk është vendosur" : "Not set");
 
   return (
     <div style={{ background: W.bg, minHeight: "100vh", paddingBottom: 90 }}>
@@ -156,7 +151,6 @@ export default function Profile({ authUser, onSignOut, notifEnabled, onNotifTogg
       <div style={{ margin: "16px 20px 0", display: "flex", gap: 10 }}>
         {[
           { label: isSq ? "Ditë radhë" : "Day streak",        value: "—" },
-          { label: isSq ? "Namaze"     : "Prayers logged",    value: "—" },
           { label: isSq ? "Xhuz lexuar": "Juz read",          value: "—" },
         ].map((s, i) => (
           <div key={i} style={{
@@ -170,20 +164,8 @@ export default function Profile({ authUser, onSignOut, notifEnabled, onNotifTogg
         ))}
       </div>
 
-      {/* Account settings */}
-      <div style={{ margin: "20px 20px 0" }}>
-        <SectionLabel>{isSq ? "Llogaria" : "Account"}</SectionLabel>
-        <div style={{ background: W.card, border: `1px solid ${W.border}`, borderRadius: 14, boxShadow: W.shadow, overflow: "hidden" }}>
-          <SettingRow
-            label={isSq ? "Vendndodhja" : "Location"}
-            value={locationLabel}
-            onClick={() => navigate && navigate("prayer")}
-          />
-        </div>
-      </div>
-
       {/* App settings */}
-      <div style={{ margin: "16px 20px 0" }}>
+      <div style={{ margin: "20px 20px 0" }}>
         <SectionLabel>{isSq ? "Aplikacioni" : "App"}</SectionLabel>
         <div style={{ background: W.card, border: `1px solid ${W.border}`, borderRadius: 14, boxShadow: W.shadow, overflow: "hidden" }}>
           <SettingRow
@@ -201,11 +183,6 @@ export default function Profile({ authUser, onSignOut, notifEnabled, onNotifTogg
       <div style={{ margin: "16px 20px 0" }}>
         <SectionLabel>{isSq ? "Njoftime" : "Notifications"}</SectionLabel>
         <div style={{ background: W.card, border: `1px solid ${W.border}`, borderRadius: 14, boxShadow: W.shadow, overflow: "hidden" }}>
-          <SettingRow
-            label={isSq ? "Kujtuese të namazit" : "Prayer reminders"}
-            toggle checked={toggles.prayerReminders}
-            onToggle={() => flipToggle("prayerReminders")}
-          />
           <SettingRow
             label={isSq ? "Kujtuese e dhikrit ditor" : "Daily dhikr reminder"}
             toggle checked={toggles.dhikrReminder}
