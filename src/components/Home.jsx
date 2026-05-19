@@ -86,6 +86,139 @@ const DHIKR_PRESETS = [
   { label:"Ṣalawāt",         arabic:"اللَّهُمَّ صَلِّ عَلَى مُحَمَّد", target:100 },
 ];
 
+// ─── PRAYER STRIP DATA ────────────────────────────────────────────────
+const HOME_PRAYERS = [
+  {
+    id: "sabahu", nameAlb: "Sabahu", timeLabel: { sq: "AGIM",     en: "DAWN"    },
+    rakatFard: 2, rakatSunnah: 2,
+    sky: "linear-gradient(180deg,#141A38 0%,#2A1F4A 18%,#4A2E58 38%,#8A4E5E 60%,#C87858 78%,#E8AE7A 92%,#F2C898 100%)",
+    sunY: 86, sunColor: "#F8D89A", sunGlow: "rgba(248,200,140,0.45)",
+    stars: [{ x:18,y:12,s:0.9 },{ x:32,y:8,s:0.7 },{ x:64,y:14,s:1 },{ x:78,y:10,s:0.8 },{ x:88,y:22,s:0.6 }],
+    window: [4*60+30, 5*60+45],
+  },
+  {
+    id: "dreka", nameAlb: "Dreka", timeLabel: { sq: "MESDITË",  en: "MIDDAY"  },
+    rakatFard: 4, rakatSunnah: 6,
+    sky: "linear-gradient(180deg,#4A8AB8 0%,#6FA8CC 25%,#98C0DC 55%,#C8DCE8 85%,#E8EFF2 100%)",
+    sunY: 22, sunColor: "#FFF8E0", sunGlow: "rgba(255,248,224,0.55)",
+    stars: null,
+    window: [12*60+15, 15*60+45],
+  },
+  {
+    id: "iqindia", nameAlb: "Iqindia", timeLabel: { sq: "PASDITE", en: "AFTERNOON" },
+    rakatFard: 4, rakatSunnah: 4,
+    sky: "linear-gradient(180deg,#6FA0BC 0%,#98B0B8 25%,#C8A878 55%,#E0B870 80%,#ECC890 100%)",
+    sunY: 48, sunColor: "#F8C870", sunGlow: "rgba(248,200,112,0.5)",
+    stars: null,
+    window: [15*60+45, 18*60+30],
+  },
+  {
+    id: "akshami", nameAlb: "Akshami", timeLabel: { sq: "PERËNDIM", en: "SUNSET"  },
+    rakatFard: 3, rakatSunnah: 2,
+    sky: "linear-gradient(180deg,#2A1F58 0%,#5A2E5A 18%,#9A3A52 38%,#D0583A 58%,#E88838 75%,#F2B068 88%,#F8D098 100%)",
+    sunY: 70, sunColor: "#FFD088", sunGlow: "rgba(255,200,120,0.55)",
+    stars: [{ x:18,y:12,s:1 }],
+    window: [18*60+30, 20*60+15],
+  },
+  {
+    id: "jacia", nameAlb: "Jacia", timeLabel: { sq: "NATË",     en: "NIGHT"   },
+    rakatFard: 4, rakatSunnah: 4,
+    sky: "linear-gradient(180deg,#050828 0%,#0F1438 25%,#1A2050 50%,#1F2858 75%,#28305A 100%)",
+    sunY: -10, sunColor: "#E8E0F0", sunGlow: "rgba(232,224,240,0.35)",
+    stars: [{ x:12,y:14,s:1 },{ x:22,y:28,s:1.5 },{ x:35,y:12,s:0.8 },{ x:48,y:22,s:1.2 },{ x:62,y:18,s:1 },{ x:78,y:30,s:1.3 },{ x:88,y:14,s:0.9 }],
+    isNight: true,
+    window: [20*60+15, (24+4)*60+30],
+  },
+];
+
+function getCurrentPrayerIdx() {
+  const now = new Date();
+  const mins = now.getHours() * 60 + now.getMinutes();
+  for (let i = 0; i < HOME_PRAYERS.length; i++) {
+    const [s, e] = HOME_PRAYERS[i].window;
+    if (e > 24*60 ? (mins >= s || mins < e - 24*60) : (mins >= s && mins < e)) return i;
+  }
+  return HOME_PRAYERS.length - 1;
+}
+
+function HomePrayerCard({ prayer, isCurrent, isSq, onClick }) {
+  const [hov, setHov] = useState(false);
+  const W_CARD = 155;
+  const label = isSq ? prayer.timeLabel.sq : prayer.timeLabel.en;
+  return (
+    <button
+      onClick={onClick}
+      onMouseEnter={() => setHov(true)}
+      onMouseLeave={() => setHov(false)}
+      style={{
+        flexShrink: 0, width: W_CARD, borderRadius: 16, overflow: "hidden",
+        border: isCurrent ? "2px solid rgba(255,255,255,0.9)" : "2px solid transparent",
+        boxShadow: hov ? "0 8px 24px rgba(0,0,0,0.25)" : "0 3px 12px rgba(0,0,0,0.18)",
+        transform: hov ? "translateY(-3px)" : "none",
+        transition: "transform 0.18s, box-shadow 0.18s",
+        cursor: "pointer", background: "none", padding: 0, textAlign: "left",
+        outline: "none",
+      }}
+    >
+      {/* Sky scene */}
+      <div style={{ position: "relative", height: 100, background: prayer.sky, overflow: "hidden" }}>
+        {/* Stars */}
+        {prayer.stars?.map((st, i) => (
+          <div key={i} style={{
+            position: "absolute", left: `${st.x}%`, top: `${st.y}%`,
+            width: st.s * 3, height: st.s * 3, borderRadius: "50%",
+            background: "#fff", opacity: 0.85,
+          }}/>
+        ))}
+        {/* Sun / Moon */}
+        {prayer.sunY > -5 && (
+          <div style={{
+            position: "absolute", left: "50%", top: `${prayer.sunY}%`,
+            transform: "translate(-50%, -50%)",
+            width: prayer.isNight ? 22 : 30, height: prayer.isNight ? 22 : 30,
+            borderRadius: "50%", background: prayer.sunColor,
+            boxShadow: `0 0 ${prayer.isNight ? 10 : 18}px 4px ${prayer.sunGlow}`,
+          }}/>
+        )}
+        {/* Time label */}
+        <div style={{
+          position: "absolute", top: 8, left: 9,
+          fontSize: 9, fontWeight: 700, letterSpacing: "0.08em",
+          color: "rgba(255,255,255,0.85)", fontFamily: SA,
+        }}>{label}</div>
+        {/* TANI / NOW badge */}
+        {isCurrent && (
+          <div style={{
+            position: "absolute", top: 7, right: 7,
+            background: "#fff", color: "#1A1915",
+            fontSize: 9, fontWeight: 800, letterSpacing: "0.06em",
+            padding: "2px 6px", borderRadius: 99, fontFamily: SA,
+          }}>{isSq ? "TANI" : "NOW"}</div>
+        )}
+      </div>
+      {/* Card body */}
+      <div style={{ background: "#fff", padding: "10px 12px 12px" }}>
+        <div style={{ fontSize: 16, fontWeight: 700, color: "#1A1915", fontFamily: SR, marginBottom: 5 }}>
+          {prayer.nameAlb}
+        </div>
+        <div style={{ display: "flex", gap: 8, alignItems: "center", marginBottom: 8 }}>
+          <span style={{ fontSize: 10, color: "#6B6050", fontFamily: SA }}>
+            <strong style={{ color: "#1A1915" }}>{prayer.rakatFard}</strong> {isSq ? "FARZ" : "FARD"}
+          </span>
+          <span style={{ width: 1, height: 10, background: "#E0D5C0" }}/>
+          <span style={{ fontSize: 10, color: "#6B6050", fontFamily: SA }}>
+            <strong style={{ color: "#1A1915" }}>{prayer.rakatSunnah}</strong> {isSq ? "SUNET" : "SUNNAH"}
+          </span>
+        </div>
+        <div style={{ display: "flex", alignItems: "center", gap: 4, fontSize: 11, color: "#9A8E7A", fontFamily: SA }}>
+          {isSq ? "Mëso si të falesh" : "Learn to pray"}
+          <span style={{ fontSize: 13, marginTop: -1 }}>→</span>
+        </div>
+      </div>
+    </button>
+  );
+}
+
 // ─── FEATURE CARD ─────────────────────────────────────────────────────
 function FeatureCard({ icon, title, sub, onClick }) {
   const [hov, setHov] = useState(false);
@@ -281,6 +414,37 @@ export default function Home({ quote, verseQuote, setPage, showInstall, onInstal
           )}
         </div>
       </div>
+
+      {/* ── Prayer Strip ─────────────────────────────────────────────── */}
+      {(() => {
+        const currentIdx = getCurrentPrayerIdx();
+        return (
+          <div style={{ margin: "16px 0 0" }}>
+            <div style={{ padding: "0 20px", marginBottom: 8, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+              <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", color: W.mutedDark, fontFamily: SA }}>
+                {isSq ? "Pesë Namazet" : "Five Prayers"}
+              </div>
+              <button
+                onClick={() => setPage("namaz")}
+                style={{ fontSize: 11, color: W.gold, fontFamily: SA, fontWeight: 600, background: "none", border: "none", cursor: "pointer", padding: 0 }}
+              >
+                {isSq ? "Shiko të gjitha →" : "See all →"}
+              </button>
+            </div>
+            <div className="hide-scrollbar" style={{ display: "flex", gap: 10, overflowX: "auto", padding: "0 20px 4px", scrollSnapType: "x mandatory" }}>
+              {HOME_PRAYERS.map((p, i) => (
+                <HomePrayerCard
+                  key={p.id}
+                  prayer={p}
+                  isCurrent={i === currentIdx}
+                  isSq={isSq}
+                  onClick={() => setPage("namaz")}
+                />
+              ))}
+            </div>
+          </div>
+        );
+      })()}
 
       {/* ── Hadith of the Day ────────────────────────────────────────── */}
       {quote && (
