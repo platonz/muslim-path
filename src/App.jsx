@@ -2384,9 +2384,12 @@ export default function App() {
     setMeta('meta[property="og:url"]',          "content", `https://www.muslimspath.app${pageToUrl(page, lang)}`);
   }, [page]);
 
-  function navigate(p) {
+  const [namazPrayerId, setNamazPrayerId] = useState(null);
+
+  function navigate(p, extra) {
     if (p !== page) setNavHistory(h => [...h, page]);
     setPage(p);
+    if (p === "namaz") setNamazPrayerId(extra || null);
     const lang = i18n.language?.startsWith("sq") ? "sq" : "en";
     window.history.pushState({}, "", pageToUrl(p, lang));
   }
@@ -2438,7 +2441,7 @@ export default function App() {
         {page === "dua"     && <DuaPage favs={duaFavs} onFav={toggleDuaFav} />}
         {page === "asma"    && <AsmaPage />}
         {page === "admin"   && <AdminPage authSession={authSession} />}
-        {page === "namaz"   && <SiTeFalesh />}
+        {page === "namaz"   && <SiTeFalesh initialPrayerId={namazPrayerId} />}
       </main>
       {showSearch && (
         <GlobalSearch

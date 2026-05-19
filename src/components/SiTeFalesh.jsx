@@ -1178,8 +1178,12 @@ function SiTeFaleshDetail({ prayerId, onBack, layout, setLayout }) {
 }
 
 // ─── MAIN EXPORT ──────────────────────────────────────────────────
-export default function SiTeFalesh() {
-  const [view, setView] = useState({ screen: 'home', prayerId: null });
+export default function SiTeFalesh({ initialPrayerId = null }) {
+  const [view, setView] = useState(
+    initialPrayerId
+      ? { screen: 'detail', prayerId: initialPrayerId }
+      : { screen: 'home', prayerId: null }
+  );
   const [layout, setLayout] = useState('scroll');
 
   function openPrayer(id) {
