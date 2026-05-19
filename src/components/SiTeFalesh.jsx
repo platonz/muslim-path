@@ -471,13 +471,6 @@ function RecitationCard({ step: s, accent, accentDark, showTranslit }) {
         textTransform: 'uppercase', color: accentDark, marginBottom: 8,
       }}>Ç'thuhet</div>
 
-      {/* Arabic */}
-      <div style={{
-        fontFamily: "'Lateef', 'Amiri', serif", fontSize: 26, fontWeight: 400,
-        lineHeight: 1.9, direction: 'rtl', textAlign: 'right',
-        color: C.dark900, marginBottom: showTranslit ? 6 : 0,
-      }}>{s.arabic}</div>
-
       {/* Transliteration */}
       {showTranslit && s.translit && (
         <div style={{
