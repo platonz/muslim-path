@@ -315,7 +315,7 @@ export default function Home({ quote, verseQuote, setPage, showInstall, onInstal
   ];
   const TOOLS = [
     { id:"zakat",       icon:"zakat",   en:"Zakat",   sq:"Zekati",  subEn:"Calculate your zakat",  subSq:"Llogarit zekatin" },
-    { id:"inheritance", icon:"inherit", en:"Will",    sq:"Hiseja",  subEn:"Islamic will planner",  subSq:"Planifikues testamenti" },
+    { id:"inheritance", icon:"inherit", en:"Will",    sq:"Hiseja",  subEn:"Learning estimate",  subSq:"Vlerësim mësimor" },
     { id:"dates",       icon:"dates",   en:"Dates",   sq:"Datat",   subEn:"Hijri ↔ Gregorian",     subSq:"Hijri ↔ Gregorian" },
   ];
 

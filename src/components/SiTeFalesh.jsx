@@ -41,9 +41,9 @@ const PRAYERS = [
     stars: [{ x:18,y:12,s:0.9 },{ x:32,y:8,s:0.7 },{ x:64,y:14,s:1 },{ x:78,y:10,s:0.8 },{ x:88,y:22,s:0.6 }],
     accent: '#C87858', accentDark: '#7A3848', onSky: '#F5DCB0',
     tips: [
-      { title: 'Mos e ngatërro me imsakun', body: 'Sabahu fillon në agim (kur shfaqet drita e parë) — jo në lindjen e diellit. Pas lindjes së diellit nuk lejohet më ta falësh.' },
+      { title: 'Mos e ngatërro me imsakun', body: 'Sabahu fillon në agimin e vërtetë dhe koha e tij mbaron kur lind dielli. Nëse e humb pa dashje, fale kaza pasi të kalojë momenti i ndaluar i lindjes së diellit.' },
       { title: 'Lexo me zë (jo me shumë zë)', body: 'Fatihaja dhe sureja e shkurtër lexohen me zë (xhehri) në dy rekatet e Sabahut. Por jo aq lartë sa të shqetësosh të tjerët.' },
-      { title: 'Mos lëre kunutin në mëngjes', body: 'Disa medhhebe (si Shafii) e shtojnë lutjen Kunut në rekatin e dytë — kontrollo çfarë ndjek xhamia jote.' },
+      { title: 'Kunuti varet nga medhhebi', body: 'Disa medhhebe, si Shafii, lexojnë Kunut në rekatin e dytë të Sabahut; të tjerat jo rregullisht. Ndiq imamin ose mësimin që ndjek zakonisht.' },
     ],
   },
   {
@@ -78,7 +78,7 @@ const PRAYERS = [
     accent: '#C89858', accentDark: '#6A4820', onSky: '#FFFFFF',
     tips: [
       { title: 'Mos e shtyj derisa dielli të zverdhet', body: 'Pejgamberi (a.s.) ka tërhequr vëmendjen për mosvonimin e Iqindisë. Falu sapo të dëgjosh ezanin.' },
-      { title: 'Po, është 4 rekate edhe në udhëtim', body: 'Vetëm nëse je në udhëtim të gjatë (mbi ~80 km), mund të bësh kasr (2 rekate). Përndryshe, plot 4.' },
+      { title: 'Në udhëtim mund të shkurtohet', body: 'Normalisht Iqindia është 4 rekate farz. Në udhëtim të vlefshëm, sipas rregullave të medhhebit tënd, mund të falet kasr: 2 rekate.' },
       { title: 'I njëjti ritëm si Dreka', body: 'Strukturalisht identike me Drekën — i njëjti numër rekatesh, e njëjta heshtje në lexim.' },
     ],
   },
@@ -114,8 +114,8 @@ const PRAYERS = [
     isNight: true,
     accent: '#7A88B8', accentDark: '#2A305A', onSky: '#E8E0F0',
     tips: [
-      { title: 'Mund të falet deri në mesnatë', body: 'Koha e preferuar mbaron rreth mesnatës; pas saj llogaritet vonesë, edhe pse vlefshmëria zgjat deri në Sabah.' },
-      { title: 'Mos harro Vitrin', body: 'Pas Jacisë vjen Vitri — 3 rekate teke që mbyllin ditën në mënyrë të veçantë. Pejgamberi (a.s.) nuk e linte kurrë.' },
+      { title: 'Koha ka dallime mendimesh', body: 'Më e sigurta për fillestarët është ta falësh Jacinë para mesnatës islame. Disa dijetarë e zgjasin kohën deri në Sabah; mos e vono pa arsye.' },
+      { title: 'Mos harro Vitrin', body: 'Pas Jacisë falet Vitri. Shumë muslimanë e falin 3 rekate, sidomos në medhhebin Hanefi, ndërsa ka edhe forma të tjera të njohura në medhhebe.' },
       { title: 'Lexim me zë në 2 rekatet e para', body: 'Si te Sabahu dhe Akshami: rekatet e para me zë, rekatet 3 dhe 4 në heshtje, vetëm Fatiha.' },
     ],
   },

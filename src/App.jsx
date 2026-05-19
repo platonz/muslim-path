@@ -62,8 +62,6 @@ const QUOTES = [
   { text: "The most beloved people to Allah are those who are most beneficial to people, and the most beloved of deeds to Allah is happiness you bring to a Muslim.", src: "al-Tabarani", sq:"Njerëzit më të dashur tek Allahu janë ata me dobi më të madhe për njerëzit, dhe veprat më të dashura tek Allahu janë gëzimi që i sjell një muslimani.", ref: "al-Mu'jam al-Awsat 6192" },
   { text: "Every act of kindness is charity.", src: "Bukhari & Muslim", sq:"Çdo vepër e mirë është sadaka.", ref: "Bukhari 2989 · Muslim 1005" },
   { text: "Perform the prayer before you die, and fast the month of Ramadan and give Zakat on your wealth — it purifies you.", src: "Ahmad", sq:"Fale namazin para se të vdesësh, agjëro muajin e Ramazanit dhe jep zeqatin e pasurisë sate — ai të pastron.", ref: "Ahmad 22387" },
-  { text: "Seek knowledge from the cradle to the grave.", src: "Traditional saying", sq:"Kërkoje diturinë nga djepi deri në varr." },
-  { text: "The ink of the scholar is more sacred than the blood of the martyr.", src: "Traditional saying", sq:"Boja e dijetarit është më e shenjtë se gjaku i dëshmorit." },
   { text: "The believer does not slander, curse, speak obscenely, or behave indecently.", src: "Tirmidhi", sq:"Besimtari nuk shpif, nuk mallkon, nuk flet të paturpshme dhe nuk sillet pa dinjitet.", ref: "Tirmidhi 1977" },
   { text: "Whoever loves to meet Allah, Allah loves to meet him.", src: "Bukhari & Muslim", sq:"Kush dëshiron të takojë Allahun, Allahu dëshiron ta takojë atë.", ref: "Bukhari 6507 · Muslim 2683" },
   { text: "The best of your leaders are those you love and who love you, who pray for you and you pray for them.", src: "Muslim", sq:"Më të mirët e udhëheqësve tuaj janë ata që i doni dhe ju duan, që luten për ju dhe ju luteni për ta.", ref: "Muslim 1855" },
@@ -248,12 +246,14 @@ function calcFaraid(h, madhab) {
 
   const results = [];
   const hasDesc = sons > 0 || daughters > 0;
+  const hasMaleDesc = sons > 0;
   const totalSiblings = fullBrothers + fullSisters + paternalHB + paternalHS + uterine;
 
   // Blocking
   const pGFActive = paternalGF && !father;
-  // Full siblings blocked by: children, father, or grandfather (except Maliki)
-  const fullSibsBlocked = hasDesc || father || (pGFActive && madhab !== "maliki");
+  // Full siblings are blocked by male descendants, father, or grandfather.
+  // Daughters do not block full sisters; sisters may become residuary with daughters.
+  const fullSibsBlocked = hasMaleDesc || father || (pGFActive && madhab !== "maliki");
   // Paternal half-siblings additionally blocked by full brothers
   const pHSibsBlocked = fullSibsBlocked || fullBrothers > 0;
   const uterineBlocked = hasDesc || father || pGFActive;
@@ -313,9 +313,10 @@ function calcFaraid(h, madhab) {
   // Paternal grandfather (fard only if children present)
   if (pGFActive && hasDesc) addShare("Paternal Grandfather", 1, [1,6]);
 
-  // Grandmothers
-  if (mGMActive) addShare("Maternal Grandmother", 1, [1,6]);
-  if (pGMActive) addShare("Paternal Grandmother", 1, [1,6]);
+  // Grandmothers share one sixth when more than one eligible grandmother is present.
+  if (mGMActive && pGMActive) addShare("Grandmothers", 2, [1,6], [1,12]);
+  else if (mGMActive) addShare("Maternal Grandmother", 1, [1,6]);
+  else if (pGMActive) addShare("Paternal Grandmother", 1, [1,6]);
 
   // Full sisters as fard (no brothers, no sons, no daughters, not blocked)
   if (!fullSibsBlocked && fullBrothers === 0 && sons === 0 && daughters === 0 && fullSisters > 0) {
@@ -323,10 +324,12 @@ function calcFaraid(h, madhab) {
     else addShare("Full Sisters", fullSisters, [2,3], reduce(2, 3*fullSisters));
   }
 
-  // Paternal half-sisters as fard (only 1, no full sisters, no blocking)
+  // Paternal half-sisters as fard (or completing 2/3 with one full sister)
   if (!pHSibsBlocked && fullSisters === 0 && sons === 0 && daughters === 0 && paternalHB === 0 && paternalHS > 0) {
     if (paternalHS === 1) addShare("Paternal Half-Sister", 1, [1,2]);
     else addShare("Paternal Half-Sisters", paternalHS, [2,3], reduce(2, 3*paternalHS));
+  } else if (!pHSibsBlocked && fullSisters === 1 && sons === 0 && daughters === 0 && paternalHB === 0 && paternalHS > 0) {
+    addShare("Paternal Half-Sisters", paternalHS, [1,6], reduce(1, 6*paternalHS), "Completes two-thirds with one full sister");
   }
 
   // Uterine siblings
@@ -798,6 +801,11 @@ function Zakat() {
   return (
     <div style={{ maxWidth: 680, margin: "0 auto", padding: "40px 24px" }}>
       <PageTitle icon="zakat" title="Zakat Calculator" sub="2.5% of net zakatable wealth above nisab, held for one lunar year" />
+      <Card style={{ marginBottom: 16, borderColor: `${GOLD}80`, background: "#FFF9EA" }}>
+        <div style={{ fontSize: 13, lineHeight: 1.7, color: TEXT }}>
+          <strong>Important:</strong> this is an estimate. Zakat details can vary by asset type, debts, business stock, jewelry, and scholar opinion. Ask a qualified scholar for a real case.
+        </div>
+      </Card>
       <Card style={{ marginBottom: 20 }}>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14, marginBottom: 20 }}>
           <Select label="Currency" value={currency} onChange={e => setCurrency(e.target.value)}
@@ -916,7 +924,13 @@ function Inheritance() {
 
   return (
     <div style={{ maxWidth: 720, margin: "0 auto", padding: "40px 24px" }}>
-      <PageTitle icon="inherit" title="Inheritance Calculator" sub="Calculate Islamic inheritance shares (Farāʾiḍ) according to your madhab" />
+      <PageTitle icon="inherit" title="Inheritance Calculator" sub="Educational estimate for Islamic inheritance shares (Farāʾiḍ)" />
+
+      <Card style={{ marginBottom: 16, borderColor: `${GOLD}80`, background: "#FFF9EA" }}>
+        <div style={{ fontSize: 13, lineHeight: 1.7, color: TEXT }}>
+          <strong>Important:</strong> inheritance rulings can become complex very quickly. Use this as a learning estimate only, not for real estate distribution. For a real case, ask a qualified Islamic scholar.
+        </div>
+      </Card>
 
       <div className="inherit-top-grid">
         <Card>
@@ -1028,7 +1042,7 @@ function Inheritance() {
             </div>
           )}
           <p style={{ margin: "16px 0 0", fontSize: 12, color: MUTED, borderTop: `1px solid ${BORDER}`, paddingTop: 12 }}>
-            This calculator provides general guidance based on classical faraid principles. Please consult a qualified Islamic scholar for formal legal matters.
+            Educational estimate only. Real inheritance cases may include debts, wills, missing heirs, local law, and detailed madhhab rulings. Please consult a qualified Islamic scholar before acting on these numbers.
           </p>
         </Card>
       )}
@@ -2362,7 +2376,7 @@ export default function App() {
     asma:        { title: "99 Names of Allah — Muslim's Path",                 desc: "Al-Asma ul-Husna — the 99 Beautiful Names of Allah with meanings and transliteration." },
     tasbeeh:     { title: "Digital Tasbeeh Counter — Muslim's Path",           desc: "Digital dhikr counter for Subhanallah, Alhamdulillah, Allahu Akbar and custom phrases." },
     zakat:       { title: "Zakat Calculator — Muslim's Path",                  desc: "Calculate your annual Zakat obligation based on nisab threshold and zakatable assets." },
-    inheritance: { title: "Islamic Inheritance Calculator — Muslim's Path",    desc: "Distribute estate according to Quranic inheritance rules (Faraidh)." },
+    inheritance: { title: "Islamic Inheritance Calculator — Muslim's Path",    desc: "Estimate Islamic inheritance shares for learning, then confirm real cases with a qualified scholar." },
     calendar:    { title: "Islamic Calendar — Muslim's Path",                  desc: "Hijri calendar with Islamic dates, events and Gregorian cross-reference." },
     dates:       { title: "Hijri ↔ Gregorian Date Converter — Muslim's Path", desc: "Convert dates between the Islamic Hijri calendar and the Gregorian calendar." },
     library:     { title: "Islamic Library — Muslim's Path",                   desc: "Curated collection of essential Islamic books — Quran, Hadith, Seerah, Fiqh and Aqeedah." },
@@ -3140,7 +3154,7 @@ function AsmaPage() {
       )}
 
       <p style={{ marginTop:20, fontSize:12, color:MUTED, textAlign:"center", letterSpacing:"0.04em" }}>
-        "Allah has 99 names. Whoever memorises (and acts upon) them all will enter Paradise." — Bukhari 2736 · Muslim 2677
+        This list is a learning aid for Allah's Beautiful Names. Scholars discuss the exact list; the hadith encourages learning, preserving, understanding, and living by them. — Bukhari 2736 · Muslim 2677
       </p>
     </div>
   );
@@ -4192,7 +4206,6 @@ function TasbeehPage() {
             onMouseUp={e => e.currentTarget.style.transform = "translate(-50%, -50%) scale(1)"}
             onTouchStart={e => { e.currentTarget.style.transform = "translate(-50%, -50%) scale(0.96)"; e.preventDefault(); }}
             onTouchEnd={e => { e.currentTarget.style.transform = "translate(-50%, -50%) scale(1)"; tap(); e.preventDefault(); }}
-            onClick={tap}
           >
             <div style={{ fontSize: 56, fontWeight: 300, color: flash2 ? "#2ecc71" : TEXT, fontVariantNumeric: "tabular-nums", lineHeight: 1, fontFamily: SERIF, transition: "color 0.3s" }}>
               {count}
