@@ -487,8 +487,8 @@ function RecitationCard({ step: s, accent, accentDark, showTranslit }) {
       {showTranslit && s.translit && (
         <div style={{
           fontFamily: SERIF, fontStyle: 'italic', fontSize: 15,
-          color: C.dark900, lineHeight: 1.5, letterSpacing: '-0.005em',
-          marginBottom: 10,
+          color: C.dark900, lineHeight: 1.5, letterSpacing: 0,
+          marginBottom: 10, textTransform: 'uppercase',
         }}>{s.translit}</div>
       )}
 
@@ -518,7 +518,7 @@ function RecitationCard({ step: s, accent, accentDark, showTranslit }) {
             }}>Kuptimi në shqip</div>
             <div style={{
               fontFamily: SERIF, fontStyle: 'italic', fontSize: 15,
-              lineHeight: 1.55, color: C.dark900,
+              lineHeight: 1.55, color: C.dark900, textTransform: 'uppercase',
             }}>{s.translation}</div>
             <button onClick={() => setOpen(false)} style={{
               marginTop: 8, padding: 0, background: 'transparent', border: 'none',
