@@ -926,8 +926,8 @@ function ScrollLayout({ prayer: p, showTranslit }) {
       <BottomCTA prayer={p} />
       <style>{`
         @media(max-width:760px){
-          .stf-scroll-row{grid-template-columns:auto 1fr!important;}
-          .stf-scroll-figure{display:none!important;}
+          .stf-scroll-row{grid-template-columns:auto 80px 1fr!important;}
+          .stf-scroll-figure>div{width:80px!important;height:80px!important;}
         }
       `}</style>
     </>
