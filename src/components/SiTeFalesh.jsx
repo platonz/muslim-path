@@ -903,15 +903,20 @@ function ScrollLayout({ prayer: p, showTranslit }) {
                 border: s.isNote ? `1.5px dashed ${C.gold300}` : `1px solid ${C.warm200}`,
                 padding: s.isNote ? '14px 18px' : '18px 22px',
               }}>
-                <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 12 }}>
-                  <div style={{ fontFamily: SERIF, fontSize: 22, fontWeight: 600, color: C.dark900, lineHeight: 1.15, letterSpacing: '-0.01em' }}>
-                    {s.name}
+                <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 12 }}>
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{ fontFamily: SERIF, fontSize: 22, fontWeight: 600, color: C.dark900, lineHeight: 1.15, letterSpacing: '-0.01em' }}>
+                      {s.name}
+                    </div>
+                    <div style={{
+                      fontSize: 10, fontWeight: 600, color: C.warm500, letterSpacing: '0.12em',
+                      textTransform: 'uppercase', background: C.warm100, padding: '4px 10px', borderRadius: 999,
+                      whiteSpace: 'nowrap', display: 'inline-block', marginTop: 6,
+                    }}>{s.postureAlb}</div>
                   </div>
-                  <div style={{
-                    fontSize: 10, fontWeight: 600, color: C.warm500, letterSpacing: '0.12em',
-                    textTransform: 'uppercase', background: C.warm100, padding: '4px 10px', borderRadius: 999,
-                    whiteSpace: 'nowrap', flexShrink: 0,
-                  }}>{s.postureAlb}</div>
+                  <div className="stf-inline-figure" style={{ flexShrink: 0 }}>
+                    <PostureFigure posture={s.posture} size={80} color={s.isNote ? p.accent : C.dark900} bg={s.isNote ? 'transparent' : C.gold50} />
+                  </div>
                 </div>
                 <p style={{ fontSize: 14, color: C.warm700, marginTop: 10, lineHeight: 1.6 }}>{s.instruction}</p>
                 {s.arabic && (
@@ -925,9 +930,11 @@ function ScrollLayout({ prayer: p, showTranslit }) {
       <TipsBlock prayer={p} />
       <BottomCTA prayer={p} />
       <style>{`
+        .stf-inline-figure{display:none;}
         @media(max-width:760px){
-          .stf-scroll-row{grid-template-columns:auto 80px 1fr!important;}
-          .stf-scroll-figure>div{width:80px!important;height:80px!important;}
+          .stf-scroll-row{grid-template-columns:auto 1fr!important;}
+          .stf-scroll-figure{display:none!important;}
+          .stf-inline-figure{display:block;}
         }
       `}</style>
     </>
