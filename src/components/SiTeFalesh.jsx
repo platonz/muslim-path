@@ -322,8 +322,21 @@ const POSTURE_SVG = {
   ),
 };
 
+const POSTURE_PHOTO = {
+  qiyam:          '/postures/nijeti.png',
+  takbir:         '/postures/tekbiri.png',
+  'qiyam-folded': '/postures/subhaneke.png',
+  ruku:           '/postures/ruku.png',
+  itidal:         '/postures/itidali.png',
+  sujud:          '/postures/sexhde.png',
+  jalsa:          '/postures/xhelseja.png',
+  tashahhud:      '/postures/teshehud.png',
+  salam:          '/postures/selami.png',
+};
+
 function PostureFigure({ posture, size = 120, color = C.dark900, bg = C.gold50 }) {
   const idx = POSTURE_ORDER.indexOf(posture);
+  const photo = POSTURE_PHOTO[posture];
   const svg = POSTURE_SVG[posture] || POSTURE_SVG.qiyam;
   return (
     <div style={{
@@ -332,12 +345,21 @@ function PostureFigure({ posture, size = 120, color = C.dark900, bg = C.gold50 }
       flexShrink: 0, position: 'relative', overflow: 'hidden',
       color,
     }}>
-      <div style={{ width: size * 0.65, height: size * 0.65 }}>{svg}</div>
+      {photo ? (
+        <img
+          src={photo}
+          alt={posture}
+          style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top' }}
+        />
+      ) : (
+        <div style={{ width: size * 0.65, height: size * 0.65 }}>{svg}</div>
+      )}
       {idx >= 0 && (
         <div style={{
           position: 'absolute', bottom: 4, right: 6,
           fontFamily: MONO, fontSize: size * 0.1, fontWeight: 600,
-          color: color, opacity: 0.45,
+          color: '#fff', opacity: 0.75,
+          textShadow: '0 1px 3px rgba(0,0,0,0.6)',
         }}>{String(idx + 1).padStart(2, '0')}</div>
       )}
     </div>
