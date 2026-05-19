@@ -61,7 +61,7 @@ const PRAYERS = [
     tips: [
       { title: 'Prit pak pas mesditës', body: 'Mos e fal Drekën pikërisht kur dielli është në kulm — prit derisa hija të kthehet drejt lindjes.' },
       { title: 'Fatihaja lexohet në heshtje', body: 'Në Dreka, Iqindi dhe rekatet e tretë e të katërt të namazeve të tjera, leximi është i heshtur (sirri).' },
-      { title: 'Mos i ngatërro 4 rekatet', body: 'Pas dy rekateve të para ulesh në teshehud, pastaj çohesh sërish për dy rekatet e tjera — vetëm Fatiha (pa sure të shkurtër).' },
+      { title: 'Mos i ngatërro 4 rekatet', body: 'Pas dy rekateve të para ulesh në teshehud, pastaj çohesh për dy rekatet e tjera. Në rekatet e fundit Fatiha lexohet patjetër; ndonjëherë mund të shtohet edhe pak lexim.' },
     ],
   },
   {
@@ -116,7 +116,7 @@ const PRAYERS = [
     tips: [
       { title: 'Koha ka dallime mendimesh', body: 'Më e sigurta për fillestarët është ta falësh Jacinë para mesnatës islame. Disa dijetarë e zgjasin kohën deri në Sabah; mos e vono pa arsye.' },
       { title: 'Mos harro Vitrin', body: 'Pas Jacisë falet Vitri. Shumë muslimanë e falin 3 rekate, sidomos në medhhebin Hanefi, ndërsa ka edhe forma të tjera të njohura në medhhebe.' },
-      { title: 'Lexim me zë në 2 rekatet e para', body: 'Si te Sabahu dhe Akshami: rekatet e para me zë, rekatet 3 dhe 4 në heshtje, vetëm Fatiha.' },
+      { title: 'Lexim me zë në 2 rekatet e para', body: 'Si te Sabahu dhe Akshami: dy rekatet e para lexohen me zë, ndërsa rekatet 3 dhe 4 në heshtje. Në rekatet e fundit Fatiha lexohet patjetër.' },
     ],
   },
 ];
@@ -125,14 +125,12 @@ const PRAYERS = [
 const STEPS = [
   {
     n: 1, posture: 'qiyam', name: 'Nijeti', nameAr: 'النِّيَّة', postureAlb: 'Në këmbë, qetë',
-    instruction: 'Bëj nijetin në zemër — qëllimin që po fal për Allahun. Nuk është e domosdoshme të thuhet me zë.',
-    arabic: 'نَوَيْتُ أَنْ أُصَلِّيَ لِلَّهِ تَعَالَى',
-    translit: "Nevejtu en usalije lil-lahi te'ala",
-    translation: 'Bëra nijet të fal namazin për Allahun, të Lartësuarin.',
+    instruction: 'Bëj nijetin në zemër — qëllimin se cilin namaz po fal për Allahun. Nuk ka tekst të veçantë për t’u thënë me zë para tekbirit.',
+    arabic: null, translit: null, translation: null,
   },
   {
-    n: 2, posture: 'takbir', name: 'Tekbiri fillestar', nameAr: 'تَكْبِيرَة الإِحْرَام', postureAlb: 'Duart deri tek veshët',
-    instruction: 'Ngri duart deri tek veshët, gishtërinjtë e hapur lehtë, dhe shqipto qetë:',
+    n: 2, posture: 'takbir', name: 'Tekbiri fillestar', nameAr: 'تَكْبِيرَة الإِحْرَام', postureAlb: 'Duart te supet ose veshët',
+    instruction: 'Ngri duart deri në nivelin e supeve ose të veshëve, me gishtërinj të lirë, dhe shqipto qetë:',
     arabic: 'اللَّهُ أَكْبَر', translit: 'Allahu Ekber', translation: 'Allahu është më i Madhi.',
   },
   {
@@ -144,7 +142,7 @@ const STEPS = [
   },
   {
     n: 4, posture: 'qiyam-folded', name: 'Sureja Fatiha', nameAr: 'الفَاتِحَة', postureAlb: 'Duart ende në kraharor',
-    instruction: 'Lexo suren hyrëse të Kuranit — shtatë ajetet që përsëriten në çdo rekat të çdo namazi:',
+    instruction: 'Lexo suren hyrëse të Kuranit — shtatë ajetet që përsëriten në çdo rekat të çdo namazi. Në fund thuaj: Amin.',
     arabic: 'بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ ۝ الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ ۝ الرَّحْمَٰنِ الرَّحِيمِ ۝ مَالِكِ يَوْمِ الدِّينِ ۝ إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ ۝ اهْدِنَا الصِّرَاطَ الْمُسْتَقِيمَ ۝ صِرَاطَ الَّذِينَ أَنْعَمْتَ عَلَيْهِمْ غَيْرِ الْمَغْضُوبِ عَلَيْهِمْ وَلَا الضَّالِّينَ',
     translit: "Bismil-lahir-rahmanir-rahim. Elhamdu lil-lahi rabbil-alemin. Er-rahmanir-rahim. Maliki jevmid-din. Ijjake na'budu ve ijjake nesta'in. Ihdines-siratal-mustekim. Siratal-ledhine en'amte alejhim, gajril-magdubi alejhim ve led-dal-lin.",
     translation: 'Në emër të Allahut, Mëshiruesit, Mëshirëbërësit. Lavdërimi i takon Allahut, Zotit të botëve, Mëshiruesit, Mëshirëbërësit, Sunduesit të Ditës së Gjykimit. Vetëm Ty të adhurojmë dhe vetëm prej Teje ndihmë kërkojmë. Udhëzona në rrugën e drejtë — rrugën e atyre që i ke begatuar, jo të atyre që zemërimi është mbi ta, e as të të humburve.',
@@ -185,18 +183,32 @@ const STEPS = [
   },
   {
     n: 11, posture: 'note', name: 'Rekatet e ardhshme', nameAr: 'الرَّكَعَات التَّالِيَة', postureAlb: 'Ngrihu për rekatin tjetër',
-    instruction: 'Ngrihu për rekatin e ardhshëm dhe përsërit Fatihanë, suren e shkurtër, rukunë dhe dy sexhdet. Numri i rekateve ndryshon sipas namazit.',
+    instruction: 'Ngrihu për rekatin e ardhshëm. Në dy rekatet e para lexo Fatihanë dhe një sure të shkurtër; në rekatet e fundit Fatiha lexohet patjetër, dhe ndonjëherë mund të shtohet pak lexim. Numri i rekateve ndryshon sipas namazit.',
     arabic: null, translit: null, translation: null, isNote: true,
   },
   {
     n: 12, posture: 'tashahhud', name: 'Teshehudi', nameAr: 'التَّشَهُّد', postureAlb: 'Ulur, gishtin tregues e ngre',
-    instruction: 'Pas sexhdes së dytë të rekatit të dytë, ulu dhe lexo Teshehudin (Et-Tehijjat):',
+    instruction: 'Pas sexhdes së dytë të rekatit të dytë, ulu dhe lexo Teshehudin (Et-Tehijjat). Nëse namazi ka 3 ose 4 rekate, ky është teshehudi i parë dhe pastaj ngrihesh; në uljen e fundit vazhdo edhe me salavatet:',
     arabic: 'التَّحِيَّاتُ لِلَّهِ وَالصَّلَوَاتُ وَالطَّيِّبَاتُ، السَّلَامُ عَلَيْكَ أَيُّهَا النَّبِيُّ وَرَحْمَةُ اللَّهِ وَبَرَكَاتُهُ، السَّلَامُ عَلَيْنَا وَعَلَىٰ عِبَادِ اللَّهِ الصَّالِحِينَ، أَشْهَدُ أَنْ لَا إِلَٰهَ إِلَّا اللَّهُ، وَأَشْهَدُ أَنَّ مُحَمَّدًا عَبْدُهُ وَرَسُولُهُ',
     translit: 'Et-tehijjatu lil-lahi ves-salavatu vet-tajjibat. Es-selamu alejke ejjuhen-nebijju ve rahmetullahi ve berekatuhu. Es-selamu alejna ve ala ibadil-lahis-salihin. Esh-hedu en la ilahe il-lAllah, ve esh-hedu enne Muhammeden abduhu ve resuluhu.',
     translation: "Përshëndetjet, lutjet dhe veprat e mira i takojnë Allahut. Paqja, mëshira dhe begatitë e Allahut qofshin mbi ty, o Pejgamber. Paqja qoftë mbi ne dhe mbi robërit e mirë të Allahut. Dëshmoj se s'ka të adhuruar tjetër veç Allahut, dhe dëshmoj se Muhamedi është rob dhe i Dërguar i Tij.",
   },
   {
-    n: 13, posture: 'salam', name: 'Selami', nameAr: 'السَّلَام', postureAlb: 'Kthim koke djathtas, pastaj majtas',
+    n: 13, posture: 'tashahhud', name: 'Salavati', nameAr: 'الصَّلَاةُ عَلَى النَّبِيِّ', postureAlb: 'Ulur në teshehudin e fundit',
+    instruction: 'Në teshehudin e fundit, pas Et-Tehijjatit, dërgo salavate mbi Pejgamberin ﷺ:',
+    arabic: 'اللَّهُمَّ صَلِّ عَلَى مُحَمَّدٍ وَعَلَى آلِ مُحَمَّدٍ، كَمَا صَلَّيْتَ عَلَى إِبْرَاهِيمَ وَعَلَى آلِ إِبْرَاهِيمَ، إِنَّكَ حَمِيدٌ مَجِيدٌ. اللَّهُمَّ بَارِكْ عَلَى مُحَمَّدٍ وَعَلَى آلِ مُحَمَّدٍ، كَمَا بَارَكْتَ عَلَى إِبْرَاهِيمَ وَعَلَى آلِ إِبْرَاهِيمَ، إِنَّكَ حَمِيدٌ مَجِيدٌ',
+    translit: 'Allahumme sal-li ala Muhammedin ve ala ali Muhammed, kema sal-lejte ala Ibrahime ve ala ali Ibrahim, inneke Hamidun Mexhid. Allahumme barik ala Muhammedin ve ala ali Muhammed, kema barekte ala Ibrahime ve ala ali Ibrahim, inneke Hamidun Mexhid.',
+    translation: 'O Allah, dërgo lavdërime mbi Muhamedin dhe familjen e Muhamedit, siç dërgove lavdërime mbi Ibrahimin dhe familjen e Ibrahimit. Me të vërtetë, Ti je i Lavdëruari, i Madhërishmi. O Allah, bekoje Muhamedin dhe familjen e Muhamedit, siç bekove Ibrahimin dhe familjen e Ibrahimit. Me të vërtetë, Ti je i Lavdëruari, i Madhërishmi.',
+  },
+  {
+    n: 14, posture: 'tashahhud', name: 'Dua para selamit', nameAr: 'الدُّعَاءُ قَبْلَ السَّلَام', postureAlb: 'Ulur para përfundimit',
+    instruction: 'Para selamit, kërko mbrojtje tek Allahu. Kjo dua është nga lutjet e njohura para përfundimit të namazit:',
+    arabic: 'اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنْ عَذَابِ جَهَنَّمَ، وَمِنْ عَذَابِ الْقَبْرِ، وَمِنْ فِتْنَةِ الْمَحْيَا وَالْمَمَاتِ، وَمِنْ شَرِّ فِتْنَةِ الْمَسِيحِ الدَّجَّالِ',
+    translit: "Allahumme inni e'udhu bike min adhabi xhehennem, ve min adhabil-kabr, ve min fitnetil-mahja vel-memat, ve min sherri fitnetil-mesihid-dexhxhal.",
+    translation: 'O Allah, kërkoj mbrojtje tek Ti nga dënimi i Xhehenemit, nga dënimi i varrit, nga sprova e jetës dhe vdekjes, dhe nga e keqja e sprovës së Mesihut Dexhall.',
+  },
+  {
+    n: 15, posture: 'salam', name: 'Selami', nameAr: 'السَّلَام', postureAlb: 'Kthim koke djathtas, pastaj majtas',
     instruction: 'Përfundo namazin duke kthyer kokën në të djathtë e pastaj në të majtë, duke thënë çdo herë:',
     arabic: 'السَّلَامُ عَلَيْكُمْ وَرَحْمَةُ اللَّهِ', translit: 'Es-selamu alejkum ve rahmetullah', translation: 'Paqja dhe mëshira e Allahut qofshin mbi ju.',
   },
