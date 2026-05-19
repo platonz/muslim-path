@@ -877,7 +877,7 @@ function ScrollLayout({ prayer: p, showTranslit }) {
           {STEPS.map((s, i) => (
             <div key={s.n} className="stf-scroll-row" style={{ display: 'grid', gridTemplateColumns: 'auto 140px 1fr', gap: 20, alignItems: 'start' }}>
               {/* Number + timeline */}
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', flexShrink: 0, paddingTop: 4 }}>
+              <div className="stf-num-col" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', flexShrink: 0, paddingTop: 4 }}>
                 <div style={{
                   width: 36, height: 36, borderRadius: '50%',
                   background: s.isNote ? C.gold50 : C.dark900,
@@ -905,6 +905,10 @@ function ScrollLayout({ prayer: p, showTranslit }) {
               }}>
                 <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 12 }}>
                   <div style={{ flex: 1, minWidth: 0 }}>
+                    <div className="stf-card-num" style={{
+                      display: 'none', fontFamily: MONO, fontSize: 11, fontWeight: 700,
+                      color: s.isNote ? p.accentDark : C.warm500, marginBottom: 4,
+                    }}>{String(s.n).padStart(2, '0')}</div>
                     <div style={{ fontFamily: SERIF, fontSize: 22, fontWeight: 600, color: C.dark900, lineHeight: 1.15, letterSpacing: '-0.01em' }}>
                       {s.name}
                     </div>
@@ -915,7 +919,7 @@ function ScrollLayout({ prayer: p, showTranslit }) {
                     }}>{s.postureAlb}</div>
                   </div>
                   <div className="stf-inline-figure" style={{ flexShrink: 0 }}>
-                    <PostureFigure posture={s.posture} size={80} color={s.isNote ? p.accent : C.dark900} bg={s.isNote ? 'transparent' : C.gold50} />
+                    <PostureFigure posture={s.posture} size={100} color={s.isNote ? p.accent : C.dark900} bg={s.isNote ? 'transparent' : C.gold50} />
                   </div>
                 </div>
                 <p style={{ fontSize: 14, color: C.warm700, marginTop: 10, lineHeight: 1.6 }}>{s.instruction}</p>
@@ -932,9 +936,11 @@ function ScrollLayout({ prayer: p, showTranslit }) {
       <style>{`
         .stf-inline-figure{display:none;}
         @media(max-width:760px){
-          .stf-scroll-row{grid-template-columns:auto 1fr!important;}
+          .stf-scroll-row{grid-template-columns:1fr!important;gap:12px!important;}
+          .stf-num-col{display:none!important;}
           .stf-scroll-figure{display:none!important;}
           .stf-inline-figure{display:block;}
+          .stf-card-num{display:block!important;}
         }
       `}</style>
     </>
