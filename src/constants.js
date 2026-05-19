@@ -12,6 +12,7 @@ export const SANS    = "'Inter', -apple-system, BlinkMacSystemFont, sans-serif";
 
 export const NAV_ITEMS = [
   { id: "home",        icon: "🏠" },
+  { id: "namaz",       icon: "🕌" },
   { id: "dua",         icon: "🤲" },
   { id: "calendar",    icon: "📆" },
   { id: "library",     icon: "📚" },

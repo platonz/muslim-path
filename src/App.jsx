@@ -10,6 +10,7 @@ import Icon from "./components/Icon";
 import KaabaWatermark from "./components/KaabaWatermark";
 import MobileTabBar from "./components/MobileTabBar";
 import QuranReader from "./components/QuranReader";
+import SiTeFalesh from "./components/SiTeFalesh";
 
 // ─── QUOTES ────────────────────────────────────────────────────────
 const QUOTES = [
@@ -1928,12 +1929,12 @@ function LangBar({ page }) {
 }
 
 // ─── APP ──────────────────────────────────────────────────────────
-const VALID_PAGES = ["home","zakat","inheritance","calendar","dates","library","audio","tasbeeh","quran","dua","asma","admin","profile"];
+const VALID_PAGES = ["home","zakat","inheritance","calendar","dates","library","audio","tasbeeh","quran","dua","asma","admin","profile","namaz"];
 
 // ── Language-prefixed URL slug mapping ────────────────────────────
 const PAGE_SLUGS = {
-  en: { home:"", zakat:"zakat", inheritance:"inheritance", calendar:"calendar", dates:"dates", library:"library", audio:"audio", tasbeeh:"tasbeeh", quran:"quran", dua:"dua", asma:"asma", admin:"admin", profile:"profile" },
-  sq: { home:"", zakat:"zekati", inheritance:"hiseja", calendar:"kalendari", dates:"datat", library:"biblioteka", audio:"ligjerata", tasbeeh:"tesbihe", quran:"kurani", dua:"dua", asma:"emrat", admin:"admin", profile:"profili" },
+  en: { home:"", zakat:"zakat", inheritance:"inheritance", calendar:"calendar", dates:"dates", library:"library", audio:"audio", tasbeeh:"tasbeeh", quran:"quran", dua:"dua", asma:"asma", admin:"admin", profile:"profile", namaz:"how-to-pray" },
+  sq: { home:"", zakat:"zekati", inheritance:"hiseja", calendar:"kalendari", dates:"datat", library:"biblioteka", audio:"ligjerata", tasbeeh:"tesbihe", quran:"kurani", dua:"dua", asma:"emrat", admin:"admin", profile:"profili", namaz:"si-te-falesh" },
 };
 function slugToPage(lang, slug) {
   const map = PAGE_SLUGS[lang] || PAGE_SLUGS.en;
@@ -2366,6 +2367,7 @@ export default function App() {
     dates:       { title: "Hijri ↔ Gregorian Date Converter — Muslim's Path", desc: "Convert dates between the Islamic Hijri calendar and the Gregorian calendar." },
     library:     { title: "Islamic Library — Muslim's Path",                   desc: "Curated collection of essential Islamic books — Quran, Hadith, Seerah, Fiqh and Aqeedah." },
     audio:       { title: "Islamic Lectures — Muslim's Path",                  desc: "Listen to Islamic lectures and audio content." },
+    namaz:       { title: "Si të Falesh — Muslim's Path",                      desc: "Pesë namazet e ditës, shpjeguar hap pas hapi — me shqiptim dhe kuptim shqip." },
   };
   useEffect(() => {
     const m = PAGE_META[page] || PAGE_META.home;
@@ -2436,6 +2438,7 @@ export default function App() {
         {page === "dua"     && <DuaPage favs={duaFavs} onFav={toggleDuaFav} />}
         {page === "asma"    && <AsmaPage />}
         {page === "admin"   && <AdminPage authSession={authSession} />}
+        {page === "namaz"   && <SiTeFalesh />}
       </main>
       {showSearch && (
         <GlobalSearch
