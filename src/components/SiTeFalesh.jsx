@@ -351,7 +351,7 @@ function PostureFigure({ posture, size = 120, color = C.dark900, bg = C.gold50 }
   const photo = POSTURE_PHOTO[posture];
   const svg = POSTURE_SVG[posture] || POSTURE_SVG.qiyam;
   return (
-    <div style={{
+    <div className="posture-figure" style={{
       width: size, height: size, borderRadius: '50%',
       background: bg, display: 'flex', alignItems: 'center', justifyContent: 'center',
       flexShrink: 0, position: 'relative', overflow: 'hidden',
@@ -909,22 +909,22 @@ function ScrollLayout({ prayer: p, showTranslit }) {
               </div>
 
               {/* Content */}
-              <div style={{
+              <div className="stf-step-card" style={{
                 background: s.isNote ? 'transparent' : C.surface,
                 borderRadius: 14,
                 border: s.isNote ? `1.5px dashed ${C.gold300}` : `1px solid ${C.warm200}`,
                 padding: s.isNote ? '14px 18px' : '18px 22px',
               }}>
-                <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 12 }}>
+                <div className="stf-step-heading" style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 12 }}>
                   <div style={{ flex: 1, minWidth: 0 }}>
                     <div className="stf-card-num" style={{
                       display: 'none', fontFamily: MONO, fontSize: 11, fontWeight: 700,
                       color: s.isNote ? p.accentDark : C.warm500, marginBottom: 4,
                     }}>{String(s.n).padStart(2, '0')}</div>
-                    <div style={{ fontFamily: SERIF, fontSize: 22, fontWeight: 600, color: C.dark900, lineHeight: 1.15, letterSpacing: '-0.01em' }}>
+                    <div className="stf-step-title" style={{ fontFamily: SERIF, fontSize: 19, fontWeight: 600, color: C.dark900, lineHeight: 1.15, letterSpacing: '-0.01em' }}>
                       {s.name}
                     </div>
-                    <div style={{
+                    <div className="stf-posture-badge" style={{
                       fontSize: 10, fontWeight: 600, color: C.warm500, letterSpacing: '0.12em',
                       textTransform: 'uppercase', background: C.warm100, padding: '4px 10px', borderRadius: 999,
                       whiteSpace: 'nowrap', display: 'inline-block', marginTop: 6,
@@ -934,7 +934,7 @@ function ScrollLayout({ prayer: p, showTranslit }) {
                     <PostureFigure posture={s.posture} size={100} color={s.isNote ? p.accent : C.dark900} bg={s.isNote ? 'transparent' : C.gold50} />
                   </div>
                 </div>
-                <p style={{ fontSize: 14, color: C.warm700, marginTop: 10, lineHeight: 1.6 }}>{s.instruction}</p>
+                <p className="stf-step-instruction" style={{ fontSize: 14, color: C.warm700, marginTop: 10, lineHeight: 1.6 }}>{s.instruction}</p>
                 {s.arabic && (
                   <RecitationCard step={s} accent={p.accent} accentDark={p.accentDark} showTranslit={showTranslit} />
                 )}
@@ -953,6 +953,18 @@ function ScrollLayout({ prayer: p, showTranslit }) {
           .stf-scroll-figure{display:none!important;}
           .stf-inline-figure{display:block;}
           .stf-card-num{display:block!important;}
+          .stf-step-card{padding:0 18px 18px!important;overflow:hidden;}
+          .stf-step-heading{
+            margin:0 -18px 14px!important;
+            padding:10px 14px!important;
+            align-items:center!important;
+            background:${C.gold50}!important;
+            border-bottom:1px solid ${C.warm200}!important;
+          }
+          .stf-step-title{font-size:16px!important;line-height:1.2!important;}
+          .stf-posture-badge{font-size:9px!important;margin-top:4px!important;padding:3px 8px!important;}
+          .stf-inline-figure .posture-figure{width:76px!important;height:76px!important;}
+          .stf-step-instruction{margin-top:0!important;font-size:14px!important;}
         }
       `}</style>
     </>
@@ -1200,7 +1212,7 @@ function SiTeFaleshDetail({ prayerId, onBack, layout, setLayout }) {
         </div>
 
         {/* Centered prayer name */}
-        <div style={{ position: 'absolute', left: 0, right: 0, bottom: '14%', textAlign: 'center', color: p.onSky }}>
+        <div className="stf-prayer-title" style={{ position: 'absolute', left: 0, right: 0, bottom: '14%', textAlign: 'center', color: p.onSky }}>
           <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.22em', textTransform: 'uppercase', opacity: 0.85 }}>{p.period}</div>
           <h1 style={{
             fontFamily: SERIF, fontSize: 'clamp(48px,7vw,84px)',
@@ -1235,7 +1247,7 @@ function SiTeFaleshDetail({ prayerId, onBack, layout, setLayout }) {
             white-space:nowrap!important;
           }
           .stf-summary-strip{
-            margin-top:-54px!important;
+            margin-top:-28px!important;
             padding:0 20px!important;
           }
           .stf-summary-grid{
@@ -1245,6 +1257,13 @@ function SiTeFaleshDetail({ prayerId, onBack, layout, setLayout }) {
           }
           .stf-summary-item div:first-child{
             letter-spacing:0.12em!important;
+          }
+          .stf-prayer-title{
+            bottom:25%!important;
+            padding:0 24px!important;
+          }
+          .stf-prayer-title h1{
+            font-size:clamp(42px,15vw,58px)!important;
           }
         }
       `}</style>
