@@ -752,8 +752,8 @@ function SiTeFaleshHome({ onOpenPrayer }) {
 // ─── DETAIL PAGE ──────────────────────────────────────────────────
 function SummaryStrip({ prayer: p }) {
   return (
-    <div style={{ margin: '-44px auto 0', maxWidth: 1100, padding: '0 clamp(20px,4vw,56px)', position: 'relative', zIndex: 5 }}>
-      <div style={{
+    <div className="stf-summary-strip" style={{ margin: '-44px auto 0', maxWidth: 1100, padding: '0 clamp(20px,4vw,56px)', position: 'relative', zIndex: 5 }}>
+      <div className="stf-summary-grid" style={{
         background: C.surface, borderRadius: 18,
         boxShadow: '0 6px 28px rgba(26,25,21,0.10), 0 0 0 1px rgba(26,25,21,0.04)',
         padding: '18px 24px',
@@ -765,7 +765,7 @@ function SummaryStrip({ prayer: p }) {
           { label: 'Hapa',        value: STEPS.length,  unit: 'pozicione', color: C.gold600 },
           { label: 'Kohëzgjatja', value: '~4',          unit: 'minuta',   color: C.dark900 },
         ].map(({ label, value, unit, color }) => (
-          <div key={label}>
+          <div className="stf-summary-item" key={label}>
             <div style={{ fontSize: 10, fontWeight: 600, letterSpacing: '0.16em', textTransform: 'uppercase', color: C.warm500 }}>{label}</div>
             <div style={{ display: 'flex', alignItems: 'baseline', gap: 6, marginTop: 4 }}>
               <span style={{ fontFamily: MONO, fontSize: 26, fontWeight: 600, color }}>{value}</span>
@@ -1142,7 +1142,7 @@ function SiTeFaleshDetail({ prayerId, onBack, layout, setLayout }) {
       <div style={{ position: 'relative' }}>
         <SkyScene prayer={p} height="clamp(280px,36vh,420px)" intensity={1.3} />
         {/* Overlays */}
-        <div style={{
+        <div className="stf-detail-topbar" style={{
           position: 'absolute', top: 20, left: 'clamp(20px,4vw,56px)', right: 'clamp(20px,4vw,56px)',
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
         }}>
@@ -1160,7 +1160,7 @@ function SiTeFaleshDetail({ prayerId, onBack, layout, setLayout }) {
           </button>
 
           {/* Layout + translit controls */}
-          <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+          <div className="stf-detail-controls" style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
             {/* Translit toggle */}
             <button
               onClick={() => setShowTranslit(v => !v)}
@@ -1176,7 +1176,7 @@ function SiTeFaleshDetail({ prayerId, onBack, layout, setLayout }) {
             >Shqiptim</button>
 
             {/* Layout selector */}
-            <div style={{
+            <div className="stf-layout-selector" style={{
               display: 'flex', alignItems: 'center', gap: 4,
               padding: '6px 8px', borderRadius: 999,
               background: 'rgba(0,0,0,0.22)', backdropFilter: 'blur(8px)',
@@ -1187,7 +1187,7 @@ function SiTeFaleshDetail({ prayerId, onBack, layout, setLayout }) {
                 { id: 'step',   title: 'Hap pas hapi' },
                 { id: 'twocol', title: 'Dy kolona' },
               ].map(opt => (
-                <button key={opt.id} onClick={() => setLayout(opt.id)} style={{
+                <button className="stf-layout-option" key={opt.id} onClick={() => setLayout(opt.id)} style={{
                   padding: '4px 10px', borderRadius: 999,
                   background: layout === opt.id ? 'rgba(255,255,255,0.9)' : 'transparent',
                   border: 'none', color: layout === opt.id ? C.dark900 : p.onSky,
@@ -1213,6 +1213,41 @@ function SiTeFaleshDetail({ prayerId, onBack, layout, setLayout }) {
       {layout === 'scroll'  && <ScrollLayout  prayer={p} showTranslit={showTranslit} />}
       {layout === 'step'    && <StepLayout    prayer={p} showTranslit={showTranslit} />}
       {layout === 'twocol'  && <TwoColLayout  prayer={p} showTranslit={showTranslit} />}
+      <style>{`
+        @media(max-width:520px){
+          .stf-detail-topbar{
+            align-items:flex-start!important;
+            gap:10px!important;
+          }
+          .stf-detail-controls{
+            flex-direction:column!important;
+            align-items:flex-end!important;
+            gap:6px!important;
+          }
+          .stf-layout-selector{
+            max-width:190px!important;
+            flex-wrap:wrap!important;
+            justify-content:flex-end!important;
+            border-radius:20px!important;
+          }
+          .stf-layout-option{
+            min-width:52px!important;
+            white-space:nowrap!important;
+          }
+          .stf-summary-strip{
+            margin-top:-54px!important;
+            padding:0 20px!important;
+          }
+          .stf-summary-grid{
+            grid-template-columns:repeat(2,minmax(0,1fr))!important;
+            gap:14px 18px!important;
+            padding:16px 20px!important;
+          }
+          .stf-summary-item div:first-child{
+            letter-spacing:0.12em!important;
+          }
+        }
+      `}</style>
     </div>
   );
 }

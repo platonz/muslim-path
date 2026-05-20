@@ -219,6 +219,9 @@ input, select, textarea { color-scheme: light; }
 
 @media (max-width: 640px) {
   .mobile-tab-bar { display: flex; }
+  .app-root > main {
+    padding-bottom: calc(82px + env(safe-area-inset-bottom));
+  }
 }
 
 /* ─── SECTION DIVIDER ────────────────────────────────────── */
@@ -287,12 +290,26 @@ input, select, textarea { color-scheme: light; }
 }
 .inherit-results-card { display: none; padding: 12px 0; }
 
+.zakat-top-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.date-input-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
 @media (max-width: 600px) {
   .inherit-top-grid         { grid-template-columns: 1fr; }
   .inherit-heirs-grid       { grid-template-columns: 1fr; }
   .inherit-results-header   { display: none; }
   .inherit-results-row      { display: none; }
   .inherit-results-card     { display: block; }
+  .zakat-top-grid           { grid-template-columns: 1fr; }
+  .date-input-grid          { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+@media (max-width: 380px) {
+  .date-input-grid { grid-template-columns: 1fr; }
 }
 
 /* ─── HOME BENTO GRID ────────────────────────────────────── */

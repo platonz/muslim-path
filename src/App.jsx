@@ -498,8 +498,8 @@ function PageTitle({ icon, title, sub }) {
 
 function Input({ label, ...props }) {
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 7 }}>
-      {label && <label style={{ fontSize: 11, fontWeight: 600, color: MUTED, textTransform: "uppercase", letterSpacing: "0.1em" }}>{label}</label>}
+    <div style={{ display: "flex", flexDirection: "column", gap: 7, minWidth: 0 }}>
+      {label && <label style={{ fontSize: 11, fontWeight: 600, color: MUTED, textTransform: "uppercase", letterSpacing: "0.1em", overflowWrap: "anywhere" }}>{label}</label>}
       <input
         {...props}
         style={{
@@ -509,6 +509,9 @@ function Input({ label, ...props }) {
           fontSize: 14, color: TEXT, background: SURFACE, outline: "none",
           transition: "border-color 0.2s, box-shadow 0.2s",
           fontFamily: SANS,
+          width: "100%",
+          minWidth: 0,
+          boxSizing: "border-box",
           ...props.style
         }}
         onFocus={e => { e.target.style.borderColor = GOLD; e.target.style.boxShadow = `0 0 0 3px ${GOLD}18`; }}
@@ -520,8 +523,8 @@ function Input({ label, ...props }) {
 
 function Select({ label, options, ...props }) {
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 7 }}>
-      {label && <label style={{ fontSize: 11, fontWeight: 600, color: MUTED, textTransform: "uppercase", letterSpacing: "0.1em" }}>{label}</label>}
+    <div style={{ display: "flex", flexDirection: "column", gap: 7, minWidth: 0 }}>
+      {label && <label style={{ fontSize: 11, fontWeight: 600, color: MUTED, textTransform: "uppercase", letterSpacing: "0.1em", overflowWrap: "anywhere" }}>{label}</label>}
       <select
         {...props}
         style={{
@@ -530,6 +533,9 @@ function Select({ label, options, ...props }) {
           border: `1px solid ${BORDER}`,
           fontSize: 14, color: TEXT, background: SURFACE, outline: "none", cursor: "pointer",
           fontFamily: SANS,
+          width: "100%",
+          minWidth: 0,
+          boxSizing: "border-box",
           ...props.style
         }}
       >
@@ -807,7 +813,7 @@ function Zakat() {
         </div>
       </Card>
       <Card style={{ marginBottom: 20 }}>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14, marginBottom: 20 }}>
+        <div className="zakat-top-grid" style={{ display: "grid", gap: 14, marginBottom: 20 }}>
           <Select label="Currency" value={currency} onChange={e => setCurrency(e.target.value)}
             options={[{v:"USD",l:"USD — US Dollar"},{v:"GBP",l:"GBP — British Pound"},{v:"EUR",l:"EUR — Euro"},{v:"AED",l:"AED — Emirati Dirham"},{v:"PKR",l:"PKR — Pakistani Rupee"},{v:"BDT",l:"BDT — Bangladeshi Taka"},{v:"MYR",l:"MYR — Malaysian Ringgit"}]} />
           <Input label="Gold Price (per gram)" type="number" value={goldPriceInput} onChange={e => setGoldPriceInput(e.target.value)} />
@@ -1113,13 +1119,13 @@ function DateConverter() {
         </div>
 
         {mode === "gToH" ? (
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 12 }}>
+          <div className="date-input-grid" style={{ display: "grid", gap: 12 }}>
             <Input label="Day" type="number" min="1" max="31" value={gDay} onChange={e => setGDay(e.target.value)} />
             <Input label="Month" type="number" min="1" max="12" value={gMonth} onChange={e => setGMonth(e.target.value)} />
             <Input label="Year" type="number" value={gYear} onChange={e => setGYear(e.target.value)} />
           </div>
         ) : (
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 12 }}>
+          <div className="date-input-grid" style={{ display: "grid", gap: 12 }}>
             <Input label="Day" type="number" min="1" max="30" value={hDay} onChange={e => setHDay(e.target.value)} />
             <Input label="Month" type="number" min="1" max="12" value={hMonth} onChange={e => setHMonth(e.target.value)} />
             <Input label="Year (AH)" type="number" value={hYear} onChange={e => setHYear(e.target.value)} />

@@ -12,8 +12,7 @@ export default function Icon({ name, size = 20, color = "currentColor", sw = 1.6
     strokeWidth: sw,
     strokeLinecap: "round",
     strokeLinejoin: "round",
-    display: "block",
-    flexShrink: 0,
+    style: { display: "block", flexShrink: 0 },
   };
   switch (name) {
     /* ── Navigation & pages ── */
