@@ -1035,9 +1035,9 @@ function StepLayout({ prayer: p, showTranslit }) {
                   {String(idx + 1).padStart(2, '0')} / {String(max).padStart(2, '0')}
                 </div>
                 {idx === max - 1 ? (
-                  <PillBtn variant="dark">
-                    Mbaroi!
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+                  <PillBtn variant="dark" onClick={() => setIdx(0)}>
+                    Rifillo
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4"/></svg>
                   </PillBtn>
                 ) : (
                   <PillBtn variant="dark" onClick={() => setIdx(i => Math.min(max - 1, i + 1))}>
@@ -1206,8 +1206,8 @@ function SiTeFaleshDetail({ prayerId, onBack, layout, setLayout }) {
               }}
             >Shqiptim</button>
 
-            {/* Layout selector */}
-            <div className="stf-layout-selector" style={{
+            {/* Layout selector — hidden in guided step mode */}
+            {layout !== 'step' && <div className="stf-layout-selector" style={{
               display: 'flex', alignItems: 'center', gap: 4,
               padding: '6px 8px', borderRadius: 999,
               background: 'rgba(0,0,0,0.22)', backdropFilter: 'blur(8px)',
@@ -1215,7 +1215,6 @@ function SiTeFaleshDetail({ prayerId, onBack, layout, setLayout }) {
             }}>
               {[
                 { id: 'scroll', title: 'Lista' },
-                { id: 'step',   title: 'Hap pas hapi' },
                 { id: 'twocol', title: 'Dy kolona' },
               ].map(opt => (
                 <button className="stf-layout-option" key={opt.id} onClick={() => setLayout(opt.id)} style={{
@@ -1226,18 +1225,38 @@ function SiTeFaleshDetail({ prayerId, onBack, layout, setLayout }) {
                   transition: 'all 150ms',
                 }}>{opt.title}</button>
               ))}
-            </div>
+            </div>}
           </div>
         </div>
 
         {/* Centered prayer name */}
-        <div className="stf-prayer-title" style={{ position: 'absolute', left: 0, right: 0, bottom: '14%', textAlign: 'center', color: p.onSky }}>
+        <div className="stf-prayer-title" style={{ position: 'absolute', left: 0, right: 0, bottom: '10%', textAlign: 'center', color: p.onSky }}>
           <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.22em', textTransform: 'uppercase', opacity: 0.85 }}>{p.period}</div>
           <h1 style={{
             fontFamily: SERIF, fontSize: 'clamp(48px,7vw,84px)',
             fontWeight: 600, margin: '8px 0 0', letterSpacing: '-0.02em', lineHeight: 1,
             textShadow: '0 2px 18px rgba(0,0,0,0.22)',
           }}>{p.nameAlb}</h1>
+          {layout !== 'step' && (
+            <button
+              onClick={() => setLayout('step')}
+              style={{
+                marginTop: 20, display: 'inline-flex', alignItems: 'center', gap: 10,
+                padding: '13px 28px', borderRadius: 999,
+                background: 'rgba(255,255,255,0.95)',
+                border: 'none', cursor: 'pointer',
+                color: C.dark900, fontFamily: SANS, fontSize: 15, fontWeight: 700,
+                boxShadow: '0 4px 24px rgba(0,0,0,0.22)',
+                transition: 'transform 150ms, box-shadow 150ms',
+                letterSpacing: '0.01em',
+              }}
+              onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 8px 32px rgba(0,0,0,0.28)'; }}
+              onMouseLeave={e => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = '0 4px 24px rgba(0,0,0,0.22)'; }}
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              Fillo hap pas hapi
+            </button>
+          )}
         </div>
       </div>
 
