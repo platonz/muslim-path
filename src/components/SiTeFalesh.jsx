@@ -1005,8 +1005,8 @@ function StepLayout({ prayer: p, showTranslit }) {
               <div style={{ position: 'absolute', top: 18, left: 22, fontFamily: MONO, fontSize: 12, fontWeight: 600, color: p.accentDark }}>
                 {String(idx + 1).padStart(2, '0')} <span style={{ color: C.warm500 }}>/ {String(max).padStart(2, '0')}</span>
               </div>
-              <PostureFigure posture={s.posture} size={210} color={C.dark900} bg="transparent" />
-              <div style={{ marginTop: 8, fontSize: 11, fontWeight: 600, color: C.warm600, letterSpacing: '0.16em', textTransform: 'uppercase', textAlign: 'center' }}>
+              <PostureFigure posture={s.posture} size={226} color={C.dark900} bg="transparent" />
+              <div className="stf-step-posture-label" style={{ marginTop: 8, fontSize: 11, fontWeight: 600, color: C.warm600, letterSpacing: '0.16em', textTransform: 'uppercase', textAlign: 'center' }}>
                 {s.postureAlb}
               </div>
             </div>
@@ -1015,6 +1015,10 @@ function StepLayout({ prayer: p, showTranslit }) {
             <div className="stf-step-mode-content" style={{ padding: '32px 32px 28px', display: 'flex', flexDirection: 'column' }}>
               <h3 className="stf-step-mode-title" style={{ fontFamily: SERIF, fontSize: 28, fontWeight: 600, color: C.dark900, margin: '4px 0 0', letterSpacing: '0', lineHeight: 1.18 }}>
                 {s.name}
+                {' '}
+                <span className="stf-step-title-posture" style={{ fontFamily: SANS, fontSize: 12, fontWeight: 700, color: C.warm600, letterSpacing: '0.08em', textTransform: 'uppercase', marginLeft: 10 }}>
+                  ({s.postureAlb})
+                </span>
               </h3>
               <p className="stf-step-mode-instruction" style={{ fontSize: 15, color: C.warm700, marginTop: 14, lineHeight: 1.6 }}>{s.instruction}</p>
               <div style={{ flex: 1 }}>
@@ -1052,8 +1056,9 @@ function StepLayout({ prayer: p, showTranslit }) {
       <style>{`
         @media(max-width:760px){
           .stf-step-grid{grid-template-columns:1fr!important;}
-          .stf-step-grid>div:first-child{border-right:none!important;border-bottom:1px solid ${C.warm200};min-height:190px!important;padding:22px 20px 14px!important;}
-          .stf-step-mode-figure .posture-figure{width:150px!important;height:150px!important;}
+          .stf-step-grid>div:first-child{border-right:none!important;border-bottom:1px solid ${C.warm200};min-height:212px!important;padding:18px 20px 10px!important;}
+          .stf-step-mode-figure .posture-figure{width:clamp(178px,52vw,196px)!important;height:clamp(178px,52vw,196px)!important;}
+          .stf-step-posture-label{display:none!important;}
           .stf-step-mode-content{padding:0 28px 24px!important;}
           .stf-step-mode-title{
             margin:0 -28px 12px!important;
@@ -1063,6 +1068,7 @@ function StepLayout({ prayer: p, showTranslit }) {
             background:${C.gold50}!important;
             border-bottom:1px solid ${C.warm200}!important;
           }
+          .stf-step-title-posture{display:inline!important;font-size:10px!important;letter-spacing:0.06em!important;margin-left:6px!important;vertical-align:middle!important;}
           .stf-step-mode-instruction{font-size:14px!important;margin-top:0!important;line-height:1.55!important;}
         }
       `}</style>
