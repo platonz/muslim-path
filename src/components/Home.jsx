@@ -141,7 +141,7 @@ function getCurrentPrayerIdx() {
   return HOME_PRAYERS.length - 1;
 }
 
-function HomePrayerCard({ prayer, isCurrent, isSq, onClick }) {
+function HomePrayerCard({ prayer, isCurrent, isSq, onClick, isDesktop }) {
   const [hov, setHov] = useState(false);
   const label = isSq ? prayer.timeLabel.sq : prayer.timeLabel.en;
   return (
@@ -150,7 +150,10 @@ function HomePrayerCard({ prayer, isCurrent, isSq, onClick }) {
       onMouseEnter={() => setHov(true)}
       onMouseLeave={() => setHov(false)}
       style={{
-        flexShrink: 0, width: "clamp(110px, 28vw, 148px)", borderRadius: 14, overflow: "hidden",
+        flexShrink: isDesktop ? 1 : 0,
+        flex: isDesktop ? "1 1 0" : undefined,
+        width: isDesktop ? undefined : "clamp(110px, 28vw, 148px)",
+        borderRadius: 14, overflow: "hidden",
         border: isCurrent ? "2px solid rgba(255,255,255,0.9)" : "2px solid transparent",
         boxShadow: hov ? "0 8px 24px rgba(0,0,0,0.25)" : "0 3px 12px rgba(0,0,0,0.18)",
         transform: hov ? "translateY(-3px)" : "none",
@@ -160,7 +163,7 @@ function HomePrayerCard({ prayer, isCurrent, isSq, onClick }) {
       }}
     >
       {/* Sky scene */}
-      <div style={{ position: "relative", height: "clamp(72px, 18vw, 90px)", background: prayer.sky, overflow: "hidden" }}>
+      <div style={{ position: "relative", height: isDesktop ? 160 : "clamp(72px, 18vw, 90px)", background: prayer.sky, overflow: "hidden" }}>
         {/* Stars */}
         {prayer.stars?.map((st, i) => (
           <div key={i} style={{
@@ -174,42 +177,43 @@ function HomePrayerCard({ prayer, isCurrent, isSq, onClick }) {
           <div style={{
             position: "absolute", left: "50%", top: `${prayer.sunY}%`,
             transform: "translate(-50%, -50%)",
-            width: prayer.isNight ? 22 : 30, height: prayer.isNight ? 22 : 30,
+            width: prayer.isNight ? (isDesktop ? 32 : 22) : (isDesktop ? 44 : 30),
+            height: prayer.isNight ? (isDesktop ? 32 : 22) : (isDesktop ? 44 : 30),
             borderRadius: "50%", background: prayer.sunColor,
-            boxShadow: `0 0 ${prayer.isNight ? 10 : 18}px 4px ${prayer.sunGlow}`,
+            boxShadow: `0 0 ${prayer.isNight ? (isDesktop ? 16 : 10) : (isDesktop ? 28 : 18)}px 4px ${prayer.sunGlow}`,
           }}/>
         )}
         {/* Time label */}
         <div style={{
-          position: "absolute", top: 8, left: 9,
-          fontSize: 9, fontWeight: 700, letterSpacing: "0.08em",
+          position: "absolute", top: isDesktop ? 12 : 8, left: isDesktop ? 14 : 9,
+          fontSize: isDesktop ? 11 : 9, fontWeight: 700, letterSpacing: "0.08em",
           color: "rgba(255,255,255,0.85)", fontFamily: SA,
         }}>{label}</div>
         {/* TANI / NOW badge */}
         {isCurrent && (
           <div style={{
-            position: "absolute", top: 7, right: 7,
+            position: "absolute", top: isDesktop ? 11 : 7, right: isDesktop ? 11 : 7,
             background: "#fff", color: "#1A1915",
-            fontSize: 9, fontWeight: 800, letterSpacing: "0.06em",
-            padding: "2px 6px", borderRadius: 99, fontFamily: SA,
+            fontSize: isDesktop ? 10 : 9, fontWeight: 800, letterSpacing: "0.06em",
+            padding: isDesktop ? "3px 8px" : "2px 6px", borderRadius: 99, fontFamily: SA,
           }}>{isSq ? "TANI" : "NOW"}</div>
         )}
       </div>
       {/* Card body */}
-      <div style={{ background: "#fff", padding: "8px 10px 10px" }}>
-        <div style={{ fontSize: 14, fontWeight: 700, color: "#1A1915", fontFamily: SR, marginBottom: 4 }}>
+      <div style={{ background: "#fff", padding: isDesktop ? "12px 16px 14px" : "8px 10px 10px" }}>
+        <div style={{ fontSize: isDesktop ? 17 : 14, fontWeight: 700, color: "#1A1915", fontFamily: SR, marginBottom: isDesktop ? 6 : 4 }}>
           {prayer.nameAlb}
         </div>
-        <div style={{ display: "flex", gap: 6, alignItems: "center", marginBottom: 6 }}>
-          <span style={{ fontSize: 9, color: "#6B6050", fontFamily: SA }}>
+        <div style={{ display: "flex", gap: 6, alignItems: "center", marginBottom: isDesktop ? 8 : 6 }}>
+          <span style={{ fontSize: isDesktop ? 11 : 9, color: "#6B6050", fontFamily: SA }}>
             <strong style={{ color: "#1A1915" }}>{prayer.rakatFard}</strong> {isSq ? "FARZ" : "FARD"}
           </span>
           <span style={{ width: 1, height: 8, background: "#E0D5C0" }}/>
-          <span style={{ fontSize: 9, color: "#6B6050", fontFamily: SA }}>
+          <span style={{ fontSize: isDesktop ? 11 : 9, color: "#6B6050", fontFamily: SA }}>
             <strong style={{ color: "#1A1915" }}>{prayer.rakatSunnah}</strong> {isSq ? "SUNET" : "SUNNAH"}
           </span>
         </div>
-        <div style={{ display: "flex", alignItems: "center", gap: 3, fontSize: 10, color: "#9A8E7A", fontFamily: SA }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 3, fontSize: isDesktop ? 12 : 10, color: "#9A8E7A", fontFamily: SA }}>
           {isSq ? "Mëso →" : "Learn →"}
         </div>
       </div>
@@ -429,13 +433,14 @@ export default function Home({ quote, verseQuote, setPage, showInstall, onInstal
                 {isSq ? "Shiko të gjitha →" : "See all →"}
               </button>
             </div>
-            <div className="hide-scrollbar" style={{ display: "flex", gap: 10, overflowX: "auto", padding: "0 20px 4px", scrollSnapType: "x mandatory" }}>
+            <div className="hide-scrollbar" style={{ display: "flex", gap: 10, overflowX: isMobile ? "auto" : "visible", padding: "0 20px 4px", scrollSnapType: isMobile ? "x mandatory" : "none" }}>
               {HOME_PRAYERS.map((p, i) => (
                 <HomePrayerCard
                   key={p.id}
                   prayer={p}
                   isCurrent={i === currentIdx}
                   isSq={isSq}
+                  isDesktop={!isMobile}
                   onClick={() => setPage("namaz", p.id)}
                 />
               ))}
