@@ -137,27 +137,27 @@ const STEPS = [
     n: 3, posture: 'qiyam-folded', name: 'Subhaneke', nameAr: 'الثَّنَاء', postureAlb: 'Duart në kraharor',
     instruction: 'Vendos duart në kraharor — e djathta mbi të majtën — dhe lexo lutjen hapëse:',
     arabic: 'سُبْحَانَكَ اللَّهُمَّ وَبِحَمْدِكَ، وَتَبَارَكَ اسْمُكَ، وَتَعَالَى جَدُّكَ، وَلَا إِلَٰهَ غَيْرُكَ',
-    translit: "Subhanekel-lahumme ve bi hamdike, ve tebarekesmuke, ve te'ala xhedduke, ve la ilahe gajruke",
-    translation: "I lartë je Ti, o Zoti im, dhe Ty të lavdëroj. I bekuar është Emri Yt, e madhështore madhëria Jote, dhe s'ka të adhuruar tjetër veç Teje.",
+    translit: "Subhaneke Allahumme ve bi hamdike, ve tebarekesmuke, ve te'ala xhedduke, ve la ilahe gajruke.",
+    translation: "I madhëruar je Ti, o Allah, dhe Ty të lavdëroj. I bekuar është Emri Yt, e madhështore është madhëria Jote, dhe s'ka të adhuruar tjetër veç Teje.",
   },
   {
     n: 4, posture: 'qiyam-folded', name: 'Sureja Fatiha', nameAr: 'الفَاتِحَة', postureAlb: 'Duart ende në kraharor',
     instruction: 'Lexo suren hyrëse të Kuranit — shtatë ajetet që përsëriten në çdo rekat të çdo namazi. Në fund thuaj: Amin.',
-    arabic: 'بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ ۝ الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ ۝ الرَّحْمَٰنِ الرَّحِيمِ ۝ مَالِكِ يَوْمِ الدِّينِ ۝ إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ ۝ اهْدِنَا الصِّرَاطَ الْمُسْتَقِيمَ ۝ صِرَاطَ الَّذِينَ أَنْعَمْتَ عَلَيْهِمْ غَيْرِ الْمَغْضُوبِ عَلَيْهِمْ وَلَا الضَّالِّينَ',
-    translit: "Bismil-lahir-rahmanir-rahim. Elhamdu lil-lahi rabbil-alemin. Er-rahmanir-rahim. Maliki jevmid-din. Ijjake na'budu ve ijjake nesta'in. Ihdines-siratal-mustekim. Siratal-ledhine en'amte alejhim, gajril-magdubi alejhim ve led-dal-lin.",
+    arabic: 'بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ ۝ ٱلْحَمْدُ لِلَّهِ رَبِّ ٱلْعَـٰلَمِينَ ۝ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ ۝ مَـٰلِكِ يَوْمِ ٱلدِّينِ ۝ إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ ۝ ٱهْدِنَا ٱلصِّرَٰطَ ٱلْمُسْتَقِيمَ ۝ صِرَٰطَ ٱلَّذِينَ أَنْعَمْتَ عَلَيْهِمْ غَيْرِ ٱلْمَغْضُوبِ عَلَيْهِمْ وَلَا ٱلضَّآلِّينَ',
+    translit: "Bismil-lahir-rahmanir-rahim. Elhamdu lil-lahi rabbil-alemin. Er-rahmanir-rahim. Maliki jevmid-din. Ijjake na'budu ve ijjake nesta'in. Ihdinas-siratal-mustekim. Siratal-ledhine en'amte alejhim, gajril-magdubi alejhim ve led-dal-lin.",
     translation: 'Në emër të Allahut, Mëshiruesit, Mëshirëbërësit. Lavdërimi i takon Allahut, Zotit të botëve, Mëshiruesit, Mëshirëbërësit, Sunduesit të Ditës së Gjykimit. Vetëm Ty të adhurojmë dhe vetëm prej Teje ndihmë kërkojmë. Udhëzona në rrugën e drejtë — rrugën e atyre që i ke begatuar, jo të atyre që zemërimi është mbi ta, e as të të humburve.',
   },
   {
     n: 5, posture: 'qiyam-folded', name: 'Sure e shkurtër', nameAr: 'سُورَة قَصِيرَة', postureAlb: 'Në këmbë',
     instruction: 'Pas Fatihasë, lexo një sure të shkurtër. Për fillestarët, sureja El-Ihlas është më e thjeshta për të mësuar:',
-    arabic: 'قُلْ هُوَ اللَّهُ أَحَدٌ ۝ اللَّهُ الصَّمَدُ ۝ لَمْ يَلِدْ وَلَمْ يُولَدْ ۝ وَلَمْ يَكُن لَّهُ كُفُوًا أَحَدٌ',
+    arabic: 'قُلْ هُوَ ٱللَّهُ أَحَدٌ ۝ ٱللَّهُ ٱلصَّمَدُ ۝ لَمْ يَلِدْ وَلَمْ يُولَدْ ۝ وَلَمْ يَكُن لَّهُۥ كُفُوًا أَحَدٌۢ',
     translit: 'Kul huvel-lahu ehad. Allahus-samed. Lem jelid ve lem juled. Ve lem jekul-lehu kufuven ehad.',
     translation: 'Thuaj: Ai, Allahu është Një. Allahu është Streha e gjithçkaje. Nuk lindi e as nuk është i lindur. Dhe askush nuk i është i barabartë Atij.',
   },
   {
     n: 6, posture: 'ruku', name: 'Rukuja', nameAr: 'الرُّكُوع', postureAlb: 'Përkulje, duart mbi gjunjë',
     instruction: 'Thuaj "Allahu Ekber" dhe përkulu — shpina e drejtë, duart mbi gjunjë, sytë drejt vendit ku do biesh në sexhde. Përsërit tri herë:',
-    arabic: 'سُبْحَانَ رَبِّيَ العَظِيمِ', translit: 'Subhane Rabbijel-Adhim', translation: 'I lavdëruar është Zoti im, i Madhërishmi.',
+    arabic: 'سُبْحَانَ رَبِّيَ الْعَظِيمِ', translit: 'Subhane Rabbijel-Adhim', translation: 'I lavdëruar është Zoti im, i Madhërishmi.',
   },
   {
     n: 7, posture: 'itidal', name: 'Itidali', nameAr: 'الِاعْتِدَال', postureAlb: 'Drejt në këmbë',
@@ -169,7 +169,7 @@ const STEPS = [
   {
     n: 8, posture: 'sujud', name: 'Sexhdja', nameAr: 'السُّجُود', postureAlb: 'Shtatë gjymtyrët në tokë',
     instruction: 'Thuaj "Allahu Ekber" dhe bjer në sexhde. Shtatë gjymtyrët duhet të prekin tokën: balli me hundë, dy pëllëmbët, dy gjunjët, dhe gishtërinjtë e dy këmbëve. Përsërit tri herë:',
-    arabic: 'سُبْحَانَ رَبِّيَ الأَعْلَى', translit: "Subhane Rabbijel-A'la", translation: 'I lavdëruar është Zoti im, më i Larti.',
+    arabic: 'سُبْحَانَ رَبِّيَ الْأَعْلَى', translit: "Subhane Rabbijel-A'la", translation: 'I lavdëruar është Zoti im, më i Larti.',
   },
   {
     n: 9, posture: 'jalsa', name: 'Xhelseja', nameAr: 'الجَلْسَة', postureAlb: 'Ulur mes dy sexhdeve',
@@ -179,7 +179,7 @@ const STEPS = [
   {
     n: 10, posture: 'sujud', name: 'Sexhdja e dytë', nameAr: 'السُّجُود الثَّانِي', postureAlb: 'Përsëri në sexhde',
     instruction: 'Bjer përsëri në sexhde dhe përsërit tri herë:',
-    arabic: 'سُبْحَانَ رَبِّيَ الأَعْلَى', translit: "Subhane Rabbijel-A'la", translation: 'I lavdëruar është Zoti im, më i Larti.',
+    arabic: 'سُبْحَانَ رَبِّيَ الْأَعْلَى', translit: "Subhane Rabbijel-A'la", translation: 'I lavdëruar është Zoti im, më i Larti.',
   },
   {
     n: 11, posture: 'note', name: 'Rekatet e ardhshme', nameAr: 'الرَّكَعَات التَّالِيَة', postureAlb: 'Ngrihu për rekatin tjetër',
@@ -197,7 +197,7 @@ const STEPS = [
     n: 13, posture: 'tashahhud', name: 'Salavati', nameAr: 'الصَّلَاةُ عَلَى النَّبِيِّ', postureAlb: 'Ulur në teshehudin e fundit',
     instruction: 'Në teshehudin e fundit, pas Et-Tehijjatit, dërgo salavate mbi Pejgamberin ﷺ:',
     arabic: 'اللَّهُمَّ صَلِّ عَلَى مُحَمَّدٍ وَعَلَى آلِ مُحَمَّدٍ، كَمَا صَلَّيْتَ عَلَى إِبْرَاهِيمَ وَعَلَى آلِ إِبْرَاهِيمَ، إِنَّكَ حَمِيدٌ مَجِيدٌ. اللَّهُمَّ بَارِكْ عَلَى مُحَمَّدٍ وَعَلَى آلِ مُحَمَّدٍ، كَمَا بَارَكْتَ عَلَى إِبْرَاهِيمَ وَعَلَى آلِ إِبْرَاهِيمَ، إِنَّكَ حَمِيدٌ مَجِيدٌ',
-    translit: 'Allahumme sal-li ala Muhammedin ve ala ali Muhammed, kema sal-lejte ala Ibrahime ve ala ali Ibrahim, inneke Hamidun Mexhid. Allahumme barik ala Muhammedin ve ala ali Muhammed, kema barekte ala Ibrahime ve ala ali Ibrahim, inneke Hamidun Mexhid.',
+    translit: 'Allahumme sal-li ala Muhammedin ve ala aali Muhammed, kema sal-lejte ala Ibrahime ve ala aali Ibrahim, inneke Hamidun Mexhid. Allahumme barik ala Muhammedin ve ala aali Muhammed, kema barekte ala Ibrahime ve ala aali Ibrahim, inneke Hamidun Mexhid.',
     translation: 'O Allah, dërgo lavdërime mbi Muhamedin dhe familjen e Muhamedit, siç dërgove lavdërime mbi Ibrahimin dhe familjen e Ibrahimit. Me të vërtetë, Ti je i Lavdëruari, i Madhërishmi. O Allah, bekoje Muhamedin dhe familjen e Muhamedit, siç bekove Ibrahimin dhe familjen e Ibrahimit. Me të vërtetë, Ti je i Lavdëruari, i Madhërishmi.',
   },
   {
