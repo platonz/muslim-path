@@ -994,7 +994,7 @@ function StepLayout({ prayer: p, showTranslit }) {
         <div style={{ background: C.surface, borderRadius: 22, border: `1px solid ${C.warm200}`, boxShadow: '0 6px 28px rgba(26,25,21,0.08)', overflow: 'hidden' }}>
           <div className="stf-step-grid" style={{ display: 'grid', gridTemplateColumns: 'minmax(240px,340px) 1fr' }}>
             {/* Figure side */}
-            <div style={{
+            <div className="stf-step-mode-figure" style={{
               background: `linear-gradient(180deg,${C.gold50} 0%,${C.warm100} 100%)`,
               padding: '36px 28px', display: 'flex', flexDirection: 'column',
               alignItems: 'center', justifyContent: 'center',
@@ -1010,11 +1010,11 @@ function StepLayout({ prayer: p, showTranslit }) {
             </div>
 
             {/* Content side */}
-            <div style={{ padding: '32px 32px 28px', display: 'flex', flexDirection: 'column' }}>
-              <h3 style={{ fontFamily: SERIF, fontSize: 34, fontWeight: 600, color: C.dark900, margin: '8px 0 0', letterSpacing: '-0.015em', lineHeight: 1.1 }}>
+            <div className="stf-step-mode-content" style={{ padding: '32px 32px 28px', display: 'flex', flexDirection: 'column' }}>
+              <h3 className="stf-step-mode-title" style={{ fontFamily: SERIF, fontSize: 28, fontWeight: 600, color: C.dark900, margin: '4px 0 0', letterSpacing: '0', lineHeight: 1.18 }}>
                 {s.name}
               </h3>
-              <p style={{ fontSize: 15, color: C.warm700, marginTop: 16, lineHeight: 1.6 }}>{s.instruction}</p>
+              <p className="stf-step-mode-instruction" style={{ fontSize: 15, color: C.warm700, marginTop: 14, lineHeight: 1.6 }}>{s.instruction}</p>
               <div style={{ flex: 1 }}>
                 {s.arabic && <RecitationCard step={s} accent={p.accent} accentDark={p.accentDark} showTranslit={showTranslit} />}
               </div>
@@ -1050,7 +1050,18 @@ function StepLayout({ prayer: p, showTranslit }) {
       <style>{`
         @media(max-width:760px){
           .stf-step-grid{grid-template-columns:1fr!important;}
-          .stf-step-grid>div:first-child{border-right:none!important;border-bottom:1px solid ${C.warm200};min-height:260px!important;}
+          .stf-step-grid>div:first-child{border-right:none!important;border-bottom:1px solid ${C.warm200};min-height:190px!important;padding:22px 20px 14px!important;}
+          .stf-step-mode-figure .posture-figure{width:150px!important;height:150px!important;}
+          .stf-step-mode-content{padding:0 28px 24px!important;}
+          .stf-step-mode-title{
+            margin:0 -28px 12px!important;
+            padding:10px 28px!important;
+            font-size:18px!important;
+            line-height:1.2!important;
+            background:${C.gold50}!important;
+            border-bottom:1px solid ${C.warm200}!important;
+          }
+          .stf-step-mode-instruction{font-size:14px!important;margin-top:0!important;line-height:1.55!important;}
         }
       `}</style>
     </>
