@@ -36,6 +36,7 @@ const ummahFetch = (url) => fetch(`${url}?apikey=${UMMAH_KEY}`);
 // ─── MODULE-LEVEL CACHES ─────────────────────────────────────────────────────
 let _surahCache = null;
 let _fullVerseCache = null;
+const QURAN_CACHE_PREFIX = "qv_qcom_v1";
 
 // ─── HELPERS ─────────────────────────────────────────────────────────────────
 function normSearch(s) {
@@ -45,6 +46,29 @@ function normSearch(s) {
     .replace(/[''ʿʾʻˀ`]/g, "")
     .replace(/[-]/g, "")
     .toLowerCase();
+}
+
+async function fetchQuranComSurah(surahNumber) {
+  const res = await fetch(`https://api.quran.com/api/v4/quran/verses/uthmani?chapter_number=${surahNumber}`);
+  const data = await res.json();
+  return (data.verses || []).map(v => ({
+    n: Number(v.verse_key.split(":")[1]),
+    globalN: v.id,
+    ar: v.text_uthmani.trim(),
+  }));
+}
+
+async function fetchReaderSurah(surahNumber, transEdition) {
+  const [arVerses, helperRes] = await Promise.all([
+    fetchQuranComSurah(surahNumber),
+    fetch(`https://api.alquran.cloud/v1/surah/${surahNumber}/editions/en.transliteration,${transEdition}`).then(r => r.json()),
+  ]);
+  const [translit, trans] = helperRes.data || [];
+  return arVerses.map((v, i) => ({
+    ...v,
+    tr: translit?.ayahs?.[i]?.text || "",
+    en: trans?.ayahs?.[i]?.text || "",
+  }));
 }
 
 const RECITERS = [
@@ -568,10 +592,10 @@ export default function QuranReader({ playQuranAudio, globalCurrentId, globalPla
     onStopQuranAudio?.();
 
     try {
-      const cached = localStorage.getItem(`qv_${current}_${transEdition}`);
+      const cached = localStorage.getItem(`${QURAN_CACHE_PREFIX}_${current}_${transEdition}`);
       if (cached) {
         const parsed = JSON.parse(cached);
-        if (!parsed[0]?.globalN) { localStorage.removeItem(`qv_${current}_${transEdition}`); throw new Error("stale"); }
+        if (!parsed[0]?.globalN) { localStorage.removeItem(`${QURAN_CACHE_PREFIX}_${current}_${transEdition}`); throw new Error("stale"); }
         setVerses(parsed); setLoadingRead(false); setFromCache(true);
         const pv = pendingVerseRef.current;
         if (pv) {
@@ -582,16 +606,10 @@ export default function QuranReader({ playQuranAudio, globalCurrentId, globalPla
       }
     } catch {}
 
-    fetch(`https://api.alquran.cloud/v1/surah/${current}/editions/quran-uthmani,en.transliteration,${transEdition}`)
-      .then(r => r.json())
-      .then(d => {
-        const [ar, translit, trans] = d.data;
-        const parsed = ar.ayahs.map((a, i) => ({
-          n: a.numberInSurah, globalN: a.number,
-          ar: a.text, tr: translit.ayahs[i]?.text || "", en: trans.ayahs[i]?.text || "",
-        }));
+    fetchReaderSurah(current, transEdition)
+      .then(parsed => {
         setVerses(parsed); setLoadingRead(false);
-        try { localStorage.setItem(`qv_${current}_${transEdition}`, JSON.stringify(parsed)); } catch {}
+        try { localStorage.setItem(`${QURAN_CACHE_PREFIX}_${current}_${transEdition}`, JSON.stringify(parsed)); } catch {}
         const pv = pendingVerseRef.current;
         if (pv) {
           pendingVerseRef.current = null;
@@ -608,22 +626,25 @@ export default function QuranReader({ playQuranAudio, globalCurrentId, globalPla
     if (fullLoading) return;
     setFullLoading(true);
     Promise.all([
-      fetch(`https://api.alquran.cloud/v1/quran/quran-uthmani`).then(r => r.json()),
+      fetch(`https://api.quran.com/api/v4/quran/verses/uthmani`).then(r => r.json()),
       fetch(`https://api.alquran.cloud/v1/quran/en.transliteration`).then(r => r.json()),
       fetch(`https://api.alquran.cloud/v1/quran/${transEdition}`).then(r => r.json()),
     ]).then(([arRes, trRes, enRes]) => {
-      const arSurahs = arRes.data?.surahs || [];
+      const arVerses = arRes.verses || [];
       const trSurahs = trRes.data?.surahs || [];
       const enSurahs = enRes.data?.surahs || [];
       const allVerses = [];
-      arSurahs.forEach((surah, si) => {
-        const s = surahs.find(x => x.number === surah.number);
-        surah.ayahs.forEach((ayah, ai) => {
-          allVerses.push({
-            surahNum: surah.number, ayahNum: ayah.numberInSurah,
-            surahName: s?.englishName || `Surah ${surah.number}`, surahAr: s?.name || "",
-            ar: ayah.text, tr: trSurahs[si]?.ayahs[ai]?.text || "", en: enSurahs[si]?.ayahs[ai]?.text || "",
-          });
+      arVerses.forEach((ayah, i) => {
+        const [surahNumRaw, ayahNumRaw] = ayah.verse_key.split(":");
+        const surahNum = Number(surahNumRaw);
+        const ayahNum = Number(ayahNumRaw);
+        const si = surahNum - 1;
+        const ai = ayahNum - 1;
+        const s = surahs.find(x => x.number === surahNum);
+        allVerses.push({
+          surahNum, ayahNum,
+          surahName: s?.englishName || `Surah ${surahNum}`, surahAr: s?.name || "",
+          ar: ayah.text_uthmani.trim(), tr: trSurahs[si]?.ayahs[ai]?.text || "", en: enSurahs[si]?.ayahs[ai]?.text || "",
         });
       });
       _fullVerseCache = { edition: transEdition, verses: allVerses };
@@ -639,15 +660,12 @@ export default function QuranReader({ playQuranAudio, globalCurrentId, globalPla
     try {
       let sv;
       try {
-        const cached = localStorage.getItem(`qv_${surahNum}_${transEdition}`);
+        const cached = localStorage.getItem(`${QURAN_CACHE_PREFIX}_${surahNum}_${transEdition}`);
         if (cached) { const p = JSON.parse(cached); if (p[0]?.globalN) sv = p; }
       } catch {}
       if (!sv) {
-        const res = await fetch(`https://api.alquran.cloud/v1/surah/${surahNum}/editions/quran-uthmani,en.transliteration,${transEdition}`);
-        const d = await res.json();
-        const [ar, translit, trans] = d.data;
-        sv = ar.ayahs.map((a, i) => ({ n: a.numberInSurah, globalN: a.number, ar: a.text, tr: translit.ayahs[i]?.text || "", en: trans.ayahs[i]?.text || "" }));
-        try { localStorage.setItem(`qv_${surahNum}_${transEdition}`, JSON.stringify(sv)); } catch {}
+        sv = await fetchReaderSurah(surahNum, transEdition);
+        try { localStorage.setItem(`${QURAN_CACHE_PREFIX}_${surahNum}_${transEdition}`, JSON.stringify(sv)); } catch {}
       }
       const url = await getAudioUrl(surahNum, 1, reciter);
       if (!url) return;
@@ -971,7 +989,7 @@ export default function QuranReader({ playQuranAudio, globalCurrentId, globalPla
                 </button>
               )}
               <div style={{ fontFamily: T.fontArabic, fontSize: 56, color: T.gold600, direction: "rtl", lineHeight: 1.4, marginBottom: 20, opacity: 0.7 }}>
-                بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ
+                بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ
               </div>
               <div style={{ fontFamily: T.fontDisplay, fontSize: 24, fontWeight: 600, color: T.dark900, marginBottom: 8 }}>
                 {isSq ? "Kurani Famëlartë" : "The Noble Quran"}
