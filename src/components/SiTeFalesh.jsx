@@ -619,7 +619,7 @@ function SiTeFaleshHome({ onOpenPrayer }) {
   return (
     <div style={{ minHeight: '100vh', background: C.bg, fontFamily: SANS, color: C.dark900 }}>
       {/* Hero */}
-      <section style={{ padding: 'clamp(32px,5vw,64px) clamp(20px,4vw,56px) clamp(20px,3vw,36px)', maxWidth: 1280, margin: '0 auto' }}>
+      <section style={{ padding: 'clamp(32px,5vw,64px) clamp(20px,4vw,56px) clamp(20px,3vw,36px)', paddingLeft: window.innerWidth < 640 ? 60 : undefined, maxWidth: 1280, margin: '0 auto' }}>
         <div className="stf-hero-grid">
           {/* Left — headline */}
           <div>

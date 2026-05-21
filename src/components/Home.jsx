@@ -204,13 +204,13 @@ function HomePrayerCard({ prayer, isCurrent, isSq, onClick, isDesktop }) {
         <div style={{ fontSize: isDesktop ? 17 : 14, fontWeight: 700, color: "#1A1915", fontFamily: SR, marginBottom: isDesktop ? 6 : 4 }}>
           {prayer.nameAlb}
         </div>
-        <div style={{ display: "flex", gap: 6, alignItems: "center", marginBottom: isDesktop ? 8 : 6 }}>
-          <span style={{ fontSize: isDesktop ? 11 : 9, color: "#6B6050", fontFamily: SA }}>
+        <div style={{ display: "flex", gap: 5, alignItems: "center", marginBottom: isDesktop ? 8 : 6, overflow: "hidden" }}>
+          <span style={{ fontSize: isDesktop ? 11 : 9, color: "#6B6050", fontFamily: SA, whiteSpace: "nowrap" }}>
             <strong style={{ color: "#1A1915" }}>{prayer.rakatFard}</strong> {isSq ? "FARZ" : "FARD"}
           </span>
-          <span style={{ width: 1, height: 8, background: "#E0D5C0" }}/>
-          <span style={{ fontSize: isDesktop ? 11 : 9, color: "#6B6050", fontFamily: SA }}>
-            <strong style={{ color: "#1A1915" }}>{prayer.rakatSunnah}</strong> {isSq ? "SUNET" : "SUNNAH"}
+          <span style={{ width: 1, height: 8, background: "#E0D5C0", flexShrink: 0 }}/>
+          <span style={{ fontSize: isDesktop ? 11 : 9, color: "#6B6050", fontFamily: SA, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", minWidth: 0 }}>
+            <strong style={{ color: "#1A1915" }}>{prayer.rakatSunnah}</strong> {isSq ? "SUNET" : "SUN."}
           </span>
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: 3, fontSize: isDesktop ? 12 : 10, color: "#9A8E7A", fontFamily: SA }}>
@@ -325,6 +325,7 @@ export default function Home({ quote, verseQuote, setPage, showInstall, onInstal
 
   return (
     <div style={{ background:"#FAF7EE", minHeight:"100vh", paddingBottom:90 }}>
+    <div style={{ maxWidth: 900, margin: "0 auto" }}>
 
       {/* ── PWA Install Nudge ───────────────────────────────────────── */}
       {!isStandalone && isMobile && !installDismissed && (
@@ -588,6 +589,7 @@ export default function Home({ quote, verseQuote, setPage, showInstall, onInstal
       <style>{`
         .hide-scrollbar::-webkit-scrollbar { display: none; }
       `}</style>
+    </div>
     </div>
   );
 }

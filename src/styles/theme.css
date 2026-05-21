@@ -400,5 +400,6 @@ input, select, textarea { color-scheme: light; }
   .home-grid-tools { grid-template-columns: 1fr; }
 }
 @media (max-width: 480px) {
-  .home-grid-2, .home-grid-3, .home-grid-4, .home-grid-tools { grid-template-columns: 1fr; }
+  .home-grid-2, .home-grid-3, .home-grid-tools { grid-template-columns: 1fr; }
+  /* home-grid-4 stays 2-col even on small phones — 4 stacked cards is too tall */
 }
