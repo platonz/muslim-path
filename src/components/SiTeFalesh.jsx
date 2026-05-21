@@ -224,8 +224,8 @@ const RISE_TPL = {
   arabic: 'اللَّهُ أَكْبَر', translit: 'Allahu Ekber', translation: 'Allahu është më i Madhi.',
 };
 
-function buildPrayerSteps(prayer) {
-  const total = prayer.rakatFard;
+function buildPrayerSteps(prayer, rakatOverride) {
+  const total = rakatOverride ?? prayer.rakatFard;
   const out = [];
   let n = 1;
   const add = (base, extra = {}) => { out.push({ ...base, n: n++, ...extra }); };
@@ -1030,13 +1030,80 @@ function ScrollLayout({ prayer: p, showTranslit }) {
 
 // ── Step layout — full-screen guided card ──────────────────────────
 function StepLayout({ prayer: p, showTranslit, onBack }) {
+  const [phase, setPhase] = useState('farz'); // 'farz' | 'sunet_prompt' | 'sunet'
   const [idx, setIdx] = useState(0);
-  const steps = useMemo(() => buildPrayerSteps(p), [p.id]);
+  const farzSteps  = useMemo(() => buildPrayerSteps(p), [p.id]);
+  const sunetSteps = useMemo(() => buildPrayerSteps(p, p.rakatSunnah), [p.id]);
+  const steps = phase === 'sunet' ? sunetSteps : farzSteps;
   const s = steps[idx];
   const max = steps.length;
 
-  function goNext() { if (idx < max - 1) setIdx(i => i + 1); else setIdx(0); }
+  function goNext() {
+    if (idx < max - 1) { setIdx(i => i + 1); return; }
+    if (phase === 'farz' && p.rakatSunnah > 0) { setPhase('sunet_prompt'); return; }
+    onBack?.();
+  }
   function goPrev() { if (idx > 0) setIdx(i => i - 1); else onBack?.(); }
+
+  if (phase === 'sunet_prompt') {
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', height: 'calc(100dvh - 80px - 56px)', padding: '0 24px', alignItems: 'center', justifyContent: 'center', gap: 20 }}>
+        <div style={{ textAlign: 'center' }}>
+          <div style={{ width: 72, height: 72, borderRadius: '50%', background: p.accentDark, display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px' }}>
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <h2 style={{ fontFamily: SERIF, fontSize: 'clamp(22px,5vw,28px)', fontWeight: 700, color: C.dark900, margin: '0 0 8px', lineHeight: 1.15 }}>
+            Fardi u plotësua!
+          </h2>
+          <p style={{ fontSize: 14, color: C.warm600, margin: 0, lineHeight: 1.6 }}>
+            Keni falur {p.rakatFard} rekate farz të {p.nameAlb}.<br/>
+            Dëshironi të faleni edhe sunetin?
+          </p>
+        </div>
+
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 12, width: '100%', maxWidth: 400 }}>
+          <button
+            onClick={() => { setIdx(0); setPhase('sunet'); }}
+            style={{
+              background: C.dark900, color: '#fff', border: 'none', borderRadius: 16,
+              padding: '20px 24px', cursor: 'pointer', textAlign: 'left',
+              display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16,
+            }}
+          >
+            <div>
+              <div style={{ fontFamily: SANS, fontWeight: 700, fontSize: 16, marginBottom: 4 }}>
+                Po, fal sunetin
+              </div>
+              <div style={{ fontFamily: SANS, fontSize: 13, color: 'rgba(255,255,255,0.65)' }}>
+                {p.rakatSunnah} rekate sunet · vazhdo tani
+              </div>
+            </div>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+
+          <button
+            onClick={() => onBack?.()}
+            style={{
+              background: C.surface, color: C.dark700, border: `1px solid ${C.warm200}`, borderRadius: 16,
+              padding: '20px 24px', cursor: 'pointer', textAlign: 'left',
+              display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16,
+            }}
+          >
+            <div>
+              <div style={{ fontFamily: SANS, fontWeight: 600, fontSize: 16, marginBottom: 4 }}>
+                Jo, kthehu mbrapa
+              </div>
+              <div style={{ fontFamily: SANS, fontSize: 13, color: C.warm500 }}>
+                Funda namazin këtu
+              </div>
+            </div>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+          </button>
+        </div>
+        <style>{`@media (max-width: 640px) { .stf-sunet-prompt { height: calc(100dvh - 80px - 56px - 58px) !important; } }`}</style>
+      </div>
+    );
+  }
 
   return (
     <div className="stf-guided-root" style={{ display: 'flex', flexDirection: 'column', height: 'calc(100dvh - 80px - 56px)' }}>
@@ -1052,8 +1119,9 @@ function StepLayout({ prayer: p, showTranslit, onBack }) {
           ))}
         </div>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 8 }}>
-          <span style={{ fontFamily: MONO, fontSize: 11, color: C.warm500 }}>
+          <span style={{ fontFamily: MONO, fontSize: 11, color: C.warm500, display: 'flex', alignItems: 'center', gap: 6 }}>
             {String(idx + 1).padStart(2, '0')} / {String(max).padStart(2, '0')}
+            {phase === 'sunet' && <span style={{ fontFamily: SANS, fontSize: 9, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', background: p.accent, color: '#fff', borderRadius: 4, padding: '1px 5px' }}>SUNET</span>}
           </span>
           <span style={{ fontSize: 10, color: C.warm500, fontFamily: SANS, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.12em' }}>
             {s.rakatLabel ? `${s.rakatLabel}  ·  ` : ''}{s.postureAlb}
@@ -1131,7 +1199,7 @@ function StepLayout({ prayer: p, showTranslit, onBack }) {
           {idx === max - 1 ? (
             <>
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-              Mbarova namazin
+              {phase === 'sunet' ? 'Mbarova sunetin' : 'Mbarova fardin'}
             </>
           ) : (
             <>
