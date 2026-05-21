@@ -1357,8 +1357,7 @@ function SiTeFaleshDetail({ prayerId, onBack, layout, setLayout }) {
             <div style={{ position: 'absolute', right: -50, top: -50, width: 180, height: 180, borderRadius: '50%', background: `radial-gradient(circle, ${p.sunGlow} 0%, transparent 60%)`, pointerEvents: 'none' }} />
           )}
           {/* Back */}
-          <button onClick={onBack} style={{ flexShrink: 0, display: 'flex', alignItems: 'center', gap: 6, padding: '7px 12px 7px 9px', borderRadius: 999, background: 'rgba(255,255,255,0.22)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,0.3)', color: p.onSky, cursor: 'pointer', fontFamily: SANS, fontSize: 13, fontWeight: 600, zIndex: 1, position: 'relative' }}>
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+          <button onClick={onBack} style={{ flexShrink: 0, padding: '7px 14px', borderRadius: 999, background: 'rgba(255,255,255,0.22)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,0.3)', color: p.onSky, cursor: 'pointer', fontFamily: SANS, fontSize: 13, fontWeight: 600, zIndex: 1, position: 'relative' }}>
             Mbrapa
           </button>
           {/* Title — takes all remaining space, centered */}
