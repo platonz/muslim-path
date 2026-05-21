@@ -200,11 +200,11 @@ function HomePrayerCard({ prayer, isCurrent, isSq, onClick, isDesktop }) {
         )}
       </div>
       {/* Card body */}
-      <div style={{ background: "#fff", padding: isDesktop ? "12px 16px 14px" : "8px 10px 10px" }}>
+      <div style={{ background: "#fff", padding: isDesktop ? "12px 16px 14px" : "8px 10px 10px", textAlign: "center" }}>
         <div style={{ fontSize: isDesktop ? 15 : 12, fontWeight: 600, color: "#1A1915", fontFamily: SA, marginBottom: isDesktop ? 6 : 4, lineHeight: 1.25, minHeight: isDesktop ? "auto" : "30px" }}>
           {prayer.nameAlb}
         </div>
-        <div style={{ display: "flex", gap: 5, alignItems: "center", marginBottom: isDesktop ? 8 : 6, overflow: "hidden" }}>
+        <div style={{ display: "flex", gap: 5, alignItems: "center", justifyContent: "center", marginBottom: isDesktop ? 8 : 6, overflow: "hidden" }}>
           <span style={{ fontSize: isDesktop ? 11 : 9, color: "#6B6050", fontFamily: SA, whiteSpace: "nowrap" }}>
             <strong style={{ color: "#1A1915" }}>{prayer.rakatFard}</strong> {isSq ? "FARZ" : "FARD"}
           </span>
@@ -213,7 +213,7 @@ function HomePrayerCard({ prayer, isCurrent, isSq, onClick, isDesktop }) {
             <strong style={{ color: "#1A1915" }}>{prayer.rakatSunnah}</strong> {isSq ? "SUNET" : "SUN."}
           </span>
         </div>
-        <div style={{ display: "flex", alignItems: "center", gap: 3, fontSize: isDesktop ? 12 : 10, color: "#9A8E7A", fontFamily: SA }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 3, fontSize: isDesktop ? 12 : 10, color: "#9A8E7A", fontFamily: SA }}>
           {isSq ? "Mëso →" : "Learn →"}
         </div>
       </div>
