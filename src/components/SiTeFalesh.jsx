@@ -214,6 +214,61 @@ const STEPS = [
   },
 ];
 
+// ─── FULL PRAYER STEP BUILDER ────────────────────────────────────
+// Expands STEPS template into a complete step-by-step sequence
+// for the specific prayer's rakat count.
+
+const RISE_TPL = {
+  posture: 'qiyam', postureAlb: 'Ngrihu në këmbë',
+  instruction: "Thuaj 'Allahu Ekber' dhe ngrihu ngadalë në këmbë.",
+  arabic: 'اللَّهُ أَكْبَر', translit: 'Allahu Ekber', translation: 'Allahu është më i Madhi.',
+};
+
+function buildPrayerSteps(prayer) {
+  const total = prayer.rakatFard;
+  const out = [];
+  let n = 1;
+  const add = (base, extra = {}) => { out.push({ ...base, n: n++, ...extra }); };
+
+  // ── Opening (once) ──────────────────────────────────────────
+  add(STEPS[0]);  // Nijeti
+  add(STEPS[1]);  // Tekbiri fillestar
+  add(STEPS[2]);  // Subhaneke
+
+  for (let r = 1; r <= total; r++) {
+    const rl = `Rekati ${r}`;
+
+    add(STEPS[3], { rakatLabel: rl });                         // Fatiha (every rakat)
+    if (r <= 2) add(STEPS[4], { rakatLabel: rl });             // Sure (rakats 1-2 only)
+    add(STEPS[5], { rakatLabel: rl });                         // Rukuja
+    add(STEPS[6], { rakatLabel: rl });                         // Itidali
+    add(STEPS[7], { rakatLabel: rl });                         // Sexhdja
+    add(STEPS[8], { rakatLabel: rl });                         // Xhelseja
+    add(STEPS[9], { rakatLabel: rl });                         // Sexhdja e dytë
+
+    if (r < total) {
+      // Middle teshehud after rakat 2 in 3+ rakat prayers
+      if (r === 2 && total > 2) {
+        add(STEPS[11], {
+          name: 'Teshehudi i mesëm',
+          instruction: 'Ulu dhe lexo Teshehudin. Nuk lexohet salavati këtu — pastaj ngrihu për rekatin e ardhshëm.',
+          rakatLabel: null,
+        });
+      }
+      // Transition: rise for next rakat
+      add({ ...RISE_TPL, name: `Rekati ${r + 1} fillon`, nameAr: '' }, { rakatLabel: `Rekati ${r + 1}`, isRise: true });
+    }
+  }
+
+  // ── Closing (once) ──────────────────────────────────────────
+  add(STEPS[11]);  // Teshehudi final
+  add(STEPS[12]);  // Salavati
+  add(STEPS[13]);  // Dua para selamit
+  add(STEPS[14]);  // Selami
+
+  return out;
+}
+
 // ─── HELPERS ──────────────────────────────────────────────────────
 const ALB_DAYS   = ['E diel','E hënë','E martë','E mërkurë','E enjte','E premte','E shtunë'];
 const ALB_MONTHS = ['janar','shkurt','mars','prill','maj','qershor','korrik','gusht','shtator','tetor','nëntor','dhjetor'];
@@ -976,8 +1031,9 @@ function ScrollLayout({ prayer: p, showTranslit }) {
 // ── Step layout — full-screen guided card ──────────────────────────
 function StepLayout({ prayer: p, showTranslit, onBack }) {
   const [idx, setIdx] = useState(0);
-  const s = STEPS[idx];
-  const max = STEPS.length;
+  const steps = useMemo(() => buildPrayerSteps(p), [p.id]);
+  const s = steps[idx];
+  const max = steps.length;
 
   function goNext() { if (idx < max - 1) setIdx(i => i + 1); else setIdx(0); }
   function goPrev() { if (idx > 0) setIdx(i => i - 1); else onBack?.(); }
@@ -986,27 +1042,32 @@ function StepLayout({ prayer: p, showTranslit, onBack }) {
     <div className="stf-guided-root" style={{ display: 'flex', flexDirection: 'column', height: 'calc(100dvh - 80px - 56px)' }}>
       {/* ── Progress + counter ── */}
       <div style={{ padding: '14px 20px 10px', flexShrink: 0 }}>
-        <div style={{ display: 'flex', gap: 3 }}>
-          {STEPS.map((_, i) => (
+        <div style={{ display: 'flex', gap: 2 }}>
+          {steps.map((_, i) => (
             <button key={i} onClick={() => setIdx(i)} style={{
               flex: '1 1 0', height: 3, borderRadius: 2, padding: 0, border: 'none', cursor: 'pointer',
               background: i < idx ? p.accent : i === idx ? p.accentDark : C.warm200,
-              transition: 'background 180ms',
+              transition: 'background 180ms', minWidth: 2,
             }} />
           ))}
         </div>
-        <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 8 }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 8 }}>
           <span style={{ fontFamily: MONO, fontSize: 11, color: C.warm500 }}>
             {String(idx + 1).padStart(2, '0')} / {String(max).padStart(2, '0')}
           </span>
           <span style={{ fontSize: 10, color: C.warm500, fontFamily: SANS, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.12em' }}>
-            {s.postureAlb}
+            {s.rakatLabel ? `${s.rakatLabel}  ·  ` : ''}{s.postureAlb}
           </span>
         </div>
       </div>
 
       {/* ── Scrollable content ── */}
       <div style={{ flex: 1, overflowY: 'auto', padding: '8px 20px 0', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 14 }}>
+        {s.isRise && (
+          <div style={{ width: '100%', maxWidth: 340, background: p.accentDark, borderRadius: 12, padding: '10px 18px', textAlign: 'center' }}>
+            <span style={{ fontFamily: SERIF, fontSize: 17, fontWeight: 600, color: '#fff', letterSpacing: '-0.01em' }}>{s.name}</span>
+          </div>
+        )}
         <PostureFigure posture={s.posture} size={clamp(148, 22, 196)} color={s.isNote ? p.accent : C.dark900} bg={C.gold50} />
 
         <div style={{ textAlign: 'center', width: '100%', maxWidth: 480 }}>
