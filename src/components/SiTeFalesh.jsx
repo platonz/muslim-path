@@ -182,9 +182,9 @@ const STEPS = [
     arabic: 'سُبْحَانَ رَبِّيَ الْأَعْلَى', translit: "Subhane Rabbijel-A'la", translation: 'I lavdëruar është Zoti im, më i Larti.',
   },
   {
-    n: 11, posture: 'note', name: 'Rekatet e ardhshme', nameAr: 'الرَّكَعَات التَّالِيَة', postureAlb: 'Ngrihu për rekatin tjetër',
-    instruction: 'Ngrihu për rekatin e ardhshëm. Në dy rekatet e para lexo Fatihanë dhe një sure të shkurtër; në rekatet e fundit Fatiha lexohet patjetër, dhe ndonjëherë mund të shtohet pak lexim. Numri i rekateve ndryshon sipas namazit.',
-    arabic: null, translit: null, translation: null, isNote: true,
+    n: 11, posture: 'qiyam', name: 'Rekatet e ardhshme', nameAr: 'الرَّكَعَات التَّالِيَة', postureAlb: 'Ngrihu në këmbë',
+    instruction: 'Ngrihu në këmbë dhe fillo rekatin e ri — Fatiha, sure e shkurtër, ruku, itidal, dy sexhde. Numri total: Sabahu 2 · Dreka 4 · Iqindia 4 · Akshami 3 · Jacia 4.',
+    arabic: null, translit: null, translation: null, isNote: true, repeatFrom: 4, repeatTo: 10,
   },
   {
     n: 12, posture: 'tashahhud', name: 'Teshehudi', nameAr: 'التَّشَهُّد', postureAlb: 'Ulur, gishtin tregues e ngre',
@@ -1019,6 +1019,23 @@ function StepLayout({ prayer: p, showTranslit, onBack }) {
           {s.instruction}
         </p>
 
+        {s.repeatFrom && (
+          <div style={{ width: '100%', maxWidth: 420, background: C.gold50, border: `1px solid ${C.gold200}`, borderRadius: 14, padding: '14px 16px' }}>
+            <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: p.accentDark, marginBottom: 10 }}>Përsërit hapat</div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap', justifyContent: 'center' }}>
+              {Array.from({ length: s.repeatTo - s.repeatFrom + 1 }, (_, i) => s.repeatFrom + i).map((n, i, arr) => (
+                <span key={n} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                  <span style={{ width: 30, height: 30, borderRadius: '50%', background: C.dark900, color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: MONO, fontSize: 12, fontWeight: 700, flexShrink: 0 }}>{n}</span>
+                  {i < arr.length - 1 && <span style={{ color: C.warm400, fontSize: 12 }}>→</span>}
+                </span>
+              ))}
+              <span style={{ marginLeft: 4, fontSize: 18, color: p.accent }}>↺</span>
+            </div>
+            <div style={{ marginTop: 10, fontSize: 12, color: C.warm600, textAlign: 'center', lineHeight: 1.5 }}>
+              {STEPS.slice(s.repeatFrom - 1, s.repeatTo).map(st => st.name).join(' · ')}
+            </div>
+          </div>
+        )}
         {s.arabic && (
           <div style={{ width: '100%', maxWidth: 520 }}>
             <RecitationCard step={s} accent={p.accent} accentDark={p.accentDark} showTranslit={showTranslit} />
