@@ -1062,7 +1062,7 @@ function StepLayout({ prayer: p, showTranslit, onBack }) {
       </div>
 
       {/* ── Scrollable content ── */}
-      <div style={{ flex: 1, overflowY: 'auto', padding: '8px 20px 0', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 14 }}>
+      <div style={{ flex: 1, overflowY: 'auto', padding: '8px 20px 24px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 14 }}>
         {s.isRise && (
           <div style={{ width: '100%', maxWidth: 340, background: p.accentDark, borderRadius: 12, padding: '10px 18px', textAlign: 'center' }}>
             <span style={{ fontFamily: SERIF, fontSize: 17, fontWeight: 600, color: '#fff', letterSpacing: '-0.01em' }}>{s.name}</span>
@@ -1102,7 +1102,6 @@ function StepLayout({ prayer: p, showTranslit, onBack }) {
             <RecitationCard step={s} accent={p.accent} accentDark={p.accentDark} showTranslit={showTranslit} />
           </div>
         )}
-        <div style={{ height: 8, flexShrink: 0 }} />
       </div>
 
       {/* ── Pinned nav bar ── */}
