@@ -244,8 +244,12 @@ const PRAYER_SEQUENCES = {
     { type: 'sunet', rakat: 2, label: 'Sunet',       desc: '2 rekate sunet' },
   ],
   jacia:   [
-    { type: 'farz',  rakat: 4, label: 'Farz',        desc: '4 rekate farz' },
-    { type: 'sunet', rakat: 2, label: 'Sunet',       desc: '2 rekate sunet' },
+    { type: 'sunet', rakat: 4, label: 'Sunet para',       desc: '4 rekate · sunet jo i theksuar', optional: true },
+    { type: 'farz',  rakat: 4, label: 'Farz',              desc: '4 rekate · obligator' },
+    { type: 'sunet', rakat: 2, label: 'Sunet pas',         desc: '2 rekate · sunet i theksuar' },
+    { type: 'nafl',  rakat: 2, label: 'Nafile',            desc: '2 rekate · vullnetar', optional: true },
+    { type: 'witr',  rakat: 3, label: 'Vitri',             desc: '3 rekate · detyrues' },
+    { type: 'nafl',  rakat: 2, label: 'Nafile (pas vitrit)', desc: '2 rekate · vullnetar', optional: true },
   ],
 };
 
@@ -1112,22 +1116,31 @@ function StepLayout({ prayer: p, showTranslit, onBack }) {
         {/* Sequence cards */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: 10, width: '100%', maxWidth: 400 }}>
           {seqItems.map((item, i) => {
-            const isDone   = completed.has(i);
-            const isPrimary = !isDone && i === firstRemaining;
+            const isDone    = completed.has(i);
+            // Primary = first remaining required item (skip optional when choosing highlight)
+            const firstReqRemaining = seqItems.findIndex((it, j) => !completed.has(j) && !it.optional);
+            const isPrimary = !isDone && !item.optional && i === firstReqRemaining;
             return (
               <button key={i} onClick={() => !isDone && startItem(i)} disabled={isDone}
                 style={{
                   background: isDone ? C.warm100 : isPrimary ? C.dark900 : C.surface,
                   color:      isDone ? C.warm400 : isPrimary ? '#fff'     : C.dark700,
-                  border:     isDone ? 'none'    : isPrimary ? 'none'     : `1px solid ${C.warm200}`,
+                  border:     isDone ? 'none'    : `1px solid ${isPrimary ? 'transparent' : C.warm200}`,
                   borderRadius: 16, padding: '18px 20px', cursor: isDone ? 'default' : 'pointer',
                   textAlign: 'left', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12,
                   opacity: isDone ? 0.55 : 1, transition: 'opacity 180ms',
                 }}
               >
                 <div>
-                  <div style={{ fontFamily: SANS, fontWeight: isPrimary ? 700 : 600, fontSize: 15, marginBottom: 3 }}>
-                    {item.label}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 7, marginBottom: 3 }}>
+                    <span style={{ fontFamily: SANS, fontWeight: isPrimary ? 700 : 600, fontSize: 15 }}>
+                      {item.label}
+                    </span>
+                    {item.optional && !isDone && (
+                      <span style={{ fontSize: 9, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', background: C.gold100, color: C.gold600, borderRadius: 4, padding: '2px 5px', fontFamily: SANS }}>
+                        opsionale
+                      </span>
+                    )}
                   </div>
                   <div style={{ fontFamily: SANS, fontSize: 12, color: isDone ? C.warm400 : isPrimary ? 'rgba(255,255,255,0.6)' : C.warm500 }}>
                     {item.desc}
@@ -1166,7 +1179,9 @@ function StepLayout({ prayer: p, showTranslit, onBack }) {
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 8 }}>
           <span style={{ fontFamily: MONO, fontSize: 11, color: C.warm500, display: 'flex', alignItems: 'center', gap: 6 }}>
             {String(stepIdx + 1).padStart(2, '0')} / {String(max).padStart(2, '0')}
-            <span style={{ fontFamily: SANS, fontSize: 9, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', background: activeItem.type === 'sunet' ? p.accent : C.dark900, color: '#fff', borderRadius: 4, padding: '1px 5px' }}>
+            <span style={{ fontFamily: SANS, fontSize: 9, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', borderRadius: 4, padding: '1px 5px', color: '#fff',
+              background: activeItem.type === 'farz' ? C.dark900 : activeItem.type === 'witr' ? C.gold600 : activeItem.type === 'nafl' ? C.warm400 : p.accent,
+            }}>
               {activeItem.label}
             </span>
           </span>
