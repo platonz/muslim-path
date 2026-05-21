@@ -224,6 +224,31 @@ const RISE_TPL = {
   arabic: 'اللَّهُ أَكْبَر', translit: 'Allahu Ekber', translation: 'Allahu është më i Madhi.',
 };
 
+// ── Proper prayer sequence per time (Hanafi order) ────────────────
+const PRAYER_SEQUENCES = {
+  sabahu:  [
+    { type: 'sunet', rakat: 2, label: 'Sunet',      desc: '2 rekate sunet' },
+    { type: 'farz',  rakat: 2, label: 'Farz',        desc: '2 rekate farz' },
+  ],
+  dreka:   [
+    { type: 'sunet', rakat: 4, label: 'Sunet para',  desc: '4 rekate sunet para farzit' },
+    { type: 'farz',  rakat: 4, label: 'Farz',        desc: '4 rekate farz' },
+    { type: 'sunet', rakat: 2, label: 'Sunet pas',   desc: '2 rekate sunet pas farzit' },
+  ],
+  ikindia: [
+    { type: 'sunet', rakat: 4, label: 'Sunet',       desc: '4 rekate sunet' },
+    { type: 'farz',  rakat: 4, label: 'Farz',        desc: '4 rekate farz' },
+  ],
+  akshami: [
+    { type: 'farz',  rakat: 3, label: 'Farz',        desc: '3 rekate farz' },
+    { type: 'sunet', rakat: 2, label: 'Sunet',       desc: '2 rekate sunet' },
+  ],
+  jacia:   [
+    { type: 'farz',  rakat: 4, label: 'Farz',        desc: '4 rekate farz' },
+    { type: 'sunet', rakat: 2, label: 'Sunet',       desc: '2 rekate sunet' },
+  ],
+};
+
 function buildPrayerSteps(prayer, rakatOverride) {
   const total = rakatOverride ?? prayer.rakatFard;
   const out = [];
@@ -1030,98 +1055,120 @@ function ScrollLayout({ prayer: p, showTranslit }) {
 
 // ── Step layout — full-screen guided card ──────────────────────────
 function StepLayout({ prayer: p, showTranslit, onBack }) {
-  const [phase, setPhase] = useState('farz'); // 'farz' | 'sunet_prompt' | 'sunet'
-  const [idx, setIdx] = useState(0);
-  const farzSteps  = useMemo(() => buildPrayerSteps(p), [p.id]);
-  const sunetSteps = useMemo(() => buildPrayerSteps(p, p.rakatSunnah), [p.id]);
-  const steps = phase === 'sunet' ? sunetSteps : farzSteps;
-  const s = steps[idx];
+  const seqItems = PRAYER_SEQUENCES[p.id] || [{ type: 'farz', rakat: p.rakatFard, label: 'Farz', desc: `${p.rakatFard} rekate farz` }];
+  const [phase, setPhase]       = useState('choose'); // 'choose' | 'praying'
+  const [seqIdx, setSeqIdx]     = useState(0);
+  const [completed, setCompleted] = useState(new Set());
+  const [stepIdx, setStepIdx]   = useState(0);
+
+  const activeItem = seqItems[seqIdx];
+  const steps = useMemo(() => buildPrayerSteps(p, activeItem.rakat), [p.id, seqIdx]);
+  const s   = steps[stepIdx];
   const max = steps.length;
 
-  function goNext() {
-    if (idx < max - 1) { setIdx(i => i + 1); return; }
-    if (phase === 'farz' && p.rakatSunnah > 0) { setPhase('sunet_prompt'); return; }
-    onBack?.();
+  function startItem(i) { setSeqIdx(i); setStepIdx(0); setPhase('praying'); }
+
+  function finishItem() {
+    const next = new Set(completed);
+    next.add(seqIdx);
+    setCompleted(next);
+    if (next.size === seqItems.length) { onBack?.(); }
+    else { setPhase('choose'); }
   }
-  function goPrev() { if (idx > 0) setIdx(i => i - 1); else onBack?.(); }
 
-  if (phase === 'sunet_prompt') {
+  function goNext() { if (stepIdx < max - 1) setStepIdx(i => i + 1); else finishItem(); }
+  function goPrev() { if (stepIdx > 0) setStepIdx(i => i - 1); else setPhase('choose'); }
+
+  // ── Choose / continuation screen ─────────────────────────────────
+  if (phase === 'choose') {
+    const firstRemaining = seqItems.findIndex((_, i) => !completed.has(i));
+    const justFinished   = completed.size > 0 ? seqItems[seqIdx] : null;
+
     return (
-      <div style={{ display: 'flex', flexDirection: 'column', height: 'calc(100dvh - 80px - 56px)', padding: '0 24px', alignItems: 'center', justifyContent: 'center', gap: 20 }}>
-        <div style={{ textAlign: 'center' }}>
-          <div style={{ width: 72, height: 72, borderRadius: '50%', background: p.accentDark, display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px' }}>
-            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-          </div>
-          <h2 style={{ fontFamily: SERIF, fontSize: 'clamp(22px,5vw,28px)', fontWeight: 700, color: C.dark900, margin: '0 0 8px', lineHeight: 1.15 }}>
-            Fardi u plotësua!
-          </h2>
-          <p style={{ fontSize: 14, color: C.warm600, margin: 0, lineHeight: 1.6 }}>
-            Keni falur {p.rakatFard} rekate farz të {p.nameAlb}.<br/>
-            Dëshironi të faleni edhe sunetin?
-          </p>
+      <div style={{ display: 'flex', flexDirection: 'column', padding: '32px 24px 28px', gap: 24, alignItems: 'center', minHeight: 'calc(100dvh - 80px - 56px)', boxSizing: 'border-box' }}>
+
+        {/* Header */}
+        <div style={{ textAlign: 'center', width: '100%' }}>
+          {justFinished ? (
+            <>
+              <div style={{ width: 56, height: 56, borderRadius: '50%', background: p.accentDark, display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 12px' }}>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              </div>
+              <h3 style={{ fontFamily: SERIF, fontSize: 20, fontWeight: 700, color: C.dark900, margin: '0 0 4px' }}>
+                {justFinished.label} u plotësua!
+              </h3>
+              <p style={{ fontSize: 13, color: C.warm500, margin: 0 }}>Dëshiron të vazhdosh?</p>
+            </>
+          ) : (
+            <>
+              <h3 style={{ fontFamily: SERIF, fontSize: 22, fontWeight: 700, color: C.dark900, margin: '0 0 4px' }}>
+                {p.nameAlb}
+              </h3>
+              <p style={{ fontSize: 13, color: C.warm500, margin: 0 }}>Cilin dëshiron të falesh të parin?</p>
+            </>
+          )}
         </div>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 12, width: '100%', maxWidth: 400 }}>
-          <button
-            onClick={() => { setIdx(0); setPhase('sunet'); }}
-            style={{
-              background: C.dark900, color: '#fff', border: 'none', borderRadius: 16,
-              padding: '20px 24px', cursor: 'pointer', textAlign: 'left',
-              display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16,
-            }}
-          >
-            <div>
-              <div style={{ fontFamily: SANS, fontWeight: 700, fontSize: 16, marginBottom: 4 }}>
-                Po, fal sunetin
-              </div>
-              <div style={{ fontFamily: SANS, fontSize: 13, color: 'rgba(255,255,255,0.65)' }}>
-                {p.rakatSunnah} rekate sunet · vazhdo tani
-              </div>
-            </div>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-          </button>
-
-          <button
-            onClick={() => onBack?.()}
-            style={{
-              background: C.surface, color: C.dark700, border: `1px solid ${C.warm200}`, borderRadius: 16,
-              padding: '20px 24px', cursor: 'pointer', textAlign: 'left',
-              display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16,
-            }}
-          >
-            <div>
-              <div style={{ fontFamily: SANS, fontWeight: 600, fontSize: 16, marginBottom: 4 }}>
-                Jo, kthehu mbrapa
-              </div>
-              <div style={{ fontFamily: SANS, fontSize: 13, color: C.warm500 }}>
-                Funda namazin këtu
-              </div>
-            </div>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
-          </button>
+        {/* Sequence cards */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 10, width: '100%', maxWidth: 400 }}>
+          {seqItems.map((item, i) => {
+            const isDone   = completed.has(i);
+            const isPrimary = !isDone && i === firstRemaining;
+            return (
+              <button key={i} onClick={() => !isDone && startItem(i)} disabled={isDone}
+                style={{
+                  background: isDone ? C.warm100 : isPrimary ? C.dark900 : C.surface,
+                  color:      isDone ? C.warm400 : isPrimary ? '#fff'     : C.dark700,
+                  border:     isDone ? 'none'    : isPrimary ? 'none'     : `1px solid ${C.warm200}`,
+                  borderRadius: 16, padding: '18px 20px', cursor: isDone ? 'default' : 'pointer',
+                  textAlign: 'left', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12,
+                  opacity: isDone ? 0.55 : 1, transition: 'opacity 180ms',
+                }}
+              >
+                <div>
+                  <div style={{ fontFamily: SANS, fontWeight: isPrimary ? 700 : 600, fontSize: 15, marginBottom: 3 }}>
+                    {item.label}
+                  </div>
+                  <div style={{ fontFamily: SANS, fontSize: 12, color: isDone ? C.warm400 : isPrimary ? 'rgba(255,255,255,0.6)' : C.warm500 }}>
+                    {item.desc}
+                  </div>
+                </div>
+                {isDone
+                  ? <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                  : <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                }
+              </button>
+            );
+          })}
         </div>
-        <style>{`@media (max-width: 640px) { .stf-sunet-prompt { height: calc(100dvh - 80px - 56px - 58px) !important; } }`}</style>
+
+        <button onClick={onBack} style={{ background: 'none', border: 'none', fontSize: 13, color: C.warm500, cursor: 'pointer', fontFamily: SANS }}>
+          ← Kthehu mbrapa
+        </button>
       </div>
     );
   }
 
+  // ── Step-by-step ──────────────────────────────────────────────────
   return (
     <div className="stf-guided-root" style={{ display: 'flex', flexDirection: 'column', height: 'calc(100dvh - 80px - 56px)' }}>
-      {/* ── Progress + counter ── */}
+      {/* Progress + counter */}
       <div style={{ padding: '14px 20px 10px', flexShrink: 0 }}>
         <div style={{ display: 'flex', gap: 2 }}>
           {steps.map((_, i) => (
-            <button key={i} onClick={() => setIdx(i)} style={{
+            <button key={i} onClick={() => setStepIdx(i)} style={{
               flex: '1 1 0', height: 3, borderRadius: 2, padding: 0, border: 'none', cursor: 'pointer',
-              background: i < idx ? p.accent : i === idx ? p.accentDark : C.warm200,
+              background: i < stepIdx ? p.accent : i === stepIdx ? p.accentDark : C.warm200,
               transition: 'background 180ms', minWidth: 2,
             }} />
           ))}
         </div>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 8 }}>
           <span style={{ fontFamily: MONO, fontSize: 11, color: C.warm500, display: 'flex', alignItems: 'center', gap: 6 }}>
-            {String(idx + 1).padStart(2, '0')} / {String(max).padStart(2, '0')}
-            {phase === 'sunet' && <span style={{ fontFamily: SANS, fontSize: 9, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', background: p.accent, color: '#fff', borderRadius: 4, padding: '1px 5px' }}>SUNET</span>}
+            {String(stepIdx + 1).padStart(2, '0')} / {String(max).padStart(2, '0')}
+            <span style={{ fontFamily: SANS, fontSize: 9, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', background: activeItem.type === 'sunet' ? p.accent : C.dark900, color: '#fff', borderRadius: 4, padding: '1px 5px' }}>
+              {activeItem.label}
+            </span>
           </span>
           <span style={{ fontSize: 10, color: C.warm500, fontFamily: SANS, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.12em' }}>
             {s.rakatLabel ? `${s.rakatLabel}  ·  ` : ''}{s.postureAlb}
@@ -1129,7 +1176,7 @@ function StepLayout({ prayer: p, showTranslit, onBack }) {
         </div>
       </div>
 
-      {/* ── Scrollable content ── */}
+      {/* Scrollable content */}
       <div style={{ flex: 1, overflowY: 'auto', padding: '8px 20px 24px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 14 }}>
         {s.isRise && (
           <div style={{ width: '100%', maxWidth: 340, background: p.accentDark, borderRadius: 12, padding: '10px 18px', textAlign: 'center' }}>
@@ -1137,17 +1184,14 @@ function StepLayout({ prayer: p, showTranslit, onBack }) {
           </div>
         )}
         <PostureFigure posture={s.posture} size={clamp(148, 22, 196)} color={s.isNote ? p.accent : C.dark900} bg={C.gold50} />
-
         <div style={{ textAlign: 'center', width: '100%', maxWidth: 480 }}>
           <h3 style={{ fontFamily: SERIF, fontSize: 'clamp(22px,5vw,28px)', fontWeight: 600, color: C.dark900, margin: 0, lineHeight: 1.1 }}>
             {s.name}
           </h3>
         </div>
-
         <p style={{ fontSize: 15, color: C.warm700, lineHeight: 1.6, margin: 0, textAlign: 'center', maxWidth: 460, padding: '0 4px' }}>
           {s.instruction}
         </p>
-
         {s.repeatFrom && (
           <div style={{ width: '100%', maxWidth: 420, background: C.gold50, border: `1px solid ${C.gold200}`, borderRadius: 14, padding: '14px 16px' }}>
             <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: p.accentDark, marginBottom: 10 }}>Përsërit hapat</div>
@@ -1172,49 +1216,23 @@ function StepLayout({ prayer: p, showTranslit, onBack }) {
         )}
       </div>
 
-      {/* ── Pinned nav bar ── */}
-      <div style={{
-        flexShrink: 0, padding: '12px 20px calc(12px + env(safe-area-inset-bottom, 0px))',
-        borderTop: `1px solid ${C.warm100}`, background: C.bg,
-        display: 'flex', gap: 10, alignItems: 'center',
-      }}>
-        <button onClick={goPrev} style={{
-          width: 52, height: 56, borderRadius: 14, flexShrink: 0,
-          background: C.surface, border: `1px solid ${C.warm200}`,
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-          cursor: 'pointer', color: C.dark900, transition: 'background 150ms',
-        }}>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round">
-            <line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/>
-          </svg>
+      {/* Pinned nav bar */}
+      <div style={{ flexShrink: 0, padding: '12px 20px calc(12px + env(safe-area-inset-bottom, 0px))', borderTop: `1px solid ${C.warm100}`, background: C.bg, display: 'flex', gap: 10, alignItems: 'center' }}>
+        <button onClick={goPrev} style={{ width: 52, height: 56, borderRadius: 14, flexShrink: 0, background: C.surface, border: `1px solid ${C.warm200}`, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: C.dark900 }}>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
         </button>
-        <button onClick={goNext} style={{
-          flex: 1, height: 56, borderRadius: 14,
-          background: idx === max - 1 ? C.gold600 : C.dark900,
-          color: '#fff', border: 'none', cursor: 'pointer',
-          fontFamily: SANS, fontSize: 16, fontWeight: 700,
-          display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10,
-          transition: 'background 180ms',
-        }}>
-          {idx === max - 1 ? (
-            <>
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-              {phase === 'sunet' ? 'Mbarova sunetin' : 'Mbarova fardin'}
-            </>
+        <button onClick={goNext} style={{ flex: 1, height: 56, borderRadius: 14, background: stepIdx === max - 1 ? C.gold600 : C.dark900, color: '#fff', border: 'none', cursor: 'pointer', fontFamily: SANS, fontSize: 16, fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, transition: 'background 180ms' }}>
+          {stepIdx === max - 1 ? (
+            <><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Mbarova {activeItem.label.toLowerCase()}</>
           ) : (
-            <>
-              Tjetri
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-            </>
+            <>Tjetri <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"/></svg></>
           )}
         </button>
       </div>
 
       <style>{`
         .stf-guided .posture-figure { transition: transform 200ms; }
-        @media (max-width: 640px) {
-          .stf-guided-root { height: calc(100dvh - 80px - 56px - 58px) !important; }
-        }
+        @media (max-width: 640px) { .stf-guided-root { height: calc(100dvh - 80px - 56px - 58px) !important; } }
       `}</style>
     </div>
   );
