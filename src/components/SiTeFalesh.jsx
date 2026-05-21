@@ -1089,7 +1089,7 @@ function StepLayout({ prayer: p, showTranslit, onBack }) {
     const justFinished   = completed.size > 0 ? seqItems[seqIdx] : null;
 
     return (
-      <div style={{ display: 'flex', flexDirection: 'column', padding: '32px 24px 28px', gap: 24, alignItems: 'center', minHeight: 'calc(100dvh - 80px - 56px)', boxSizing: 'border-box' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', padding: '32px 24px 28px', gap: 24, alignItems: 'center', minHeight: 'calc(100dvh - 64px - 56px)', boxSizing: 'border-box' }}>
 
         {/* Header */}
         <div style={{ textAlign: 'center', width: '100%' }}>
@@ -1164,7 +1164,7 @@ function StepLayout({ prayer: p, showTranslit, onBack }) {
 
   // ── Step-by-step ──────────────────────────────────────────────────
   return (
-    <div className="stf-guided-root" style={{ display: 'flex', flexDirection: 'column', height: 'calc(100dvh - 80px - 56px)' }}>
+    <div className="stf-guided-root" style={{ display: 'flex', flexDirection: 'column', height: 'calc(100dvh - 64px - 56px)' }}>
       {/* Progress + counter */}
       <div style={{ padding: '14px 20px 10px', flexShrink: 0 }}>
         <div style={{ display: 'flex', gap: 2 }}>
@@ -1247,7 +1247,7 @@ function StepLayout({ prayer: p, showTranslit, onBack }) {
 
       <style>{`
         .stf-guided .posture-figure { transition: transform 200ms; }
-        @media (max-width: 640px) { .stf-guided-root { height: calc(100dvh - 80px - 56px - 58px) !important; } }
+        @media (max-width: 640px) { .stf-guided-root { height: calc(100dvh - 64px - 56px - 58px) !important; } }
       `}</style>
     </div>
   );
@@ -1352,19 +1352,21 @@ function SiTeFaleshDetail({ prayerId, onBack, layout, setLayout }) {
     <div style={{ minHeight: '100vh', background: C.bg, fontFamily: SANS, color: C.dark900 }}>
       {/* Hero — compact strip in step mode, full sky in browse modes */}
       {layout === 'step' ? (
-        <div style={{ height: 80, background: p.sky, position: 'relative', overflow: 'hidden', display: 'flex', alignItems: 'center', padding: '0 20px', justifyContent: 'space-between', flexShrink: 0 }}>
+        <div style={{ height: 64, background: p.sky, position: 'relative', overflow: 'hidden', display: 'flex', alignItems: 'center', padding: '0 16px', gap: 8, flexShrink: 0 }}>
           {p.sunY > -20 && p.sunY < 110 && (
             <div style={{ position: 'absolute', right: -50, top: -50, width: 180, height: 180, borderRadius: '50%', background: `radial-gradient(circle, ${p.sunGlow} 0%, transparent 60%)`, pointerEvents: 'none' }} />
           )}
-          <button onClick={onBack} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '8px 14px 8px 10px', borderRadius: 999, background: 'rgba(255,255,255,0.22)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,0.3)', color: p.onSky, cursor: 'pointer', fontFamily: SANS, fontSize: 13, fontWeight: 600, zIndex: 1, position: 'relative' }}>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+          {/* Back */}
+          <button onClick={onBack} style={{ flexShrink: 0, display: 'flex', alignItems: 'center', gap: 6, padding: '7px 12px 7px 9px', borderRadius: 999, background: 'rgba(255,255,255,0.22)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,0.3)', color: p.onSky, cursor: 'pointer', fontFamily: SANS, fontSize: 13, fontWeight: 600, zIndex: 1, position: 'relative' }}>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
             Mbrapa
           </button>
-          <div style={{ textAlign: 'center', color: p.onSky, position: 'relative', zIndex: 1 }}>
-            <div style={{ fontFamily: SERIF, fontSize: 20, fontWeight: 600, textShadow: '0 1px 8px rgba(0,0,0,0.22)', lineHeight: 1.1 }}>{p.nameAlb}</div>
-            <div style={{ fontSize: 9, fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', opacity: 0.72, marginTop: 2 }}>{p.period}</div>
+          {/* Title — takes all remaining space, centered */}
+          <div style={{ flex: 1, minWidth: 0, textAlign: 'center', color: p.onSky, position: 'relative', zIndex: 1 }}>
+            <div style={{ fontFamily: SERIF, fontSize: 18, fontWeight: 600, textShadow: '0 1px 8px rgba(0,0,0,0.22)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{p.nameAlb}</div>
           </div>
-          <button onClick={() => setShowTranslit(v => !v)} style={{ padding: '7px 12px', borderRadius: 999, background: showTranslit ? 'rgba(255,255,255,0.9)' : 'rgba(0,0,0,0.22)', backdropFilter: 'blur(8px)', border: '1px solid rgba(255,255,255,0.3)', color: showTranslit ? C.dark900 : p.onSky, fontFamily: SERIF, fontStyle: 'italic', fontSize: 11, fontWeight: 600, cursor: 'pointer', zIndex: 1, position: 'relative' }}>Shqiptim</button>
+          {/* Shqiptim */}
+          <button onClick={() => setShowTranslit(v => !v)} style={{ flexShrink: 0, padding: '7px 12px', borderRadius: 999, background: showTranslit ? 'rgba(255,255,255,0.9)' : 'rgba(0,0,0,0.22)', backdropFilter: 'blur(8px)', border: '1px solid rgba(255,255,255,0.3)', color: showTranslit ? C.dark900 : p.onSky, fontFamily: SERIF, fontStyle: 'italic', fontSize: 11, fontWeight: 600, cursor: 'pointer', zIndex: 1, position: 'relative' }}>Shqiptim</button>
         </div>
       ) : (
       <div style={{ position: 'relative' }}>
