@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import i18n from "../i18n";
 import Icon from "./Icon";
@@ -201,7 +201,7 @@ function HomePrayerCard({ prayer, isCurrent, isSq, onClick, isDesktop }) {
       </div>
       {/* Card body */}
       <div style={{ background: "#fff", padding: isDesktop ? "12px 16px 14px" : "8px 10px 10px" }}>
-        <div style={{ fontSize: isDesktop ? 17 : 14, fontWeight: 700, color: "#1A1915", fontFamily: SR, marginBottom: isDesktop ? 6 : 4 }}>
+        <div style={{ fontSize: isDesktop ? 15 : 12, fontWeight: 600, color: "#1A1915", fontFamily: SA, marginBottom: isDesktop ? 6 : 4, lineHeight: 1.25, minHeight: isDesktop ? "auto" : "30px" }}>
           {prayer.nameAlb}
         </div>
         <div style={{ display: "flex", gap: 5, alignItems: "center", marginBottom: isDesktop ? 8 : 6, overflow: "hidden" }}>
@@ -288,7 +288,12 @@ export default function Home({ quote, verseQuote, setPage, showInstall, onInstal
 
   const isStandalone = window.matchMedia("(display-mode: standalone)").matches || !!navigator.standalone;
   const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
-  const isMobile = window.innerWidth < 768;
+  const [isMobile, setIsMobile] = useState(() => window.innerWidth < 768);
+  useEffect(() => {
+    const onResize = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
   const [installDismissed, setInstallDismissed] = useState(() => !!localStorage.getItem("mp-install-dismissed"));
 
   const lastSurahNum = parseInt(localStorage.getItem("quranSurah") || "0");
