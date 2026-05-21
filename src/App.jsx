@@ -2471,7 +2471,7 @@ export default function App() {
         />
       )}
       {/* Back button — top-left on mobile, bottom-left on desktop */}
-      {page !== "home" && navHistory.length > 0 && (
+      {page !== "home" && page !== "namaz" && navHistory.length > 0 && (
         <button onClick={goBack} title="Go back" className="back-btn" style={{
           position: "fixed",
           bottom: current ? 80 : 24,
