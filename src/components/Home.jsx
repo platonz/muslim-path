@@ -152,7 +152,7 @@ function HomePrayerCard({ prayer, isCurrent, isSq, onClick, isDesktop }) {
       style={{
         flexShrink: isDesktop ? 1 : 0,
         flex: isDesktop ? "1 1 0" : undefined,
-        width: isDesktop ? undefined : "clamp(110px, 28vw, 148px)",
+        width: isDesktop ? undefined : "clamp(120px, 31vw, 160px)",
         borderRadius: 14, overflow: "hidden",
         border: isCurrent ? "2px solid rgba(255,255,255,0.9)" : "2px solid transparent",
         boxShadow: hov ? "0 8px 24px rgba(0,0,0,0.25)" : "0 3px 12px rgba(0,0,0,0.18)",
@@ -439,7 +439,7 @@ export default function Home({ quote, verseQuote, setPage, showInstall, onInstal
                 {isSq ? "Shiko të gjitha →" : "See all →"}
               </button>
             </div>
-            <div className="hide-scrollbar" style={{ display: "flex", gap: 10, overflowX: isMobile ? "auto" : "visible", padding: "0 20px 4px", scrollSnapType: isMobile ? "x mandatory" : "none" }}>
+            <div className="hide-scrollbar" style={{ display: "flex", gap: 6, overflowX: isMobile ? "auto" : "visible", padding: "0 20px 4px", scrollSnapType: isMobile ? "x mandatory" : "none" }}>
               {HOME_PRAYERS.map((p, i) => (
                 <HomePrayerCard
                   key={p.id}
