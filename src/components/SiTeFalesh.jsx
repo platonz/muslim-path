@@ -973,107 +973,110 @@ function ScrollLayout({ prayer: p, showTranslit }) {
   );
 }
 
-// ── Step layout ────────────────────────────────────────────────────
-function StepLayout({ prayer: p, showTranslit }) {
+// ── Step layout — full-screen guided card ──────────────────────────
+function StepLayout({ prayer: p, showTranslit, onBack }) {
   const [idx, setIdx] = useState(0);
   const s = STEPS[idx];
   const max = STEPS.length;
+
+  function goNext() { if (idx < max - 1) setIdx(i => i + 1); else setIdx(0); }
+  function goPrev() { if (idx > 0) setIdx(i => i - 1); else onBack?.(); }
+
   return (
-    <>
-      <SummaryStrip prayer={p} />
-      <section style={{ margin: '40px auto 0', maxWidth: 1100, padding: '0 clamp(20px,4vw,56px) 40px' }}>
-        {/* Progress bar */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 24, flexWrap: 'wrap' }}>
+    <div className="stf-guided-root" style={{ display: 'flex', flexDirection: 'column', height: 'calc(100dvh - 80px - 56px)' }}>
+      {/* ── Progress + counter ── */}
+      <div style={{ padding: '14px 20px 10px', flexShrink: 0 }}>
+        <div style={{ display: 'flex', gap: 3 }}>
           {STEPS.map((_, i) => (
             <button key={i} onClick={() => setIdx(i)} style={{
-              flex: '1 1 0', minWidth: 18, height: 4, borderRadius: 2,
-              background: i === idx ? p.accentDark : (i < idx ? p.accent : C.warm200),
-              border: 'none', cursor: 'pointer', padding: 0, transition: 'background 200ms',
-            }} aria-label={`Hapi ${i + 1}`} />
+              flex: '1 1 0', height: 3, borderRadius: 2, padding: 0, border: 'none', cursor: 'pointer',
+              background: i < idx ? p.accent : i === idx ? p.accentDark : C.warm200,
+              transition: 'background 180ms',
+            }} />
           ))}
         </div>
-
-        <div style={{ background: C.surface, borderRadius: 22, border: `1px solid ${C.warm200}`, boxShadow: '0 6px 28px rgba(26,25,21,0.08)', overflow: 'hidden' }}>
-          <div className="stf-step-grid" style={{ display: 'grid', gridTemplateColumns: 'minmax(240px,340px) 1fr' }}>
-            {/* Figure side */}
-            <div className="stf-step-mode-figure" style={{
-              background: `linear-gradient(180deg,${C.gold50} 0%,${C.warm100} 100%)`,
-              padding: '36px 28px', display: 'flex', flexDirection: 'column',
-              alignItems: 'center', justifyContent: 'center',
-              borderRight: `1px solid ${C.warm200}`, position: 'relative', minHeight: 380,
-            }}>
-              <div style={{ position: 'absolute', top: 18, left: 22, fontFamily: MONO, fontSize: 12, fontWeight: 600, color: p.accentDark }}>
-                {String(idx + 1).padStart(2, '0')} <span style={{ color: C.warm500 }}>/ {String(max).padStart(2, '0')}</span>
-              </div>
-              <PostureFigure posture={s.posture} size={226} color={C.dark900} bg="transparent" />
-              <div className="stf-step-posture-label" style={{ marginTop: 8, fontSize: 11, fontWeight: 600, color: C.warm600, letterSpacing: '0.16em', textTransform: 'uppercase', textAlign: 'center' }}>
-                {s.postureAlb}
-              </div>
-            </div>
-
-            {/* Content side */}
-            <div className="stf-step-mode-content" style={{ padding: '32px 32px 28px', display: 'flex', flexDirection: 'column' }}>
-              <h3 className="stf-step-mode-title" style={{ fontFamily: SERIF, fontSize: 28, fontWeight: 600, color: C.dark900, margin: '4px 0 0', letterSpacing: '0', lineHeight: 1.18 }}>
-                {s.name}
-                {' '}
-                <span className="stf-step-title-posture" style={{ fontFamily: SANS, fontSize: 12, fontWeight: 700, color: C.warm600, letterSpacing: '0.08em', textTransform: 'uppercase', marginLeft: 10 }}>
-                  ({s.postureAlb})
-                </span>
-              </h3>
-              <p className="stf-step-mode-instruction" style={{ fontSize: 15, color: C.warm700, marginTop: 14, lineHeight: 1.6 }}>{s.instruction}</p>
-              <div style={{ flex: 1 }}>
-                {s.arabic && <RecitationCard step={s} accent={p.accent} accentDark={p.accentDark} showTranslit={showTranslit} />}
-              </div>
-
-              {/* Nav */}
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 28, paddingTop: 18, borderTop: `1px solid ${C.warm100}` }}>
-                <PillBtn variant="ghost" disabled={idx === 0} onClick={() => setIdx(i => Math.max(0, i - 1))}>
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
-                  Prapa
-                </PillBtn>
-                <div style={{ fontFamily: MONO, fontSize: 12, color: C.warm600 }}>
-                  {String(idx + 1).padStart(2, '0')} / {String(max).padStart(2, '0')}
-                </div>
-                {idx === max - 1 ? (
-                  <PillBtn variant="dark" onClick={() => setIdx(0)}>
-                    Rifillo
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4"/></svg>
-                  </PillBtn>
-                ) : (
-                  <PillBtn variant="dark" onClick={() => setIdx(i => Math.min(max - 1, i + 1))}>
-                    Tjetri
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-                  </PillBtn>
-                )}
-              </div>
-            </div>
-          </div>
+        <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 8 }}>
+          <span style={{ fontFamily: MONO, fontSize: 11, color: C.warm500 }}>
+            {String(idx + 1).padStart(2, '0')} / {String(max).padStart(2, '0')}
+          </span>
+          <span style={{ fontSize: 10, color: C.warm500, fontFamily: SANS, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.12em' }}>
+            {s.postureAlb}
+          </span>
         </div>
-      </section>
-      <AyetBlock prayer={p} />
-      <TipsBlock prayer={p} />
-      <BottomCTA prayer={p} />
+      </div>
+
+      {/* ── Scrollable content ── */}
+      <div style={{ flex: 1, overflowY: 'auto', padding: '8px 20px 0', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 14 }}>
+        <PostureFigure posture={s.posture} size={clamp(148, 22, 196)} color={s.isNote ? p.accent : C.dark900} bg={C.gold50} />
+
+        <div style={{ textAlign: 'center', width: '100%', maxWidth: 480 }}>
+          <h3 style={{ fontFamily: SERIF, fontSize: 'clamp(22px,5vw,28px)', fontWeight: 600, color: C.dark900, margin: 0, lineHeight: 1.1 }}>
+            {s.name}
+          </h3>
+        </div>
+
+        <p style={{ fontSize: 15, color: C.warm700, lineHeight: 1.6, margin: 0, textAlign: 'center', maxWidth: 460, padding: '0 4px' }}>
+          {s.instruction}
+        </p>
+
+        {s.arabic && (
+          <div style={{ width: '100%', maxWidth: 520 }}>
+            <RecitationCard step={s} accent={p.accent} accentDark={p.accentDark} showTranslit={showTranslit} />
+          </div>
+        )}
+        <div style={{ height: 8, flexShrink: 0 }} />
+      </div>
+
+      {/* ── Pinned nav bar ── */}
+      <div style={{
+        flexShrink: 0, padding: '12px 20px calc(12px + env(safe-area-inset-bottom, 0px))',
+        borderTop: `1px solid ${C.warm100}`, background: C.bg,
+        display: 'flex', gap: 10, alignItems: 'center',
+      }}>
+        <button onClick={goPrev} style={{
+          width: 52, height: 56, borderRadius: 14, flexShrink: 0,
+          background: C.surface, border: `1px solid ${C.warm200}`,
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          cursor: 'pointer', color: C.dark900, transition: 'background 150ms',
+        }}>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round">
+            <line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/>
+          </svg>
+        </button>
+        <button onClick={goNext} style={{
+          flex: 1, height: 56, borderRadius: 14,
+          background: idx === max - 1 ? C.gold600 : C.dark900,
+          color: '#fff', border: 'none', cursor: 'pointer',
+          fontFamily: SANS, fontSize: 16, fontWeight: 700,
+          display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10,
+          transition: 'background 180ms',
+        }}>
+          {idx === max - 1 ? (
+            <>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              Mbarova namazin
+            </>
+          ) : (
+            <>
+              Tjetri
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+            </>
+          )}
+        </button>
+      </div>
+
       <style>{`
-        @media(max-width:760px){
-          .stf-step-grid{grid-template-columns:1fr!important;}
-          .stf-step-grid>div:first-child{border-right:none!important;border-bottom:1px solid ${C.warm200};min-height:212px!important;padding:18px 20px 10px!important;}
-          .stf-step-mode-figure .posture-figure{width:clamp(178px,52vw,196px)!important;height:clamp(178px,52vw,196px)!important;}
-          .stf-step-posture-label{display:none!important;}
-          .stf-step-mode-content{padding:0 28px 24px!important;}
-          .stf-step-mode-title{
-            margin:0 -28px 12px!important;
-            padding:10px 28px!important;
-            font-size:18px!important;
-            line-height:1.2!important;
-            background:${C.gold50}!important;
-            border-bottom:1px solid ${C.warm200}!important;
-          }
-          .stf-step-title-posture{display:inline!important;font-size:10px!important;letter-spacing:0.06em!important;margin-left:6px!important;vertical-align:middle!important;}
-          .stf-step-mode-instruction{font-size:14px!important;margin-top:0!important;line-height:1.55!important;}
+        .stf-guided .posture-figure { transition: transform 200ms; }
+        @media (max-width: 640px) {
+          .stf-guided-root { height: calc(100dvh - 80px - 56px - 58px) !important; }
         }
       `}</style>
-    </>
+    </div>
   );
+}
+
+function clamp(min, vwPct, max) {
+  return `clamp(${min}px, ${vwPct}vw, ${max}px)`;
 }
 
 // ── Two-column layout ──────────────────────────────────────────────
@@ -1169,7 +1172,23 @@ function SiTeFaleshDetail({ prayerId, onBack, layout, setLayout }) {
 
   return (
     <div style={{ minHeight: '100vh', background: C.bg, fontFamily: SANS, color: C.dark900 }}>
-      {/* Hero */}
+      {/* Hero — compact strip in step mode, full sky in browse modes */}
+      {layout === 'step' ? (
+        <div style={{ height: 80, background: p.sky, position: 'relative', overflow: 'hidden', display: 'flex', alignItems: 'center', padding: '0 20px', justifyContent: 'space-between', flexShrink: 0 }}>
+          {p.sunY > -20 && p.sunY < 110 && (
+            <div style={{ position: 'absolute', right: -50, top: -50, width: 180, height: 180, borderRadius: '50%', background: `radial-gradient(circle, ${p.sunGlow} 0%, transparent 60%)`, pointerEvents: 'none' }} />
+          )}
+          <button onClick={onBack} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '8px 14px 8px 10px', borderRadius: 999, background: 'rgba(255,255,255,0.22)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,0.3)', color: p.onSky, cursor: 'pointer', fontFamily: SANS, fontSize: 13, fontWeight: 600, zIndex: 1, position: 'relative' }}>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+            Mbrapa
+          </button>
+          <div style={{ textAlign: 'center', color: p.onSky, position: 'relative', zIndex: 1 }}>
+            <div style={{ fontFamily: SERIF, fontSize: 20, fontWeight: 600, textShadow: '0 1px 8px rgba(0,0,0,0.22)', lineHeight: 1.1 }}>{p.nameAlb}</div>
+            <div style={{ fontSize: 9, fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', opacity: 0.72, marginTop: 2 }}>{p.period}</div>
+          </div>
+          <button onClick={() => setShowTranslit(v => !v)} style={{ padding: '7px 12px', borderRadius: 999, background: showTranslit ? 'rgba(255,255,255,0.9)' : 'rgba(0,0,0,0.22)', backdropFilter: 'blur(8px)', border: '1px solid rgba(255,255,255,0.3)', color: showTranslit ? C.dark900 : p.onSky, fontFamily: SERIF, fontStyle: 'italic', fontSize: 11, fontWeight: 600, cursor: 'pointer', zIndex: 1, position: 'relative' }}>Shqiptim</button>
+        </div>
+      ) : (
       <div style={{ position: 'relative' }}>
         <SkyScene prayer={p} height="clamp(280px,36vh,420px)" intensity={1.3} />
         {/* Overlays */}
@@ -1259,9 +1278,10 @@ function SiTeFaleshDetail({ prayerId, onBack, layout, setLayout }) {
           )}
         </div>
       </div>
+      )}
 
       {layout === 'scroll'  && <ScrollLayout  prayer={p} showTranslit={showTranslit} />}
-      {layout === 'step'    && <StepLayout    prayer={p} showTranslit={showTranslit} />}
+      {layout === 'step'    && <StepLayout    prayer={p} showTranslit={showTranslit} onBack={onBack} />}
       {layout === 'twocol'  && <TwoColLayout  prayer={p} showTranslit={showTranslit} />}
       <style>{`
         @media(max-width:520px){
@@ -1316,7 +1336,7 @@ export default function SiTeFalesh({ initialPrayerId = null }) {
       ? { screen: 'detail', prayerId: initialPrayerId }
       : { screen: 'home', prayerId: null }
   );
-  const [layout, setLayout] = useState('scroll');
+  const [layout, setLayout] = useState('step');
 
   function openPrayer(id) {
     setView({ screen: 'detail', prayerId: id });
