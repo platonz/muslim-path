@@ -150,9 +150,7 @@ function HomePrayerCard({ prayer, isCurrent, isSq, onClick, isDesktop }) {
       onMouseEnter={() => setHov(true)}
       onMouseLeave={() => setHov(false)}
       style={{
-        flexShrink: isDesktop ? 1 : 0,
-        flex: isDesktop ? "1 1 0" : undefined,
-        width: isDesktop ? undefined : "clamp(120px, 31vw, 160px)",
+        flex: isDesktop ? "1 1 0" : "0 0 clamp(120px, 31vw, 160px)",
         borderRadius: 14, overflow: "hidden",
         border: isCurrent ? "2px solid rgba(255,255,255,0.9)" : "2px solid transparent",
         boxShadow: hov ? "0 8px 24px rgba(0,0,0,0.25)" : "0 3px 12px rgba(0,0,0,0.18)",
@@ -200,11 +198,11 @@ function HomePrayerCard({ prayer, isCurrent, isSq, onClick, isDesktop }) {
         )}
       </div>
       {/* Card body */}
-      <div style={{ background: "#fff", padding: isDesktop ? "12px 16px 14px" : "8px 10px 10px", textAlign: "center" }}>
+      <div style={{ background: "#fff", padding: isDesktop ? "12px 16px 14px" : "8px 10px 10px", textAlign: "left" }}>
         <div style={{ fontSize: isDesktop ? 15 : 12, fontWeight: 600, color: "#1A1915", fontFamily: SA, marginBottom: isDesktop ? 6 : 4, lineHeight: 1.25, minHeight: isDesktop ? "auto" : "30px" }}>
           {prayer.nameAlb}
         </div>
-        <div style={{ display: "flex", gap: 5, alignItems: "center", justifyContent: "center", marginBottom: isDesktop ? 8 : 6, overflow: "hidden" }}>
+        <div style={{ display: "flex", gap: 5, alignItems: "center", marginBottom: isDesktop ? 8 : 6, overflow: "hidden" }}>
           <span style={{ fontSize: isDesktop ? 11 : 9, color: "#6B6050", fontFamily: SA, whiteSpace: "nowrap" }}>
             <strong style={{ color: "#1A1915" }}>{prayer.rakatFard}</strong> {isSq ? "FARZ" : "FARD"}
           </span>
@@ -213,7 +211,7 @@ function HomePrayerCard({ prayer, isCurrent, isSq, onClick, isDesktop }) {
             <strong style={{ color: "#1A1915" }}>{prayer.rakatSunnah}</strong> {isSq ? "SUNET" : "SUN."}
           </span>
         </div>
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 3, fontSize: isDesktop ? 12 : 10, color: "#9A8E7A", fontFamily: SA }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 3, fontSize: isDesktop ? 12 : 10, color: "#9A8E7A", fontFamily: SA }}>
           {isSq ? "Mëso →" : "Learn →"}
         </div>
       </div>
