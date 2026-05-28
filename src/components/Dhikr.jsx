@@ -24,61 +24,76 @@ const ARABIC = "'Amiri', serif";
 
 const DHIKR_PRESETS = [
   {
-    label:   "SubḥānAllāh",
-    trans:   "Glory be to Allah",
-    arabic:  "سُبْحَانَ اللَّهِ",
-    translit:"Subḥān-Allāh",
-    target:  33,
-    virtue:  'The Prophet ﷺ said: "Whoever says Subḥān-Allāh 33 times, Alḥamdulillāh 33 times, and Allāhu Akbar 34 times after each prayer — those are 100 words, and all sins are forgiven, even if they are like the foam of the sea." (Muslim)',
+    label:    "SubḥānAllāh",
+    trans:    "Glory be to Allah",
+    transSq:  "Lëvduar qoftë Allahu",
+    arabic:   "سُبْحَانَ اللَّهِ",
+    translit: "Subḥān-Allāh",
+    target:   33,
+    virtue:   'The Prophet ﷺ said: "Whoever says Subḥān-Allāh 33 times, Alḥamdulillāh 33 times, and Allāhu Akbar 34 times after each prayer — those are 100 words, and all sins are forgiven, even if they are like the foam of the sea." (Muslim)',
+    virtueSq: 'Pejgamberi ﷺ ka thënë: "Kush thotë Subḥān-Allāh 33 herë, Alḥamdulillāh 33 herë dhe Allāhu Akbar 34 herë pas çdo namazi — ato janë 100 fjalë, dhe të gjitha mëkatet falen, qoftë edhe sikur të jenë si shkuma e detit." (Muslim)',
   },
   {
-    label:   "Alḥamdulillāh",
-    trans:   "All praise to Allah",
-    arabic:  "الْحَمْدُ لِلَّهِ",
-    translit:"Alḥamdu lillāh",
-    target:  33,
-    virtue:  'The Prophet ﷺ said: "Alḥamdulillāh fills the scales, and Subḥān-Allāh and Alḥamdulillāh together fill what is between the heavens and the earth." (Muslim)',
+    label:    "Alḥamdulillāh",
+    trans:    "All praise to Allah",
+    transSq:  "Gjithë lavdia i takon Allahut",
+    arabic:   "الْحَمْدُ لِلَّهِ",
+    translit: "Alḥamdu lillāh",
+    target:   33,
+    virtue:   'The Prophet ﷺ said: "Alḥamdulillāh fills the scales, and Subḥān-Allāh and Alḥamdulillāh together fill what is between the heavens and the earth." (Muslim)',
+    virtueSq: 'Pejgamberi ﷺ ka thënë: "Alḥamdulillāh mbush peshoren, ndërsa Subḥān-Allāh dhe Alḥamdulillāh bashkë mbushin çfarë ndodhet midis qiejve dhe tokës." (Muslim)',
   },
   {
-    label:   "Allāhu Akbar",
-    trans:   "Allah is the Greatest",
-    arabic:  "اللَّهُ أَكْبَرُ",
-    translit:"Allāhu Akbar",
-    target:  34,
-    virtue:  'The Prophet ﷺ said: "Is any of you unable to earn a thousand good deeds a day?" A companion asked how. He said: "Say Subḥān-Allāh 100 times — a thousand good deeds are recorded for you, or a thousand sins wiped away." (Muslim)',
+    label:    "Allāhu Akbar",
+    trans:    "Allah is the Greatest",
+    transSq:  "Allahu është më i Madhi",
+    arabic:   "اللَّهُ أَكْبَرُ",
+    translit: "Allāhu Akbar",
+    target:   34,
+    virtue:   'The Prophet ﷺ said: "Is any of you unable to earn a thousand good deeds a day?" A companion asked how. He said: "Say Subḥān-Allāh 100 times — a thousand good deeds are recorded for you, or a thousand sins wiped away." (Muslim)',
+    virtueSq: 'Pejgamberi ﷺ tha: "A mund të fitojë ndonjëri prej jush njëmijë vepra të mira në ditë?" Një shok pyeti si. Ai tha: "Thuaj Subḥān-Allāh 100 herë — njëmijë vepra të mira regjistrohen për ty, ose njëmijë mëkate fshihen." (Muslim)',
   },
   {
-    label:   "Lā ilāha illAllāh",
-    trans:   "There is no god but Allah",
-    arabic:  "لَا إِلَٰهَ إِلَّا اللَّهُ",
-    translit:"Lā ilāha ill-Allāh",
-    target:  100,
-    virtue:  'The Prophet ﷺ said: "The best dhikr is Lā ilāha illAllāh, and the best supplication is Alḥamdulillāh." (Tirmidhi — Ḥasan)',
+    label:    "Lā ilāha illAllāh",
+    trans:    "There is no god but Allah",
+    transSq:  "Nuk ka të adhuruar tjetër veç Allahut",
+    arabic:   "لَا إِلَٰهَ إِلَّا اللَّهُ",
+    translit: "Lā ilāha ill-Allāh",
+    target:   100,
+    virtue:   'The Prophet ﷺ said: "The best dhikr is Lā ilāha illAllāh, and the best supplication is Alḥamdulillāh." (Tirmidhi — Ḥasan)',
+    virtueSq: 'Pejgamberi ﷺ ka thënë: "Dhikri më i mirë është Lā ilāha illAllāh, dhe lutja më e mirë është Alḥamdulillāh." (Tirmidhiu — Hasen)',
   },
   {
-    label:   "Lā ilāha illAllāh (full)",
-    title:   "Earn an Unparalleled Reward",
-    trans:   "There is no god worthy of worship except Allah. He is Alone and has no partner. To Him belongs all sovereignty and all praise. He is over all things All-Powerful.",
-    arabic:  "لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ، وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ",
-    translit:"Lā ilāha illallāh, waḥdahū lā sharīka lah, lahul-mulku wa lahul-ḥamd, wa Huwa ʿalā kulli shay'in Qadīr.",
-    target:  100,
-    virtue:  'The Messenger of Allah ﷺ said: "Whoever says this 100 times a day will have a reward equivalent to freeing 10 slaves. 100 good deeds will be recorded for him, 100 of his sins will be blotted out, and it will be a shield for him against Shaytan throughout that day until evening." (Bukhāri & Muslim)',
+    label:    "Lā ilāha illAllāh (full)",
+    title:    "Earn an Unparalleled Reward",
+    titleSq:  "Fito një Shpërblim të Pakrahasueshëm",
+    trans:    "There is no god worthy of worship except Allah. He is Alone and has no partner. To Him belongs all sovereignty and all praise. He is over all things All-Powerful.",
+    transSq:  "Nuk ka të adhuruar tjetër me të drejtë veç Allahut. Ai është i Vetëm dhe s'ka ortak. Atij i takon i gjithë sundimi dhe gjithë lavdia. Ai është i Plotfuqishëm mbi çdo gjë.",
+    arabic:   "لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ، وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ",
+    translit: "Lā ilāha illallāh, waḥdahū lā sharīka lah, lahul-mulku wa lahul-ḥamd, wa Huwa ʿalā kulli shay'in Qadīr.",
+    target:   100,
+    virtue:   'The Messenger of Allah ﷺ said: "Whoever says this 100 times a day will have a reward equivalent to freeing 10 slaves. 100 good deeds will be recorded for him, 100 of his sins will be blotted out, and it will be a shield for him against Shaytan throughout that day until evening." (Bukhāri & Muslim)',
+    virtueSq: 'I Dërguari i Allahut ﷺ ka thënë: "Kush e thotë këtë 100 herë në ditë do të ketë shpërblim të barabartë me lirimin e 10 skllevërve. 100 vepra të mira do t\'i regjistrohen, 100 mëkate do t\'i fshihen, dhe do të jetë mbrojtje për të nga Shejtani gjatë atij dite deri në mbrëmje." (Bukhāriu & Muslimi)',
   },
   {
-    label:   "Astaghfirullāh",
-    trans:   "I seek forgiveness from Allah",
-    arabic:  "أَسْتَغْفِرُ اللَّهَ",
-    translit:"Astaghfiru llāh",
-    target:  100,
-    virtue:  'The Prophet ﷺ said: "By Allah, I seek Allah\'s forgiveness and turn to Him in repentance more than 70 times a day." (Bukhāri). He also said: "Whoever seeks forgiveness regularly, Allah will grant him relief from every distress, a way out from every hardship, and provision from where he does not expect." (Abu Dawud)',
+    label:    "Astaghfirullāh",
+    trans:    "I seek forgiveness from Allah",
+    transSq:  "Kërkoj falje nga Allahu",
+    arabic:   "أَسْتَغْفِرُ اللَّهَ",
+    translit: "Astaghfiru llāh",
+    target:   100,
+    virtue:   'The Prophet ﷺ said: "By Allah, I seek Allah\'s forgiveness and turn to Him in repentance more than 70 times a day." (Bukhāri). He also said: "Whoever seeks forgiveness regularly, Allah will grant him relief from every distress, a way out from every hardship, and provision from where he does not expect." (Abu Dawud)',
+    virtueSq: 'Pejgamberi ﷺ ka thënë: "Pasha Allahun, unë i kërkoj falje Allahut dhe kthehem tek Ai me pendim më shumë se 70 herë në ditë." (Bukhāriu). Ai gjithashtu tha: "Kush kërkon falje vazhdimisht, Allahu do t\'i japë lehtësi nga çdo vështirësi, rrugëdalje nga çdo hall, dhe rrizk nga ku nuk e pret." (Ebu Davudi)',
   },
   {
-    label:   "Ṣalawāt",
-    trans:   "Blessings upon the Prophet ﷺ",
-    arabic:  "اللَّهُمَّ صَلِّ عَلَى مُحَمَّد",
-    translit:"Allāhumma ṣalli ʿalā Muḥammad",
-    target:  100,
-    virtue:  'The Prophet ﷺ said: "Whoever sends one blessing upon me, Allah will send ten blessings upon him." (Muslim). Ibn Mas\'ūd reported: "The closest people to me on the Day of Resurrection will be those who send the most blessings upon me." (Tirmidhi)',
+    label:    "Ṣalawāt",
+    trans:    "Blessings upon the Prophet ﷺ",
+    transSq:  "Bekime mbi Pejgamberin ﷺ",
+    arabic:   "اللَّهُمَّ صَلِّ عَلَى مُحَمَّد",
+    translit: "Allāhumma ṣalli ʿalā Muḥammad",
+    target:   100,
+    virtue:   'The Prophet ﷺ said: "Whoever sends one blessing upon me, Allah will send ten blessings upon him." (Muslim). Ibn Mas\'ūd reported: "The closest people to me on the Day of Resurrection will be those who send the most blessings upon me." (Tirmidhi)',
+    virtueSq: 'Pejgamberi ﷺ ka thënë: "Kush dërgon një salavat mbi mua, Allahu do t\'i dërgojë dhjetë bekime atij." (Muslim). Ibn Mes\'udi ka treguar: "Njerëzit më afër meje në Ditën e Kiametit do të jenë ata që dërgojnë më shumë salavate mbi mua." (Tirmidhiu)',
   },
 ];
 
@@ -204,7 +219,7 @@ export default function Dhikr() {
             textAlign: "center",
           }}>
             <div style={{ fontFamily: SR, fontSize: 17, fontWeight: 600, color: "#FFF8E8", lineHeight: 1.3 }}>
-              {dhikr.title}
+              {isSq ? (dhikr.titleSq || dhikr.title) : dhikr.title}
             </div>
           </div>
         )}
@@ -280,7 +295,7 @@ export default function Dhikr() {
 
         {/* Translation */}
         <div style={{ fontSize: 13, fontWeight: 600, color: W.text, fontFamily: SA, marginBottom: 20, textAlign: "center", maxWidth: 380, lineHeight: 1.65, padding: "0 4px" }}>
-          {dhikr.trans}
+          {isSq ? (dhikr.transSq || dhikr.trans) : dhikr.trans}
         </div>
 
         {/* Done state */}
@@ -331,7 +346,7 @@ export default function Dhikr() {
               </span>
             </div>
             <p style={{ fontSize: 13, color: W.mutedDark, fontFamily: SA, lineHeight: 1.65, margin: 0 }}>
-              {dhikr.virtue}
+              {isSq ? (dhikr.virtueSq || dhikr.virtue) : dhikr.virtue}
             </p>
           </div>
         )}
