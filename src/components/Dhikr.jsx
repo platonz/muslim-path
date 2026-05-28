@@ -23,12 +23,63 @@ const SA = "'Inter', -apple-system, BlinkMacSystemFont, sans-serif";
 const ARABIC = "'Amiri', serif";
 
 const DHIKR_PRESETS = [
-  { label: "SubḥānAllāh",       trans: "Glory be to Allah",               arabic: "سُبْحَانَ اللَّهِ",            target: 33  },
-  { label: "Alḥamdulillāh",     trans: "All praise to Allah",             arabic: "الْحَمْدُ لِلَّهِ",            target: 33  },
-  { label: "Allāhu Akbar",      trans: "Allah is the Greatest",           arabic: "اللَّهُ أَكْبَرُ",             target: 34  },
-  { label: "Lā ilāha illAllāh", trans: "There is no god but Allah",       arabic: "لَا إِلَٰهَ إِلَّا اللَّهُ",  target: 100 },
-  { label: "Astaghfirullāh",    trans: "I seek forgiveness from Allah",   arabic: "أَسْتَغْفِرُ اللَّهَ",         target: 100 },
-  { label: "Ṣalawāt",           trans: "Blessings upon the Prophet",      arabic: "اللَّهُمَّ صَلِّ عَلَى مُحَمَّد", target: 100 },
+  {
+    label:   "SubḥānAllāh",
+    trans:   "Glory be to Allah",
+    arabic:  "سُبْحَانَ اللَّهِ",
+    translit:"Subḥān-Allāh",
+    target:  33,
+    virtue:  'The Prophet ﷺ said: "Whoever says Subḥān-Allāh 33 times, Alḥamdulillāh 33 times, and Allāhu Akbar 34 times after each prayer — those are 100 words, and all sins are forgiven, even if they are like the foam of the sea." (Muslim)',
+  },
+  {
+    label:   "Alḥamdulillāh",
+    trans:   "All praise to Allah",
+    arabic:  "الْحَمْدُ لِلَّهِ",
+    translit:"Alḥamdu lillāh",
+    target:  33,
+    virtue:  'The Prophet ﷺ said: "Alḥamdulillāh fills the scales, and Subḥān-Allāh and Alḥamdulillāh together fill what is between the heavens and the earth." (Muslim)',
+  },
+  {
+    label:   "Allāhu Akbar",
+    trans:   "Allah is the Greatest",
+    arabic:  "اللَّهُ أَكْبَرُ",
+    translit:"Allāhu Akbar",
+    target:  34,
+    virtue:  'The Prophet ﷺ said: "Is any of you unable to earn a thousand good deeds a day?" A companion asked how. He said: "Say Subḥān-Allāh 100 times — a thousand good deeds are recorded for you, or a thousand sins wiped away." (Muslim)',
+  },
+  {
+    label:   "Lā ilāha illAllāh",
+    trans:   "There is no god but Allah",
+    arabic:  "لَا إِلَٰهَ إِلَّا اللَّهُ",
+    translit:"Lā ilāha ill-Allāh",
+    target:  100,
+    virtue:  'The Prophet ﷺ said: "The best dhikr is Lā ilāha illAllāh, and the best supplication is Alḥamdulillāh." (Tirmidhi — Ḥasan)',
+  },
+  {
+    label:   "Lā ilāha illAllāh (full)",
+    title:   "Earn an Unparalleled Reward",
+    trans:   "There is no god worthy of worship except Allah. He is Alone and has no partner. To Him belongs all sovereignty and all praise. He is over all things All-Powerful.",
+    arabic:  "لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ، وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ",
+    translit:"Lā ilāha illallāh, waḥdahū lā sharīka lah, lahul-mulku wa lahul-ḥamd, wa Huwa ʿalā kulli shay'in Qadīr.",
+    target:  100,
+    virtue:  'The Messenger of Allah ﷺ said: "Whoever says this 100 times a day will have a reward equivalent to freeing 10 slaves. 100 good deeds will be recorded for him, 100 of his sins will be blotted out, and it will be a shield for him against Shaytan throughout that day until evening." (Bukhāri & Muslim)',
+  },
+  {
+    label:   "Astaghfirullāh",
+    trans:   "I seek forgiveness from Allah",
+    arabic:  "أَسْتَغْفِرُ اللَّهَ",
+    translit:"Astaghfiru llāh",
+    target:  100,
+    virtue:  'The Prophet ﷺ said: "By Allah, I seek Allah\'s forgiveness and turn to Him in repentance more than 70 times a day." (Bukhāri). He also said: "Whoever seeks forgiveness regularly, Allah will grant him relief from every distress, a way out from every hardship, and provision from where he does not expect." (Abu Dawud)',
+  },
+  {
+    label:   "Ṣalawāt",
+    trans:   "Blessings upon the Prophet ﷺ",
+    arabic:  "اللَّهُمَّ صَلِّ عَلَى مُحَمَّد",
+    translit:"Allāhumma ṣalli ʿalā Muḥammad",
+    target:  100,
+    virtue:  'The Prophet ﷺ said: "Whoever sends one blessing upon me, Allah will send ten blessings upon him." (Muslim). Ibn Mas\'ūd reported: "The closest people to me on the Day of Resurrection will be those who send the most blessings upon me." (Tirmidhi)',
+  },
 ];
 
 function persist(idx, count, rounds) {
@@ -86,17 +137,13 @@ export default function Dhikr() {
 
   function reset() { setCount(0); setRounds(0); persist(dhikrIdx, 0, 0); }
 
-  // Three main dhikrs shown as prominent tabs; rest accessible via overflow row
   const mainTabs  = DHIKR_PRESETS.slice(0, 3);
   const extraTabs = DHIKR_PRESETS.slice(3);
 
   return (
     <div style={{ background: W.bg, minHeight: "100vh", paddingBottom: 90 }}>
-      {/* White page header */}
-      <div style={{
-        background: W.card, borderBottom: `1px solid ${W.border}`,
-        padding: "16px 20px 14px",
-      }}>
+      {/* Page header */}
+      <div style={{ background: W.card, borderBottom: `1px solid ${W.border}`, padding: "16px 20px 14px" }}>
         <div style={{ fontFamily: SR, fontSize: 20, fontWeight: 600, color: W.text }}>
           {isSq ? "Tesbihe" : "Dhikr"}
         </div>
@@ -105,7 +152,7 @@ export default function Dhikr() {
         </div>
       </div>
 
-      {/* Main tabs (first 3 dhikrs) */}
+      {/* Main tabs */}
       <div style={{ padding: "16px 20px 0", display: "flex", gap: 8 }}>
         {mainTabs.map((d, i) => {
           const active = dhikrIdx === i;
@@ -131,8 +178,10 @@ export default function Dhikr() {
           const active = dhikrIdx === realIdx;
           return (
             <button key={realIdx} onClick={() => selectDhikr(realIdx)} style={{
-              padding: "6px 12px", borderRadius: 999, border: `1px solid ${active ? W.goldDark : W.border}`,
-              cursor: "pointer", fontFamily: SA, fontSize: 10, fontWeight: active ? 600 : 400,
+              padding: "6px 12px", borderRadius: 999,
+              border: `1px solid ${active ? W.goldDark : W.border}`,
+              cursor: "pointer", fontFamily: SA, fontSize: 10,
+              fontWeight: active ? 600 : 400,
               background: active ? W.goldBg : "transparent",
               color: active ? W.goldDark : W.muted,
               transition: "all 0.18s",
@@ -143,26 +192,36 @@ export default function Dhikr() {
         })}
       </div>
 
-      {/* Counter area */}
-      <div style={{
-        display: "flex", flexDirection: "column", alignItems: "center",
-        justifyContent: "center", padding: "32px 40px 24px",
-      }}>
+      {/* ── Counter + content area ── */}
+      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", padding: "28px 20px 24px" }}>
+
+        {/* Title banner (shown when dhikr has a title) */}
+        {dhikr.title && (
+          <div style={{
+            width: "100%", maxWidth: 400,
+            background: `linear-gradient(135deg, ${W.goldDark} 0%, #6B4A18 100%)`,
+            borderRadius: 14, padding: "14px 20px", marginBottom: 20,
+            textAlign: "center",
+          }}>
+            <div style={{ fontFamily: SR, fontSize: 17, fontWeight: 600, color: "#FFF8E8", lineHeight: 1.3 }}>
+              {dhikr.title}
+            </div>
+          </div>
+        )}
+
         {/* SVG ring + tap button */}
-        <div style={{ position: "relative", width: 220, height: 220, marginBottom: 28 }}>
+        <div style={{ position: "relative", width: 220, height: 220, marginBottom: 24 }}>
           <svg width="220" height="220" style={{ position: "absolute", top: 0, left: 0, transform: "rotate(-90deg)" }}>
             <circle cx="110" cy="110" r={R} fill="none" stroke={W.border} strokeWidth="8" />
             <circle
               cx="110" cy="110" r={R} fill="none"
               stroke={flash ? W.green : W.goldDark}
-              strokeWidth="8"
-              strokeLinecap="round"
+              strokeWidth="8" strokeLinecap="round"
               strokeDasharray={circ}
               strokeDashoffset={circ * (1 - pct)}
               style={{ transition: "stroke-dashoffset 0.25s ease, stroke 0.3s" }}
             />
           </svg>
-
           <button
             onClick={tap}
             onMouseDown={e => { e.currentTarget.style.transform = "translate(-50%,-50%) scale(0.96)"; }}
@@ -184,11 +243,7 @@ export default function Dhikr() {
               outline: "none",
             }}
           >
-            <div style={{
-              fontSize: 52, fontWeight: 600, lineHeight: 1,
-              fontFamily: SR, color: flash ? W.green : W.goldDark,
-              transition: "color 0.3s",
-            }}>
+            <div style={{ fontSize: 52, fontWeight: 600, lineHeight: 1, fontFamily: SR, color: flash ? W.green : W.goldDark, transition: "color 0.3s" }}>
               {count}
             </div>
             <div style={{ fontSize: 11, color: W.muted, fontFamily: SA }}>
@@ -198,28 +253,39 @@ export default function Dhikr() {
         </div>
 
         {/* Arabic text */}
-        <div style={{
-          fontFamily: ARABIC, fontSize: 30, color: W.text,
-          direction: "rtl", textAlign: "center", marginBottom: 6,
-          lineHeight: 1.7,
-        }}>
+        <div style={{ fontFamily: ARABIC, fontSize: 28, color: W.text, direction: "rtl", textAlign: "center", marginBottom: 10, lineHeight: 1.8, maxWidth: 380, padding: "0 8px" }}>
           {dhikr.arabic}
         </div>
-        <div style={{ fontSize: 14, color: W.mutedDark, fontFamily: SA, marginBottom: 6 }}>
-          {dhikr.label}
+
+        {/* Repeat badge */}
+        <div style={{
+          display: "inline-flex", alignItems: "center", gap: 6,
+          background: W.goldBg, border: `1px solid ${W.goldBorder}`,
+          borderRadius: 999, padding: "5px 14px", marginBottom: 14,
+        }}>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke={W.goldDark} strokeWidth="2.2" strokeLinecap="round">
+            <polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/>
+          </svg>
+          <span style={{ fontFamily: SA, fontSize: 11, fontWeight: 600, color: W.goldDark, letterSpacing: "0.04em" }}>
+            {isSq ? `Përsërit ×${dhikr.target}` : `Repeat ×${dhikr.target}`}
+          </span>
         </div>
-        <div style={{ fontSize: 12, color: W.muted, fontFamily: SA, marginBottom: 24 }}>
+
+        {/* Transliteration */}
+        {dhikr.translit && (
+          <div style={{ fontSize: 13, color: W.mutedDark, fontFamily: SA, fontStyle: "italic", marginBottom: 8, textAlign: "center", maxWidth: 380, lineHeight: 1.55 }}>
+            {dhikr.translit}
+          </div>
+        )}
+
+        {/* Translation */}
+        <div style={{ fontSize: 13, fontWeight: 600, color: W.text, fontFamily: SA, marginBottom: 20, textAlign: "center", maxWidth: 380, lineHeight: 1.65, padding: "0 4px" }}>
           {dhikr.trans}
         </div>
 
         {/* Done state */}
         {done && (
-          <div style={{
-            fontSize: 13, fontWeight: 600, color: W.green,
-            background: W.greenBg, padding: "10px 24px",
-            borderRadius: 10, border: `1px solid ${W.greenBorder}`,
-            marginBottom: 16, fontFamily: SA,
-          }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: W.green, background: W.greenBg, padding: "10px 24px", borderRadius: 10, border: `1px solid ${W.greenBorder}`, marginBottom: 16, fontFamily: SA }}>
             {isSq ? "Alhamdulilah — kompletuar ✓" : "Alhamdulillah — complete ✓"}
           </div>
         )}
@@ -230,12 +296,7 @@ export default function Dhikr() {
         )}
 
         {/* Stats row */}
-        <div style={{
-          display: "flex", alignItems: "center", gap: 28,
-          padding: "16px 24px",
-          background: W.card, border: `1px solid ${W.border}`,
-          borderRadius: 14, boxShadow: W.shadow,
-        }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 28, padding: "16px 24px", background: W.card, border: `1px solid ${W.border}`, borderRadius: 14, boxShadow: W.shadow, marginBottom: dhikr.virtue ? 20 : 0 }}>
           <div style={{ textAlign: "center" }}>
             <div style={{ fontSize: 22, fontWeight: 600, color: W.text, fontFamily: SR }}>{rounds}</div>
             <div style={{ fontSize: 10, color: W.muted, fontFamily: SA, letterSpacing: "0.08em", textTransform: "uppercase", marginTop: 2 }}>
@@ -244,27 +305,36 @@ export default function Dhikr() {
           </div>
           <div style={{ width: 1, height: 36, background: W.border }} />
           <div style={{ textAlign: "center" }}>
-            <div style={{ fontSize: 22, fontWeight: 600, color: W.text, fontFamily: SR }}>
-              {rounds * dhikr.target + count}
-            </div>
+            <div style={{ fontSize: 22, fontWeight: 600, color: W.text, fontFamily: SR }}>{rounds * dhikr.target + count}</div>
             <div style={{ fontSize: 10, color: W.muted, fontFamily: SA, letterSpacing: "0.08em", textTransform: "uppercase", marginTop: 2 }}>
               {isSq ? "gjithsej" : "Total"}
             </div>
           </div>
           <div style={{ width: 1, height: 36, background: W.border }} />
-          <button onClick={reset} style={{
-            background: "none", border: `1px solid ${W.border}`,
-            borderRadius: 999, cursor: "pointer",
-            color: W.muted, fontSize: 11, fontWeight: 500,
-            padding: "6px 14px", fontFamily: SA,
-            transition: "all 0.18s",
-          }}
+          <button onClick={reset} style={{ background: "none", border: `1px solid ${W.border}`, borderRadius: 999, cursor: "pointer", color: W.muted, fontSize: 11, fontWeight: 500, padding: "6px 14px", fontFamily: SA, transition: "all 0.18s" }}
             onMouseEnter={e => { e.currentTarget.style.borderColor = "#8A2020"; e.currentTarget.style.color = "#8A2020"; }}
             onMouseLeave={e => { e.currentTarget.style.borderColor = W.border; e.currentTarget.style.color = W.muted; }}
           >
             {isSq ? "Rinis" : "Reset"}
           </button>
         </div>
+
+        {/* Virtue / Hadith card */}
+        {dhikr.virtue && (
+          <div style={{ width: "100%", maxWidth: 400, background: W.card, border: `1px solid ${W.goldBorder}`, borderRadius: 14, padding: "16px 18px", boxShadow: W.shadow }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 7, marginBottom: 10 }}>
+              <svg width="13" height="13" viewBox="0 0 24 24" fill={W.goldDark} stroke="none">
+                <path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/>
+              </svg>
+              <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.16em", textTransform: "uppercase", color: W.goldDark, fontFamily: SA }}>
+                {isSq ? "Vlera" : "Virtue"}
+              </span>
+            </div>
+            <p style={{ fontSize: 13, color: W.mutedDark, fontFamily: SA, lineHeight: 1.65, margin: 0 }}>
+              {dhikr.virtue}
+            </p>
+          </div>
+        )}
       </div>
     </div>
   );

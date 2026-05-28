@@ -11,6 +11,7 @@ import KaabaWatermark from "./components/KaabaWatermark";
 import MobileTabBar from "./components/MobileTabBar";
 import QuranReader from "./components/QuranReader";
 import SiTeFalesh from "./components/SiTeFalesh";
+import HowToPray from "./components/HowToPray";
 import Zakat from "./components/Zakat";
 import Inheritance from "./components/Inheritance";
 import DateConverter from "./components/DateConverter";
@@ -382,7 +383,10 @@ export default function App() {
         {page === "dua"     && <DuaPage favs={duaFavs} onFav={toggleDuaFav} />}
         {page === "asma"    && <AsmaPage />}
         {page === "admin"   && <AdminPage authSession={authSession} />}
-        {page === "namaz"   && <SiTeFalesh initialPrayerId={namazPrayerId} />}
+        {page === "namaz"   && (i18n.language?.startsWith("sq")
+          ? <SiTeFalesh initialPrayerId={namazPrayerId} />
+          : <HowToPray  initialPrayerId={namazPrayerId} />
+        )}
       </main>
       {showSearch && (
         <GlobalSearch

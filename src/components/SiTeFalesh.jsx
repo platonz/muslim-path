@@ -1,30 +1,32 @@
 ﻿import { useState, useMemo } from "react";
+import {
+  SURFACE, SERIF, SANS, MONO,
+  DARK_900, DARK_700,
+  WARM_700, WARM_600, WARM_500, WARM_400, WARM_300, WARM_200, WARM_100,
+  GOLD_700, GOLD_600, GOLD_500, GOLD_400, GOLD_300, GOLD_200, GOLD_100, GOLD_50,
+} from "../constants";
 
-// ─── DESIGN TOKENS ────────────────────────────────────────────────
 const C = {
-  bg:       '#FAF7EE',
-  surface:  '#FFFFFF',
-  dark900:  '#1A1915',
-  dark700:  '#3A3828',
-  warm700:  '#6B6050',
-  warm600:  '#8A7E6E',
-  warm500:  '#9A8E7A',
-  warm400:  '#B5A888',
-  warm300:  '#D4C9A8',
-  warm200:  '#E0D5C0',
-  warm100:  '#EDE8DC',
-  gold700:  '#6B5320',
-  gold600:  '#8A7235',
-  gold500:  '#9A8142',
-  gold400:  '#B89D60',
-  gold300:  '#D4BA88',
-  gold200:  '#E8D9A8',
-  gold100:  '#F2EAD0',
-  gold50:   '#FAF5E8',
+  bg:      '#FAF7EE',
+  surface:  SURFACE,
+  dark900:  DARK_900,
+  dark700:  DARK_700,
+  warm700:  WARM_700,
+  warm600:  WARM_600,
+  warm500:  WARM_500,
+  warm400:  WARM_400,
+  warm300:  WARM_300,
+  warm200:  WARM_200,
+  warm100:  WARM_100,
+  gold700:  GOLD_700,
+  gold600:  GOLD_600,
+  gold500:  GOLD_500,
+  gold400:  GOLD_400,
+  gold300:  GOLD_300,
+  gold200:  GOLD_200,
+  gold100:  GOLD_100,
+  gold50:   GOLD_50,
 };
-const SERIF = "'Playfair Display', Georgia, serif";
-const SANS  = "'Inter', system-ui, sans-serif";
-const MONO  = "'Fira Code', 'Courier New', monospace";
 
 // ─── PRAYER DATA ──────────────────────────────────────────────────
 const PRAYERS = [
@@ -67,7 +69,7 @@ const PRAYERS = [
   {
     id: 'iqindia', nameAr: 'العَصْر', nameAlb: 'Iqindia', nameFull: 'Namazi i Iqindisë',
     period: 'Pasdite e vonshme', timeLabel: 'Pasdite', timeApprox: '16:30',
-    window: [15*60+45, 18*60+30], rakatFard: 4, rakatSunnah: 4,
+    window: [15*60+45, 18*60+30], rakatFard: 4, rakatSunnah: 0,
     blurb: 'Mes drekës dhe perëndimit — namazi i mesëm, ai për të cilin Kurani urdhëron kujdes të veçantë.',
     ayet: 'حَافِظُوا عَلَى الصَّلَوَاتِ وَالصَّلَاةِ الْوُسْطَىٰ',
     ayetAlb: 'Ruajini namazet, e veçanërisht atë të mesmin.',
@@ -103,7 +105,7 @@ const PRAYERS = [
   {
     id: 'jacia', nameAr: 'العِشَاء', nameAlb: 'Jacia', nameFull: 'Namazi i Jacisë',
     period: 'Pas errësimit të plotë të qiellit', timeLabel: 'Natë', timeApprox: '21:20',
-    window: [20*60+15, (24+4)*60+30], rakatFard: 4, rakatSunnah: 4,
+    window: [20*60+15, (24+4)*60+30], rakatFard: 4, rakatSunnah: 2, rakatWitr: 3,
     blurb: 'Mbyllja e ditës. Falet në qetësinë e natës, kur dita ka rënë dhe yjet kanë zënë qiellin.',
     ayet: 'وَمِنَ اللَّيْلِ فَتَهَجَّدْ بِهِ نَافِلَةً لَّكَ',
     ayetAlb: 'Edhe nga nata zgjohu për lutje, si dhuratë e shtuar për ty.',
@@ -434,6 +436,9 @@ function PostureFigure({ posture, size = 120, color = C.dark900, bg = C.gold50 }
   const idx = POSTURE_ORDER.indexOf(posture);
   const photo = POSTURE_PHOTO[posture];
   const svg = POSTURE_SVG[posture] || POSTURE_SVG.qiyam;
+  // size may be a CSS string (e.g. "clamp(...)") when passed from responsive callers;
+  // arithmetic ops need a numeric fallback so they don't resolve to NaN.
+  const numSize = typeof size === 'number' ? size : 120;
   return (
     <div className="posture-figure" style={{
       width: size, height: size, borderRadius: '50%',
@@ -448,12 +453,12 @@ function PostureFigure({ posture, size = 120, color = C.dark900, bg = C.gold50 }
           style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top' }}
         />
       ) : (
-        <div style={{ width: size * 0.65, height: size * 0.65 }}>{svg}</div>
+        <div style={{ width: numSize * 0.65, height: numSize * 0.65 }}>{svg}</div>
       )}
       {idx >= 0 && (
         <div style={{
           position: 'absolute', bottom: 4, right: 6,
-          fontFamily: MONO, fontSize: size * 0.1, fontWeight: 600,
+          fontFamily: MONO, fontSize: numSize * 0.1, fontWeight: 600,
           color: '#fff', opacity: 0.75,
           textShadow: '0 1px 3px rgba(0,0,0,0.6)',
         }}>{String(idx + 1).padStart(2, '0')}</div>
@@ -662,11 +667,20 @@ function PrayerCard({ prayer: p, isCurrent, onOpen }) {
             <span style={{ fontFamily: MONO, fontSize: 14, fontWeight: 600, color: C.dark900 }}>{p.rakatFard}</span>
             <span style={{ fontSize: 10, letterSpacing: '0.12em', color: C.warm600, fontWeight: 600, textTransform: 'uppercase' }}>Farz</span>
           </div>
-          <div style={{ width: 1, height: 14, background: C.warm200 }} />
-          <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-            <span style={{ fontFamily: MONO, fontSize: 14, fontWeight: 600, color: C.warm600 }}>{p.rakatSunnah}</span>
-            <span style={{ fontSize: 10, letterSpacing: '0.12em', color: C.warm600, fontWeight: 600, textTransform: 'uppercase' }}>Sunet</span>
-          </div>
+          {p.rakatSunnah > 0 && <>
+            <div style={{ width: 1, height: 14, background: C.warm200 }} />
+            <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+              <span style={{ fontFamily: MONO, fontSize: 14, fontWeight: 600, color: C.warm600 }}>{p.rakatSunnah}</span>
+              <span style={{ fontSize: 10, letterSpacing: '0.12em', color: C.warm600, fontWeight: 600, textTransform: 'uppercase' }}>Sunet</span>
+            </div>
+          </>}
+          {p.rakatWitr > 0 && <>
+            <div style={{ width: 1, height: 14, background: C.warm200 }} />
+            <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+              <span style={{ fontFamily: MONO, fontSize: 14, fontWeight: 600, color: C.warm600 }}>{p.rakatWitr}</span>
+              <span style={{ fontSize: 10, letterSpacing: '0.12em', color: C.warm600, fontWeight: 600, textTransform: 'uppercase' }}>Vitr</span>
+            </div>
+          </>}
         </div>
         <div style={{
           marginTop: 16, paddingTop: 14, borderTop: `1px solid ${C.warm100}`,
