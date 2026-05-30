@@ -698,6 +698,283 @@ function PrayerCard({ prayer: p, isCurrent, onOpen }) {
   );
 }
 
+// ─── SEXHDJA E HARRESËS ───────────────────────────────────────────
+const SAHW = {
+  eyebrow: 'Kur harron diçka në namaz',
+  titleAr: 'سُجُود السَّهْو',
+  intro:
+    'Dy sexhde shtesë që plotësojnë namazin kur harron diçka — një shtesë, një mangësi, ose një dyshim. ' +
+    'Kryhen njësoj si sexhdja e zakonshme; ndryshon vetëm nëse bëhen para apo pas selamit.',
+  sources: 'Fiqh-us-Sunnah (Sajjid Sabik) · Bulugh al-Maram (Ibn Haxheri)',
+  principles: [
+    {
+      id: 'shtesa', num: 1, termAlb: 'Shtesa', termAr: 'الزِّيادة',
+      when: 'after', glyph: '＋',
+      ruleShort: 'Shtove pa dashje një lëvizje a rekat — sexhdja bëhet pas selamit.',
+      scenarios: [
+        { title: 'Fale 5 rekate në vend të 4', detail: 'Vazhdoje namazin si e ke nisur, jepe selamin, pastaj bëj dy sexhde dhe jep selamin sërish. Nuk e prish namazin.' },
+        { title: 'Shtove një ruku, sexhde a qëndrim më shumë', detail: 'Çdo lëvizje e shtuar nga harresa rregullohet me dy sexhde pas selamit.' },
+      ],
+      hadith: {
+        ar: 'إِذَا زَادَ الرَّجُلُ أَوْ نَقَصَ فِي صَلَاتِهِ فَلْيَسْجُدْ سَجْدَتَيْنِ',
+        alb: 'Pejgamberi ﷺ fali drekën pesë rekate. Kur e pyetën, kreu dy sexhde pasi dha selamin.',
+        ref: "Ibn Mes'udi · Buhariu & Muslimi",
+      },
+    },
+    {
+      id: 'mangesia', num: 2, termAlb: 'Mangësia', termAr: 'النَّقْص',
+      when: 'before', glyph: '−',
+      ruleShort: 'Harrove një vaxhib (p.sh. teshehudin e parë) — sexhdja bëhet para selamit.',
+      scenarios: [
+        { title: 'Harrove teshehudin e parë dhe u ngrite plotësisht', detail: 'Mos u kthe. Vazhdo namazin deri në fund dhe bëj dy sexhde para selamit.' },
+        { title: 'U ngrite pjesërisht — ende pa u drejtuar', detail: 'Kthehu, ulu dhe plotëso teshehudin. Në këtë rast nuk kërkohet sexhdja e harresës.' },
+      ],
+      hadith: {
+        ar: 'فَلَمَّا أَتَمَّ صَلَاتَهُ سَجَدَ سَجْدَتَيْنِ قَبْلَ أَنْ يُسَلِّمَ',
+        alb: 'Pejgamberi ﷺ u ngrit pas dy rekateve pa u ulur për teshehud. Kur e mbaroi namazin, bëri dy sexhde para selamit.',
+        ref: 'Abdullah ibn Buhejne · Buhariu & Muslimi',
+      },
+    },
+    {
+      id: 'dyshimi', num: 3, termAlb: 'Dyshimi', termAr: 'الشَّكّ',
+      when: 'before', glyph: '？',
+      ruleShort: 'Nuk je i sigurt sa rekate fale — ndërto mbi numrin e vogël, sexhde para selamit.',
+      scenarios: [
+        { title: 'Dyshon: 3 apo 4 rekate?', detail: 'Largoje dyshimin dhe llogarit më të voglën — 3. Fal rekatin e mbetur, pastaj bëj dy sexhde para selamit.' },
+        { title: 'Nuk e di ku e nise dyshimin', detail: 'Gjithmonë ndërto mbi atë që je i sigurt (numrin më të vogël) dhe plotëso pjesën e munguar.' },
+      ],
+      hadith: {
+        ar: 'فَلْيَطْرَحِ الشَّكَّ وَلْيَبْنِ عَلَى مَا اسْتَيْقَنَ ثُمَّ يَسْجُدُ سَجْدَتَيْنِ',
+        alb: '«Kur ndonjëri prej jush dyshon në namaz e nuk e di sa fali, le ta heqë dyshimin e le të ndërtojë mbi atë që është i sigurt, pastaj le të bëjë dy sexhde para selamit.»',
+        ref: "Ebu Se'id el-Hudri · Muslimi",
+      },
+    },
+  ],
+  howto: [
+    { n: 1, name: 'Tekbiri',         nameAr: 'تَكْبِير',            text: "Thuaj «Allahu Ekber» dhe bjer në sexhde si zakonisht." },
+    { n: 2, name: 'Sexhdja e parë',  nameAr: 'السَّجْدَة الأولى',   text: "Në sexhde përsërit tri herë: «Subhane Rabbijel A'la»." },
+    { n: 3, name: 'Ulja',            nameAr: 'الجَلْسَة',           text: "Ngrihu me tekbir, ulu shkurt, pastaj bjer në sexhden e dytë njësoj." },
+    { n: 4, name: 'Selami',          nameAr: 'السَّلام',            text: "Mbylle me selam djathtas e majtas. Namazi është i plotë." },
+  ],
+};
+
+function SahwNodeB({ p, selected, onSelect }) {
+  const before = p.when === 'before';
+  const [hover, setHov] = useState(false);
+  const accent = before ? C.dark900 : C.gold600;
+  return (
+    <button
+      onClick={onSelect}
+      onMouseEnter={() => setHov(true)}
+      onMouseLeave={() => setHov(false)}
+      style={{
+        textAlign: 'left', cursor: 'pointer', width: '100%',
+        background: selected ? C.gold50 : C.surface,
+        border: `1.5px solid ${selected ? accent : C.warm200}`,
+        borderRadius: 14, padding: '14px 15px',
+        boxShadow: selected ? '0 8px 22px rgba(26,25,21,0.12)' : hover ? '0 4px 14px rgba(26,25,21,0.08)' : 'none',
+        transition: 'all 220ms cubic-bezier(0.25,0.46,0.45,0.94)',
+        transform: selected ? 'translateY(-2px)' : 'none',
+        display: 'flex', flexDirection: 'column', gap: 8,
+      }}
+    >
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <div style={{
+          width: 48, height: 48, borderRadius: 12, flexShrink: 0,
+          background: before ? C.dark900 : C.gold50,
+          border: before ? 'none' : `1px solid ${C.gold200}`,
+          color: before ? C.gold300 : C.gold600,
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          fontSize: 22, lineHeight: 1,
+        }}>{p.glyph}</div>
+        <span style={{ fontFamily: 'Lateef, Amiri, serif', fontSize: 24, color: C.warm400, direction: 'rtl', lineHeight: 1 }}>{p.termAr}</span>
+      </div>
+      <div style={{ display: 'flex', alignItems: 'baseline', gap: 8 }}>
+        <span style={{ fontFamily: SERIF, fontSize: 20, fontWeight: 600, color: C.dark900, lineHeight: 1, letterSpacing: '-0.01em' }}>{p.termAlb}</span>
+        <span style={{ fontFamily: MONO, fontSize: 10, color: C.warm500 }}>0{p.num}</span>
+      </div>
+      <div style={{ fontFamily: SANS, fontSize: 12, lineHeight: 1.5, color: C.warm700 }}>{p.ruleShort}</div>
+    </button>
+  );
+}
+
+function SahuBlock() {
+  const [sel, setSel] = useState('mangesia');
+  const beforeNodes = SAHW.principles.filter(p => p.when === 'before');
+  const afterNodes  = SAHW.principles.filter(p => p.when === 'after');
+  const current = SAHW.principles.find(p => p.id === sel);
+
+  return (
+    <section style={{ margin: '64px auto 0', maxWidth: 1100, padding: '0 clamp(20px,4vw,56px) 72px' }}>
+      <style>{`
+        .sahwb-rail {
+          position: relative; display: grid;
+          grid-template-columns: 1fr auto 1fr; gap: 22px; align-items: stretch;
+        }
+        .sahwb-dashes {
+          position: absolute; left: 4%; right: 4%; top: 50%; height: 2px;
+          background: repeating-linear-gradient(90deg, ${C.warm300} 0 8px, transparent 8px 16px);
+          z-index: 0; pointer-events: none;
+        }
+        .sahwb-zone { position: relative; z-index: 1; display: flex; flex-direction: column; gap: 12px; }
+        .sahwb-nodes { display: flex; gap: 14px; }
+        .sahwb-nodes > * { flex: 1; }
+        @media (max-width: 760px) {
+          .sahwb-rail { grid-template-columns: 1fr !important; gap: 14px !important; }
+          .sahwb-dashes { display: none !important; }
+          .sahwb-nodes { flex-direction: column !important; }
+        }
+      `}</style>
+
+      {/* Header */}
+      <div style={{ marginBottom: 28 }}>
+        <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: '0.16em', textTransform: 'uppercase', color: C.gold600, marginBottom: 10 }}>
+          Sexhdja e Harresës · Fikh
+        </div>
+        <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: 24, flexWrap: 'wrap' }}>
+          <h2 style={{
+            fontFamily: SERIF, fontSize: 'clamp(28px,5vw,44px)', fontWeight: 600,
+            color: C.dark900, margin: 0, lineHeight: 1.05, letterSpacing: '-0.015em', maxWidth: 560,
+          }}>{SAHW.eyebrow}</h2>
+          <div style={{ fontFamily: 'Lateef, Amiri, serif', fontSize: 'clamp(36px,6vw,58px)', color: C.warm300, direction: 'rtl', lineHeight: 1 }}>
+            {SAHW.titleAr}
+          </div>
+        </div>
+        <p style={{ fontFamily: SANS, fontSize: 15, lineHeight: 1.6, color: C.warm700, marginTop: 14, maxWidth: 580 }}>
+          {SAHW.intro}{' '}
+          <span style={{ color: C.dark900, fontWeight: 600 }}>Prek një rast në vijë për ta parë rregullin.</span>
+        </p>
+      </div>
+
+      {/* Axis card */}
+      <div style={{
+        background: C.surface, borderRadius: 20,
+        padding: 'clamp(20px,4vw,36px)',
+        boxShadow: '0 2px 14px rgba(26,25,21,0.06), 0 0 0 1px rgba(26,25,21,0.04)',
+      }}>
+        <div className="sahwb-rail">
+          <div className="sahwb-dashes" />
+
+          {/* Before-salam zone */}
+          <div className="sahwb-zone">
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <span style={{ fontFamily: SANS, fontSize: 11, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: C.dark900 }}>Para selamit</span>
+              <span style={{ fontFamily: 'Lateef, Amiri, serif', fontSize: 17, direction: 'rtl', color: C.warm500 }}>قَبْل</span>
+            </div>
+            <div className="sahwb-nodes">
+              {beforeNodes.map(p => (
+                <SahwNodeB key={p.id} p={p} selected={sel === p.id} onSelect={() => setSel(p.id)} />
+              ))}
+            </div>
+          </div>
+
+          {/* Salam marker */}
+          <div style={{ position: 'relative', zIndex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', alignSelf: 'center', padding: '0 4px' }}>
+            <div style={{
+              width: 64, height: 64, borderRadius: '50%', background: C.dark900, color: '#fff',
+              display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+              boxShadow: '0 6px 20px rgba(26,25,21,0.22)', flexShrink: 0,
+            }}>
+              <span style={{ fontFamily: 'Lateef, Amiri, serif', fontSize: 24, lineHeight: 1, color: C.gold300 }}>سَلام</span>
+            </div>
+            <span style={{ fontFamily: SANS, fontSize: 10, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: C.warm600, marginTop: 8 }}>Selami</span>
+          </div>
+
+          {/* After-salam zone */}
+          <div className="sahwb-zone">
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, justifyContent: 'flex-end' }}>
+              <span style={{ fontFamily: SANS, fontSize: 11, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: C.gold600 }}>Pas selamit</span>
+              <span style={{ fontFamily: 'Lateef, Amiri, serif', fontSize: 17, direction: 'rtl', color: C.warm500 }}>بَعْد</span>
+            </div>
+            <div className="sahwb-nodes">
+              {afterNodes.map(p => (
+                <SahwNodeB key={p.id} p={p} selected={sel === p.id} onSelect={() => setSel(p.id)} />
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Detail panel */}
+        <div key={current.id} style={{
+          marginTop: 24, paddingTop: 24, borderTop: `1px solid ${C.warm100}`,
+          display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(280px,1fr))', gap: 28,
+        }}>
+          {/* Left: ruling + scenarios */}
+          <div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
+              <h3 style={{ fontFamily: SERIF, fontSize: 22, fontWeight: 600, color: C.dark900, margin: 0, letterSpacing: '-0.01em' }}>
+                {current.termAlb}
+              </h3>
+              <span style={{
+                display: 'inline-flex', alignItems: 'center', gap: 5,
+                padding: '3px 10px', borderRadius: 999,
+                background: current.when === 'before' ? C.dark900 : C.gold600,
+                color: '#fff', fontFamily: SANS, fontSize: 10, fontWeight: 600, letterSpacing: '0.04em', lineHeight: 1,
+              }}>
+                <span style={{ width: 5, height: 5, borderRadius: '50%', background: current.when === 'before' ? C.gold300 : '#FAF5E8' }} />
+                {current.when === 'before' ? 'Para selamit' : 'Pas selamit'}
+              </span>
+            </div>
+            {current.scenarios.map((sc, i) => (
+              <div key={i} style={{ display: 'flex', gap: 12, marginBottom: 14 }}>
+                <div style={{
+                  width: 24, height: 24, borderRadius: 7, flexShrink: 0, marginTop: 1,
+                  background: C.dark900, color: '#fff',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  fontFamily: MONO, fontSize: 11, fontWeight: 600,
+                }}>{i + 1}</div>
+                <div>
+                  <div style={{ fontFamily: SANS, fontSize: 14, fontWeight: 600, color: C.dark900, lineHeight: 1.35 }}>{sc.title}</div>
+                  <div style={{ fontFamily: SANS, fontSize: 13, lineHeight: 1.55, color: C.warm700, marginTop: 4 }}>{sc.detail}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Right: hadith + how-to */}
+          <div>
+            <div style={{ borderLeft: `3px solid ${C.gold600}`, paddingLeft: 15, marginBottom: 20 }}>
+              <div style={{ fontSize: 10, fontWeight: 600, letterSpacing: '0.16em', textTransform: 'uppercase', color: C.gold600, marginBottom: 8 }}>
+                Hadith
+              </div>
+              <div style={{ fontFamily: 'Lateef, Amiri, serif', fontSize: 22, lineHeight: 1.7, direction: 'rtl', textAlign: 'right', color: C.dark900 }}>
+                {current.hadith.ar}
+              </div>
+              <div style={{ fontFamily: SERIF, fontStyle: 'italic', fontSize: 13.5, lineHeight: 1.55, color: C.warm700, marginTop: 9 }}>
+                {current.hadith.alb}
+              </div>
+              <div style={{ fontFamily: MONO, fontSize: 11, color: C.gold600, marginTop: 8, fontWeight: 500 }}>
+                {current.hadith.ref}
+              </div>
+            </div>
+            <div style={{ background: C.gold50, border: `1px solid ${C.gold200}`, borderRadius: 12, padding: '14px 16px' }}>
+              <div style={{ fontSize: 10, fontWeight: 600, letterSpacing: '0.16em', textTransform: 'uppercase', color: C.gold600, marginBottom: 10 }}>
+                Si kryhen dy sexhdet
+              </div>
+              <ol style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 7 }}>
+                {SAHW.howto.map(s => (
+                  <li key={s.n} style={{ display: 'flex', gap: 9, alignItems: 'baseline' }}>
+                    <span style={{ fontFamily: MONO, fontSize: 11, fontWeight: 600, color: C.gold600, flexShrink: 0 }}>0{s.n}</span>
+                    <span style={{ fontFamily: SANS, fontSize: 12.5, lineHeight: 1.5, color: C.warm700 }}>
+                      <strong style={{ color: C.dark900, fontWeight: 600 }}>{s.name}.</strong> {s.text}
+                    </span>
+                  </li>
+                ))}
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Sources */}
+      <div style={{ marginTop: 14, fontFamily: SANS, fontSize: 12, color: C.warm600, display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
+        <span style={{ fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', color: C.warm500, fontSize: 11 }}>Burimet</span>
+        {SAHW.sources}
+      </div>
+    </section>
+  );
+}
+
 function SiTeFaleshHome({ onOpenPrayer }) {
   const [now, setNow] = useState(() => new Date());
   useState(() => { const id = setInterval(() => setNow(new Date()), 30000); return () => clearInterval(id); });
@@ -835,6 +1112,8 @@ function SiTeFaleshHome({ onOpenPrayer }) {
           ))}
         </div>
       </section>
+
+      <SahuBlock />
 
       <style>{`
         @keyframes namaz-pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.4;transform:scale(.8)} }
