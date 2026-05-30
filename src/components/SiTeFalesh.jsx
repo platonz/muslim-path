@@ -44,7 +44,7 @@ const PRAYERS = [
     accent: '#C87858', accentDark: '#7A3848', onSky: '#F5DCB0',
     tips: [
       { title: 'Mos e ngatërro me imsakun', body: 'Sabahu fillon në agimin e vërtetë dhe koha e tij mbaron kur lind dielli. Nëse e humb pa dashje, fale kaza pasi të kalojë momenti i ndaluar i lindjes së diellit.' },
-      { title: 'Lexo me zë (jo me shumë zë)', body: 'Fatihaja dhe sureja e shkurtër lexohen me zë (xhehri) në dy rekatet e Sabahut. Por jo aq lartë sa të shqetësosh të tjerët.' },
+      { title: 'Lexo me zë (jo me shumë zë)', body: 'Fatihaja dhe sureja e shkurtër lexohen me zë (xhehri) në dy rekatet e Sabahut. Por jo aq lart sa të shqetësosh të tjerët.' },
       { title: 'Kunuti varet nga medhhebi', body: 'Disa medhhebe, si Shafii, lexojnë Kunut në rekatin e dytë të Sabahut; të tjerat jo rregullisht. Ndiq imamin ose mësimin që ndjek zakonisht.' },
     ],
   },
@@ -62,7 +62,7 @@ const PRAYERS = [
     accent: '#6F9ECC', accentDark: '#2A5878', onSky: '#FFFFFF',
     tips: [
       { title: 'Prit pak pas mesditës', body: 'Mos e fal Drekën pikërisht kur dielli është në kulm — prit derisa hija të kthehet drejt lindjes.' },
-      { title: 'Fatihaja lexohet në heshtje', body: 'Në Dreka, Iqindi dhe rekatet e tretë e të katërt të namazeve të tjera, leximi është i heshtur (sirri).' },
+      { title: 'Fatihaja lexohet në heshtje', body: 'Në Drekë, në Iqindi dhe rekatet e tretë e të katërt të namazeve të tjera, leximi është i heshtur (sirri).' },
       { title: 'Mos i ngatërro 4 rekatet', body: 'Pas dy rekateve të para ulesh në teshehud, pastaj çohesh për dy rekatet e tjera. Në rekatet e fundit Fatiha lexohet patjetër; ndonjëherë mund të shtohet edhe pak lexim.' },
     ],
   },
@@ -158,7 +158,7 @@ const STEPS = [
   },
   {
     n: 6, posture: 'ruku', name: 'Rukuja', nameAr: 'الرُّكُوع', postureAlb: 'Përkulje, duart mbi gjunjë',
-    instruction: 'Thuaj "Allahu Ekber" dhe përkulu — shpina e drejtë, duart mbi gjunjë, sytë drejt vendit ku do biesh në sexhde. Përsërit tri herë:',
+    instruction: 'Thuaj "Allahu Ekber" dhe përkulu — shpina e drejtë, duart mbi gjunjë, sytë drejt vendit ku do të biesh në sexhde. Përsërit tri herë:',
     arabic: 'سُبْحَانَ رَبِّيَ الْعَظِيمِ', translit: 'Subhane Rabbijel-Adhim', translation: 'I lavdëruar është Zoti im, i Madhërishmi.',
   },
   {
@@ -170,7 +170,7 @@ const STEPS = [
   },
   {
     n: 8, posture: 'sujud', name: 'Sexhdja', nameAr: 'السُّجُود', postureAlb: 'Shtatë gjymtyrët në tokë',
-    instruction: 'Thuaj "Allahu Ekber" dhe bjer në sexhde. Shtatë gjymtyrët duhet të prekin tokën: balli me hundë, dy pëllëmbët, dy gjunjët, dhe gishtërinjtë e dy këmbëve. Përsërit tri herë:',
+    instruction: 'Thuaj "Allahu Ekber" dhe bjer në sexhde. Shtatë gjymtyrët duhet të prekin tokën: balli dhe hunda, dy pëllëmbët, dy gjunjët, dhe gishtërinjtë e dy këmbëve. Përsërit tri herë:',
     arabic: 'سُبْحَانَ رَبِّيَ الْأَعْلَى', translit: "Subhane Rabbijel-A'la", translation: 'I lavdëruar është Zoti im, më i Larti.',
   },
   {
@@ -712,7 +712,7 @@ const SAHW = {
       when: 'after', glyph: '＋',
       ruleShort: 'Shtove pa dashje një lëvizje a rekat — sexhdja bëhet pas selamit.',
       scenarios: [
-        { title: 'Fale 5 rekate në vend të 4', detail: 'Vazhdoje namazin si e ke nisur, jepe selamin, pastaj bëj dy sexhde dhe jep selamin sërish. Nuk e prish namazin.' },
+        { title: 'Fale 5 rekate në vend të 4', detail: 'Vazhdoje namazin siç e ke nisur, jepe selamin, pastaj bëj dy sexhde dhe jep selamin sërish. Nuk e prish namazin.' },
         { title: 'Shtove një ruku, sexhde a qëndrim më shumë', detail: 'Çdo lëvizje e shtuar nga harresa rregullohet me dy sexhde pas selamit.' },
       ],
       hadith: {
@@ -738,7 +738,7 @@ const SAHW = {
     {
       id: 'dyshimi', num: 3, termAlb: 'Dyshimi', termAr: 'الشَّكّ',
       when: 'before', glyph: '？',
-      ruleShort: 'Nuk je i sigurt sa rekate fale — ndërto mbi numrin e vogël, sexhde para selamit.',
+      ruleShort: 'Nuk je i sigurt sa rekate ke falur — ndërto mbi numrin e vogël, sexhde para selamit.',
       scenarios: [
         { title: 'Dyshon: 3 apo 4 rekate?', detail: 'Largoje dyshimin dhe llogarit më të voglën — 3. Fal rekatin e mbetur, pastaj bëj dy sexhde para selamit.' },
         { title: 'Nuk e di ku e nise dyshimin', detail: 'Gjithmonë ndërto mbi atë që je i sigurt (numrin më të vogël) dhe plotëso pjesën e munguar.' },
@@ -1015,7 +1015,7 @@ function SiTeFaleshHome({ onOpenPrayer }) {
               color: C.warm700, marginTop: 20, maxWidth: 540,
             }}>
               Lutjet, pozicionet dhe shqiptimi — gjithçka që të duhet për të filluar.
-              Zgjedh kohën e namazit më poshtë.
+              Zgjidh kohën e namazit më poshtë.
             </p>
           </div>
 
@@ -1100,7 +1100,7 @@ function SiTeFaleshHome({ onOpenPrayer }) {
           <div>
             <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: '0.2em', textTransform: 'uppercase', color: C.gold600 }}>Pesë namazet</div>
             <h2 style={{ fontFamily: SERIF, fontSize: 'clamp(22px,2.4vw,30px)', fontWeight: 600, marginTop: 4, color: C.dark900, letterSpacing: '-0.01em' }}>
-              Zgjedh kohën për të mësuar
+              Zgjidh kohën për të mësuar
             </h2>
           </div>
           <div style={{ fontFamily: MONO, fontSize: 12, color: C.warm500, letterSpacing: '0.05em' }}>05 / 05</div>
@@ -1376,6 +1376,25 @@ function StepLayout({ prayer: p, showTranslit, onBack }) {
   function goNext() { if (stepIdx < max - 1) setStepIdx(i => i + 1); else finishItem(); }
   function goPrev() { if (stepIdx > 0) setStepIdx(i => i - 1); else setPhase('choose'); }
 
+  function completionLabel(label, sentenceStart = false) {
+    const lower = label.toLowerCase();
+    let text = lower;
+    if (lower.startsWith('farz')) text = lower.replace('farz', 'farzi');
+    else if (lower.startsWith('sunet')) text = lower.replace('sunet', 'suneti');
+    else if (lower.startsWith('vitri')) text = lower.replace('vitri', 'vitri');
+    else if (lower.startsWith('nafile')) text = lower.replace('nafile', 'nafilja');
+    return sentenceStart ? text.charAt(0).toUpperCase() + text.slice(1) : text;
+  }
+
+  function completedObjectLabel(label) {
+    const lower = label.toLowerCase();
+    if (lower.startsWith('farz')) return lower.replace('farz', 'farzin');
+    if (lower.startsWith('sunet')) return lower.replace('sunet', 'sunetin');
+    if (lower.startsWith('vitri')) return lower.replace('vitri', 'vitrin');
+    if (lower.startsWith('nafile')) return lower.replace('nafile', 'nafilen');
+    return lower;
+  }
+
   // ── Choose / continuation screen ─────────────────────────────────
   if (phase === 'choose') {
     const firstRemaining = seqItems.findIndex((_, i) => !completed.has(i));
@@ -1392,7 +1411,7 @@ function StepLayout({ prayer: p, showTranslit, onBack }) {
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
               </div>
               <h3 style={{ fontFamily: SERIF, fontSize: 20, fontWeight: 700, color: C.dark900, margin: '0 0 4px' }}>
-                {justFinished.label} u plotësua!
+                {completionLabel(justFinished.label, true)} u plotësua!
               </h3>
               <p style={{ fontSize: 13, color: C.warm500, margin: 0 }}>Dëshiron të vazhdosh?</p>
             </>
@@ -1401,7 +1420,7 @@ function StepLayout({ prayer: p, showTranslit, onBack }) {
               <h3 style={{ fontFamily: SERIF, fontSize: 22, fontWeight: 700, color: C.dark900, margin: '0 0 4px' }}>
                 {p.nameAlb}
               </h3>
-              <p style={{ fontSize: 13, color: C.warm500, margin: 0 }}>Cilin dëshiron të falesh të parin?</p>
+              <p style={{ fontSize: 13, color: C.warm500, margin: 0 }}>Cilin dëshiron ta falësh të parin?</p>
             </>
           )}
         </div>
@@ -1531,7 +1550,7 @@ function StepLayout({ prayer: p, showTranslit, onBack }) {
         </button>
         <button onClick={goNext} style={{ flex: 1, height: 56, borderRadius: 14, background: stepIdx === max - 1 ? C.gold600 : C.dark900, color: '#fff', border: 'none', cursor: 'pointer', fontFamily: SANS, fontSize: 16, fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, transition: 'background 180ms' }}>
           {stepIdx === max - 1 ? (
-            <><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Mbarova {activeItem.label.toLowerCase()}</>
+            <><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>E mbarova {completedObjectLabel(activeItem.label)}</>
           ) : (
             <>Tjetri <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"/></svg></>
           )}
