@@ -30,9 +30,9 @@ function Cover({ onOpen, onExit }) {
     <div className="cover-stage">
       <div className="cover-vignette" aria-hidden="true" />
 
-      <button className="cover-brand" onClick={onExit} aria-label="Kthehu te Muslims Path">
+      <button className="cover-brand" onClick={onExit} aria-label="Kthehu te Sunneti.com">
         <img className="cover-brand-logo" src="/logo.png" alt="" />
-        <span className="cover-brand-word">Muslims Path</span>
+        <span className="cover-brand-word">Sunneti.com</span>
       </button>
 
       <div className="cover-scaler" style={{ transform: `scale(${scale})` }}>
@@ -49,7 +49,7 @@ function Cover({ onOpen, onExit }) {
             <span className="cover-rule cover-rule--inner" aria-hidden="true" />
 
             <span className="cover-top">
-              <span className="cover-kicker">Muslims Path</span>
+              <span className="cover-kicker">Sunneti.com</span>
             </span>
 
             <span className="cover-center">
@@ -110,7 +110,7 @@ function ContentsPage({ toc, onGoto }) {
   return (
     <div className="pg pg--contents">
       <div className="contents-head">
-        <div className="t-label contents-kicker">Muslims Path</div>
+        <div className="t-label contents-kicker">Sunneti.com</div>
         <h2 className="contents-title">Përmbajtja</h2>
         <div className="contents-arabic">{'\u0627\u0644\u0633\u0651\u064f\u0646\u0651\u064e\u0629'}</div>
         <Ornament small />

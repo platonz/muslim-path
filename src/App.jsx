@@ -49,11 +49,13 @@ export default function App() {
     const parts = window.location.pathname.replace(/^\//, "").split("/").filter(Boolean);
     // Redirect legacy /sq/... or /en/... URLs
     if (parts[0] === "sq" || parts[0] === "en") {
-      const pageId = slugToPage(parts[1] || "") || "home";
+      const pageId = slugToPage(parts[1] || "") || "sunneti";
       window.history.replaceState({}, "", pageToUrl(pageId));
       return pageId;
     }
-    return slugToPage(parts[0] || "") || (VALID_PAGES.includes(parts[0]) ? parts[0] : "home");
+    // Root URL → book landing
+    if (!parts[0]) return "sunneti";
+    return slugToPage(parts[0]) || (VALID_PAGES.includes(parts[0]) ? parts[0] : "sunneti");
   });
   const [navHistory, setNavHistory] = useState([]);
   const HADITH_QUOTES = QUOTES.filter(q => !q.src?.startsWith("Quran"));
