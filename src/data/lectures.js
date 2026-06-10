@@ -1,4 +1,4 @@
-const R2 = "https://cdn.muslimspath.app";
+const R2 = "https://pub-cdb1d5a2606a4ef68b5d888d9c684d9e.r2.dev";
 
 export const LECTURES = [
   { id:1,  title:"Butësia",                                        file:"Butësia.mp3" },

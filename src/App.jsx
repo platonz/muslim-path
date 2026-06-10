@@ -9,6 +9,7 @@ import KaabaWatermark from "./components/KaabaWatermark";
 import MobileTabBar from "./components/MobileTabBar";
 import QuranReader from "./components/QuranReader";
 import SiTeFalesh from "./components/SiTeFalesh";
+import HowToPray from "./components/HowToPray";
 import Zakat from "./components/Zakat";
 import Inheritance from "./components/Inheritance";
 import DateConverter from "./components/DateConverter";
@@ -297,6 +298,7 @@ export default function App() {
     library:     { title: "Islamic Library - Sunneti.com",                  desc: "Curated collection of essential Islamic books, Quran, Hadith, Seerah, Fiqh and Aqeedah." },
     audio:       { title: "Islamic Lectures - Sunneti.com",                 desc: "Listen to Islamic lectures and audio content." },
     namaz:       { title: "Si te Falesh - Sunneti.com",                     desc: "Pese namazet e dites, shpjeguar hap pas hapi me shqiptim dhe kuptim shqip." },
+    howpray:     { title: "How to Pray - Sunneti.com",                      desc: "Step-by-step guide to the five daily prayers with Arabic, transliteration, and meaning." },
   };
   useEffect(() => {
     const m = PAGE_META[page] || PAGE_META.home;
@@ -367,6 +369,7 @@ export default function App() {
         {page === "asma"    && <AsmaPage />}
         {page === "admin"   && <AdminPage authSession={authSession} />}
         {page === "namaz"   && <SiTeFalesh initialPrayerId={namazPrayerId} />}
+        {page === "howpray" && <HowToPray />}
       </main>
       {/* Immersive full-screen page — rendered outside <main> so it stacks above the navbar */}
       {page === "sunneti" && <SunnetiReadingRoom onExit={() => navigate("library")} />}
