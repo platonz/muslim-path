@@ -1,4 +1,4 @@
-import { SURFACE, BORDER, GOLD, TEXT, MUTED, SERIF, SANS, GREEN_L } from "../constants";
+import { SURFACE, BORDER, GOLD, GREEN, TEXT, MUTED, SERIF, SANS, GREEN_L, WARM_100, WARM_600, DARK_900 } from "../constants";
 import Icon from "./Icon";
 
 export function Card({ children, style, className = "" }) {
@@ -7,10 +7,10 @@ export function Card({ children, style, className = "" }) {
       className={className}
       style={{
         padding: 28,
-        background: "#FFFFFF",
+        background: SURFACE,
         border: `1px solid ${BORDER}`,
-        borderRadius: 14,
-        boxShadow: "0 2px 12px rgba(26,25,21,0.07)",
+        borderRadius: 16,
+        boxShadow: "0 16px 40px rgba(31,53,42,0.08)",
         ...style
       }}
     >
@@ -24,16 +24,16 @@ export function PageTitle({ icon, title, sub }) {
     <div style={{ marginBottom: 36 }}>
       <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 6 }}>
         <div style={{
-          width: 40, height: 40, borderRadius: 10,
-          background: "#FAF5E8", border: "1px solid rgba(184,157,96,0.30)",
+          width: 42, height: 42, borderRadius: 12,
+        background: GREEN_L, border: `1px solid ${BORDER}`,
           display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0,
         }}>
-          <Icon name={icon} size={20} color="#8A7235" sw={1.7} />
+          <Icon name={icon} size={20} color={GREEN} sw={1.7} />
         </div>
-        <h1 style={{ margin: 0, fontSize: 28, fontWeight: 600, color: TEXT, fontFamily: SERIF, letterSpacing: "0.04em" }}>{title}</h1>
+        <h1 style={{ margin: 0, fontSize: 30, fontWeight: 600, color: TEXT, fontFamily: SERIF, letterSpacing: "0.01em" }}>{title}</h1>
       </div>
-      {sub && <p style={{ margin: "0 0 0 52px", color: MUTED, fontSize: 13, letterSpacing: "0.03em" }}>{sub}</p>}
-      <div style={{ marginTop: 16, height: 1, background: `linear-gradient(90deg, ${GOLD} 0%, transparent 60%)`, opacity: 0.35 }} />
+      {sub && <p style={{ margin: "0 0 0 54px", color: MUTED, fontSize: 13, letterSpacing: "0.02em" }}>{sub}</p>}
+      <div style={{ marginTop: 16, height: 1, background: `linear-gradient(90deg, ${GREEN} 0%, transparent 60%)`, opacity: 0.40 }} />
     </div>
   );
 }
@@ -56,7 +56,7 @@ export function Input({ label, ...props }) {
           boxSizing: "border-box",
           ...props.style
         }}
-        onFocus={e => { e.target.style.borderColor = GOLD; e.target.style.boxShadow = `0 0 0 3px ${GOLD}18`; }}
+        onFocus={e => { e.target.style.borderColor = GREEN; e.target.style.boxShadow = `0 0 0 3px rgba(23,107,77,0.14)`; }}
         onBlur={e => { e.target.style.borderColor = BORDER; e.target.style.boxShadow = "none"; }}
       />
     </div>
@@ -96,19 +96,19 @@ export function Btn({ children, onClick, variant = "primary", disabled, style })
         padding: "11px 24px",
         borderRadius: 999,
         border: variant === "primary" ? "none" : `1px solid ${BORDER}`,
-        background: disabled ? "#E8DCC8"
+        background: disabled ? WARM_100
           : variant === "primary"
-            ? "#8A7235"
+            ? GREEN
             : "#FFFFFF",
-        color: disabled ? MUTED : variant === "primary" ? "#FFFFFF" : TEXT,
+        color: disabled ? MUTED : variant === "primary" ? "#0C1410" : TEXT,
         fontSize: 13, fontWeight: 600, cursor: disabled ? "not-allowed" : "pointer",
-        letterSpacing: "0.05em",
-        transition: "opacity 0.2s, transform 0.15s",
+        letterSpacing: "0.04em",
+        transition: "opacity 0.2s, transform 0.15s, box-shadow 0.15s",
         fontFamily: SANS,
         ...style
       }}
-      onMouseEnter={e => { if (!disabled) { e.currentTarget.style.opacity = "0.85"; e.currentTarget.style.transform = "translateY(-1px)"; } }}
-      onMouseLeave={e => { e.currentTarget.style.opacity = "1"; e.currentTarget.style.transform = "none"; }}
+      onMouseEnter={e => { if (!disabled) { e.currentTarget.style.opacity = "0.90"; e.currentTarget.style.transform = "translateY(-1px)"; e.currentTarget.style.boxShadow = variant === "primary" ? "0 4px 20px rgba(23,107,77,0.22)" : "0 8px 24px rgba(31,53,42,0.12)"; } }}
+      onMouseLeave={e => { e.currentTarget.style.opacity = "1"; e.currentTarget.style.transform = "none"; e.currentTarget.style.boxShadow = "none"; }}
     >
       {children}
     </button>

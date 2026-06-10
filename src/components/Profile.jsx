@@ -253,7 +253,7 @@ export default function Profile({ authUser, onSignOut, navigate }) {
       {/* About */}
       <div style={{ padding: "24px 20px", textAlign: "center" }}>
         <div style={{ fontSize: 11, color: W.muted, fontFamily: SA, letterSpacing: "0.06em" }}>
-          Muslim's Path · mdesign v2
+          Sunneti.com
         </div>
       </div>
     </div>

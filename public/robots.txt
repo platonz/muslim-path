@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://www.muslimspath.app/sitemap.xml
+Sitemap: https://sunneti.com/sitemap.xml

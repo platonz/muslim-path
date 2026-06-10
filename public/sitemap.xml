@@ -3,72 +3,72 @@
         xmlns:xhtml="http://www.w3.org/1999/xhtml">
 
   <!-- English URLs -->
-  <url><loc>https://www.muslimspath.app/en/</loc>            <priority>1.0</priority><changefreq>daily</changefreq>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.muslimspath.app/en/"/>
-    <xhtml:link rel="alternate" hreflang="sq" href="https://www.muslimspath.app/sq/"/>
+  <url><loc>https://sunneti.com/en/</loc>            <priority>1.0</priority><changefreq>daily</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://sunneti.com/en/"/>
+    <xhtml:link rel="alternate" hreflang="sq" href="https://sunneti.com/sq/"/>
   </url>
-  <url><loc>https://www.muslimspath.app/en/prayer</loc>      <priority>0.9</priority><changefreq>daily</changefreq>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.muslimspath.app/en/prayer"/>
-    <xhtml:link rel="alternate" hreflang="sq" href="https://www.muslimspath.app/sq/namazi"/>
+  <url><loc>https://sunneti.com/en/prayer</loc>      <priority>0.9</priority><changefreq>daily</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://sunneti.com/en/prayer"/>
+    <xhtml:link rel="alternate" hreflang="sq" href="https://sunneti.com/sq/namazi"/>
   </url>
-  <url><loc>https://www.muslimspath.app/en/quran</loc>       <priority>0.9</priority><changefreq>weekly</changefreq>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.muslimspath.app/en/quran"/>
-    <xhtml:link rel="alternate" hreflang="sq" href="https://www.muslimspath.app/sq/kurani"/>
+  <url><loc>https://sunneti.com/en/quran</loc>       <priority>0.9</priority><changefreq>weekly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://sunneti.com/en/quran"/>
+    <xhtml:link rel="alternate" hreflang="sq" href="https://sunneti.com/sq/kurani"/>
   </url>
-  <url><loc>https://www.muslimspath.app/en/dua</loc>         <priority>0.9</priority><changefreq>weekly</changefreq>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.muslimspath.app/en/dua"/>
-    <xhtml:link rel="alternate" hreflang="sq" href="https://www.muslimspath.app/sq/dua"/>
+  <url><loc>https://sunneti.com/en/dua</loc>         <priority>0.9</priority><changefreq>weekly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://sunneti.com/en/dua"/>
+    <xhtml:link rel="alternate" hreflang="sq" href="https://sunneti.com/sq/dua"/>
   </url>
-  <url><loc>https://www.muslimspath.app/en/qibla</loc>       <priority>0.8</priority><changefreq>monthly</changefreq>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.muslimspath.app/en/qibla"/>
-    <xhtml:link rel="alternate" hreflang="sq" href="https://www.muslimspath.app/sq/kibla"/>
+  <url><loc>https://sunneti.com/en/qibla</loc>       <priority>0.8</priority><changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://sunneti.com/en/qibla"/>
+    <xhtml:link rel="alternate" hreflang="sq" href="https://sunneti.com/sq/kibla"/>
   </url>
-  <url><loc>https://www.muslimspath.app/en/tasbeeh</loc>     <priority>0.8</priority><changefreq>monthly</changefreq>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.muslimspath.app/en/tasbeeh"/>
-    <xhtml:link rel="alternate" hreflang="sq" href="https://www.muslimspath.app/sq/tesbihe"/>
+  <url><loc>https://sunneti.com/en/tasbeeh</loc>     <priority>0.8</priority><changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://sunneti.com/en/tasbeeh"/>
+    <xhtml:link rel="alternate" hreflang="sq" href="https://sunneti.com/sq/tesbihe"/>
   </url>
-  <url><loc>https://www.muslimspath.app/en/asma</loc>        <priority>0.8</priority><changefreq>monthly</changefreq>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.muslimspath.app/en/asma"/>
-    <xhtml:link rel="alternate" hreflang="sq" href="https://www.muslimspath.app/sq/emrat"/>
+  <url><loc>https://sunneti.com/en/asma</loc>        <priority>0.8</priority><changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://sunneti.com/en/asma"/>
+    <xhtml:link rel="alternate" hreflang="sq" href="https://sunneti.com/sq/emrat"/>
   </url>
-  <url><loc>https://www.muslimspath.app/en/library</loc>     <priority>0.8</priority><changefreq>monthly</changefreq>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.muslimspath.app/en/library"/>
-    <xhtml:link rel="alternate" hreflang="sq" href="https://www.muslimspath.app/sq/biblioteka"/>
+  <url><loc>https://sunneti.com/en/library</loc>     <priority>0.8</priority><changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://sunneti.com/en/library"/>
+    <xhtml:link rel="alternate" hreflang="sq" href="https://sunneti.com/sq/biblioteka"/>
   </url>
-  <url><loc>https://www.muslimspath.app/en/audio</loc>       <priority>0.7</priority><changefreq>weekly</changefreq>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.muslimspath.app/en/audio"/>
-    <xhtml:link rel="alternate" hreflang="sq" href="https://www.muslimspath.app/sq/ligjerata"/>
+  <url><loc>https://sunneti.com/en/audio</loc>       <priority>0.7</priority><changefreq>weekly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://sunneti.com/en/audio"/>
+    <xhtml:link rel="alternate" hreflang="sq" href="https://sunneti.com/sq/ligjerata"/>
   </url>
-  <url><loc>https://www.muslimspath.app/en/zakat</loc>       <priority>0.7</priority><changefreq>monthly</changefreq>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.muslimspath.app/en/zakat"/>
-    <xhtml:link rel="alternate" hreflang="sq" href="https://www.muslimspath.app/sq/zekati"/>
+  <url><loc>https://sunneti.com/en/zakat</loc>       <priority>0.7</priority><changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://sunneti.com/en/zakat"/>
+    <xhtml:link rel="alternate" hreflang="sq" href="https://sunneti.com/sq/zekati"/>
   </url>
-  <url><loc>https://www.muslimspath.app/en/calendar</loc>    <priority>0.7</priority><changefreq>monthly</changefreq>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.muslimspath.app/en/calendar"/>
-    <xhtml:link rel="alternate" hreflang="sq" href="https://www.muslimspath.app/sq/kalendari"/>
+  <url><loc>https://sunneti.com/en/calendar</loc>    <priority>0.7</priority><changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://sunneti.com/en/calendar"/>
+    <xhtml:link rel="alternate" hreflang="sq" href="https://sunneti.com/sq/kalendari"/>
   </url>
-  <url><loc>https://www.muslimspath.app/en/dates</loc>       <priority>0.6</priority><changefreq>monthly</changefreq>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.muslimspath.app/en/dates"/>
-    <xhtml:link rel="alternate" hreflang="sq" href="https://www.muslimspath.app/sq/datat"/>
+  <url><loc>https://sunneti.com/en/dates</loc>       <priority>0.6</priority><changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://sunneti.com/en/dates"/>
+    <xhtml:link rel="alternate" hreflang="sq" href="https://sunneti.com/sq/datat"/>
   </url>
-  <url><loc>https://www.muslimspath.app/en/inheritance</loc> <priority>0.6</priority><changefreq>monthly</changefreq>
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.muslimspath.app/en/inheritance"/>
-    <xhtml:link rel="alternate" hreflang="sq" href="https://www.muslimspath.app/sq/trashegimia"/>
+  <url><loc>https://sunneti.com/en/inheritance</loc> <priority>0.6</priority><changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://sunneti.com/en/inheritance"/>
+    <xhtml:link rel="alternate" hreflang="sq" href="https://sunneti.com/sq/trashegimia"/>
   </url>
 
   <!-- Albanian URLs -->
-  <url><loc>https://www.muslimspath.app/sq/</loc>            <priority>1.0</priority><changefreq>daily</changefreq></url>
-  <url><loc>https://www.muslimspath.app/sq/namazi</loc>      <priority>0.9</priority><changefreq>daily</changefreq></url>
-  <url><loc>https://www.muslimspath.app/sq/kurani</loc>      <priority>0.9</priority><changefreq>weekly</changefreq></url>
-  <url><loc>https://www.muslimspath.app/sq/dua</loc>         <priority>0.9</priority><changefreq>weekly</changefreq></url>
-  <url><loc>https://www.muslimspath.app/sq/kibla</loc>       <priority>0.8</priority><changefreq>monthly</changefreq></url>
-  <url><loc>https://www.muslimspath.app/sq/tesbihe</loc>     <priority>0.8</priority><changefreq>monthly</changefreq></url>
-  <url><loc>https://www.muslimspath.app/sq/emrat</loc>       <priority>0.8</priority><changefreq>monthly</changefreq></url>
-  <url><loc>https://www.muslimspath.app/sq/biblioteka</loc>  <priority>0.8</priority><changefreq>monthly</changefreq></url>
-  <url><loc>https://www.muslimspath.app/sq/ligjerata</loc>   <priority>0.7</priority><changefreq>weekly</changefreq></url>
-  <url><loc>https://www.muslimspath.app/sq/zekati</loc>      <priority>0.7</priority><changefreq>monthly</changefreq></url>
-  <url><loc>https://www.muslimspath.app/sq/kalendari</loc>   <priority>0.7</priority><changefreq>monthly</changefreq></url>
-  <url><loc>https://www.muslimspath.app/sq/datat</loc>       <priority>0.6</priority><changefreq>monthly</changefreq></url>
-  <url><loc>https://www.muslimspath.app/sq/trashegimia</loc> <priority>0.6</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://sunneti.com/sq/</loc>            <priority>1.0</priority><changefreq>daily</changefreq></url>
+  <url><loc>https://sunneti.com/sq/namazi</loc>      <priority>0.9</priority><changefreq>daily</changefreq></url>
+  <url><loc>https://sunneti.com/sq/kurani</loc>      <priority>0.9</priority><changefreq>weekly</changefreq></url>
+  <url><loc>https://sunneti.com/sq/dua</loc>         <priority>0.9</priority><changefreq>weekly</changefreq></url>
+  <url><loc>https://sunneti.com/sq/kibla</loc>       <priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://sunneti.com/sq/tesbihe</loc>     <priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://sunneti.com/sq/emrat</loc>       <priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://sunneti.com/sq/biblioteka</loc>  <priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://sunneti.com/sq/ligjerata</loc>   <priority>0.7</priority><changefreq>weekly</changefreq></url>
+  <url><loc>https://sunneti.com/sq/zekati</loc>      <priority>0.7</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://sunneti.com/sq/kalendari</loc>   <priority>0.7</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://sunneti.com/sq/datat</loc>       <priority>0.6</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://sunneti.com/sq/trashegimia</loc> <priority>0.6</priority><changefreq>monthly</changefreq></url>
 
 </urlset>

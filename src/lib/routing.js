@@ -1,8 +1,8 @@
-export const VALID_PAGES = ["home","zakat","inheritance","calendar","dates","library","audio","tasbeeh","quran","dua","asma","admin","profile","namaz"];
+export const VALID_PAGES = ["home","zakat","inheritance","calendar","dates","library","audio","tasbeeh","quran","dua","asma","admin","profile","namaz","sunneti"];
 
 export const PAGE_SLUGS = {
-  en: { home:"", zakat:"zakat", inheritance:"inheritance", calendar:"calendar", dates:"dates", library:"library", audio:"audio", tasbeeh:"tasbeeh", quran:"quran", dua:"dua", asma:"asma", admin:"admin", profile:"profile", namaz:"how-to-pray" },
-  sq: { home:"", zakat:"zekati", inheritance:"hiseja", calendar:"kalendari", dates:"datat", library:"biblioteka", audio:"ligjerata", tasbeeh:"tesbihe", quran:"kurani", dua:"dua", asma:"emrat", admin:"admin", profile:"profili", namaz:"si-te-falesh" },
+  en: { home:"", zakat:"zakat", inheritance:"inheritance", calendar:"calendar", dates:"dates", library:"library", audio:"audio", tasbeeh:"tasbeeh", quran:"quran", dua:"dua", asma:"asma", admin:"admin", profile:"profile", namaz:"how-to-pray", sunneti:"sunneti" },
+  sq: { home:"", zakat:"zekati", inheritance:"hiseja", calendar:"kalendari", dates:"datat", library:"biblioteka", audio:"ligjerata", tasbeeh:"tesbihe", quran:"kurani", dua:"dua", asma:"emrat", admin:"admin", profile:"profili", namaz:"si-te-falesh", sunneti:"sunneti" },
 };
 
 export function slugToPage(lang, slug) {

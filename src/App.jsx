@@ -16,6 +16,7 @@ import Zakat from "./components/Zakat";
 import Inheritance from "./components/Inheritance";
 import DateConverter from "./components/DateConverter";
 import Library from "./components/Library";
+import SunnetiReadingRoom from "./components/SunnetiBook";
 import IslamicCalendar from "./components/IslamicCalendar";
 import GlobalSearch from "./components/GlobalSearch";
 import AuthModal, { loadSession, saveSession, clearSession } from "./components/AuthModal";
@@ -223,7 +224,7 @@ export default function App() {
     if ("mediaSession" in navigator) {
       navigator.mediaSession.metadata = new MediaMetadata({
         title: current.title,
-        artist: current.type === "quran" ? (current.surahName || "Quran") : "Muslim's Path",
+        artist: current.type === "quran" ? (current.surahName || "Quran") : "Sunneti.com",
         album: current.type === "quran" ? "Quran" : "Ligjerata Islame",
       });
       navigator.mediaSession.setActionHandler("play", () => { audioRef.current.play(); setPlaying(true); });
@@ -298,18 +299,18 @@ export default function App() {
 
   // Dynamic <title> + <meta description> per page
   const PAGE_META = {
-    home:        { title: "Muslim's Path — Daily Islamic Companion",          desc: "Quran, Duas, Tasbeeh, Islamic calendar and more — all in one app." },
-    quran:       { title: "Quran — Muslim's Path",                             desc: "Read the Holy Quran with Arabic text, transliteration and English translation." },
-    dua:         { title: "Dua & Dhikr — Muslim's Path",                       desc: "Morning & evening adhkar, daily supplications and situational remembrances." },
-    asma:        { title: "99 Names of Allah — Muslim's Path",                 desc: "Al-Asma ul-Husna — the 99 Beautiful Names of Allah with meanings and transliteration." },
-    tasbeeh:     { title: "Digital Tasbeeh Counter — Muslim's Path",           desc: "Digital dhikr counter for Subhanallah, Alhamdulillah, Allahu Akbar and custom phrases." },
-    zakat:       { title: "Zakat Calculator — Muslim's Path",                  desc: "Calculate your annual Zakat obligation based on nisab threshold and zakatable assets." },
-    inheritance: { title: "Islamic Inheritance Calculator — Muslim's Path",    desc: "Estimate Islamic inheritance shares for learning, then confirm real cases with a qualified scholar." },
-    calendar:    { title: "Islamic Calendar — Muslim's Path",                  desc: "Hijri calendar with Islamic dates, events and Gregorian cross-reference." },
-    dates:       { title: "Hijri ↔ Gregorian Date Converter — Muslim's Path", desc: "Convert dates between the Islamic Hijri calendar and the Gregorian calendar." },
-    library:     { title: "Islamic Library — Muslim's Path",                   desc: "Curated collection of essential Islamic books — Quran, Hadith, Seerah, Fiqh and Aqeedah." },
-    audio:       { title: "Islamic Lectures — Muslim's Path",                  desc: "Listen to Islamic lectures and audio content." },
-    namaz:       { title: "Si të Falesh — Muslim's Path",                      desc: "Pesë namazet e ditës, shpjeguar hap pas hapi — me shqiptim dhe kuptim shqip." },
+    home:        { title: "Sunneti.com - Daily Islamic Companion",          desc: "Quran, Duas, Tasbeeh, Islamic calendar and more in one calm daily app." },
+    quran:       { title: "Quran - Sunneti.com",                            desc: "Read the Holy Quran with Arabic text, transliteration and English translation." },
+    dua:         { title: "Dua & Dhikr - Sunneti.com",                      desc: "Morning & evening adhkar, daily supplications and situational remembrances." },
+    asma:        { title: "99 Names of Allah - Sunneti.com",                desc: "Al-Asma ul-Husna, the 99 Beautiful Names of Allah with meanings and transliteration." },
+    tasbeeh:     { title: "Digital Tasbeeh Counter - Sunneti.com",          desc: "Digital dhikr counter for Subhanallah, Alhamdulillah, Allahu Akbar and custom phrases." },
+    zakat:       { title: "Zakat Calculator - Sunneti.com",                 desc: "Calculate your annual Zakat obligation based on nisab threshold and zakatable assets." },
+    inheritance: { title: "Islamic Inheritance Calculator - Sunneti.com",   desc: "Estimate Islamic inheritance shares for learning, then confirm real cases with a qualified scholar." },
+    calendar:    { title: "Islamic Calendar - Sunneti.com",                 desc: "Hijri calendar with Islamic dates, events and Gregorian cross-reference." },
+    dates:       { title: "Hijri / Gregorian Date Converter - Sunneti.com", desc: "Convert dates between the Islamic Hijri calendar and the Gregorian calendar." },
+    library:     { title: "Islamic Library - Sunneti.com",                  desc: "Curated collection of essential Islamic books, Quran, Hadith, Seerah, Fiqh and Aqeedah." },
+    audio:       { title: "Islamic Lectures - Sunneti.com",                 desc: "Listen to Islamic lectures and audio content." },
+    namaz:       { title: "Si te Falesh - Sunneti.com",                     desc: "Pese namazet e dites, shpjeguar hap pas hapi me shqiptim dhe kuptim shqip." },
   };
   useEffect(() => {
     const m = PAGE_META[page] || PAGE_META.home;
@@ -323,7 +324,7 @@ export default function App() {
     setMeta('meta[property="og:title"]',        "content", m.title);
     setMeta('meta[property="og:description"]',  "content", m.desc);
     const lang = i18n.language?.startsWith("sq") ? "sq" : "en";
-    setMeta('meta[property="og:url"]',          "content", `https://www.muslimspath.app${pageToUrl(page, lang)}`);
+    setMeta('meta[property="og:url"]',          "content", `https://sunneti.com${pageToUrl(page, lang)}`);
   }, [page]);
 
   const [namazPrayerId, setNamazPrayerId] = useState(null);
@@ -388,6 +389,8 @@ export default function App() {
           : <HowToPray  initialPrayerId={namazPrayerId} />
         )}
       </main>
+      {/* Immersive full-screen page — rendered outside <main> so it stacks above the navbar */}
+      {page === "sunneti" && <SunnetiReadingRoom onExit={() => navigate("library")} />}
       {showSearch && (
         <GlobalSearch
           onClose={() => setShowSearch(false)}
@@ -689,7 +692,7 @@ function AdminPage({ authSession }) {
           <div style={{ textAlign: "center", marginBottom: 32 }}>
             <img src="/logo.png" alt="" style={{ width: 52, height: 52, objectFit: "contain", marginBottom: 16 }} />
             <div style={{ fontFamily: SERIF, fontSize: 22, color: TEXT, letterSpacing: "0.04em" }}>Admin Panel</div>
-            <div style={{ fontSize: 12, color: MUTED, marginTop: 4 }}>Muslim’s Path</div>
+            <div style={{ fontSize: 12, color: MUTED, marginTop: 4 }}>Sunneti.com</div>
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
             <input style={inp} type="email" placeholder="Admin Email" value={email}

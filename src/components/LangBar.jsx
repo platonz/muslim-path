@@ -22,16 +22,16 @@ export default function LangBar({ page }) {
         onClick={() => switchLang(lang)}
         style={{
           padding: "4px 14px", borderRadius: 999,
-          border: `1.5px solid ${active ? "#1A1915" : "#C8B89A"}`,
-          background: active ? "#1A1915" : "transparent",
-          color: active ? "#fff" : "#6B6050",
+          border: `1px solid ${active ? "#176B4D" : "rgba(24,35,29,0.12)"}`,
+          background: active ? "#176B4D" : "rgba(255,255,255,0.72)",
+          color: active ? "#fff" : "#6F7C73",
           cursor: active ? "default" : "pointer",
           fontSize: 11, fontWeight: 600,
           letterSpacing: "0.06em", fontFamily: SANS,
           transition: "all 0.15s",
         }}
-        onMouseEnter={e => { if (!active) { e.currentTarget.style.background = "#EDE8DC"; e.currentTarget.style.color = "#1A1915"; } }}
-        onMouseLeave={e => { if (!active) { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "#6B6050"; } }}
+        onMouseEnter={e => { if (!active) { e.currentTarget.style.background = "#EEF4EC"; e.currentTarget.style.color = "#176B4D"; } }}
+        onMouseLeave={e => { if (!active) { e.currentTarget.style.background = "rgba(255,255,255,0.72)"; e.currentTarget.style.color = "#6F7C73"; } }}
       >
         {label}
       </button>
@@ -39,9 +39,9 @@ export default function LangBar({ page }) {
   };
 
   return (
-    <div style={{ display: "flex", justifyContent: "center", gap: 8, padding: "10px 0", borderBottom: "1px solid #EDE8DC" }}>
-      {btn("en", "GB EN")}
-      {btn("sq", "AL SQ")}
+    <div style={{ display: "flex", justifyContent: "center", gap: 8, padding: "10px 0", borderBottom: "1px solid rgba(24,35,29,0.08)", background: "rgba(245,247,242,0.72)" }}>
+      {btn("en", "EN")}
+      {btn("sq", "SQ")}
     </div>
   );
 }

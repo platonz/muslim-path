@@ -32,20 +32,20 @@ export default function MobileTabBar({ page, navigate }) {
               alignItems: "center",
               gap: 3,
               padding: "4px 0",
-              color: active ? "#8A7235" : "#9A8E7A",
+              color: active ? "#176B4D" : "#87948B",
               transition: "color 0.15s",
             }}
           >
             <span style={tab.id === "quran" ? {
               filter: active
-                ? "drop-shadow(0 0 5px rgba(184,157,96,0.85)) drop-shadow(0 0 2px rgba(184,157,96,0.6))"
-                : "drop-shadow(0 0 3px rgba(184,157,96,0.45))",
+                ? "drop-shadow(0 0 5px rgba(23,107,77,0.35))"
+                : "none",
               display: "flex",
             } : {}}>
               <Icon
                 name={tab.icon}
                 size={22}
-                color={active ? "#8A7235" : "#9A8E7A"}
+                color={active ? "#176B4D" : "#87948B"}
                 sw={active ? 2.0 : 1.5}
               />
             </span>

@@ -102,7 +102,7 @@ export default function AuthModal({ onClose, onAuth }) {
 
         <div style={{ textAlign: "center", marginBottom: 28 }}>
           <img src="/logo.png" alt="" style={{ width: 44, height: 44, objectFit: "contain", marginBottom: 12 }} />
-          <div style={{ fontSize: 18, color: "#3a2a10", fontFamily: "'Cormorant Garamond', Georgia, serif", letterSpacing: "0.05em" }}>Muslim&#x2019;s Path</div>
+          <div style={{ fontSize: 18, color: "#18231D", fontFamily: "'Playfair Display', Georgia, serif", letterSpacing: "0" }}>Sunneti.com</div>
           <div style={{ fontSize: 11, color: "#7a5c28", letterSpacing: "0.12em", textTransform: "uppercase", marginTop: 4 }}>{t("auth.companion")}</div>
         </div>
 
