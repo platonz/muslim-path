@@ -213,11 +213,11 @@ input, select, textarea { color-scheme: light; }
   position: fixed;
   bottom: 0; left: 0; right: 0;
   z-index: 500;
-  background: rgba(250,245,232,0.96);
+  background: rgba(26, 20, 10, 0.97);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border-top: 1px solid rgba(180,147,96,0.30);
-  box-shadow: 0 -10px 30px rgba(26,25,21,0.18);
+  border-top: 1px solid rgba(180,147,96,0.18);
+  box-shadow: 0 -8px 28px rgba(0,0,0,0.45);
   padding: 8px 0 max(8px, env(safe-area-inset-bottom));
 }
 

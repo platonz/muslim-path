@@ -32,7 +32,7 @@ export default function MobileTabBar({ page, navigate }) {
               alignItems: "center",
               gap: 3,
               padding: "4px 0",
-              color: active ? "#176B4D" : "#87948B",
+              color: active ? "#D4BA88" : "#6B5F50",
               transition: "color 0.15s",
             }}
           >
@@ -45,7 +45,7 @@ export default function MobileTabBar({ page, navigate }) {
               <Icon
                 name={tab.icon}
                 size={22}
-                color={active ? "#176B4D" : "#87948B"}
+                color={active ? "#D4BA88" : "#6B5F50"}
                 sw={active ? 2.0 : 1.5}
               />
             </span>

@@ -3,11 +3,11 @@ import { createPortal } from "react-dom";
 import { useTranslation } from "react-i18next";
 import { GOLD, GREEN, TEXT, MUTED, SANS, NAV_ITEMS, TOOLS_ITEMS } from "../constants";
 
-const BG      = "rgba(255,255,255,0.86)";
-const BORDER  = "rgba(24,35,29,0.10)";
-const DARK    = "#18231D";
-const WARM700 = "#6F7C73";
-const WARM100 = "#EEF4EC";
+const BG      = "rgba(26, 20, 10, 0.97)";
+const BORDER  = "rgba(180, 147, 96, 0.18)";
+const DARK    = "#D4BA88";
+const WARM700 = "#8A7A60";
+const WARM100 = "rgba(180,147,96,0.12)";
 
 const PRIMARY_LINKS = ["home", "quran"];
 
@@ -288,8 +288,8 @@ export default function Navbar({ page, setPage, onSearch, authUser, onAuthClick,
           padding: "6px 14px", borderRadius: 999,
           border: "none", cursor: "pointer",
           fontSize: 13, fontWeight: isActive ? 600 : 500,
-          background: isActive ? GREEN : "transparent",
-          color: isActive ? "#FFFFFF" : WARM700,
+          background: isActive ? "rgba(180,147,96,0.18)" : "transparent",
+          color: isActive ? DARK : WARM700,
           fontFamily: SANS, transition: "all 0.15s", whiteSpace: "nowrap",
         }}
         onMouseEnter={e => { if (!isActive) { e.currentTarget.style.background = WARM100; e.currentTarget.style.color = DARK; } }}
@@ -334,7 +334,7 @@ export default function Navbar({ page, setPage, onSearch, authUser, onAuthClick,
       backdropFilter: "blur(18px)",
       WebkitBackdropFilter: "blur(18px)",
       borderBottom: `1px solid ${BORDER}`,
-      boxShadow: "0 10px 30px rgba(31,53,42,0.08)",
+      boxShadow: "0 4px 24px rgba(0,0,0,0.40)",
       padding: "0 24px",
       height: 58,
       display: "flex", alignItems: "center",
@@ -363,8 +363,8 @@ export default function Navbar({ page, setPage, onSearch, authUser, onAuthClick,
               padding: "6px 14px", borderRadius: 999,
               border: "none", cursor: "pointer",
               fontSize: 13, fontWeight: moreActive ? 600 : 500,
-              background: moreActive ? GREEN : "transparent",
-              color: moreActive ? "#FFFFFF" : WARM700,
+              background: moreActive ? "rgba(180,147,96,0.18)" : "transparent",
+              color: moreActive ? DARK : WARM700,
               fontFamily: SANS, transition: "all 0.15s",
             }}
             onMouseEnter={e => { if (!moreActive) { e.currentTarget.style.background = WARM100; e.currentTarget.style.color = DARK; } }}
@@ -379,8 +379,8 @@ export default function Navbar({ page, setPage, onSearch, authUser, onAuthClick,
               onMouseLeave={() => setMoreOpen(false)}
               style={{
                 position: "absolute", top: "calc(100% + 8px)", left: 0,
-                background: "#FFFFFF", border: `1px solid ${BORDER}`,
-                boxShadow: "0 18px 40px rgba(31,53,42,0.14)",
+                background: "#1E160A", border: `1px solid ${BORDER}`,
+                boxShadow: "0 18px 40px rgba(0,0,0,0.50)",
                 minWidth: 200, zIndex: 200, borderRadius: 14, overflow: "hidden",
                 animation: "menuOpen 0.18s cubic-bezier(0.22,1,0.36,1)",
               }}
@@ -389,7 +389,7 @@ export default function Navbar({ page, setPage, onSearch, authUser, onAuthClick,
                 <button key={n.id} onClick={() => { setPage(n.id); setMoreOpen(false); }} style={{
                   display: "flex", alignItems: "center", gap: 10, width: "100%",
                   padding: "11px 16px", background: page === n.id ? WARM100 : "none",
-                  border: "none", borderLeft: page === n.id ? `3px solid ${GREEN}` : "3px solid transparent",
+                  border: "none", borderLeft: page === n.id ? `3px solid ${GOLD}` : "3px solid transparent",
                   cursor: "pointer", fontSize: 13, color: page === n.id ? DARK : WARM700,
                   fontWeight: page === n.id ? 600 : 400, fontFamily: SANS, transition: "all 0.12s", textAlign: "left",
                 }}
@@ -437,8 +437,8 @@ export default function Navbar({ page, setPage, onSearch, authUser, onAuthClick,
               }}
               style={{
                 width: 34, height: 34, borderRadius: "50%",
-                background: GREEN, border: "none", cursor: "pointer",
-                fontSize: 13, fontWeight: 700, color: "#fff",
+                background: "rgba(180,147,96,0.20)", border: `1px solid ${BORDER}`, cursor: "pointer",
+                fontSize: 13, fontWeight: 700, color: DARK,
                 display: "flex", alignItems: "center", justifyContent: "center",
               }}
             >
@@ -446,8 +446,8 @@ export default function Navbar({ page, setPage, onSearch, authUser, onAuthClick,
             </button>
             <div id="nav-user-menu" style={{
               display: "none", position: "absolute", top: "calc(100% + 8px)", right: 0,
-              background: "#FFFFFF", border: `1px solid ${BORDER}`,
-              boxShadow: "0 18px 40px rgba(31,53,42,0.14)",
+              background: "#1E160A", border: `1px solid ${BORDER}`,
+              boxShadow: "0 18px 40px rgba(0,0,0,0.50)",
               minWidth: 200, zIndex: 300, padding: "8px 0", borderRadius: 14, overflow: "hidden",
               animation: "menuOpen 0.18s cubic-bezier(0.22,1,0.36,1)",
             }}>
@@ -468,12 +468,12 @@ export default function Navbar({ page, setPage, onSearch, authUser, onAuthClick,
         ) : (
           <button onClick={onAuthClick} style={{
             padding: "7px 18px", borderRadius: 999,
-            background: GREEN, border: "none", cursor: "pointer",
-            fontSize: 13, fontWeight: 600, color: "#FFFFFF",
+            background: "transparent", border: `1px solid ${BORDER}`, cursor: "pointer",
+            fontSize: 13, fontWeight: 600, color: DARK,
             fontFamily: SANS, transition: "all 0.15s", whiteSpace: "nowrap",
           }}
-            onMouseEnter={e => { e.currentTarget.style.background = "#0F4E3A"; e.currentTarget.style.transform = "translateY(-1px)"; e.currentTarget.style.boxShadow = "0 4px 20px rgba(23,107,77,0.24)"; }}
-            onMouseLeave={e => { e.currentTarget.style.background = GREEN; e.currentTarget.style.transform = ""; e.currentTarget.style.boxShadow = ""; }}
+            onMouseEnter={e => { e.currentTarget.style.background = WARM100; e.currentTarget.style.borderColor = GOLD; }}
+            onMouseLeave={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.borderColor = BORDER; }}
           >
             {t("nav.signIn")}
           </button>
@@ -509,8 +509,8 @@ export default function Navbar({ page, setPage, onSearch, authUser, onAuthClick,
           onTouchEnd={onMenuTouchEnd}
           style={{
             position: "fixed", top: 56, left: 0, right: 0, zIndex: 602,
-            background: "#FFFFFF", borderTop: `1px solid ${BORDER}`,
-            boxShadow: "0 8px 32px rgba(0,0,0,0.12)",
+            background: "#1E160A", borderTop: `1px solid ${BORDER}`,
+            boxShadow: "0 8px 32px rgba(0,0,0,0.60)",
             padding: "0 0 20px",
             display: "flex", flexDirection: "column",
             maxHeight: "calc(100vh - 56px)",
