@@ -6,13 +6,13 @@
 /* ─── COLOR TOKENS ──────────────────────────────────────── */
 :root {
   /* Page background */
-  --color-bg:          #F5F7F2;
-  --color-bg-deep:     #EAF1E8;
-  --color-bg-light:    #FFFFFF;
+  --color-bg:          #FAF5E8;
+  --color-bg-deep:     #F0E8CC;
+  --color-bg-light:    #FFFDF6;
 
   /* Card / Surface */
-  --surface:           #FFFFFF;
-  --surface-tint:      #EEF4EC;
+  --surface:           #FFFDF6;
+  --surface-tint:      #F5EDD8;
 
   /* Gold — primary accent */
   --gold-900:          #8A6010;
@@ -25,20 +25,20 @@
   --gold-100:          #F5EAC0;
   --gold-50:           #FAF4E0;
 
-  /* Dark slate layers */
-  --dark-950:          #08080E;
-  --dark-900:          #18231D;
-  --dark-800:          #181820;
-  --dark-700:          #FFFFFF;
+  /* Dark warm layers */
+  --dark-950:          #0E0D0A;
+  --dark-900:          #1A1915;
+  --dark-800:          #2E2A24;
+  --dark-700:          #453F36;
 
-  /* Slate muted scale */
-  --warm-700:          #B0ADB8;
-  --warm-600:          #87948B;
-  --warm-500:          #70708A;
-  --warm-400:          #50506A;
-  --warm-300:          rgba(255,255,255,0.10);
-  --warm-200:          rgba(255,255,255,0.07);
-  --warm-100:          #232330;
+  /* Warm parchment muted scale */
+  --warm-700:          #6B5F50;
+  --warm-600:          #8A7E6E;
+  --warm-500:          #A99C8A;
+  --warm-400:          #C8BFAE;
+  --warm-300:          rgba(180,147,96,0.18);
+  --warm-200:          rgba(180,147,96,0.10);
+  --warm-100:          #F5EDD8;
 
   /* Gold — primary accent */
   --green-logo:        #176B4D;
@@ -46,18 +46,18 @@
   --green-light:       rgba(23,107,77,0.10);
 
   /* ─── SEMANTIC ROLES ──────────────────────────────────── */
-  --color-border:      rgba(24,35,29,0.10);
-  --color-border-mid:  rgba(24,35,29,0.14);
+  --color-border:      rgba(180,147,96,0.22);
+  --color-border-mid:  rgba(180,147,96,0.35);
 
   --color-action:      #176B4D;
   --color-action-hover:#0F4E3A;
-  --color-action-text: #FFFFFF;
+  --color-action-text: #FFFDF6;
 
-  --fg-primary:        #18231D;
-  --fg-secondary:      #334139;
-  --fg-muted:          #6F7C73;
-  --fg-gold:           #C99A35;
-  --fg-inverse:        #FFFFFF;
+  --fg-primary:        #1A1915;
+  --fg-secondary:      #2E2A24;
+  --fg-muted:          #8A7E6E;
+  --fg-gold:           #B89D60;
+  --fg-inverse:        #FFFDF6;
 
   --color-success:     #176B4D;
   --color-warning:     #E07020;
@@ -131,8 +131,8 @@ html { scroll-behavior: smooth; }
 body {
   margin: 0;
   font-size: 14px;
-  background: #F5F7F2;
-  color: #18231D;
+  background: #1A1915;
+  color: #1A1915;
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -142,13 +142,13 @@ body {
 h1, h2, h3, h4 { font-family: var(--font-serif); margin: 0; }
 
 ::selection {
-  background: rgba(23, 107, 77, 0.20);
-  color: #18231D;
+  background: rgba(184,157,96,0.30);
+  color: #1A1915;
 }
 
-::-webkit-scrollbar              { width: 5px; background: #F5F7F2; }
-::-webkit-scrollbar-thumb        { background: rgba(23,107,77,0.25); border-radius: 4px; }
-::-webkit-scrollbar-thumb:hover  { background: rgba(23,107,77,0.45); }
+::-webkit-scrollbar              { width: 5px; background: #FAF5E8; }
+::-webkit-scrollbar-thumb        { background: rgba(184,157,96,0.40); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover  { background: rgba(184,157,96,0.65); }
 
 input::placeholder,
 textarea::placeholder { color: var(--fg-muted); opacity: 0.7; }
@@ -182,7 +182,7 @@ input, select, textarea { color-scheme: light; }
 /* ─── APP ROOT ───────────────────────────────────────────── */
 .app-root {
   min-height: 100vh;
-  background: #F5F7F2;
+  background: #1A1915;
   position: relative;
   overflow-x: clip;
 }
@@ -190,6 +190,11 @@ input, select, textarea { color-scheme: light; }
 .app-root > main {
   position: relative;
   z-index: 1;
+  background: #FAF5E8;
+  max-width: 900px;
+  margin: 0 auto;
+  min-height: 100vh;
+  box-shadow: 0 0 80px rgba(0,0,0,0.55);
 }
 
 /* Blobs are removed in mdesign v2 — hide them silently */
@@ -208,11 +213,11 @@ input, select, textarea { color-scheme: light; }
   position: fixed;
   bottom: 0; left: 0; right: 0;
   z-index: 500;
-  background: rgba(255, 255, 255, 0.92);
+  background: rgba(250,245,232,0.96);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border-top: 1px solid rgba(24,35,29,0.10);
-  box-shadow: 0 -10px 30px rgba(31,53,42,0.10);
+  border-top: 1px solid rgba(180,147,96,0.30);
+  box-shadow: 0 -10px 30px rgba(26,25,21,0.18);
   padding: 8px 0 max(8px, env(safe-area-inset-bottom));
 }
 
