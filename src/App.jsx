@@ -1,6 +1,4 @@
 import { useState, useEffect, useRef, useMemo } from "react";
-import { useTranslation } from "react-i18next";
-import i18n from "./i18n";
 import { BG, SURFACE, BORDER, GREEN, GREEN_L, GOLD, TEXT, MUTED, SERIF, SANS } from "./constants";
 import Navbar from "./components/Navbar";
 import Home from "./components/Home";
@@ -11,7 +9,6 @@ import KaabaWatermark from "./components/KaabaWatermark";
 import MobileTabBar from "./components/MobileTabBar";
 import QuranReader from "./components/QuranReader";
 import SiTeFalesh from "./components/SiTeFalesh";
-import HowToPray from "./components/HowToPray";
 import Zakat from "./components/Zakat";
 import Inheritance from "./components/Inheritance";
 import DateConverter from "./components/DateConverter";
@@ -20,7 +17,6 @@ import SunnetiReadingRoom from "./components/SunnetiBook";
 import IslamicCalendar from "./components/IslamicCalendar";
 import GlobalSearch from "./components/GlobalSearch";
 import AuthModal, { loadSession, saveSession, clearSession } from "./components/AuthModal";
-import LangBar from "./components/LangBar";
 import FloatingPlayer from "./components/FloatingPlayer";
 import DuaPage from "./components/DuaPage";
 import AsmaPage from "./components/AsmaPage";
@@ -47,22 +43,17 @@ async function resolveQuranUrl(surahN, verseN, reciterId) {
 
 
 export default function App() {
-  const { t } = useTranslation();
   const [page, setPage] = useState(() => {
-    // Support legacy hash URLs
     const hash = window.location.hash.replace("#", "");
     if (hash && VALID_PAGES.includes(hash)) return hash;
-    // Parse /lang/slug or /lang/ (new format)
     const parts = window.location.pathname.replace(/^\//, "").split("/").filter(Boolean);
-    if (parts[0] === "en" || parts[0] === "sq") {
-      const urlLang = parts[0];
-      i18n.changeLanguage(urlLang);
-      const pageId = slugToPage(urlLang, parts[1] || "");
-      return pageId || "home";
+    // Redirect legacy /sq/... or /en/... URLs
+    if (parts[0] === "sq" || parts[0] === "en") {
+      const pageId = slugToPage(parts[1] || "") || "home";
+      window.history.replaceState({}, "", pageToUrl(pageId));
+      return pageId;
     }
-    // Legacy: direct page ID
-    const path = parts[0] || "";
-    return VALID_PAGES.includes(path) ? path : "home";
+    return slugToPage(parts[0] || "") || (VALID_PAGES.includes(parts[0]) ? parts[0] : "home");
   });
   const [navHistory, setNavHistory] = useState([]);
   const HADITH_QUOTES = QUOTES.filter(q => !q.src?.startsWith("Quran"));
@@ -284,14 +275,7 @@ export default function App() {
   useEffect(() => {
     function onPop() {
       const parts = window.location.pathname.replace(/^\//, "").split("/").filter(Boolean);
-      if (parts[0] === "en" || parts[0] === "sq") {
-        const urlLang = parts[0];
-        i18n.changeLanguage(urlLang);
-        setPage(slugToPage(urlLang, parts[1] || "") || "home");
-        return;
-      }
-      const path = parts[0] || "";
-      setPage(VALID_PAGES.includes(path) ? path : "home");
+      setPage(slugToPage(parts[0] || "") || (VALID_PAGES.includes(parts[0]) ? parts[0] : "home"));
     }
     window.addEventListener("popstate", onPop);
     return () => window.removeEventListener("popstate", onPop);
@@ -323,8 +307,7 @@ export default function App() {
     setMeta('meta[name="description"]',         "content", m.desc);
     setMeta('meta[property="og:title"]',        "content", m.title);
     setMeta('meta[property="og:description"]',  "content", m.desc);
-    const lang = i18n.language?.startsWith("sq") ? "sq" : "en";
-    setMeta('meta[property="og:url"]',          "content", `https://sunneti.com${pageToUrl(page, lang)}`);
+    setMeta('meta[property="og:url"]',          "content", `https://sunneti.com${pageToUrl(page)}`);
   }, [page]);
 
   const [namazPrayerId, setNamazPrayerId] = useState(null);
@@ -333,8 +316,7 @@ export default function App() {
     if (p !== page) setNavHistory(h => [...h, page]);
     setPage(p);
     if (p === "namaz") setNamazPrayerId(extra || null);
-    const lang = i18n.language?.startsWith("sq") ? "sq" : "en";
-    window.history.pushState({}, "", pageToUrl(p, lang));
+    window.history.pushState({}, "", pageToUrl(p));
   }
 
   function goBack() {
@@ -342,8 +324,7 @@ export default function App() {
     const prev = navHistory[navHistory.length - 1];
     setNavHistory(h => h.slice(0, -1));
     setPage(prev);
-    const lang = i18n.language?.startsWith("sq") ? "sq" : "en";
-    window.history.pushState({}, "", pageToUrl(prev, lang));
+    window.history.pushState({}, "", pageToUrl(prev));
   }
 
   const skipTrack = current?.type === "quran" ? skipQuranVerse : skipLecture;
@@ -360,7 +341,6 @@ export default function App() {
 
       <audio ref={audioRef} onTimeUpdate={onTimeUpdate} onEnded={handleAudioEnd} onLoadedMetadata={() => setDuration(audioRef.current?.duration || 0)} />
       <Navbar page={page} setPage={navigate} onSearch={() => setShowSearch(true)} authUser={authUser} onAuthClick={() => setShowAuth(true)} onSignOut={handleSignOut} />
-      {page === "home" && <LangBar page={page} />}
       <main>
         {page === "home" && <Home quote={quote} verseQuote={verseQuote} setPage={navigate} showInstall={showInstall} onInstall={handleInstall} onDismissInstall={dismissInstall} />}
         {page === "zakat" && <Zakat />}
@@ -384,10 +364,7 @@ export default function App() {
         {page === "dua"     && <DuaPage favs={duaFavs} onFav={toggleDuaFav} />}
         {page === "asma"    && <AsmaPage />}
         {page === "admin"   && <AdminPage authSession={authSession} />}
-        {page === "namaz"   && (i18n.language?.startsWith("sq")
-          ? <SiTeFalesh initialPrayerId={namazPrayerId} />
-          : <HowToPray  initialPrayerId={namazPrayerId} />
-        )}
+        {page === "namaz"   && <SiTeFalesh initialPrayerId={namazPrayerId} />}
       </main>
       {/* Immersive full-screen page — rendered outside <main> so it stacks above the navbar */}
       {page === "sunneti" && <SunnetiReadingRoom onExit={() => navigate("library")} />}
