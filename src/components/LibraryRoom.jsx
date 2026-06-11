@@ -94,21 +94,21 @@ export function LibraryDoor({ onEnter }) {
 /* Percent-based clickable zones over the scene image (1536x1024).
    `page` is the app's internal page id; hrefs come from lib/routing slugs. */
 const HOTSPOTS = [
-  { id: "sunneti",      label: "Sunneti",            page: "sunneti",     left: 18.00, top: 15.00, width: 8.90,  height: 16.60 },
-  { id: "kurani",       label: "Kurani",             page: "quran",       left: 28.40, top: 15.00, width: 9.20,  height: 16.60 },
-  { id: "biblioteka",   label: "Biblioteka",         page: "library",     left: 38.90, top: 15.00, width: 9.00,  height: 16.60 },
-  { id: "ligjeratat",   label: "Ligjëratat",         page: "audio",       left: 49.20, top: 15.00, width: 9.00,  height: 16.60 },
+  { id: "sunneti",      label: "Sunneti",            page: "sunneti",     left: 17.95, top: 19.10, width: 7.55,  height: 15.45 },
+  { id: "kurani",       label: "Kurani",             page: "quran",       left: 28.90, top: 19.10, width: 7.50,  height: 15.45 },
+  { id: "biblioteka",   label: "Biblioteka",         page: "library",     left: 39.25, top: 19.10, width: 7.55,  height: 15.45 },
+  { id: "ligjeratat",   label: "Ligjëratat",         page: "audio",       left: 49.60, top: 19.10, width: 7.55,  height: 15.45 },
 
-  { id: "si-te-falesh", label: "Si të Falesh",       page: "namaz",       left: 15.00, top: 42.00, width: 8.80,  height: 17.50 },
-  { id: "how-to-pray",  label: "How to Pray",        page: "howpray",     left: 24.80, top: 42.00, width: 9.00,  height: 17.50 },
-  { id: "duate",        label: "Duatë",              page: "dua",         left: 34.80, top: 42.00, width: 8.90,  height: 17.50 },
-  { id: "emrat-99",     label: "99 Emrat",           page: "asma",        left: 44.90, top: 42.00, width: 8.40,  height: 17.50 },
-  { id: "tesbih",       label: "Tesbih",             page: "tasbeeh",     left: 54.70, top: 42.00, width: 8.50,  height: 17.50 },
+  { id: "si-te-falesh", label: "Si të Falesh",       page: "namaz",       left: 14.85, top: 44.15, width: 7.95,  height: 17.95 },
+  { id: "how-to-pray",  label: "How to Pray",        page: "howpray",     left: 24.75, top: 44.15, width: 7.95,  height: 17.95 },
+  { id: "duate",        label: "Duatë",              page: "dua",         left: 34.70, top: 44.15, width: 8.05,  height: 17.95 },
+  { id: "emrat-99",     label: "99 Emrat",           page: "asma",        left: 44.85, top: 44.15, width: 7.95,  height: 17.95 },
+  { id: "tesbih",       label: "Tesbih",             page: "tasbeeh",     left: 54.60, top: 44.15, width: 8.05,  height: 17.95 },
 
-  { id: "zekati",       label: "Zekati",             page: "zakat",       left: 17.90, top: 68.00, width: 8.80,  height: 17.20 },
-  { id: "trashegimia",  label: "Trashëgimia",        page: "inheritance", left: 28.20, top: 68.00, width: 8.70,  height: 17.20 },
-  { id: "kalendari",    label: "Kalendari",          page: "calendar",    left: 38.90, top: 68.00, width: 8.70,  height: 17.20 },
-  { id: "datat",        label: "Datat",              page: "dates",       left: 49.40, top: 68.00, width: 8.70,  height: 17.20 },
+  { id: "zekati",       label: "Zekati",             page: "zakat",       left: 17.75, top: 69.05, width: 7.90,  height: 17.40 },
+  { id: "trashegimia",  label: "Trashëgimia",        page: "inheritance", left: 28.35, top: 69.05, width: 7.85,  height: 17.40 },
+  { id: "kalendari",    label: "Kalendari",          page: "calendar",    left: 39.05, top: 69.05, width: 7.90,  height: 17.40 },
+  { id: "datat",        label: "Datat",              page: "dates",       left: 49.65, top: 69.05, width: 7.85,  height: 17.40 },
 
   { id: "read-cta",     label: "Merr për të lexuar", page: "library",     left: 68.80, top: 69.20, width: 15.20, height: 5.40 },
 

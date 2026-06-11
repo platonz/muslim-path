@@ -983,16 +983,18 @@
 .sceneHotspots { position: absolute; inset: 0; }
 .hero-spot {
   position: absolute; display: block;
-  border-radius: 8px;
+  border-radius: 5px 9px 9px 5px;
   outline: none;
   transition: box-shadow 200ms ease, background 200ms ease, transform 200ms ease;
 }
 .hero-spot:hover {
-  background: radial-gradient(70% 60% at 50% 40%, rgba(255,222,150,0.14), transparent 75%);
+  background:
+    linear-gradient(115deg, transparent 28%, rgba(255,235,170,0.1) 48%, transparent 68%),
+    radial-gradient(70% 60% at 50% 40%, rgba(255,222,150,0.08), transparent 75%);
   box-shadow:
-    0 0 0 1px rgba(232,217,168,0.55),
-    0 0 22px rgba(255,215,130,0.35),
-    inset 0 0 18px rgba(255,222,150,0.12);
+    0 0 0 1px rgba(232,217,168,0.52),
+    0 0 16px rgba(255,215,130,0.28),
+    inset 0 0 14px rgba(255,222,150,0.1);
 }
 .hero-spot:focus-visible {
   box-shadow:
