@@ -94,29 +94,29 @@ export function LibraryDoor({ onEnter }) {
 /* Percent-based clickable zones over the scene image (1536x1024).
    `page` is the app's internal page id; hrefs come from lib/routing slugs. */
 const HOTSPOTS = [
-  { id: "sunneti",      label: "Sunneti",            page: "sunneti",     left: 17.64, top: 18.85, width: 8.98,  height: 18.16 },
-  { id: "kurani",       label: "Kurani",             page: "quran",       left: 28.52, top: 18.85, width: 8.98,  height: 18.16 },
-  { id: "biblioteka",   label: "Biblioteka",         page: "library",     left: 39.32, top: 18.85, width: 8.98,  height: 18.16 },
-  { id: "ligjeratat",   label: "Ligjëratat",         page: "audio",       left: 50.20, top: 18.85, width: 8.98,  height: 18.16 },
+  { id: "sunneti",      label: "Sunneti",            page: "sunneti",     left: 18.00, top: 15.00, width: 8.90,  height: 16.60 },
+  { id: "kurani",       label: "Kurani",             page: "quran",       left: 28.40, top: 15.00, width: 9.20,  height: 16.60 },
+  { id: "biblioteka",   label: "Biblioteka",         page: "library",     left: 38.90, top: 15.00, width: 9.00,  height: 16.60 },
+  { id: "ligjeratat",   label: "Ligjëratat",         page: "audio",       left: 49.20, top: 15.00, width: 9.00,  height: 16.60 },
 
-  { id: "si-te-falesh", label: "Si të Falesh",       page: "namaz",       left: 14.71, top: 44.24, width: 9.11,  height: 17.97 },
-  { id: "how-to-pray",  label: "How to Pray",        page: "howpray",     left: 25.33, top: 44.24, width: 9.11,  height: 17.97 },
-  { id: "duate",        label: "Duatë",              page: "dua",         left: 36.13, top: 44.24, width: 9.05,  height: 17.97 },
-  { id: "emrat-99",     label: "99 Emrat",           page: "asma",        left: 46.88, top: 44.24, width: 8.98,  height: 17.97 },
-  { id: "tesbih",       label: "Tesbih",             page: "tasbeeh",     left: 57.55, top: 44.24, width: 9.05,  height: 17.97 },
+  { id: "si-te-falesh", label: "Si të Falesh",       page: "namaz",       left: 15.00, top: 42.00, width: 8.80,  height: 17.50 },
+  { id: "how-to-pray",  label: "How to Pray",        page: "howpray",     left: 24.80, top: 42.00, width: 9.00,  height: 17.50 },
+  { id: "duate",        label: "Duatë",              page: "dua",         left: 34.80, top: 42.00, width: 8.90,  height: 17.50 },
+  { id: "emrat-99",     label: "99 Emrat",           page: "asma",        left: 44.90, top: 42.00, width: 8.40,  height: 17.50 },
+  { id: "tesbih",       label: "Tesbih",             page: "tasbeeh",     left: 54.70, top: 42.00, width: 8.50,  height: 17.50 },
 
-  { id: "zekati",       label: "Zekati",             page: "zakat",       left: 17.71, top: 69.04, width: 8.98,  height: 18.26 },
-  { id: "trashegimia",  label: "Trashëgimia",        page: "inheritance", left: 28.06, top: 69.04, width: 9.05,  height: 18.26 },
-  { id: "kalendari",    label: "Kalendari",          page: "calendar",    left: 38.80, top: 69.04, width: 9.05,  height: 18.26 },
-  { id: "datat",        label: "Datat",              page: "dates",       left: 49.54, top: 69.04, width: 8.98,  height: 18.26 },
+  { id: "zekati",       label: "Zekati",             page: "zakat",       left: 17.90, top: 68.00, width: 8.80,  height: 17.20 },
+  { id: "trashegimia",  label: "Trashëgimia",        page: "inheritance", left: 28.20, top: 68.00, width: 8.70,  height: 17.20 },
+  { id: "kalendari",    label: "Kalendari",          page: "calendar",    left: 38.90, top: 68.00, width: 8.70,  height: 17.20 },
+  { id: "datat",        label: "Datat",              page: "dates",       left: 49.40, top: 68.00, width: 8.70,  height: 17.20 },
 
-  { id: "read-cta",     label: "Merr për të lexuar", page: "library",     left: 68.75, top: 68.30, width: 15.95, height: 5.60 },
+  { id: "read-cta",     label: "Merr për të lexuar", page: "library",     left: 68.80, top: 69.20, width: 15.20, height: 5.40 },
 
-  { id: "kreu",         label: "Kreu",               page: "home",        left: 20.31, top: 89.45, width: 9.57,  height: 9.57 },
-  { id: "katalogu",     label: "Katalogu",           page: "library",     left: 31.38, top: 89.45, width: 12.96, height: 9.57 },
-  { id: "favoritet",    label: "Favoritet",          page: "dua",         left: 45.77, top: 89.45, width: 12.50, height: 9.57 },
-  { id: "historia",     label: "Historia",           page: "calendar",    left: 59.70, top: 89.45, width: 10.55, height: 9.57 },
-  { id: "profili",      label: "Profili",            page: "profile",     left: 71.74, top: 89.45, width: 10.81, height: 9.57 },
+  { id: "kreu",         label: "Kreu",               page: "home",        left: 20.31, top: 90.50, width: 9.57,  height: 7.50 },
+  { id: "katalogu",     label: "Katalogu",           page: "library",     left: 31.38, top: 90.50, width: 12.96, height: 7.50 },
+  { id: "favoritet",    label: "Favoritet",          page: "dua",         left: 45.77, top: 90.50, width: 12.50, height: 7.50 },
+  { id: "historia",     label: "Historia",           page: "calendar",    left: 59.70, top: 90.50, width: 10.55, height: 7.50 },
+  { id: "profili",      label: "Profili",            page: "profile",     left: 71.74, top: 90.50, width: 10.81, height: 7.50 },
 ];
 
 /* Shared leather-cover innards, used by the mobile cards */

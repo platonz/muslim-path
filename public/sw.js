@@ -1,4 +1,4 @@
-const CACHE = "muslims-path-v1";
+const CACHE = "muslims-path-v2";
 
 // Core shell to cache on install
 const SHELL = ["/", "/index.html"];
