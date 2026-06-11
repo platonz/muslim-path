@@ -2,6 +2,8 @@
 // src/data/sunneti.js
 // Llojet e faqeve: chapter | prose | verse | hadith | list | contents | blank | colophon
 
+import { LECTURES } from './lectures.js';
+
 const SECTIONS = [
   // ───────────────────────── Kurani
   {
@@ -172,6 +174,18 @@ const SECTIONS = [
         narrator: 'Transmeton Ebu Hurejra \u2014 Muslimi',
         arabic: '\u0645\u064e\u0646\u0652 \u0633\u064e\u0644\u064e\u0643\u064e \u0637\u064e\u0631\u0650\u064a\u0642\u064b\u0627 \u064a\u064e\u0644\u0652\u062a\u064e\u0645\u0650\u0633\u064f \u0641\u0650\u064a\u0647\u0650 \u0639\u0650\u0644\u0652\u0645\u064b\u0627',
         text: '\u201cKush ndjek nj\u00eb rrug\u00eb p\u00ebr t\u00eb k\u00ebrkuar dije, Allahu ia leht\u00ebson rrug\u00ebn drejt Xhenetit.\u201d',
+      },
+      {
+        type: 'list', heading: 'Ligj\u00ebrata \u00b7 I', kicker: 'Audio',
+        items: LECTURES.slice(0, 6).map(l => ({ label: l.title })),
+      },
+      {
+        type: 'list', heading: 'Ligj\u00ebrata \u00b7 II', kicker: 'Audio',
+        items: LECTURES.slice(6, 12).map(l => ({ label: l.title })),
+      },
+      {
+        type: 'list', heading: 'Ligj\u00ebrata \u00b7 III', kicker: 'Audio',
+        items: LECTURES.slice(12).map(l => ({ label: l.title })),
       },
     ],
   },
