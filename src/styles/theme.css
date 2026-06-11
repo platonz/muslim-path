@@ -223,9 +223,6 @@ input, select, textarea { color-scheme: light; }
 
 @media (max-width: 640px) {
   .mobile-tab-bar { display: flex; }
-  .app-root > main {
-    padding-bottom: calc(82px + env(safe-area-inset-bottom));
-  }
 }
 
 /* ─── SECTION DIVIDER ────────────────────────────────────── */

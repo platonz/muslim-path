@@ -1,0 +1,758 @@
+/* ============================================================
+   Library Room — door landing + bookshelf home + book-page header
+   Scoped under .lib-door / .lib-shelf / .book-head so the rest of
+   the app theme is untouched. Shares the dark-wood / gold language
+   of the Sunneti reading room (sunneti.css).
+   ============================================================ */
+
+/* ───────────────────────── THE DOOR ───────────────────────── */
+.lib-door {
+  position: fixed; inset: 0; z-index: 250;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 0;
+  background: radial-gradient(120% 100% at 50% 0%, #3c2f1c 0%, #2a2010 55%, #191307 100%);
+  overflow: hidden;
+}
+.lib-door::after {
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  box-shadow: inset 0 0 240px rgba(0,0,0,0.65);
+}
+.lib-door.is-opening { animation: doorStageOut 600ms 700ms cubic-bezier(0.4,0,0.6,1) both; }
+@keyframes doorStageOut { to { opacity: 0; } }
+
+.door-brand {
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 34px; z-index: 2;
+}
+.door-brand img { width: 34px; height: 34px; object-fit: contain; filter: drop-shadow(0 2px 6px rgba(0,0,0,0.5)); }
+.door-brand span {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 20px; color: #E8D9A8; letter-spacing: 0.06em;
+}
+
+.door-sign {
+  z-index: 2; margin-bottom: 44px; text-align: center;
+}
+.door-sign .door-sign-title {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(30px, 5vw, 44px); color: #F2EAD0; letter-spacing: 0.04em;
+}
+.door-sign .door-sign-sub {
+  margin-top: 8px; font-family: 'Inter', system-ui, sans-serif;
+  font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; color: #B89D60;
+}
+
+.door-scene {
+  position: relative; z-index: 2;
+  display: flex; align-items: center; gap: clamp(14px, 4vw, 34px);
+}
+
+.door-frame {
+  position: relative;
+  width: min(380px, 74vw);
+  aspect-ratio: 3 / 4.2;
+  perspective: 1500px;
+  border-radius: 200px 200px 6px 6px;
+  padding: 16px;
+  /* carved jamb: wood grain + gilded inner lip */
+  background:
+    repeating-linear-gradient(95deg, rgba(0,0,0,0.1) 0 2px, transparent 2px 6px),
+    linear-gradient(180deg, #6b4a24 0%, #543a1a 45%, #3c2810 100%);
+  box-shadow:
+    0 40px 80px rgba(0,0,0,0.6),
+    0 6px 16px rgba(0,0,0,0.5),
+    inset 0 0 0 2px rgba(255,210,140,0.3),
+    inset 0 0 0 5px rgba(0,0,0,0.35),
+    inset 0 0 26px rgba(0,0,0,0.5);
+  cursor: pointer; border: none;
+}
+/* outer carved molding ring */
+.door-arch-rim {
+  position: absolute; inset: -13px;
+  border-radius: 215px 215px 9px 9px;
+  border: 2px solid rgba(212,186,136,0.4);
+  box-shadow:
+    inset 0 0 0 4px rgba(0,0,0,0.4),
+    inset 0 0 0 5px rgba(255,210,140,0.16),
+    0 0 30px rgba(0,0,0,0.45);
+  background:
+    repeating-linear-gradient(90deg, rgba(255,220,160,0.05) 0 8px, rgba(0,0,0,0.16) 8px 16px),
+    linear-gradient(180deg, #4a3115 0%, #33210c 100%);
+  pointer-events: none;
+}
+.door-keystone {
+  position: absolute; top: -27px; left: 50%; transform: translateX(-50%);
+  width: 30px; height: 30px; border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; color: #E8D9A8; line-height: 1;
+  background: linear-gradient(180deg, #5a3d1f, #3c2810);
+  border: 1px solid rgba(212,186,136,0.5);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,225,160,0.25);
+  pointer-events: none;
+}
+/* warm light spilling from inside the library */
+.door-light {
+  position: absolute; inset: 16px; border-radius: 186px 186px 4px 4px;
+  background: radial-gradient(80% 70% at 50% 40%, #f5d98a 0%, #b8893a 50%, #4a3115 100%);
+  overflow: hidden;
+  transition: filter 900ms ease;
+}
+/* faint shelves silhouette behind the doors */
+.door-light::before {
+  content: ''; position: absolute; inset: 0;
+  background:
+    repeating-linear-gradient(180deg, transparent 0 56px, rgba(58,38,16,0.55) 56px 64px),
+    repeating-linear-gradient(90deg, rgba(58,38,16,0.35) 0 14px, transparent 14px 22px);
+  opacity: 0.5;
+}
+/* dust-light rays */
+.door-light::after {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(100deg, transparent 30%, rgba(255,240,200,0.35) 50%, transparent 70%);
+  mix-blend-mode: screen;
+}
+.lib-door.is-opening .door-light { filter: brightness(1.35); }
+
+.door-leaves { position: absolute; inset: 16px; border-radius: 186px 186px 4px 4px; overflow: hidden; transform-style: preserve-3d; }
+.door-leaf {
+  position: absolute; top: 0; bottom: 0; width: 50.5%;
+  /* wood grain + faint 8-point star lattice tooled into the timber */
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 44 44'%3E%3Cpath d='M22 5 L26.5 17.5 L39 22 L26.5 26.5 L22 39 L17.5 26.5 L5 22 L17.5 17.5 Z' fill='none' stroke='%23E8D9A8' stroke-opacity='0.1' stroke-width='1'/%3E%3Ccircle cx='22' cy='22' r='2.4' fill='none' stroke='%23E8D9A8' stroke-opacity='0.08'/%3E%3C/svg%3E") 0 0 / 44px 44px,
+    repeating-linear-gradient(180deg, rgba(0,0,0,0.07) 0 3px, transparent 3px 9px),
+    linear-gradient(90deg, #6b4a24 0%, #573a18 48%, #4a3014 100%);
+  box-shadow: inset 0 0 0 1px rgba(255,210,140,0.16), inset 0 0 30px rgba(0,0,0,0.35);
+  transition: transform 950ms cubic-bezier(0.55, 0.06, 0.35, 1);
+}
+.door-leaf--left  { left: 0;  transform-origin: left center; }
+.door-leaf--right { right: 0; transform-origin: right center; }
+/* iron hinge straps on the outer edge */
+.door-leaf::before, .door-leaf::after {
+  content: ''; position: absolute; width: 34%; height: 9px;
+  background: linear-gradient(180deg, #2a1d0c, #15100a);
+  border: 1px solid rgba(212,186,136,0.35);
+  box-shadow: 0 1px 0 rgba(255,225,160,0.12);
+}
+.door-leaf::before { top: 26%; }
+.door-leaf::after  { top: 76%; }
+.door-leaf--left::before,  .door-leaf--left::after  { left: 0;  border-radius: 0 5px 5px 0; border-left: none; }
+.door-leaf--right::before, .door-leaf--right::after { right: 0; border-radius: 5px 0 0 5px; border-right: none; }
+
+/* recessed carved panels */
+.leaf-panel {
+  position: absolute; left: 17%; right: 17%;
+  border: 1px solid rgba(255,210,140,0.28);
+  box-shadow:
+    inset 0 0 16px rgba(0,0,0,0.45),
+    inset 0 0 0 3px rgba(0,0,0,0.2),
+    0 1px 0 rgba(255,225,160,0.08);
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 44 44'%3E%3Cpath d='M22 5 L26.5 17.5 L39 22 L26.5 26.5 L22 39 L17.5 26.5 L5 22 L17.5 17.5 Z' fill='none' stroke='%23E8D9A8' stroke-opacity='0.18' stroke-width='1'/%3E%3C/svg%3E") center / 34px 34px,
+    linear-gradient(180deg, rgba(0,0,0,0.18), rgba(0,0,0,0.04));
+}
+.leaf-panel--top    { top: 9%;  height: 34%; border-radius: 999px 999px 4px 4px; }
+.leaf-panel--bottom { top: 50%; height: 40%; border-radius: 4px; }
+
+/* ring handle on a studded back-plate */
+.leaf-handle {
+  position: absolute; top: 51%; width: 26px; height: 34px;
+  border-radius: 6px;
+  background:
+    radial-gradient(60% 40% at 50% 22%, rgba(255,235,180,0.4), transparent 60%),
+    linear-gradient(180deg, #8a6a30, #5a4318);
+  border: 1px solid rgba(232,217,168,0.55);
+  box-shadow: 0 3px 7px rgba(0,0,0,0.55), inset 0 0 5px rgba(0,0,0,0.35);
+}
+.leaf-handle::after {
+  content: ''; position: absolute; left: 50%; top: 12px;
+  width: 17px; height: 17px; transform: translateX(-50%);
+  border: 3px solid #E2C886; border-radius: 50%;
+  box-shadow: 0 3px 5px rgba(0,0,0,0.6), inset 0 1px 1px rgba(255,245,210,0.5);
+}
+.door-leaf--left  .leaf-handle { right: 7%; }
+.door-leaf--right .leaf-handle { left: 7%; }
+
+/* stone step under the doors */
+.door-threshold {
+  position: absolute; left: 6px; right: 6px; bottom: -9px; height: 13px;
+  border-radius: 3px;
+  background: linear-gradient(180deg, #6b4a24, #38240e);
+  box-shadow: 0 6px 14px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,210,140,0.3);
+  pointer-events: none;
+}
+
+/* hanging lanterns flanking the door */
+.door-lantern {
+  position: relative; width: 22px; height: 34px; flex: 0 0 auto;
+  border-radius: 7px 7px 10px 10px;
+  background:
+    radial-gradient(70% 55% at 50% 45%, #ffe9a8 0%, #d8a448 55%, #6b4a18 100%);
+  border: 1px solid rgba(232,217,168,0.6);
+  box-shadow: 0 0 26px rgba(255,215,130,0.4), 0 0 60px rgba(255,200,110,0.18), inset 0 0 6px rgba(120,70,10,0.6);
+  animation: lanternGlow 3.2s ease-in-out infinite;
+}
+/* chain + finial */
+.door-lantern::before {
+  content: ''; position: absolute; left: 50%; top: -42px; width: 2px; height: 38px;
+  transform: translateX(-50%);
+  background: repeating-linear-gradient(180deg, rgba(212,186,136,0.7) 0 5px, transparent 5px 9px);
+}
+.door-lantern::after {
+  content: ''; position: absolute; left: 50%; top: -8px; width: 8px; height: 6px;
+  transform: translateX(-50%);
+  border-radius: 3px 3px 0 0;
+  background: #8a6a30; border: 1px solid rgba(232,217,168,0.5);
+}
+.door-lantern--right { animation-delay: -1.6s; }
+@keyframes lanternGlow {
+  0%, 100% { box-shadow: 0 0 26px rgba(255,215,130,0.4), 0 0 60px rgba(255,200,110,0.18), inset 0 0 6px rgba(120,70,10,0.6); }
+  50%      { box-shadow: 0 0 34px rgba(255,215,130,0.55), 0 0 80px rgba(255,200,110,0.28), inset 0 0 6px rgba(120,70,10,0.6); }
+}
+
+/* warm pool of light on the floor in front of the door */
+.door-floor-glow {
+  position: relative; z-index: 1;
+  width: min(460px, 86vw); height: 26px; margin-top: 4px;
+  border-radius: 50%;
+  background: radial-gradient(50% 100% at 50% 0%, rgba(255,215,130,0.22), transparent 70%);
+  pointer-events: none;
+  transition: opacity 900ms ease, transform 900ms ease;
+}
+.lib-door.is-opening .door-floor-glow { opacity: 1.6; transform: scaleX(1.25); }
+
+.lib-door.is-opening .door-leaf--left  { transform: rotateY(-86deg); }
+.lib-door.is-opening .door-leaf--right { transform: rotateY(86deg); }
+
+.door-hint {
+  z-index: 2; margin-top: 26px;
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 13px; letter-spacing: 0.12em; text-transform: uppercase; color: #D4BA88;
+  animation: doorHintPulse 2.4s ease-in-out infinite;
+}
+@keyframes doorHintPulse { 0%,100% { opacity: 0.65; } 50% { opacity: 1; } }
+.lib-door.is-opening .door-hint { opacity: 0; animation: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .door-leaf { transition: none; }
+  .lib-door.is-opening { animation-delay: 0ms; animation-duration: 1ms; }
+}
+
+/* ──────────────────────── THE SHELF ───────────────────────── */
+.lib-shelf {
+  position: fixed; inset: 0; z-index: 250;
+  overflow-y: auto;
+  /* wood-panelled room: plank seams over warm timber */
+  background:
+    radial-gradient(60% 34% at 50% 0%, rgba(255,205,120,0.1), transparent 70%),
+    repeating-linear-gradient(90deg, rgba(0,0,0,0.16) 0 3px, transparent 3px 110px),
+    repeating-linear-gradient(90deg, rgba(255,220,160,0.018) 0 1px, transparent 1px 17px),
+    repeating-linear-gradient(180deg, rgba(255,220,160,0.025) 0 2px, transparent 2px 7px),
+    linear-gradient(180deg, #46311a 0%, #34240f 55%, #211608 100%);
+}
+.lib-shelf::after {
+  content: ''; position: fixed; inset: 0; pointer-events: none;
+  box-shadow: inset 0 0 240px rgba(0,0,0,0.6);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .lib-shelf { animation: shelfIn 480ms cubic-bezier(0.25,0.46,0.45,0.94) both; }
+}
+@keyframes shelfIn { from { opacity: 0; } }
+
+/* wall sconce lanterns */
+.shelf-lantern {
+  position: fixed; top: 120px; z-index: 1;
+  width: 22px; height: 34px;
+  border-radius: 7px 7px 10px 10px;
+  background: radial-gradient(70% 55% at 50% 45%, #ffe9a8 0%, #d8a448 55%, #6b4a18 100%);
+  border: 1px solid rgba(232,217,168,0.6);
+  box-shadow: 0 0 30px rgba(255,215,130,0.4), 0 0 80px rgba(255,200,110,0.16), inset 0 0 6px rgba(120,70,10,0.6);
+  animation: lanternGlow 3.2s ease-in-out infinite;
+}
+.shelf-lantern--l { left: 64px; }
+.shelf-lantern--r { right: 158px; animation-delay: -1.6s; }
+.shelf-lantern::before {
+  content: ''; position: absolute; left: 50%; top: -34px; width: 2px; height: 30px;
+  transform: translateX(-50%);
+  background: repeating-linear-gradient(180deg, rgba(212,186,136,0.7) 0 5px, transparent 5px 9px);
+}
+/* warm light pool each lantern throws on the wall */
+.shelf-lantern::after {
+  content: ''; position: absolute; left: 50%; top: 50%; width: 220px; height: 280px;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(50% 50% at 50% 50%, rgba(255,205,120,0.1), transparent 70%);
+  pointer-events: none;
+}
+@media (max-width: 1400px) { .shelf-lantern { display: none; } }
+
+/* fluted pilasters framing the room */
+.shelf-pilaster {
+  position: fixed; top: 0; bottom: 0; width: 34px; z-index: 1;
+  background:
+    repeating-linear-gradient(90deg, rgba(0,0,0,0.35) 0 3px, rgba(255,220,160,0.07) 3px 5px, transparent 5px 9px),
+    linear-gradient(180deg, #4a3115 0%, #38240e 60%, #261806 100%);
+  box-shadow: 0 0 24px rgba(0,0,0,0.5), inset 0 0 0 1px rgba(212,186,136,0.18);
+}
+.shelf-pilaster--l { left: 12px; }
+.shelf-pilaster--r { right: 110px; }
+/* gilded capital + base */
+.shelf-pilaster::before, .shelf-pilaster::after {
+  content: ''; position: absolute; left: -5px; right: -5px; height: 16px;
+  background: linear-gradient(180deg, #6b4a24, #4a3014);
+  border: 1px solid rgba(212,186,136,0.45);
+  border-radius: 3px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,225,160,0.3);
+}
+.shelf-pilaster::before { top: 36px; }
+.shelf-pilaster::after  { bottom: 70px; }
+@media (max-width: 1400px) { .shelf-pilaster { display: none; } }
+
+/* the door ajar on the right wall — warm light slipping through */
+.shelf-door-ajar {
+  position: fixed; top: 0; bottom: 0; right: 0; width: 110px; z-index: 1;
+  perspective: 900px; pointer-events: none; overflow: hidden;
+}
+.ajar-light {
+  position: absolute; top: 0; bottom: 0; left: 0; width: 46px;
+  background: linear-gradient(90deg, transparent, rgba(255,216,140,0.16) 45%, rgba(255,228,165,0.32));
+}
+.ajar-leaf {
+  position: absolute; top: 0; bottom: 0; left: 18px; right: -14px;
+  transform-origin: right center;
+  transform: rotateY(-24deg);
+  background:
+    repeating-linear-gradient(180deg, rgba(0,0,0,0.08) 0 3px, transparent 3px 10px),
+    linear-gradient(90deg, #573a18 0%, #4a3014 55%, #3a2510 100%);
+  border-left: 1px solid rgba(255,228,165,0.5);
+  box-shadow:
+    -18px 0 36px rgba(0,0,0,0.55),
+    inset 1px 0 0 rgba(255,210,140,0.2),
+    inset 0 0 36px rgba(0,0,0,0.4);
+}
+.ajar-panel {
+  position: absolute; left: 18%; right: 18%;
+  border: 1px solid rgba(255,210,140,0.22);
+  box-shadow: inset 0 0 14px rgba(0,0,0,0.45);
+  background: linear-gradient(180deg, rgba(0,0,0,0.16), rgba(0,0,0,0.03));
+}
+.ajar-panel--top    { top: 9%;  height: 34%; border-radius: 999px 999px 4px 4px; }
+.ajar-panel--bottom { top: 51%; height: 36%; border-radius: 4px; }
+.ajar-handle {
+  position: absolute; left: 14%; top: 49%;
+  width: 9px; height: 26px; border-radius: 5px;
+  background: linear-gradient(180deg, #E2C886, #8a6a30);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,245,210,0.5);
+}
+@media (max-width: 1400px) { .shelf-door-ajar { display: none; } }
+
+.shelf-inner { max-width: 1150px; margin: 0 auto; padding: 24px 22px 110px; position: relative; z-index: 1; }
+
+/* ── carved hanging sign (on chains from the ceiling) ── */
+.shelf-sign {
+  position: relative;
+  max-width: 640px; margin: 30px auto 26px;
+  padding: 16px 30px 18px;
+  display: flex; align-items: center; justify-content: center; gap: 20px;
+  border-radius: 10px;
+  background: linear-gradient(180deg, #4a3115 0%, #38240e 100%);
+  border: 2px solid rgba(212,186,136,0.45);
+  box-shadow:
+    inset 0 0 0 5px rgba(0,0,0,0.35),
+    inset 0 0 0 6px rgba(255,210,140,0.16),
+    inset 0 0 24px rgba(0,0,0,0.4),
+    0 16px 32px rgba(0,0,0,0.5);
+}
+.shelf-sign::before, .shelf-sign::after {
+  content: ''; position: absolute; top: -56px; width: 2px; height: 56px;
+  background: repeating-linear-gradient(180deg, rgba(212,186,136,0.65) 0 5px, transparent 5px 9px);
+}
+.shelf-sign::before { left: 14%; }
+.shelf-sign::after  { right: 14%; }
+.sign-body { text-align: center; }
+.shelf-sign h1 {
+  margin: 0;
+  font-family: 'Playfair Display', Georgia, serif; font-weight: 700;
+  font-size: clamp(26px, 4vw, 38px);
+  letter-spacing: 0.14em; text-transform: uppercase;
+  background: linear-gradient(180deg, #FAF2D8 12%, #E6CD8E 52%, #F8ECC2 78%, #D9BC7E 100%);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+  filter: drop-shadow(0 2px 2px rgba(0,0,0,0.6));
+}
+.sign-sub {
+  margin-top: 7px;
+  display: flex; align-items: center; justify-content: center; gap: 12px;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 11.5px; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase;
+  color: #C9A968;
+}
+.sign-rule { display: block; width: 44px; height: 1px; background: linear-gradient(90deg, transparent, #B89D60); }
+.sign-sub .sign-rule:last-child { background: linear-gradient(90deg, #B89D60, transparent); }
+.sign-flourish { font-size: 20px; color: #B89D60; opacity: 0.85; transform: scaleX(-1); }
+.sign-flourish--r { transform: none; }
+
+/* ── two-column layout: bookcase + side panel ── */
+.shelf-layout {
+  display: grid; grid-template-columns: minmax(0, 1fr) 300px;
+  gap: 24px; align-items: start;
+}
+@media (max-width: 1200px) { .shelf-layout { grid-template-columns: 1fr; } }
+/* beside the side panel the cabinet is narrower — slim the books so all five stand uncropped */
+@media (min-width: 1201px) {
+  .shelf-case .shelf-book { width: 128px; height: 182px; }
+  .shelf-case .bk-title { font-size: 15px; }
+  .shelf-case .bk-medallion { width: 44px; height: 53px; }
+}
+
+/* the recessed wooden bookcase */
+.shelf-case {
+  position: relative;
+  margin: 14px;
+  padding: 30px 18px 20px;
+  border-radius: 6px;
+  background:
+    repeating-linear-gradient(0deg, rgba(0,0,0,0.12) 0 2px, transparent 2px 8px),
+    linear-gradient(180deg, #251808 0%, #1a1106 100%);
+  box-shadow:
+    0 0 0 11px #4a3115,
+    0 0 0 13px rgba(255,210,140,0.2),
+    0 0 0 14px rgba(0,0,0,0.5),
+    0 26px 52px rgba(0,0,0,0.55),
+    inset 0 0 46px rgba(0,0,0,0.65);
+}
+/* carved scalloped frieze along the top of the cabinet */
+.shelf-case::before {
+  content: ''; position: absolute; top: 7px; left: 10px; right: 10px; height: 12px;
+  background: radial-gradient(circle at 50% 0%, rgba(212,186,136,0.35) 0 3px, rgba(212,186,136,0.12) 4px 5px, transparent 6px);
+  background-size: 18px 12px;
+  background-repeat: repeat-x;
+  opacity: 0.9;
+}
+
+.shelf-section { margin-top: 20px; }
+.shelf-label {
+  display: flex; align-items: center; gap: 10px;
+  font-family: 'Inter', system-ui, sans-serif; font-size: 10.5px; font-weight: 600;
+  letter-spacing: 0.2em; text-transform: uppercase; color: #B89D60;
+  margin: 0 4px 12px;
+}
+.shelf-label::before { content: '\2756'; font-size: 9px; opacity: 0.8; }
+.shelf-label::after {
+  content: ''; flex: 1; height: 1px;
+  background: linear-gradient(90deg, rgba(212,186,136,0.4), transparent);
+}
+.shelf-row {
+  display: flex; gap: 16px; align-items: flex-end;
+  padding: 6px 6px 0;
+}
+/* below this the cabinet is too narrow for five books — scroll instead of wrap */
+@media (max-width: 1024px) {
+  .shelf-row {
+    overflow-x: auto;
+    scrollbar-width: thin; scrollbar-color: rgba(212,186,136,0.3) transparent;
+  }
+}
+/* the wooden plank the books stand on */
+.shelf-plank {
+  height: 13px; margin: 0 -10px;
+  border-radius: 2px;
+  background: linear-gradient(180deg, #6b4a24 0%, #4a3014 70%, #38240e 100%);
+  box-shadow: 0 10px 22px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,210,140,0.28);
+}
+
+/* ── side panel: "Merr një libër" ── */
+.shelf-side {
+  position: sticky; top: 14px;
+  margin-top: 12px;
+  padding: 26px 22px 24px;
+  border-radius: 10px; text-align: center;
+  background: linear-gradient(180deg, #221708 0%, #181006 100%);
+  border: 1px solid rgba(212,186,136,0.4);
+  box-shadow:
+    inset 0 0 0 4px rgba(0,0,0,0.35),
+    inset 0 0 0 5px rgba(255,210,140,0.1),
+    inset 0 0 30px rgba(0,0,0,0.5),
+    0 20px 42px rgba(0,0,0,0.5);
+}
+@media (max-width: 1200px) { .shelf-side { position: static; } }
+.side-title {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 12px; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase;
+  color: #E8D9A8;
+}
+.side-emblem {
+  width: 74px; height: 74px; margin: 20px auto 0;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 50%; color: #E2C886;
+  border: 1px solid rgba(212,186,136,0.55);
+  background: radial-gradient(80% 80% at 50% 35%, rgba(255,230,160,0.16), rgba(0,0,0,0.25));
+  box-shadow: inset 0 0 14px rgba(0,0,0,0.4), 0 0 22px rgba(255,215,130,0.12);
+}
+.side-text {
+  margin: 18px 0 0;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 15.5px; line-height: 1.55; color: #E0D5C0;
+}
+.side-feats {
+  list-style: none; margin: 20px 0 0; padding: 0;
+  display: flex; flex-direction: column; gap: 10px; text-align: left;
+}
+.side-feats li {
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 12px; border-radius: 8px;
+  background: rgba(255,235,190,0.04);
+  border: 1px solid rgba(212,186,136,0.18);
+}
+.feat-icon {
+  flex: 0 0 auto; width: 32px; height: 32px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 7px; color: #E2C886;
+  border: 1px solid rgba(212,186,136,0.4);
+  background: rgba(0,0,0,0.25);
+}
+.side-feats strong {
+  display: block;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 13px; font-weight: 600; color: #F0E6C8;
+}
+.side-feats em {
+  display: block; font-style: normal;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 11px; color: #A08C68; margin-top: 2px;
+}
+.side-cta {
+  width: 100%; margin-top: 20px;
+  display: inline-flex; align-items: center; justify-content: center; gap: 9px;
+  min-height: 44px; padding: 11px 18px;
+  border-radius: 8px; cursor: pointer;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 12.5px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
+  color: #2A1C0A;
+  background: linear-gradient(180deg, #E8CD8E 0%, #C9A35C 100%);
+  border: 1px solid rgba(255,240,200,0.5);
+  box-shadow: 0 8px 18px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,250,225,0.6);
+  transition: filter 180ms, transform 180ms;
+}
+.side-cta:hover { filter: brightness(1.07); transform: translateY(-1px); }
+.side-quote {
+  margin-top: 22px; padding-top: 18px;
+  border-top: 1px solid rgba(212,186,136,0.22);
+  font-family: 'Playfair Display', Georgia, serif; font-style: italic;
+  font-size: 13.5px; line-height: 1.6; color: #C8BBA0;
+}
+.side-quote span {
+  display: block; margin-top: 8px; font-style: normal;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 11px; letter-spacing: 0.12em; color: #9A8660;
+}
+
+/* ── wooden bottom dock ── */
+.shelf-dock {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 252;
+  display: flex; align-items: center; justify-content: center;
+  gap: clamp(22px, 6vw, 56px);
+  padding: 13px 16px calc(13px + env(safe-area-inset-bottom));
+  background:
+    repeating-linear-gradient(90deg, rgba(0,0,0,0.14) 0 3px, transparent 3px 110px),
+    linear-gradient(180deg, #43301a 0%, #2a1c0c 100%);
+  border-top: 1px solid rgba(212,186,136,0.4);
+  box-shadow: 0 -12px 32px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,210,140,0.16);
+}
+.dock-item {
+  display: inline-flex; align-items: center; gap: 9px;
+  background: none; border: none; cursor: pointer;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 11px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase;
+  color: #C9A968; padding: 6px 4px;
+  transition: color 180ms;
+}
+.dock-item:hover { color: #E8D9A8; }
+.dock-item.is-active { color: #F2EAD0; }
+.dock-item.is-active svg { filter: drop-shadow(0 0 6px rgba(255,225,150,0.5)); }
+/* phones: icon above label so all five fit */
+@media (max-width: 600px) {
+  .shelf-dock { gap: 8px; justify-content: space-around; padding-top: 9px; }
+  .dock-item { flex-direction: column; gap: 5px; font-size: 8.5px; letter-spacing: 0.1em; padding: 2px; }
+}
+
+.shelf-book {
+  position: relative; flex: 0 0 auto;
+  width: 150px; height: 208px;
+  border: none; padding: 0; cursor: pointer;
+  border-radius: 4px 10px 10px 4px;
+  /* tooled leather: crosshatch grain over a lit gradient */
+  background:
+    repeating-linear-gradient(115deg, rgba(0,0,0,0.05) 0 2px, transparent 2px 5px),
+    repeating-linear-gradient(25deg, rgba(255,255,255,0.03) 0 1px, transparent 1px 5px),
+    radial-gradient(150% 115% at 28% 0%, var(--bk-hi) 0%, var(--bk) 48%, var(--bk-lo) 100%);
+  box-shadow:
+    0 16px 28px rgba(0,0,0,0.55),
+    0 4px 8px rgba(0,0,0,0.4),
+    inset 0 1px 0 rgba(255,240,200,0.18);
+  transition: transform 240ms cubic-bezier(0.25,0.46,0.45,0.94), box-shadow 240ms;
+}
+.shelf-book:hover, .shelf-book:focus-visible {
+  transform: translateY(-11px) rotateZ(-1deg);
+  box-shadow:
+    0 30px 40px rgba(0,0,0,0.62),
+    0 8px 14px rgba(0,0,0,0.45),
+    inset 0 1px 0 rgba(255,240,200,0.3);
+}
+.shelf-book:focus-visible { outline: 2px solid #D4BA88; outline-offset: 4px; }
+
+/* spine with raised binding bands */
+.bk-spine {
+  position: absolute; left: 0; top: 0; bottom: 0; width: 13px;
+  border-radius: 4px 0 0 4px;
+  background: linear-gradient(90deg,
+    rgba(0,0,0,0.52) 0%, rgba(0,0,0,0.22) 45%,
+    rgba(255,235,190,0.14) 78%, rgba(0,0,0,0.35) 100%);
+}
+.bk-spine::before {
+  content: ''; position: absolute; left: 2px; right: 4px; top: 13%; height: 4px;
+  border-radius: 2px;
+  background: linear-gradient(180deg, rgba(255,228,165,0.4), rgba(0,0,0,0.45));
+  box-shadow:
+    0 50px 0 0 rgba(255,228,165,0.18),
+    0 100px 0 0 rgba(255,228,165,0.18),
+    0 150px 0 0 rgba(255,228,165,0.18);
+}
+
+/* cream page block peeking out on the fore-edge */
+.bk-pages {
+  position: absolute; right: 0; top: 4px; bottom: 4px; width: 7px;
+  border-radius: 0 9px 9px 0;
+  background: repeating-linear-gradient(180deg, #EFE5CC 0 2px, #D7C9A4 2px 3px);
+  box-shadow: inset -2px 0 3px rgba(0,0,0,0.38), inset 1px 0 1px rgba(0,0,0,0.25);
+}
+
+/* front board: embossed double frame holding the composition */
+.bk-face {
+  position: absolute; inset: 7px 11px 7px 17px;
+  border: 1px solid rgba(232,217,168,0.6);
+  border-radius: 2px 5px 5px 2px;
+  box-shadow:
+    inset 0 0 0 3px transparent,
+    inset 0 0 14px rgba(0,0,0,0.28),
+    0 0 0 3px rgba(0,0,0,0.08);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 8px; padding: 14px 8px;
+  color: #F0E6C8; text-align: center; pointer-events: none;
+}
+.bk-face::before {
+  content: ''; position: absolute; inset: 3px;
+  border: 1px solid rgba(232,217,168,0.28); border-radius: 1px 4px 4px 1px;
+}
+
+/* gold filigree corners (double curl + dot) */
+.bk-corner {
+  position: absolute; width: 19px; height: 19px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M1 23 V7 Q1 1 7 1 H23' fill='none' stroke='%23E8D9A8' stroke-opacity='0.85' stroke-width='1.7'/%3E%3Cpath d='M5 23 V10 Q5 5 10 5 H23' fill='none' stroke='%23E8D9A8' stroke-opacity='0.4' stroke-width='1'/%3E%3Cpath d='M8.5 8.5 l2.6 2.6 M8.5 13.7 L13.7 8.5' stroke='%23E8D9A8' stroke-opacity='0.55' stroke-width='1'/%3E%3Ccircle cx='8.5' cy='8.5' r='1.7' fill='%23E8D9A8' fill-opacity='0.9'/%3E%3C/svg%3E");
+  background-size: contain;
+}
+.bk-corner--tl { top: 5px; left: 5px; }
+.bk-corner--tr { top: 5px; right: 5px; transform: rotate(90deg); }
+.bk-corner--br { bottom: 5px; right: 5px; transform: rotate(180deg); }
+.bk-corner--bl { bottom: 5px; left: 5px; transform: rotate(270deg); }
+
+/* mihrab-arch medallion around the icon */
+.bk-medallion {
+  position: relative;
+  width: 48px; height: 58px; margin-bottom: 2px;
+  display: flex; align-items: center; justify-content: center;
+  border: 1px solid rgba(232,217,168,0.65);
+  border-radius: 50% 50% 7px 7px / 62% 62% 7px 7px;
+  background:
+    radial-gradient(90% 75% at 50% 32%, rgba(255,230,160,0.22) 0%, rgba(0,0,0,0.22) 100%);
+  box-shadow: inset 0 0 10px rgba(0,0,0,0.3), 0 0 12px rgba(255,225,150,0.12);
+}
+.bk-medallion::before {
+  content: ''; position: absolute; inset: 3px;
+  border: 1px solid rgba(232,217,168,0.3);
+  border-radius: 50% 50% 5px 5px / 60% 60% 5px 5px;
+}
+/* finial dot above the arch */
+.bk-medallion::after {
+  content: ''; position: absolute; top: -7px; left: 50%; width: 5px; height: 5px;
+  transform: translateX(-50%) rotate(45deg);
+  background: #E8D9A8; opacity: 0.85;
+  box-shadow: 0 0 6px rgba(255,225,150,0.5);
+}
+.bk-icon { display: flex; color: #EFDFA8; filter: drop-shadow(0 1px 2px rgba(0,0,0,0.5)); }
+
+/* gold-foil title */
+.bk-title {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 16.5px; font-weight: 700; line-height: 1.18;
+  letter-spacing: 0.02em;
+  background: linear-gradient(180deg, #FAF2D8 12%, #E6CD8E 52%, #F8ECC2 78%, #D9BC7E 100%);
+  -webkit-background-clip: text; background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 1px 1px rgba(0,0,0,0.55));
+}
+
+/* rule ❖ rule ornament */
+.bk-orn { display: flex; align-items: center; gap: 6px; opacity: 0.85; }
+.bk-orn-rule { display: block; width: 22px; height: 1px; background: linear-gradient(90deg, transparent, #D4BA88); }
+.bk-orn .bk-orn-rule:last-child { background: linear-gradient(90deg, #D4BA88, transparent); }
+.bk-orn-diamond { font-size: 8px; color: #D4BA88; line-height: 1; }
+
+.bk-sub {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 9px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase;
+  color: rgba(240,230,200,0.72);
+  text-shadow: 0 1px 2px rgba(0,0,0,0.4);
+}
+
+/* light sweeping across the leather on hover */
+.bk-sheen {
+  position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
+  background: linear-gradient(115deg, transparent 32%, rgba(255,250,230,0.16) 46%, rgba(255,250,230,0.05) 52%, transparent 64%);
+  background-size: 260% 100%;
+  background-position: 115% 0;
+  transition: background-position 600ms cubic-bezier(0.25,0.46,0.45,0.94);
+}
+.shelf-book:hover .bk-sheen, .shelf-book:focus-visible .bk-sheen { background-position: -45% 0; }
+
+@media (max-width: 640px) {
+  .shelf-book { width: 126px; height: 178px; }
+  .bk-face { inset: 6px 10px 6px 15px; padding: 10px 6px; gap: 6px; }
+  .bk-medallion { width: 42px; height: 50px; }
+  .bk-title { font-size: 14.5px; }
+  .bk-corner { width: 15px; height: 15px; }
+  .shelf-inner { padding: 16px 14px 70px; }
+  .shelf-row { gap: 13px; }
+}
+
+/* ───────────────────── BOOK PAGE HEADER ───────────────────── */
+.book-head {
+  position: sticky; top: 0; z-index: 60;
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 16px;
+  background: linear-gradient(180deg, #FAF5E8 70%, rgba(250,245,232,0.92));
+  border-bottom: 1px solid rgba(180,147,96,0.35);
+  box-shadow: 0 6px 18px rgba(58,38,16,0.08);
+}
+.book-head-back {
+  display: inline-flex; align-items: center; gap: 7px; flex-shrink: 0;
+  background: transparent; color: #8A6010;
+  border: 1px solid rgba(180,147,96,0.45); border-radius: 999px;
+  padding: 7px 14px 7px 10px; min-height: 36px;
+  font-family: 'Inter', system-ui, sans-serif; font-size: 12.5px; font-weight: 600;
+  letter-spacing: 0.03em; cursor: pointer;
+  transition: background 180ms, color 180ms;
+}
+.book-head-back:hover { background: rgba(184,157,96,0.14); color: #6B5320; }
+.book-head-title {
+  flex: 1; min-width: 0; text-align: center;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 17px; font-weight: 600; color: #1A1915; letter-spacing: 0.03em;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.book-head-action {
+  display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0;
+  width: 36px; height: 36px; border-radius: 50%;
+  background: transparent; color: #8A7E6E;
+  border: 1px solid rgba(180,147,96,0.45); cursor: pointer;
+  transition: background 180ms, color 180ms;
+}
+.book-head-action:hover { background: rgba(184,157,96,0.14); color: #6B5320; }

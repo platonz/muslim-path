@@ -58,37 +58,6 @@ export default function Library({ navigate }) {
     <div style={{ maxWidth: 960, margin: "0 auto", padding: "40px 24px" }}>
       <PageTitle icon="library" title={t("pages.library.title")} sub={loading ? "Loading…" : `${books.length} curated books and resources`} />
 
-      {/* Featured: Sunneti Reading Room */}
-      <button
-        onClick={() => navigate("sunneti")}
-        style={{
-          position: "relative", overflow: "hidden", cursor: "pointer", width: "100%",
-          textAlign: "left", border: "none", borderRadius: 16, marginBottom: 20,
-          padding: "26px 30px",
-          background: "radial-gradient(120% 140% at 88% 12%, #3c5e22 0%, #2d5018 46%, #213d12 100%)",
-          boxShadow: "var(--shadow-md)",
-          display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16,
-        }}
-      >
-        <span>
-          <span style={{ display: "block", fontSize: 11, fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", color: "#D4BA88", fontFamily: SANS }}>
-            {t("sunneti.kicker", "Dhoma e Leximit")}
-          </span>
-          <span style={{ display: "block", fontFamily: SERIF, fontWeight: 700, fontSize: 28, lineHeight: 1.15, color: "#FAF7EE", marginTop: 8 }}>
-            Sunneti — <em style={{ fontStyle: "italic", fontWeight: 500, color: "#D4BA88" }}>{t("sunneti.accent", "një libër për t'u shfletuar")}</em>
-          </span>
-          <span style={{ display: "block", fontFamily: SANS, fontSize: 14, color: "rgba(245,237,216,0.78)", marginTop: 8 }}>
-            {t("sunneti.sub", "Kurani, namazi, lutjet e më shumë — të mbledhura si kapituj në një libër të vetëm.")}
-          </span>
-        </span>
-        <span aria-hidden="true" style={{
-          flex: "0 0 auto", width: 48, height: 48, borderRadius: "50%",
-          display: "flex", alignItems: "center", justifyContent: "center",
-          background: "rgba(250,247,238,0.12)", color: "#FAF7EE",
-          border: "1px solid rgba(212,186,136,0.4)", fontSize: 22,
-        }}>›</span>
-      </button>
-
       <div style={{ display: "flex", gap: 10, marginBottom: 20, flexWrap: "wrap" }}>
         <input
           placeholder="Search by title or author…"

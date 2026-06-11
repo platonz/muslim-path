@@ -1,12 +1,10 @@
 import { useState, useEffect, useRef, useMemo } from "react";
 import { BG, SURFACE, BORDER, GREEN, GREEN_L, GOLD, TEXT, MUTED, SERIF, SANS } from "./constants";
-import Navbar from "./components/Navbar";
-import Home from "./components/Home";
 import Dhikr from "./components/Dhikr";
 import Profile from "./components/Profile";
 import Icon from "./components/Icon";
 import KaabaWatermark from "./components/KaabaWatermark";
-import MobileTabBar from "./components/MobileTabBar";
+import { LibraryDoor, LibraryShelf, BookHeader, BOOK_TITLES } from "./components/LibraryRoom";
 import QuranReader from "./components/QuranReader";
 import SiTeFalesh from "./components/SiTeFalesh";
 import HowToPray from "./components/HowToPray";
@@ -24,7 +22,6 @@ import AsmaPage from "./components/AsmaPage";
 import AudioPage from "./components/AudioPage";
 import { SUPA_URL, SUPA_ANON_KEY, UPLOAD_WORKER_URL, UPLOAD_API, ADMIN_EMAILS, supaFetch } from "./lib/supabase";
 import { VALID_PAGES, slugToPage, pageToUrl } from "./lib/routing";
-import { QUOTES } from "./data/quotes";
 import { LECTURES } from "./data/lectures";
 
 
@@ -50,19 +47,25 @@ export default function App() {
     const parts = window.location.pathname.replace(/^\//, "").split("/").filter(Boolean);
     // Redirect legacy /sq/... or /en/... URLs
     if (parts[0] === "sq" || parts[0] === "en") {
-      const pageId = slugToPage(parts[1] || "") || "sunneti";
+      const pageId = slugToPage(parts[1] || "") || "home";
       window.history.replaceState({}, "", pageToUrl(pageId));
       return pageId;
     }
-    // Root URL → book landing
-    if (!parts[0]) return "sunneti";
-    return slugToPage(parts[0]) || (VALID_PAGES.includes(parts[0]) ? parts[0] : "sunneti");
+    // Root URL → library (door on first visit, shelf after)
+    if (!parts[0]) return "home";
+    return slugToPage(parts[0]) || (VALID_PAGES.includes(parts[0]) ? parts[0] : "home");
   });
-  const [navHistory, setNavHistory] = useState([]);
-  const HADITH_QUOTES = QUOTES.filter(q => !q.src?.startsWith("Quran"));
-  const QURAN_QUOTES  = QUOTES.filter(q =>  q.src?.startsWith("Quran"));
-  const [quote]       = useState(() => HADITH_QUOTES[Math.floor(Math.random() * HADITH_QUOTES.length)]);
-  const [verseQuote]  = useState(() => QURAN_QUOTES [Math.floor(Math.random() * QURAN_QUOTES.length)]);
+  // The library door is shown once per session; arriving on a deep link counts as already inside
+  const [entered, setEntered] = useState(() => {
+    try {
+      if (sessionStorage.getItem("mp-entered") === "1") return true;
+      return window.location.pathname !== "/";
+    } catch { return true; }
+  });
+  function enterLibrary() {
+    try { sessionStorage.setItem("mp-entered", "1"); } catch {}
+    setEntered(true);
+  }
   const [showSearch, setShowSearch] = useState(false);
   const [duaFavs, setDuaFavs] = useState(() => {
     try { return new Set(JSON.parse(localStorage.getItem("mp-dua-favs") || "[]")); } catch { return new Set(); }
@@ -286,7 +289,7 @@ export default function App() {
 
   // Dynamic <title> + <meta description> per page
   const PAGE_META = {
-    home:        { title: "Sunneti.com - Daily Islamic Companion",          desc: "Quran, Duas, Tasbeeh, Islamic calendar and more in one calm daily app." },
+    home:        { title: "Biblioteka - Sunneti.com",                       desc: "Një bibliotekë librash: Kurani, Sunneti, namazi, duatë, ligjëratat e më shumë." },
     quran:       { title: "Quran - Sunneti.com",                            desc: "Read the Holy Quran with Arabic text, transliteration and English translation." },
     dua:         { title: "Dua & Dhikr - Sunneti.com",                      desc: "Morning & evening adhkar, daily supplications and situational remembrances." },
     asma:        { title: "99 Names of Allah - Sunneti.com",                desc: "Al-Asma ul-Husna, the 99 Beautiful Names of Allah with meanings and transliteration." },
@@ -317,18 +320,9 @@ export default function App() {
   const [namazPrayerId, setNamazPrayerId] = useState(null);
 
   function navigate(p, extra) {
-    if (p !== page) setNavHistory(h => [...h, page]);
     setPage(p);
     if (p === "namaz") setNamazPrayerId(extra || null);
     window.history.pushState({}, "", pageToUrl(p));
-  }
-
-  function goBack() {
-    if (navHistory.length === 0) return;
-    const prev = navHistory[navHistory.length - 1];
-    setNavHistory(h => h.slice(0, -1));
-    setPage(prev);
-    window.history.pushState({}, "", pageToUrl(prev));
   }
 
   const skipTrack = current?.type === "quran" ? skipQuranVerse : skipLecture;
@@ -344,9 +338,26 @@ export default function App() {
       {page !== "home" && page !== "quran" && <KaabaWatermark fixed opacity={0.08} />}
 
       <audio ref={audioRef} onTimeUpdate={onTimeUpdate} onEnded={handleAudioEnd} onLoadedMetadata={() => setDuration(audioRef.current?.duration || 0)} />
-      <Navbar page={page} setPage={navigate} onSearch={() => setShowSearch(true)} authUser={authUser} onAuthClick={() => setShowAuth(true)} onSignOut={handleSignOut} />
+
+      {/* ── Library landing: door (once per session) then bookshelf ── */}
+      {page === "home" && !entered && <LibraryDoor onEnter={enterLibrary} />}
+      {page === "home" && entered && (
+        <LibraryShelf
+          navigate={navigate}
+          onSearch={() => setShowSearch(true)}
+          authUser={authUser}
+          onAuthClick={() => setShowAuth(true)}
+        />
+      )}
+
+      {/* ── An open book: page content inside the parchment column ── */}
+      {page !== "home" && page !== "sunneti" && (
       <main>
-        {page === "home" && <Home quote={quote} verseQuote={verseQuote} setPage={navigate} showInstall={showInstall} onInstall={handleInstall} onDismissInstall={dismissInstall} />}
+        <BookHeader
+          title={BOOK_TITLES[page] || ({ profile: "Profili", admin: "Admin" })[page] || "Sunneti.com"}
+          onBack={() => navigate("home")}
+          onSearch={() => setShowSearch(true)}
+        />
         {page === "zakat" && <Zakat />}
         {page === "inheritance" && <Inheritance />}
         {page === "calendar" && <IslamicCalendar />}
@@ -371,36 +382,15 @@ export default function App() {
         {page === "namaz"   && <SiTeFalesh initialPrayerId={namazPrayerId} />}
         {page === "howpray" && <HowToPray />}
       </main>
-      {/* Immersive full-screen page — rendered outside <main> so it stacks above the navbar */}
-      {page === "sunneti" && <SunnetiReadingRoom onExit={() => navigate("library")} />}
+      )}
+      {/* Immersive full-screen book — rendered outside <main>, exits back to the shelf */}
+      {page === "sunneti" && <SunnetiReadingRoom onExit={() => navigate("home")} />}
       {showSearch && (
         <GlobalSearch
           onClose={() => setShowSearch(false)}
           navigate={navigate}
           lectures={lectures}
         />
-      )}
-      {/* Back button — top-left on mobile, bottom-left on desktop */}
-      {page !== "home" && page !== "namaz" && navHistory.length > 0 && (
-        <button onClick={goBack} title="Go back" className="back-btn" style={{
-          position: "fixed",
-          bottom: current ? 80 : 24,
-          left: 16,
-          zIndex: 450,
-          background: "var(--surface)",
-          border: `1px solid ${BORDER}`,
-          borderRadius: "var(--radius-sm)",
-          color: MUTED,
-          cursor: "pointer",
-          width: 40, height: 40,
-          display: "flex", alignItems: "center", justifyContent: "center",
-          fontSize: 20, lineHeight: 1,
-          boxShadow: "var(--shadow-glass-sm)",
-          transition: "border-color 0.2s, color 0.2s",
-        }}
-          onMouseEnter={e => { e.currentTarget.style.borderColor = GOLD; e.currentTarget.style.color = GOLD; }}
-          onMouseLeave={e => { e.currentTarget.style.borderColor = BORDER; e.currentTarget.style.color = MUTED; }}
-        >‹</button>
       )}
       <FloatingPlayer {...audioProps} navigate={navigate} />
 
@@ -410,9 +400,6 @@ export default function App() {
           onAuth={session => setAuthSession(session)}
         />
       )}
-
-      {/* ── Mobile bottom tab bar (all pages) ── */}
-      <MobileTabBar page={page} navigate={navigate} />
     </div>
   );
 }
