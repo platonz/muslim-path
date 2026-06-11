@@ -187,7 +187,7 @@ input, select, textarea { color-scheme: light; }
   overflow-x: clip;
 }
 
-.app-root > main {
+.app-root > main:not(.libraryPage) {
   position: relative;
   z-index: 1;
   background: #FAF5E8;

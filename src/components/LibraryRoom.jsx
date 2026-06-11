@@ -1,46 +1,46 @@
-// Library Room — the app shell metaphor: a closed door at the entrance,
-// a bookshelf as the home screen, and a book-page header inside each section.
 import { useState } from "react";
 import "../styles/library.css";
 import Icon from "./Icon";
+import { pageToUrl } from "../lib/routing";
 
-/* Every main page as a book on the shelf. --bk* drive the leather gradient. */
+/* Set true to see the clickable zones over the scene image */
+const DEBUG_HOTSPOTS = false;
+
 export const SHELVES = [
   {
-    label: "Leximi",
+    label: "LEXIMI",
     books: [
-      { id: "sunneti", title: "Sunneti",      sub: "Libri",        icon: "bookmark", c: ["#3c5e22", "#2d5018", "#1f3a10"] },
-      { id: "quran",   title: "Kurani",       sub: "Leximi",       icon: "quran",    c: ["#2a6b52", "#176B4D", "#0e4733"] },
-      { id: "library", title: "Biblioteka",   sub: "Librat PDF",   icon: "library",  c: ["#7a4a22", "#5b3a1e", "#3f2812"] },
-      { id: "audio",   title: "Ligjëratat",   sub: "Audio",        icon: "audio",    c: ["#8a4a1e", "#7a3b1e", "#542811"] },
+      { id: "sunneti", title: "Sunneti", sub: "LIBRI", icon: "bookmark", c: ["#42652a", "#2f511b", "#1d3510"] },
+      { id: "quran", title: "Kurani", sub: "LEXIMI", icon: "quran", c: ["#2d785b", "#176b4d", "#0d4530"] },
+      { id: "library", title: "Biblioteka", sub: "LIBRAT PDF", icon: "library", c: ["#8a5528", "#5c3719", "#38210d"] },
+      { id: "audio", title: "Ligjëratat", sub: "AUDIO", icon: "audio", c: ["#945020", "#733719", "#4e250f"] },
     ],
   },
   {
-    label: "Adhurimi",
+    label: "ADHURIMI",
     books: [
-      { id: "namaz",   title: "Si të Falesh", sub: "Namazi",       icon: "dua",      c: ["#2e4a72", "#1e3a5f", "#142944"] },
-      { id: "howpray", title: "How to Pray",  sub: "English",      icon: "globe",    c: ["#3a5a78", "#2b4a66", "#1c3349"] },
-      { id: "dua",     title: "Duatë",        sub: "Lutjet",       icon: "heart",    c: ["#7a2a36", "#6b1f2a", "#4a141d"] },
-      { id: "asma",    title: "99 Emrat",     sub: "El-Esma",      icon: "asma",     c: ["#5e3055", "#4a2545", "#33182f"] },
-      { id: "tasbeeh", title: "Tesbih",       sub: "Dhikri",       icon: "tasbeeh",  c: ["#2a5a5a", "#1e4a4a", "#133232"] },
+      { id: "namaz", title: "Si të Falesh", sub: "NAMAZI", icon: "dua", c: ["#355881", "#203d64", "#142843"] },
+      { id: "howpray", title: "How to Pray", sub: "ENGLISH", icon: "globe", c: ["#426681", "#2b4b67", "#1b3148"] },
+      { id: "dua", title: "Duatë", sub: "LUTJET", icon: "heart", c: ["#842d3a", "#67202b", "#45131b"] },
+      { id: "asma", title: "99 Emrat", sub: "EL-ESMA", icon: "asma", c: ["#66335b", "#4c2546", "#31172d"] },
+      { id: "tasbeeh", title: "Tesbih", sub: "DHIKRI", icon: "tasbeeh", c: ["#2d6361", "#1f4a49", "#132f2f"] },
     ],
   },
   {
-    label: "Vegla",
+    label: "VEGLA",
     books: [
-      { id: "zakat",       title: "Zekati",      sub: "Llogaritja",  icon: "zakat",    c: ["#8a6a1e", "#75591a", "#523e10"] },
-      { id: "inheritance", title: "Trashëgimia", sub: "Hiseja",      icon: "inherit",  c: ["#5a5a26", "#4a4a1e", "#333314"] },
-      { id: "calendar",    title: "Kalendari",   sub: "Hixhri",      icon: "calendar", c: ["#456238", "#37512c", "#25381d"] },
-      { id: "dates",       title: "Datat",       sub: "Konvertimi",  icon: "dates",    c: ["#6a4a3a", "#583c2e", "#3d2920"] },
+      { id: "zakat", title: "Zekati", sub: "LLOGARITJA", icon: "zakat", c: ["#937024", "#735719", "#4f3b0f"] },
+      { id: "inheritance", title: "Trashëgimia", sub: "HISEJA", icon: "inherit", c: ["#63632a", "#49491d", "#303013"] },
+      { id: "calendar", title: "Kalendari", sub: "HIXHRI", icon: "calendar", c: ["#4f6d3f", "#38542c", "#263a1f"] },
+      { id: "dates", title: "Datat", sub: "KONVERTIMI", icon: "dates", c: ["#755341", "#583c2e", "#3c281f"] },
     ],
   },
 ];
 
 export const BOOK_TITLES = Object.fromEntries(
-  SHELVES.flatMap(s => s.books.map(b => [b.id, b.title]))
+  SHELVES.flatMap(section => section.books.map(book => [book.id, book.title]))
 );
 
-/* ── The closed library door (landing, once per session) ── */
 export function LibraryDoor({ onEnter }) {
   const [opening, setOpening] = useState(false);
 
@@ -64,7 +64,7 @@ export function LibraryDoor({ onEnter }) {
         <span className="door-lantern door-lantern--left" aria-hidden="true" />
         <button className="door-frame" onClick={open} aria-label="Hyr në bibliotekë">
           <span className="door-arch-rim" aria-hidden="true" />
-          <span className="door-keystone" aria-hidden="true">&#10070;</span>
+          <span className="door-keystone" aria-hidden="true">❖</span>
           <span className="door-light" aria-hidden="true" />
           <span className="door-leaves" aria-hidden="true">
             <span className="door-leaf door-leaf--left">
@@ -91,138 +91,146 @@ export function LibraryDoor({ onEnter }) {
   );
 }
 
-/* ── The bookshelf home ── */
-export function LibraryShelf({ navigate, onSearch, authUser, onAuthClick }) {
+/* Percent-based clickable zones over the scene image (1536x1024).
+   `page` is the app's internal page id; hrefs come from lib/routing slugs. */
+const HOTSPOTS = [
+  { id: "sunneti",      label: "Sunneti",            page: "sunneti",     left: 17.64, top: 18.85, width: 8.98,  height: 18.16 },
+  { id: "kurani",       label: "Kurani",             page: "quran",       left: 28.52, top: 18.85, width: 8.98,  height: 18.16 },
+  { id: "biblioteka",   label: "Biblioteka",         page: "library",     left: 39.32, top: 18.85, width: 8.98,  height: 18.16 },
+  { id: "ligjeratat",   label: "Ligjëratat",         page: "audio",       left: 50.20, top: 18.85, width: 8.98,  height: 18.16 },
+
+  { id: "si-te-falesh", label: "Si të Falesh",       page: "namaz",       left: 14.71, top: 44.24, width: 9.11,  height: 17.97 },
+  { id: "how-to-pray",  label: "How to Pray",        page: "howpray",     left: 25.33, top: 44.24, width: 9.11,  height: 17.97 },
+  { id: "duate",        label: "Duatë",              page: "dua",         left: 36.13, top: 44.24, width: 9.05,  height: 17.97 },
+  { id: "emrat-99",     label: "99 Emrat",           page: "asma",        left: 46.88, top: 44.24, width: 8.98,  height: 17.97 },
+  { id: "tesbih",       label: "Tesbih",             page: "tasbeeh",     left: 57.55, top: 44.24, width: 9.05,  height: 17.97 },
+
+  { id: "zekati",       label: "Zekati",             page: "zakat",       left: 17.71, top: 69.04, width: 8.98,  height: 18.26 },
+  { id: "trashegimia",  label: "Trashëgimia",        page: "inheritance", left: 28.06, top: 69.04, width: 9.05,  height: 18.26 },
+  { id: "kalendari",    label: "Kalendari",          page: "calendar",    left: 38.80, top: 69.04, width: 9.05,  height: 18.26 },
+  { id: "datat",        label: "Datat",              page: "dates",       left: 49.54, top: 69.04, width: 8.98,  height: 18.26 },
+
+  { id: "read-cta",     label: "Merr për të lexuar", page: "library",     left: 68.75, top: 68.30, width: 15.95, height: 5.60 },
+
+  { id: "kreu",         label: "Kreu",               page: "home",        left: 20.31, top: 89.45, width: 9.57,  height: 9.57 },
+  { id: "katalogu",     label: "Katalogu",           page: "library",     left: 31.38, top: 89.45, width: 12.96, height: 9.57 },
+  { id: "favoritet",    label: "Favoritet",          page: "dua",         left: 45.77, top: 89.45, width: 12.50, height: 9.57 },
+  { id: "historia",     label: "Historia",           page: "calendar",    left: 59.70, top: 89.45, width: 10.55, height: 9.57 },
+  { id: "profili",      label: "Profili",            page: "profile",     left: 71.74, top: 89.45, width: 10.81, height: 9.57 },
+];
+
+/* Shared leather-cover innards, used by the mobile cards */
+function BookCover({ b }) {
   return (
-    <div className="lib-shelf">
-      {/* room architecture: fluted pilasters, lanterns, the door ajar on the right wall */}
-      <span className="shelf-pilaster shelf-pilaster--l" aria-hidden="true" />
-      <span className="shelf-pilaster shelf-pilaster--r" aria-hidden="true" />
-      <span className="shelf-lantern shelf-lantern--l" aria-hidden="true" />
-      <span className="shelf-lantern shelf-lantern--r" aria-hidden="true" />
-      <span className="shelf-door-ajar" aria-hidden="true">
-        <span className="ajar-light" />
-        <span className="ajar-leaf">
-          <span className="ajar-panel ajar-panel--top" />
-          <span className="ajar-panel ajar-panel--bottom" />
-          <span className="ajar-handle" />
+    <>
+      <span className="bk-spine" aria-hidden="true" />
+      <span className="bk-pages" aria-hidden="true" />
+      <span className="bk-face">
+        <span className="bk-corner bk-corner--tl" aria-hidden="true" />
+        <span className="bk-corner bk-corner--tr" aria-hidden="true" />
+        <span className="bk-corner bk-corner--bl" aria-hidden="true" />
+        <span className="bk-corner bk-corner--br" aria-hidden="true" />
+        <span className="bk-medallion">
+          <span className="bk-icon"><Icon name={b.icon} size={18} /></span>
         </span>
+        <span className="bk-title">{b.title}</span>
+        <span className="bk-orn" aria-hidden="true">
+          <span className="bk-orn-rule" /><span className="bk-orn-diamond">&#10070;</span><span className="bk-orn-rule" />
+        </span>
+        <span className="bk-sub">{b.sub}</span>
       </span>
+      <span className="bk-sheen" aria-hidden="true" />
+    </>
+  );
+}
 
-      <div className="shelf-inner">
-        {/* carved hanging sign */}
-        <header className="shelf-sign">
-          <span className="sign-flourish" aria-hidden="true">&#10086;</span>
-          <div className="sign-body">
-            <h1>Biblioteka</h1>
-            <div className="sign-sub">
-              <span className="sign-rule" aria-hidden="true" />
-              Leximi &amp; Adhurimi
-              <span className="sign-rule" aria-hidden="true" />
-            </div>
-          </div>
-          <span className="sign-flourish sign-flourish--r" aria-hidden="true">&#10086;</span>
+export function LibraryShelf({ navigate, onSearch, authUser, onAuthClick }) {
+  function go(e, spot) {
+    e.preventDefault();
+    if (spot.page === "home") { window.scrollTo({ top: 0, behavior: "smooth" }); return; }
+    if (spot.page === "profile" && !authUser) { onAuthClick(); return; }
+    navigate(spot.page);
+  }
+
+  const DOCK = HOTSPOTS.filter(h => ["kreu", "katalogu", "favoritet", "historia", "profili"].includes(h.id));
+  const DOCK_ICONS = { kreu: "home", katalogu: "library", favoritet: "heart", historia: "calendar", profili: "user" };
+
+  return (
+    <main className="libraryPage">
+      {/* ── Desktop / tablet: the painted scene with live hotspots ── */}
+      <section className="libraryScene" aria-label="Biblioteka">
+        <picture>
+          <source srcSet="/images/library-scene.avif" type="image/avif" />
+          <source srcSet="/images/library-scene.webp" type="image/webp" />
+          <img
+            src="/images/library-scene.png"
+            alt=""
+            className="librarySceneImage"
+            fetchpriority="high"
+            aria-hidden="true"
+          />
+        </picture>
+        <nav className={"sceneHotspots" + (DEBUG_HOTSPOTS ? " is-debug" : "")} aria-label="Biblioteka — librat dhe navigimi">
+          {HOTSPOTS.map(spot => (
+            <a
+              key={spot.id}
+              href={pageToUrl(spot.page)}
+              className={"hero-spot" + (spot.id === "kreu" ? " is-active" : "")}
+              aria-label={spot.label}
+              data-label={spot.label}
+              onClick={e => go(e, spot)}
+              style={{
+                left: spot.left + "%",
+                top: spot.top + "%",
+                width: spot.width + "%",
+                height: spot.height + "%",
+              }}
+            />
+          ))}
+        </nav>
+      </section>
+
+      {/* ── Mobile fallback: real cards in a 2-column grid ── */}
+      <div className="libraryMobile">
+        <header className="mShelf-sign">
+          <h1>Biblioteka</h1>
+          <p>Leximi &amp; Adhurimi</p>
         </header>
-
-        <div className="shelf-layout">
-          {/* the wooden bookcase */}
-          <div className="shelf-case">
-            {SHELVES.map(shelf => (
-              <section className="shelf-section" key={shelf.label}>
-                <div className="shelf-label">{shelf.label}</div>
-                <div className="shelf-row">
-                  {shelf.books.map(b => (
+        {SHELVES.map(shelf => (
+          <section className="mShelf-section" key={shelf.label}>
+            <div className="shelf-label">{shelf.label}</div>
+            <div className="mShelf-grid">
+              {shelf.books.map(b => (
                 <button
                   key={b.id}
                   className="shelf-book"
                   style={{ "--bk-hi": b.c[0], "--bk": b.c[1], "--bk-lo": b.c[2] }}
                   onClick={() => navigate(b.id)}
+                  aria-label={b.title}
                 >
-                  <span className="bk-spine" aria-hidden="true" />
-                  <span className="bk-pages" aria-hidden="true" />
-                  <span className="bk-face">
-                    <span className="bk-corner bk-corner--tl" aria-hidden="true" />
-                    <span className="bk-corner bk-corner--tr" aria-hidden="true" />
-                    <span className="bk-corner bk-corner--bl" aria-hidden="true" />
-                    <span className="bk-corner bk-corner--br" aria-hidden="true" />
-                    <span className="bk-medallion">
-                      <span className="bk-icon"><Icon name={b.icon} size={18} /></span>
-                    </span>
-                    <span className="bk-title">{b.title}</span>
-                    <span className="bk-orn" aria-hidden="true">
-                      <span className="bk-orn-rule" /><span className="bk-orn-diamond">&#10070;</span><span className="bk-orn-rule" />
-                    </span>
-                    <span className="bk-sub">{b.sub}</span>
-                  </span>
-                  <span className="bk-sheen" aria-hidden="true" />
+                  <BookCover b={b} />
                 </button>
-                  ))}
-                </div>
-                <div className="shelf-plank" aria-hidden="true" />
-              </section>
-            ))}
-          </div>
-
-          {/* side panel: take a book */}
-          <aside className="shelf-side">
-            <div className="side-title">Merr një libër</div>
-            <div className="side-emblem"><Icon name="quran" size={30} /></div>
-            <p className="side-text">Zgjidh një libër dhe lexo, mëso dhe përfito.</p>
-            <ul className="side-feats">
-              <li>
-                <span className="feat-icon"><Icon name="check" size={15} /></span>
-                <span><strong>Falas</strong><em>Zgjeroni diturinë tuaj</em></span>
-              </li>
-              <li>
-                <span className="feat-icon"><Icon name="bookmark" size={15} /></span>
-                <span><strong>Praktik</strong><em>Përdoreni në jetën e përditshme</em></span>
-              </li>
-              <li>
-                <span className="feat-icon"><Icon name="globe" size={15} /></span>
-                <span><strong>I Qasshëm</strong><em>Gjithmonë me vete</em></span>
-              </li>
-            </ul>
-            <button className="side-cta" onClick={() => navigate("sunneti")}>
-              Merr për të lexuar
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" /></svg>
-            </button>
-            <div className="side-quote">
-              &ldquo;Lexo në emër të Zotit tënd, që të krijoi.&rdquo;
-              <span>&mdash; Kurani 96:1</span>
+              ))}
             </div>
-          </aside>
-        </div>
+          </section>
+        ))}
+        <nav className="mShelf-dock" aria-label="Navigimi">
+          {DOCK.map(spot => (
+            <a
+              key={spot.id}
+              href={pageToUrl(spot.page)}
+              className={"dock-item" + (spot.id === "kreu" ? " is-active" : "")}
+              onClick={e => go(e, spot)}
+            >
+              <Icon name={DOCK_ICONS[spot.id]} size={17} /> <span>{spot.label}</span>
+            </a>
+          ))}
+        </nav>
       </div>
-
-      {/* wooden bottom dock */}
-      <nav className="shelf-dock">
-        <button className="dock-item is-active">
-          <Icon name="home" size={17} /> <span>Kreu</span>
-        </button>
-        <button className="dock-item" onClick={onSearch}>
-          <Icon name="search" size={17} /> <span>Katalogu</span>
-        </button>
-        <button className="dock-item" onClick={() => navigate("dua")}>
-          <Icon name="heart" size={17} /> <span>Favoritet</span>
-        </button>
-        <button className="dock-item" onClick={() => navigate("calendar")}>
-          <Icon name="calendar" size={17} /> <span>Historia</span>
-        </button>
-        {authUser ? (
-          <button className="dock-item" onClick={() => navigate("profile")}>
-            <Icon name="user" size={17} /> <span>Profili</span>
-          </button>
-        ) : (
-          <button className="dock-item" onClick={onAuthClick}>
-            <Icon name="user" size={17} /> <span>Profili</span>
-          </button>
-        )}
-      </nav>
-    </div>
+    </main>
   );
 }
 
-/* ── Header strip shown at the top of every open book (page) ── */
 export function BookHeader({ title, onBack, onSearch }) {
   return (
     <div className="book-head">
