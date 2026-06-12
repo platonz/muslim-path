@@ -52,6 +52,16 @@ export function LibraryDoor({ onEnter }) {
 
   return (
     <div className={"lib-door" + (opening ? " is-opening" : "")}>
+      <div className="door-particles" aria-hidden="true">
+        <span style={{ left: "12%", animationDelay: "0s" }} />
+        <span style={{ left: "26%", animationDelay: "2.4s" }} />
+        <span style={{ left: "42%", animationDelay: "1.1s" }} />
+        <span style={{ left: "48%", animationDelay: "3.6s" }} />
+        <span style={{ left: "57%", animationDelay: "0.7s" }} />
+        <span style={{ left: "71%", animationDelay: "2.9s" }} />
+        <span style={{ left: "84%", animationDelay: "1.8s" }} />
+        <span style={{ left: "92%", animationDelay: "4.2s" }} />
+      </div>
       <div className="door-brand">
         <img src="/logo.png" alt="" />
         <span>Sunneti.com</span>
@@ -79,14 +89,15 @@ export function LibraryDoor({ onEnter }) {
             </span>
           </span>
           <span className="door-threshold" aria-hidden="true" />
+          <span className="door-open-text" aria-hidden="true">Hap derën</span>
         </button>
         <span className="door-lantern door-lantern--right" aria-hidden="true" />
       </div>
       <span className="door-floor-glow" aria-hidden="true" />
-      <div className="door-hint">
-        Trokit për të hyrë
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6" /></svg>
-      </div>
+      <button className="door-enter-btn" onClick={open}>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+        Hap Derën
+      </button>
     </div>
   );
 }
