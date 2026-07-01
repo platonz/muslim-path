@@ -31,9 +31,16 @@ MUTED    = "#6B7280"
 - Arabic font size should be ~1.15–1.25× the surrounding Latin text
 
 ## Nav & Routing
-- Page routing is controlled by `page` state in the root component via `setPage()`
-- Nav items are defined in `NAV_ITEMS` array — add new pages there
-- Currently active pages: home, prayer, qibla, zakat, inheritance, dateconverter, library
+- Page routing is controlled by `page` state in `src/App.jsx` via `navigate(pageId)`; slugs are mapped in `src/lib/routing.js` (`VALID_PAGES`, `slugToPage`, `pageToUrl`)
+- Currently active pages: home, quran, dua, asma, tasbeeh, namaz, howpray, library, audio, zakat, inheritance, calendar, dates, profile, sunneti, admin
+- The real 13-book catalogue (id, title, icon, per-book gradient colors) lives in `SHELVES` in `src/components/LibraryRoom.jsx` — reuse it, don't duplicate it, when any new UI needs to list/link the app's features
+- Every non-home page is wrapped in `<main>` with the sticky `BookHeader` (also in `LibraryRoom.jsx`) for back/title/search chrome
+
+## Home Dashboard (Nur Al-Ilm)
+- Home (`page === "home"`) renders `src/components/NurDashboard.jsx` — a sidebar dashboard, not the old door/bookshelf metaphor (removed)
+- This page intentionally uses its **own** token and font system, scoped via CSS custom properties on its root div (`src/styles/nur-dashboard.css` holds only keyframes + real `:hover` states; the palette itself lives inline in `NurDashboard.jsx`) — fonts: `Bricolage Grotesque` (display), `Hanken Grotesk` (body), `Space Mono` (numerals/kbd), plus `Amiri` for Arabic
+- This is a deliberate exception — the global `BG/SURFACE/GREEN/GOLD/TEXT/MUTED/SERIF/SANS` constants above are unchanged and still govern every other page; do not migrate other pages to the dashboard's tokens without being asked
+- All nav items, quick-tool links, and feature cards on this page must map to real routes via `SHELVES`/`navigate()` — no fabricated content (progress %, streaks, AI Q&A, etc.)
 
 ## Skills — when to use them on this project
 - `/diagnose` — prayer time calculation wrong, Qibla direction off, or any logic bug

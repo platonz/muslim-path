@@ -1,0 +1,46 @@
+/* ============================================================
+   Nur Al-Ilm home dashboard — scoped under .nur-dash.
+   Base layout/colors are inline styles (token-driven, matches
+   project convention); this file only holds what inline styles
+   can't do: keyframes and real :hover states.
+   ============================================================ */
+
+@keyframes nurDashUp   { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+@keyframes nurDashPop  { from { opacity: 0; transform: scale(.96); } to { opacity: 1; transform: none; } }
+@keyframes nurDashGrow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .nur-dash * { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; }
+}
+
+.nur-dash * { box-sizing: border-box; }
+.nur-dash *::-webkit-scrollbar { width: 9px; height: 9px; }
+.nur-dash *::-webkit-scrollbar-thumb { background: rgba(120,90,50,0.28); border-radius: 8px; }
+.nur-dash *::-webkit-scrollbar-track { background: transparent; }
+
+.nur-navrow { transition: background .15s ease, color .15s ease; }
+.nur-navrow:hover { background: var(--cream); color: var(--ink); }
+
+.nur-iconbtn { transition: background .15s ease, transform .15s ease; }
+.nur-iconbtn:hover { background: var(--cream); }
+
+.nur-listrow { transition: background .15s ease; }
+.nur-listrow:hover { background: var(--cream); }
+
+.nur-card { transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease; }
+.nur-card:hover { transform: translateY(-5px); border-color: var(--line2); box-shadow: 0 20px 34px -22px rgba(60,40,20,0.4); }
+
+.nur-tile { transition: transform .18s ease, box-shadow .18s ease; }
+.nur-tile:hover { transform: translateY(-5px); box-shadow: 0 22px 38px -20px rgba(40,26,14,0.55); }
+
+.nur-btn-primary { transition: transform .16s ease, box-shadow .16s ease; }
+.nur-btn-primary:hover { transform: translateY(-3px); box-shadow: 0 18px 30px -14px rgba(31,61,51,0.85); }
+
+.nur-btn-outline { transition: transform .16s ease, background .16s ease; }
+.nur-btn-outline:hover { transform: translateY(-3px); background: rgba(255,255,255,0.85); }
+
+.nur-btn-gold { transition: transform .15s ease; }
+.nur-btn-gold:hover { transform: translateY(-2px); }
+
+.nur-pill { transition: color .15s ease, border-color .15s ease; }
+.nur-pill:hover { color: var(--ink); border-color: var(--line2); }

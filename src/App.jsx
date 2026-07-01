@@ -4,7 +4,8 @@ import Dhikr from "./components/Dhikr";
 import Profile from "./components/Profile";
 import Icon from "./components/Icon";
 import KaabaWatermark from "./components/KaabaWatermark";
-import { LibraryDoor, LibraryShelf, BookHeader, BOOK_TITLES } from "./components/LibraryRoom";
+import { BookHeader, BOOK_TITLES } from "./components/LibraryRoom";
+import NurDashboard from "./components/NurDashboard";
 import QuranReader from "./components/QuranReader";
 import SiTeFalesh from "./components/SiTeFalesh";
 import HowToPray from "./components/HowToPray";
@@ -55,17 +56,6 @@ export default function App() {
     if (!parts[0]) return "home";
     return slugToPage(parts[0]) || (VALID_PAGES.includes(parts[0]) ? parts[0] : "home");
   });
-  // The library door is shown once per session; arriving on a deep link counts as already inside
-  const [entered, setEntered] = useState(() => {
-    try {
-      if (sessionStorage.getItem("mp-entered") === "1") return true;
-      return window.location.pathname !== "/";
-    } catch { return true; }
-  });
-  function enterLibrary() {
-    try { sessionStorage.setItem("mp-entered", "1"); } catch {}
-    setEntered(true);
-  }
   const [showSearch, setShowSearch] = useState(false);
   const [duaFavs, setDuaFavs] = useState(() => {
     try { return new Set(JSON.parse(localStorage.getItem("mp-dua-favs") || "[]")); } catch { return new Set(); }
@@ -339,14 +329,14 @@ export default function App() {
 
       <audio ref={audioRef} onTimeUpdate={onTimeUpdate} onEnded={handleAudioEnd} onLoadedMetadata={() => setDuration(audioRef.current?.duration || 0)} />
 
-      {/* ── Library landing: door (once per session) then bookshelf ── */}
-      {page === "home" && !entered && <LibraryDoor onEnter={enterLibrary} />}
-      {page === "home" && entered && (
-        <LibraryShelf
+      {/* ── Home: Nur Al-Ilm dashboard ── */}
+      {page === "home" && (
+        <NurDashboard
           navigate={navigate}
           onSearch={() => setShowSearch(true)}
           authUser={authUser}
           onAuthClick={() => setShowAuth(true)}
+          duaFavs={duaFavs}
         />
       )}
 
