@@ -5,7 +5,6 @@ export const SHELVES = [
   {
     label: "LEXIMI",
     books: [
-      { id: "sunneti", title: "Sunneti", sub: "LIBRI", icon: "bookmark", c: ["#42652a", "#2f511b", "#1d3510"] },
       { id: "quran", title: "Kurani", sub: "LEXIMI", icon: "quran", c: ["#2d785b", "#176b4d", "#0d4530"] },
       { id: "library", title: "Biblioteka", sub: "LIBRAT PDF", icon: "library", c: ["#8a5528", "#5c3719", "#38210d"] },
       { id: "audio", title: "Ligjëratat", sub: "AUDIO", icon: "audio", c: ["#945020", "#733719", "#4e250f"] },

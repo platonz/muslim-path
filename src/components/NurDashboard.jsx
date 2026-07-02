@@ -27,7 +27,7 @@ const HADITHS = [
 ];
 
 const ADHURIMI_IDS = ["namaz", "howpray", "dua", "asma", "tasbeeh"];
-const LEXIMI_IDS = ["sunneti", "quran", "library", "audio"];
+const LEXIMI_IDS = ["quran", "library", "audio"];
 const VEGLA_IDS = ["zakat", "inheritance", "calendar", "dates"];
 const BOOKS = Object.fromEntries(SHELVES.flatMap(s => s.books.map(b => [b.id, b])));
 
@@ -121,7 +121,7 @@ export default function NurDashboard({ navigate, onSearch, authUser, onAuthClick
   const rightColStyle = rightInline ? { width: 340, flex: "none" } : { width: "100%" };
   const rightInnerStyle = rightInline ? { display: "flex", flexDirection: "column", gap: 18 } : { display: "grid", gridTemplateColumns: w >= 640 ? "repeat(auto-fit,minmax(280px,1fr))" : "1fr", gap: 18 };
   const pathGridStyle = { display: "grid", gridTemplateColumns: sm ? "repeat(2,1fr)" : rightInline ? "repeat(5,1fr)" : "repeat(auto-fill,minmax(170px,1fr))", gap: 14 };
-  const tileGridStyle = { display: "grid", gridTemplateColumns: sm ? "1fr" : w < 900 ? "repeat(2,1fr)" : "repeat(4,1fr)", gap: 14 };
+  const tileGridStyle = { display: "grid", gridTemplateColumns: sm ? "1fr" : w < 900 ? "repeat(2,1fr)" : "repeat(3,1fr)", gap: 14 };
   const groupLabelStyle = { fontFamily: BODY_FONT, fontWeight: 700, fontSize: 11, letterSpacing: "0.12em", color: "var(--ink-soft)", textTransform: "uppercase", padding: "16px 12px 6px" };
   const sectionTitleStyle = { fontFamily: DISPLAY_FONT, fontWeight: 700, fontSize: 21, letterSpacing: "-0.02em", margin: "0 0 15px", color: "var(--ink)" };
   const panelStyle = { background: "var(--surface)", border: "1px solid var(--line)", borderRadius: 20, padding: 20 };

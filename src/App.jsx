@@ -13,7 +13,6 @@ import Zakat from "./components/Zakat";
 import Inheritance from "./components/Inheritance";
 import DateConverter from "./components/DateConverter";
 import Library from "./components/Library";
-import SunnetiReadingRoom from "./components/SunnetiBook";
 import IslamicCalendar from "./components/IslamicCalendar";
 import GlobalSearch from "./components/GlobalSearch";
 import AuthModal, { loadSession, saveSession, clearSession } from "./components/AuthModal";
@@ -341,7 +340,7 @@ export default function App() {
       )}
 
       {/* ── An open book: page content inside the parchment column ── */}
-      {page !== "home" && page !== "sunneti" && (
+      {page !== "home" && (
       <main>
         <BookHeader
           title={BOOK_TITLES[page] || ({ profile: "Profili", admin: "Admin" })[page] || "Sunneti.com"}
@@ -373,8 +372,6 @@ export default function App() {
         {page === "howpray" && <HowToPray />}
       </main>
       )}
-      {/* Immersive full-screen book — rendered outside <main>, exits back to the shelf */}
-      {page === "sunneti" && <SunnetiReadingRoom onExit={() => navigate("home")} />}
       {showSearch && (
         <GlobalSearch
           onClose={() => setShowSearch(false)}
