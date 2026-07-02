@@ -12,7 +12,7 @@ const MONO_FONT = "'Space Mono', monospace";
 const VARS_LIGHT = {
   "--paper": "#fbf8f1", "--surface": "#ffffff", "--cream": "#f3eee2", "--sand": "#e9ddc9",
   "--green": "#1f3d33", "--green2": "#16332a", "--gold": GOLD_ACCENT, "--clay": "#d1743e",
-  "--ink": "#2c2620", "--ink-soft": "#8b8478", "--line": "rgba(44,38,32,0.09)", "--line2": "rgba(44,38,32,0.15)",
+  "--ink": "#2c2620", "--ink-soft": "#71695b", "--line": "rgba(44,38,32,0.09)", "--line2": "rgba(44,38,32,0.15)",
 };
 const VARS_DARK = {
   "--paper": "#1e1811", "--surface": "#272019", "--cream": "#2f2820", "--sand": "#3a3126",
@@ -110,7 +110,13 @@ export default function NurDashboard({ navigate, onSearch, authUser, onAuthClick
   const topbarStyle = { position: "sticky", top: 0, zIndex: 40, display: "flex", alignItems: "center", gap: sm ? 10 : 16, padding: sm ? "14px 16px" : "18px 26px", background: dark ? "rgba(30,24,17,0.86)" : "rgba(251,248,241,0.86)", backdropFilter: "blur(10px)", borderBottom: "1px solid var(--line)" };
   const bodyPadStyle = { padding: sm ? "16px 14px 30px" : showRail ? "26px 30px 40px" : "22px 22px 34px" };
   const bodyRowStyle = { display: "flex", flexDirection: rightInline ? "row" : "column", gap: 24, alignItems: "flex-start" };
-  const heroStyle = { position: "relative", overflow: "hidden", borderRadius: 24, background: "linear-gradient(105deg,#f7efe0 0%,#f3e6cf 44%,#efd9b4 60%,#e7c79a 100%)", display: "flex", flexDirection: heroRow ? "row" : "column", minHeight: heroRow ? 300 : "auto", boxShadow: "0 20px 40px -28px rgba(80,54,24,0.5)" };
+  const heroStyle = { position: "relative", overflow: "hidden", borderRadius: 24, background: dark ? "linear-gradient(105deg,#3d3122 0%,#332921 44%,#2b2118 60%,#241a10 100%)" : "linear-gradient(105deg,#f7efe0 0%,#f3e6cf 44%,#efd9b4 60%,#e7c79a 100%)", display: "flex", flexDirection: heroRow ? "row" : "column", minHeight: heroRow ? 300 : "auto", boxShadow: "0 20px 40px -28px rgba(80,54,24,0.5)" };
+  const heroTitleColor = dark ? "#f2ece1" : "#2c2013";
+  const heroSubColor = dark ? "#c7b9a0" : "#6b5a41";
+  const heroEyebrowColor = dark ? "#8fb56a" : "#47602e";
+  const heroOutlineBtnStyle = dark
+    ? { background: "rgba(255,255,255,0.08)", color: "#f2ece1", border: "1px solid rgba(255,255,255,0.22)" }
+    : { background: "rgba(255,255,255,0.65)", color: "#2c2013", border: "1px solid rgba(120,90,50,0.28)" };
   const heroTitleSize = w >= 1100 ? 42 : sm ? 32 : 38;
   const rightColStyle = rightInline ? { width: 340, flex: "none" } : { width: "100%" };
   const rightInnerStyle = rightInline ? { display: "flex", flexDirection: "column", gap: 18 } : { display: "grid", gridTemplateColumns: w >= 640 ? "repeat(auto-fit,minmax(280px,1fr))" : "1fr", gap: 18 };
@@ -203,21 +209,21 @@ export default function NurDashboard({ navigate, onSearch, authUser, onAuthClick
                 {/* HERO */}
                 <div style={heroStyle}>
                   <div style={{ position: "relative", zIndex: 2, flex: 1.15, minWidth: 0, padding: sm ? "26px 22px" : "38px 40px", display: "flex", flexDirection: "column", justifyContent: "center", gap: 16 }}>
-                    <span style={{ display: "inline-flex", alignItems: "center", gap: 8, fontFamily: BODY_FONT, fontSize: 13.5, fontWeight: 600, color: "#5f7a3f" }}>
+                    <span style={{ display: "inline-flex", alignItems: "center", gap: 8, fontFamily: BODY_FONT, fontSize: 13.5, fontWeight: 600, color: heroEyebrowColor }}>
                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><path d="M11 20A7 7 0 0 1 4 13c5 0 7 2 7 7Z" /><path d="M13 20a7 7 0 0 1 7-7c0 5-2 7-7 7Z" /><path d="M12 20v-6" /></svg>
                       Es-selamu alejkum, kërkues i dijes
                     </span>
-                    <h1 style={{ fontFamily: DISPLAY_FONT, fontWeight: 700, fontSize: heroTitleSize, lineHeight: 1.02, letterSpacing: "-0.03em", margin: 0, color: "#2c2013" }}>
+                    <h1 style={{ fontFamily: DISPLAY_FONT, fontWeight: 700, fontSize: heroTitleSize, lineHeight: 1.02, letterSpacing: "-0.03em", margin: 0, color: heroTitleColor }}>
                       Mëso. Reflekto.<br />Afrohu te <span style={{ color: "var(--green)" }}>Allahu</span>
                     </h1>
-                    <p style={{ fontFamily: BODY_FONT, fontSize: 15, lineHeight: 1.55, color: "#6b5a41", margin: 0, maxWidth: 420 }}>
+                    <p style={{ fontFamily: BODY_FONT, fontSize: 15, lineHeight: 1.55, color: heroSubColor, margin: 0, maxWidth: 420 }}>
                       Kurani, duatë, adhurimi dhe veglat islame — të gjitha në një vend, në shqip.
                     </p>
                     <div style={{ display: "flex", flexWrap: "wrap", gap: 12, marginTop: 6 }}>
                       <a className="nur-btn-primary" href={pageToUrl("quran")} onClick={(e) => { e.preventDefault(); navigate("quran"); }} style={{ display: "flex", alignItems: "center", gap: 9, background: "var(--green)", color: "#f2ece1", border: "none", borderRadius: 14, padding: "14px 22px", fontFamily: BODY_FONT, fontWeight: 700, fontSize: 14.5, cursor: "pointer", boxShadow: "0 12px 24px -12px rgba(31,61,51,0.8)", textDecoration: "none" }}>
                         Lexo Kuranin <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.3"><path d="M9 6l6 6-6 6" /></svg>
                       </a>
-                      <a className="nur-btn-outline" href={pageToUrl("library")} onClick={(e) => { e.preventDefault(); navigate("library"); }} style={{ display: "flex", alignItems: "center", gap: 9, background: "rgba(255,255,255,0.65)", color: "#2c2013", border: "1px solid rgba(120,90,50,0.28)", borderRadius: 14, padding: "14px 20px", fontFamily: BODY_FONT, fontWeight: 700, fontSize: 14.5, cursor: "pointer", backdropFilter: "blur(4px)", textDecoration: "none" }}>
+                      <a className="nur-btn-outline" href={pageToUrl("library")} onClick={(e) => { e.preventDefault(); navigate("library"); }} style={{ display: "flex", alignItems: "center", gap: 9, ...heroOutlineBtnStyle, borderRadius: 14, padding: "14px 20px", fontFamily: BODY_FONT, fontWeight: 700, fontSize: 14.5, cursor: "pointer", backdropFilter: "blur(4px)", textDecoration: "none" }}>
                         Eksploro Bibliotekën <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="3" width="7" height="7" rx="1.5" /><rect x="14" y="3" width="7" height="7" rx="1.5" /><rect x="3" y="14" width="7" height="7" rx="1.5" /><rect x="14" y="14" width="7" height="7" rx="1.5" /></svg>
                       </a>
                     </div>
@@ -282,11 +288,11 @@ export default function NurDashboard({ navigate, onSearch, authUser, onAuthClick
                     <div style={{ fontFamily: BODY_FONT, fontSize: 12.5, color: "var(--ink-soft)", marginTop: 3 }}>{HADITHS[hi].src}</div>
                   </div>
                   <div style={{ flex: "none", display: "flex", gap: 8 }}>
-                    <button className="nur-iconbtn" onClick={() => setHadithI(i => i - 1)} aria-label="Hadithi i mëparshëm" style={{ width: 34, height: 34, borderRadius: "50%", border: "1px solid var(--line)", background: "var(--paper)", color: "var(--ink-soft)", cursor: "pointer", display: "grid", placeItems: "center" }}>
-                      <Icon name="chevronLeft" size={15} color="var(--ink-soft)" />
+                    <button className="nur-iconbtn" onClick={() => setHadithI(i => i - 1)} aria-label="Hadithi i mëparshëm" style={{ width: 42, height: 42, borderRadius: "50%", border: "1px solid var(--line)", background: "var(--paper)", color: "var(--ink-soft)", cursor: "pointer", display: "grid", placeItems: "center" }}>
+                      <Icon name="chevronLeft" size={16} color="var(--ink-soft)" />
                     </button>
-                    <button className="nur-iconbtn" onClick={() => setHadithI(i => i + 1)} aria-label="Hadithi tjetër" style={{ width: 34, height: 34, borderRadius: "50%", border: "1px solid var(--line)", background: "var(--paper)", color: "var(--ink-soft)", cursor: "pointer", display: "grid", placeItems: "center" }}>
-                      <Icon name="chevron" size={15} color="var(--ink-soft)" />
+                    <button className="nur-iconbtn" onClick={() => setHadithI(i => i + 1)} aria-label="Hadithi tjetër" style={{ width: 42, height: 42, borderRadius: "50%", border: "1px solid var(--line)", background: "var(--paper)", color: "var(--ink-soft)", cursor: "pointer", display: "grid", placeItems: "center" }}>
+                      <Icon name="chevron" size={16} color="var(--ink-soft)" />
                     </button>
                   </div>
                 </div>
