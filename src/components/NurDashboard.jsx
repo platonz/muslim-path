@@ -1,7 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import "../styles/nur-dashboard.css";
 import Icon from "./Icon";
 import { SHELVES } from "./LibraryRoom";
+import { pageToUrl } from "../lib/routing";
 
 const GOLD_ACCENT = "#c9a24b";
 const DISPLAY_FONT = "'Bricolage Grotesque', sans-serif";
@@ -30,23 +31,25 @@ const LEXIMI_IDS = ["sunneti", "quran", "library", "audio"];
 const VEGLA_IDS = ["zakat", "inheritance", "calendar", "dates"];
 const BOOKS = Object.fromEntries(SHELVES.flatMap(s => s.books.map(b => [b.id, b])));
 
-function NavRow({ icon, label, active, onClick }) {
+function NavRow({ icon, label, active, href, onClick }) {
   return (
-    <button
+    <a
       className="nur-navrow"
-      onClick={onClick}
+      href={href}
+      onClick={(e) => { e.preventDefault(); onClick(); }}
       style={{
         display: "flex", alignItems: "center", gap: 12, width: "100%", padding: "10px 12px",
         borderRadius: 12, cursor: "pointer", textAlign: "left", fontFamily: BODY_FONT, fontSize: 14,
         fontWeight: 600, border: active ? "1px solid var(--line)" : "1px solid transparent",
         background: active ? "var(--cream)" : "transparent", color: active ? "var(--green)" : "var(--ink-soft)",
+        textDecoration: "none", boxSizing: "border-box",
       }}
     >
       <span style={{ display: "grid", placeItems: "center", width: 20, height: 20 }}>
         <Icon name={icon} size={19} color={active ? "var(--green)" : "var(--ink-soft)"} />
       </span>
       <span>{label}</span>
-    </button>
+    </a>
   );
 }
 
@@ -55,6 +58,12 @@ export default function NurDashboard({ navigate, onSearch, authUser, onAuthClick
   const [dark, setDark] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [hadithI, setHadithI] = useState(0);
+  const contentRef = useRef(null);
+
+  // Kept fresh on every render so the one-time effect below can call the
+  // latest onSearch without re-binding window listeners on every App re-render.
+  const onSearchRef = useRef(onSearch);
+  onSearchRef.current = onSearch;
 
   useEffect(() => {
     const onResize = () => setW(window.innerWidth);
@@ -62,7 +71,7 @@ export default function NurDashboard({ navigate, onSearch, authUser, onAuthClick
     const onKey = (e) => {
       if ((e.metaKey || e.ctrlKey) && (e.key === "k" || e.key === "K")) {
         e.preventDefault();
-        onSearch();
+        onSearchRef.current();
       }
     };
     window.addEventListener("keydown", onKey);
@@ -70,7 +79,7 @@ export default function NurDashboard({ navigate, onSearch, authUser, onAuthClick
       window.removeEventListener("resize", onResize);
       window.removeEventListener("keydown", onKey);
     };
-  }, [onSearch]);
+  }, []);
 
   function goProfile() {
     setDrawerOpen(false);
@@ -79,6 +88,10 @@ export default function NurDashboard({ navigate, onSearch, authUser, onAuthClick
   function goBook(id) {
     setDrawerOpen(false);
     navigate(id);
+  }
+  function goHome() {
+    setDrawerOpen(false);
+    if (contentRef.current) contentRef.current.scrollTo({ top: 0, behavior: "smooth" });
   }
 
   const showRail = w >= 1024;
@@ -127,17 +140,17 @@ export default function NurDashboard({ navigate, onSearch, authUser, onAuthClick
           </div>
 
           <div style={{ display: "flex", flexDirection: "column", gap: 3, flex: 1, overflowY: "auto" }}>
-            <NavRow icon="home" label="Kreu" active onClick={() => setDrawerOpen(false)} />
+            <NavRow icon="home" label="Kreu" active href={pageToUrl("home")} onClick={goHome} />
             {SHELVES.map(section => (
               <div key={section.label}>
                 <div style={groupLabelStyle}>{section.label}</div>
                 {section.books.map(b => (
-                  <NavRow key={b.id} icon={b.icon} label={b.title} onClick={() => goBook(b.id)} />
+                  <NavRow key={b.id} icon={b.icon} label={b.title} href={pageToUrl(b.id)} onClick={() => goBook(b.id)} />
                 ))}
               </div>
             ))}
             <div style={groupLabelStyle}>&nbsp;</div>
-            <NavRow icon="user" label="Profili" onClick={goProfile} />
+            <NavRow icon="user" label="Profili" href={pageToUrl("profile")} onClick={goProfile} />
           </div>
 
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: 14, padding: "10px 6px 4px", borderTop: "1px solid var(--line)" }}>
@@ -158,7 +171,7 @@ export default function NurDashboard({ navigate, onSearch, authUser, onAuthClick
         </div>
 
         {/* ============ CONTENT COLUMN ============ */}
-        <div style={{ flex: 1, minWidth: 0, height: "100%", overflowY: "auto", display: "flex", flexDirection: "column" }}>
+        <div ref={contentRef} style={{ flex: 1, minWidth: 0, height: "100%", overflowY: "auto", display: "flex", flexDirection: "column" }}>
           {/* topbar */}
           <div style={topbarStyle}>
             {!showRail && (
@@ -172,12 +185,12 @@ export default function NurDashboard({ navigate, onSearch, authUser, onAuthClick
               <span style={{ flex: "none", fontFamily: MONO_FONT, fontSize: 11, color: "var(--ink-soft)", border: "1px solid var(--line2)", borderRadius: 6, padding: "2px 6px" }}>⌘ K</span>
             </button>
             <div style={{ flex: "none", display: "flex", alignItems: "center", gap: 12 }}>
-              <button className="nur-iconbtn" aria-label="Profili" onClick={goProfile} style={{ display: "flex", alignItems: "center", gap: 6, background: "transparent", border: "none", cursor: "pointer", padding: 0, borderRadius: 999 }}>
+              <a className="nur-iconbtn" aria-label="Profili" href={pageToUrl("profile")} onClick={(e) => { e.preventDefault(); goProfile(); }} style={{ display: "flex", alignItems: "center", gap: 6, background: "transparent", border: "none", cursor: "pointer", padding: 0, borderRadius: 999, textDecoration: "none" }}>
                 <span style={{ width: 42, height: 42, borderRadius: "50%", background: "linear-gradient(150deg,#8a6a44,#5c4028)", display: "grid", placeItems: "center", color: "#f0e2c8", fontFamily: DISPLAY_FONT, fontWeight: 700, fontSize: 15, boxShadow: "inset 0 0 0 2px var(--surface), 0 0 0 1px var(--line)" }}>
                   {authUser?.email ? authUser.email[0].toUpperCase() : <Icon name="user" size={18} color="#f0e2c8" />}
                 </span>
                 <Icon name="chevronDown" size={14} color="var(--ink-soft)" />
-              </button>
+              </a>
             </div>
           </div>
 
@@ -201,12 +214,12 @@ export default function NurDashboard({ navigate, onSearch, authUser, onAuthClick
                       Kurani, duatë, adhurimi dhe veglat islame — të gjitha në një vend, në shqip.
                     </p>
                     <div style={{ display: "flex", flexWrap: "wrap", gap: 12, marginTop: 6 }}>
-                      <button className="nur-btn-primary" onClick={() => navigate("quran")} style={{ display: "flex", alignItems: "center", gap: 9, background: "var(--green)", color: "#f2ece1", border: "none", borderRadius: 14, padding: "14px 22px", fontFamily: BODY_FONT, fontWeight: 700, fontSize: 14.5, cursor: "pointer", boxShadow: "0 12px 24px -12px rgba(31,61,51,0.8)" }}>
+                      <a className="nur-btn-primary" href={pageToUrl("quran")} onClick={(e) => { e.preventDefault(); navigate("quran"); }} style={{ display: "flex", alignItems: "center", gap: 9, background: "var(--green)", color: "#f2ece1", border: "none", borderRadius: 14, padding: "14px 22px", fontFamily: BODY_FONT, fontWeight: 700, fontSize: 14.5, cursor: "pointer", boxShadow: "0 12px 24px -12px rgba(31,61,51,0.8)", textDecoration: "none" }}>
                         Lexo Kuranin <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.3"><path d="M9 6l6 6-6 6" /></svg>
-                      </button>
-                      <button className="nur-btn-outline" onClick={() => navigate("library")} style={{ display: "flex", alignItems: "center", gap: 9, background: "rgba(255,255,255,0.65)", color: "#2c2013", border: "1px solid rgba(120,90,50,0.28)", borderRadius: 14, padding: "14px 20px", fontFamily: BODY_FONT, fontWeight: 700, fontSize: 14.5, cursor: "pointer", backdropFilter: "blur(4px)" }}>
+                      </a>
+                      <a className="nur-btn-outline" href={pageToUrl("library")} onClick={(e) => { e.preventDefault(); navigate("library"); }} style={{ display: "flex", alignItems: "center", gap: 9, background: "rgba(255,255,255,0.65)", color: "#2c2013", border: "1px solid rgba(120,90,50,0.28)", borderRadius: 14, padding: "14px 20px", fontFamily: BODY_FONT, fontWeight: 700, fontSize: 14.5, cursor: "pointer", backdropFilter: "blur(4px)", textDecoration: "none" }}>
                         Eksploro Bibliotekën <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="3" width="7" height="7" rx="1.5" /><rect x="14" y="3" width="7" height="7" rx="1.5" /><rect x="3" y="14" width="7" height="7" rx="1.5" /><rect x="14" y="14" width="7" height="7" rx="1.5" /></svg>
-                      </button>
+                      </a>
                     </div>
                   </div>
                   <div style={{ position: "relative", flex: heroRow ? 1 : "none", minWidth: 0, height: heroRow ? "auto" : 150, minHeight: heroRow ? 280 : 150, overflow: "hidden", borderRadius: heroRow ? "0 24px 24px 0" : 0 }}>
@@ -221,7 +234,7 @@ export default function NurDashboard({ navigate, onSearch, authUser, onAuthClick
                     {ADHURIMI_IDS.map((id, i) => {
                       const b = BOOKS[id];
                       return (
-                        <button key={id} className="nur-card" onClick={() => navigate(id)} style={{ display: "flex", flexDirection: "column", gap: 15, alignItems: "flex-start", background: "var(--surface)", border: "1px solid var(--line)", borderRadius: 20, padding: 16, cursor: "pointer", minHeight: 140, animation: "nurDashUp .5s cubic-bezier(.25,.46,.45,.94) both", animationDelay: (0.05 + i * 0.06).toFixed(2) + "s" }}>
+                        <a key={id} className="nur-card" href={pageToUrl(id)} onClick={(e) => { e.preventDefault(); navigate(id); }} style={{ display: "flex", flexDirection: "column", gap: 15, alignItems: "flex-start", background: "var(--surface)", border: "1px solid var(--line)", borderRadius: 20, padding: 16, cursor: "pointer", minHeight: 140, textDecoration: "none", boxSizing: "border-box", animation: "nurDashUp .5s cubic-bezier(.25,.46,.45,.94) both", animationDelay: (0.05 + i * 0.06).toFixed(2) + "s" }}>
                           <span style={{ width: 52, height: 52, borderRadius: 16, display: "grid", placeItems: "center", background: `linear-gradient(150deg, ${b.c[0]}, ${b.c[1]})`, boxShadow: `0 8px 14px -6px ${b.c[2]}` }}>
                             <Icon name={b.icon} size={24} color="#f2ece1" />
                           </span>
@@ -229,7 +242,7 @@ export default function NurDashboard({ navigate, onSearch, authUser, onAuthClick
                             <span style={{ display: "block", fontFamily: DISPLAY_FONT, fontWeight: 700, fontSize: 16.5, letterSpacing: "-0.01em", color: "var(--ink)" }}>{b.title}</span>
                             <span style={{ display: "block", fontFamily: MONO_FONT, fontSize: 11, letterSpacing: "0.06em", color: "var(--ink-soft)", marginTop: 4, textTransform: "uppercase" }}>{b.sub}</span>
                           </span>
-                        </button>
+                        </a>
                       );
                     })}
                   </div>
@@ -242,7 +255,7 @@ export default function NurDashboard({ navigate, onSearch, authUser, onAuthClick
                     {LEXIMI_IDS.map((id, i) => {
                       const b = BOOKS[id];
                       return (
-                        <button key={id} className="nur-tile" onClick={() => navigate(id)} style={{ position: "relative", overflow: "hidden", border: "none", borderRadius: 18, minHeight: 180, cursor: "pointer", padding: 0, boxShadow: "0 14px 28px -20px rgba(40,26,14,0.5)", animation: "nurDashPop .5s cubic-bezier(.25,.46,.45,.94) both", animationDelay: (0.05 + i * 0.06).toFixed(2) + "s" }}>
+                        <a key={id} className="nur-tile" href={pageToUrl(id)} onClick={(e) => { e.preventDefault(); navigate(id); }} style={{ position: "relative", overflow: "hidden", display: "block", border: "none", borderRadius: 18, minHeight: 180, cursor: "pointer", padding: 0, textDecoration: "none", boxShadow: "0 14px 28px -20px rgba(40,26,14,0.5)", animation: "nurDashPop .5s cubic-bezier(.25,.46,.45,.94) both", animationDelay: (0.05 + i * 0.06).toFixed(2) + "s" }}>
                           <span style={{ position: "absolute", inset: 0, background: `linear-gradient(160deg, ${b.c[0]} 0%, ${b.c[1]} 55%, ${b.c[2]} 120%)` }} />
                           <span style={{ position: "absolute", inset: 0, backgroundImage: goldPattern, backgroundSize: "26px 26px", opacity: 0.7 }} />
                           <span style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg, rgba(20,12,6,0) 32%, rgba(20,12,6,0.78) 100%)" }} />
@@ -253,7 +266,7 @@ export default function NurDashboard({ navigate, onSearch, authUser, onAuthClick
                           <span style={{ position: "absolute", right: 14, bottom: 14, zIndex: 3, width: 34, height: 34, borderRadius: "50%", background: "rgba(255,255,255,0.22)", border: "1px solid rgba(255,255,255,0.4)", backdropFilter: "blur(3px)", display: "grid", placeItems: "center", color: "#fff" }}>
                             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.3"><path d="M9 6l6 6-6 6" /></svg>
                           </span>
-                        </button>
+                        </a>
                       );
                     })}
                   </div>
@@ -292,13 +305,13 @@ export default function NurDashboard({ navigate, onSearch, authUser, onAuthClick
                       {VEGLA_IDS.map(id => {
                         const b = BOOKS[id];
                         return (
-                          <button key={id} className="nur-listrow" onClick={() => navigate(id)} style={{ display: "flex", alignItems: "center", gap: 12, width: "100%", padding: "9px 8px", borderRadius: 12, border: "none", background: "transparent", cursor: "pointer", textAlign: "left" }}>
+                          <a key={id} className="nur-listrow" href={pageToUrl(id)} onClick={(e) => { e.preventDefault(); navigate(id); }} style={{ display: "flex", alignItems: "center", gap: 12, width: "100%", padding: "9px 8px", borderRadius: 12, border: "none", background: "transparent", cursor: "pointer", textAlign: "left", textDecoration: "none", boxSizing: "border-box" }}>
                             <span style={{ width: 34, height: 34, borderRadius: 10, flex: "none", display: "grid", placeItems: "center", background: `linear-gradient(150deg, ${b.c[0]}, ${b.c[1]})` }}>
                               <Icon name={b.icon} size={16} color="#f2ece1" />
                             </span>
                             <span style={{ flex: 1, minWidth: 0, fontFamily: BODY_FONT, fontWeight: 600, fontSize: 13.5, color: "var(--ink)" }}>{b.title}</span>
                             <Icon name="chevron" size={13} color="var(--ink-soft)" />
-                          </button>
+                          </a>
                         );
                       })}
                     </div>
@@ -328,9 +341,9 @@ export default function NurDashboard({ navigate, onSearch, authUser, onAuthClick
                         <Icon name="heart" size={20} color="var(--gold)" />
                       </span>
                     </div>
-                    <button className="nur-btn-gold" onClick={() => navigate("dua")} style={{ marginTop: 14, display: "flex", alignItems: "center", gap: 8, background: "linear-gradient(90deg,var(--gold),#dcb45f)", color: "#3a2c0c", border: "none", borderRadius: 12, padding: "11px 18px", fontFamily: BODY_FONT, fontWeight: 700, fontSize: 13.5, cursor: "pointer" }}>
+                    <a className="nur-btn-gold" href={pageToUrl("dua")} onClick={(e) => { e.preventDefault(); navigate("dua"); }} style={{ marginTop: 14, display: "flex", alignItems: "center", gap: 8, background: "linear-gradient(90deg,var(--gold),#dcb45f)", color: "#3a2c0c", border: "none", borderRadius: 12, padding: "11px 18px", fontFamily: BODY_FONT, fontWeight: 700, fontSize: 13.5, cursor: "pointer", textDecoration: "none" }}>
                       Shiko Duatë <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.3"><path d="M9 6l6 6-6 6" /></svg>
-                    </button>
+                    </a>
                   </div>
 
                 </div>
