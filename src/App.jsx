@@ -8,6 +8,7 @@ import { BookHeader, BOOK_TITLES } from "./components/LibraryRoom";
 import NurDashboard from "./components/NurDashboard";
 import QuranReader from "./components/QuranReader";
 import SiTeFalesh from "./components/SiTeFalesh";
+import AbdesPage from "./components/AbdesPage";
 import Zakat from "./components/Zakat";
 import Inheritance from "./components/Inheritance";
 import DateConverter from "./components/DateConverter";
@@ -294,6 +295,7 @@ export default function App() {
     library:     { title: "Islamic Library - Sunneti.com",                  desc: "Curated collection of essential Islamic books, Quran, Hadith, Seerah, Fiqh and Aqeedah." },
     audio:       { title: "Islamic Lectures - Sunneti.com",                 desc: "Listen to Islamic lectures and audio content." },
     namaz:       { title: "Si te Falesh - Sunneti.com",                     desc: "Pese namazet e dites, shpjeguar hap pas hapi me shqiptim dhe kuptim shqip." },
+    abdes:       { title: "Abdesi - Sunneti.com",                           desc: "Si merret abdesi hap pas hapi, prishesit, gusli dhe tejemumi — sipas Bulugh al-Maram dhe Fikhut te Sunetit." },
   };
   useEffect(() => {
     const m = PAGE_META[page] || PAGE_META.home;
@@ -372,6 +374,7 @@ export default function App() {
         {page === "asma"    && <AsmaPage />}
         {page === "admin"   && <AdminPage authSession={authSession} />}
         {page === "namaz"   && <SiTeFalesh initialPrayerId={namazPrayerId} />}
+        {page === "abdes"   && <AbdesPage />}
       </main>
       )}
       {showSearch && (

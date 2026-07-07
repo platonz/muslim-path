@@ -31,6 +31,7 @@ export const GOLD_50   = "#FAF5E8";
 
 export const NAV_ITEMS = [
   { id: "home", icon: "home" },
+  { id: "abdes", icon: "abdes" },
   { id: "namaz", icon: "namaz" },
   { id: "dua", icon: "dua" },
   { id: "calendar", icon: "calendar" },

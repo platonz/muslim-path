@@ -13,6 +13,7 @@ export const SHELVES = [
   {
     label: "ADHURIMI",
     books: [
+      { id: "abdes", title: "Abdesi", sub: "PASTËRTIA", icon: "abdes", c: ["#2e6a8a", "#1f4f6b", "#123449"] },
       { id: "namaz", title: "Si të Falesh", sub: "NAMAZI", icon: "dua", c: ["#355881", "#203d64", "#142843"] },
       { id: "dua", title: "Duatë", sub: "LUTJET", icon: "heart", c: ["#842d3a", "#67202b", "#45131b"] },
       { id: "asma", title: "99 Emrat", sub: "EL-ESMA", icon: "asma", c: ["#66335b", "#4c2546", "#31172d"] },

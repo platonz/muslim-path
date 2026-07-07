@@ -1,9 +1,9 @@
-export const VALID_PAGES = ["home","zakat","inheritance","calendar","dates","library","audio","tasbeeh","quran","dua","asma","admin","profile","namaz"];
+export const VALID_PAGES = ["home","zakat","inheritance","calendar","dates","library","audio","tasbeeh","quran","dua","asma","admin","profile","namaz","abdes"];
 
 const SLUGS = {
   home:"", zakat:"zekati", inheritance:"hiseja", calendar:"kalendari", dates:"datat",
   library:"biblioteka", audio:"ligjerata", tasbeeh:"tesbihe", quran:"kurani", dua:"dua",
-  asma:"emrat", admin:"admin", profile:"profili", namaz:"si-te-falesh",
+  asma:"emrat", admin:"admin", profile:"profili", namaz:"si-te-falesh", abdes:"abdesi",
 };
 
 export function slugToPage(slug) {

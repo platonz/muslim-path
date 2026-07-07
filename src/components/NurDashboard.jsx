@@ -28,7 +28,7 @@ const HADITHS = [
   { text: "Kush ndjek një rrugë për të kërkuar dije, Allahu ia lehtëson rrugën për në Xhenet.", src: "— Pejgamberi Muhammed ﷺ (Muslim)" },
 ];
 
-const ADHURIMI_IDS = ["namaz", "dua", "asma", "tasbeeh"];
+const ADHURIMI_IDS = ["abdes", "namaz", "dua", "asma", "tasbeeh"];
 const LEXIMI_IDS = ["quran", "library", "audio"];
 const LEXIMI_META = {
   quran: {
