@@ -32,7 +32,7 @@ MUTED    = "#6B7280"
 
 ## Nav & Routing
 - Page routing is controlled by `page` state in `src/App.jsx` via `navigate(pageId)`; slugs are mapped in `src/lib/routing.js` (`VALID_PAGES`, `slugToPage`, `pageToUrl`)
-- Currently active pages: home, quran, dua, asma, tasbeeh, namaz, howpray, library, audio, zakat, inheritance, calendar, dates, profile, admin
+- Currently active pages: home, quran, dua, asma, tasbeeh, namaz, library, audio, zakat, inheritance, calendar, dates, profile, admin (the English howpray page was removed; `/how-to-pray` redirects to namaz)
 - The real 12-book catalogue (id, title, icon, per-book gradient colors) lives in `SHELVES` in `src/components/LibraryRoom.jsx` — reuse it, don't duplicate it, when any new UI needs to list/link the app's features
 - Every non-home page is wrapped in `<main>` with the sticky `BookHeader` (also in `LibraryRoom.jsx`) for back/title/search chrome
 

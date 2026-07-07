@@ -8,7 +8,6 @@ import { BookHeader, BOOK_TITLES } from "./components/LibraryRoom";
 import NurDashboard from "./components/NurDashboard";
 import QuranReader from "./components/QuranReader";
 import SiTeFalesh from "./components/SiTeFalesh";
-import HowToPray from "./components/HowToPray";
 import Zakat from "./components/Zakat";
 import Inheritance from "./components/Inheritance";
 import DateConverter from "./components/DateConverter";
@@ -50,6 +49,11 @@ export default function App() {
       const pageId = slugToPage(parts[1] || "") || "home";
       window.history.replaceState({}, "", pageToUrl(pageId));
       return pageId;
+    }
+    // Redirect retired English prayer-guide URL to the Albanian page
+    if (parts[0] === "how-to-pray") {
+      window.history.replaceState({}, "", pageToUrl("namaz"));
+      return "namaz";
     }
     // Root URL → library (door on first visit, shelf after)
     if (!parts[0]) return "home";
@@ -290,7 +294,6 @@ export default function App() {
     library:     { title: "Islamic Library - Sunneti.com",                  desc: "Curated collection of essential Islamic books, Quran, Hadith, Seerah, Fiqh and Aqeedah." },
     audio:       { title: "Islamic Lectures - Sunneti.com",                 desc: "Listen to Islamic lectures and audio content." },
     namaz:       { title: "Si te Falesh - Sunneti.com",                     desc: "Pese namazet e dites, shpjeguar hap pas hapi me shqiptim dhe kuptim shqip." },
-    howpray:     { title: "How to Pray - Sunneti.com",                      desc: "Step-by-step guide to the five daily prayers with Arabic, transliteration, and meaning." },
   };
   useEffect(() => {
     const m = PAGE_META[page] || PAGE_META.home;
@@ -369,7 +372,6 @@ export default function App() {
         {page === "asma"    && <AsmaPage />}
         {page === "admin"   && <AdminPage authSession={authSession} />}
         {page === "namaz"   && <SiTeFalesh initialPrayerId={namazPrayerId} />}
-        {page === "howpray" && <HowToPray />}
       </main>
       )}
       {showSearch && (

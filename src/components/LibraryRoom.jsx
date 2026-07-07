@@ -14,7 +14,6 @@ export const SHELVES = [
     label: "ADHURIMI",
     books: [
       { id: "namaz", title: "Si të Falesh", sub: "NAMAZI", icon: "dua", c: ["#355881", "#203d64", "#142843"] },
-      { id: "howpray", title: "How to Pray", sub: "ENGLISH", icon: "globe", c: ["#426681", "#2b4b67", "#1b3148"] },
       { id: "dua", title: "Duatë", sub: "LUTJET", icon: "heart", c: ["#842d3a", "#67202b", "#45131b"] },
       { id: "asma", title: "99 Emrat", sub: "EL-ESMA", icon: "asma", c: ["#66335b", "#4c2546", "#31172d"] },
       { id: "tasbeeh", title: "Tesbih", sub: "DHIKRI", icon: "tasbeeh", c: ["#2d6361", "#1f4a49", "#132f2f"] },
