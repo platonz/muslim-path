@@ -3,6 +3,8 @@ import "../styles/nur-dashboard.css";
 import Icon from "./Icon";
 import { SHELVES } from "./LibraryRoom";
 import { pageToUrl } from "../lib/routing";
+import { LIBRARY } from "../data/library";
+import { LECTURES } from "../data/lectures";
 
 const GOLD_ACCENT = "#c9a24b";
 const DISPLAY_FONT = "'Bricolage Grotesque', sans-serif";
@@ -28,6 +30,20 @@ const HADITHS = [
 
 const ADHURIMI_IDS = ["namaz", "howpray", "dua", "asma", "tasbeeh"];
 const LEXIMI_IDS = ["quran", "library", "audio"];
+const LEXIMI_META = {
+  quran: {
+    desc: "Teksti i plotë arabisht me përkthim shqip dhe tefsir, sure më sure.",
+    stats: ["114 sure", "6.236 ajete"],
+  },
+  library: {
+    desc: "Libra islamë, tefsir dhe revista në shqip — lexoji direkt në aplikacion.",
+    stats: [`${LIBRARY.length} tituj`, `${LIBRARY.filter(b => b.cat === "Shqip").length} pdf shqip`],
+  },
+  audio: {
+    desc: "Ligjërata të dëgjueshme në shqip mbi dijen, moralin dhe jetën e besimtarit.",
+    stats: [`${LECTURES.length} ligjërata`, "audio mp3"],
+  },
+};
 const VEGLA_IDS = ["zakat", "inheritance", "calendar", "dates"];
 const BOOKS = Object.fromEntries(SHELVES.flatMap(s => s.books.map(b => [b.id, b])));
 
@@ -121,7 +137,7 @@ export default function NurDashboard({ navigate, onSearch, authUser, onAuthClick
   const rightColStyle = rightInline ? { width: 340, flex: "none" } : { width: "100%" };
   const rightInnerStyle = rightInline ? { display: "flex", flexDirection: "column", gap: 18 } : { display: "grid", gridTemplateColumns: w >= 640 ? "repeat(auto-fit,minmax(280px,1fr))" : "1fr", gap: 18 };
   const pathGridStyle = { display: "grid", gridTemplateColumns: sm ? "repeat(2,1fr)" : rightInline ? "repeat(5,1fr)" : "repeat(auto-fill,minmax(170px,1fr))", gap: 14 };
-  const tileGridStyle = { display: "grid", gridTemplateColumns: sm ? "1fr" : w < 900 ? "repeat(2,1fr)" : "repeat(3,1fr)", gap: 14 };
+  const tileGridStyle = { display: "grid", gridTemplateColumns: sm ? "1fr" : "repeat(auto-fit, minmax(215px, 1fr))", gap: 14 };
   const groupLabelStyle = { fontFamily: BODY_FONT, fontWeight: 700, fontSize: 11, letterSpacing: "0.12em", color: "var(--ink-soft)", textTransform: "uppercase", padding: "16px 12px 6px" };
   const sectionTitleStyle = { fontFamily: DISPLAY_FONT, fontWeight: 700, fontSize: 21, letterSpacing: "-0.02em", margin: "0 0 15px", color: "var(--ink)" };
   const panelStyle = { background: "var(--surface)", border: "1px solid var(--line)", borderRadius: 20, padding: 20 };
@@ -260,17 +276,30 @@ export default function NurDashboard({ navigate, onSearch, authUser, onAuthClick
                   <div style={tileGridStyle}>
                     {LEXIMI_IDS.map((id, i) => {
                       const b = BOOKS[id];
+                      const m = LEXIMI_META[id];
                       return (
-                        <a key={id} className="nur-tile" href={pageToUrl(id)} onClick={(e) => { e.preventDefault(); navigate(id); }} style={{ position: "relative", overflow: "hidden", display: "block", border: "none", borderRadius: 18, minHeight: 180, cursor: "pointer", padding: 0, textDecoration: "none", boxShadow: "0 14px 28px -20px rgba(40,26,14,0.5)", animation: "nurDashPop .5s cubic-bezier(.25,.46,.45,.94) both", animationDelay: (0.05 + i * 0.06).toFixed(2) + "s" }}>
+                        <a key={id} className="nur-tile" href={pageToUrl(id)} onClick={(e) => { e.preventDefault(); navigate(id); }} style={{ position: "relative", overflow: "hidden", display: "flex", border: "none", borderRadius: 18, minHeight: 216, cursor: "pointer", padding: 0, textDecoration: "none", boxShadow: "0 14px 28px -20px rgba(40,26,14,0.5)", animation: "nurDashPop .5s cubic-bezier(.25,.46,.45,.94) both", animationDelay: (0.05 + i * 0.06).toFixed(2) + "s" }}>
                           <span style={{ position: "absolute", inset: 0, background: `linear-gradient(160deg, ${b.c[0]} 0%, ${b.c[1]} 55%, ${b.c[2]} 120%)` }} />
                           <span style={{ position: "absolute", inset: 0, backgroundImage: goldPattern, backgroundSize: "26px 26px", opacity: 0.7 }} />
-                          <span style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg, rgba(20,12,6,0) 32%, rgba(20,12,6,0.78) 100%)" }} />
-                          <span style={{ position: "relative", zIndex: 2, display: "flex", flexDirection: "column", height: "100%", justifyContent: "flex-end", alignItems: "flex-start", textAlign: "left", padding: 16 }}>
-                            <span style={{ fontFamily: DISPLAY_FONT, fontWeight: 700, fontSize: 19, letterSpacing: "-0.01em", color: "#fff" }}>{b.title}</span>
-                            <span style={{ fontFamily: MONO_FONT, fontSize: 11, letterSpacing: "0.06em", color: "rgba(255,255,255,0.82)", marginTop: 4, textTransform: "uppercase" }}>{b.sub}</span>
-                          </span>
-                          <span style={{ position: "absolute", right: 14, bottom: 14, zIndex: 3, width: 34, height: 34, borderRadius: "50%", background: "rgba(255,255,255,0.22)", border: "1px solid rgba(255,255,255,0.4)", backdropFilter: "blur(3px)", display: "grid", placeItems: "center", color: "#fff" }}>
-                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.3"><path d="M9 6l6 6-6 6" /></svg>
+                          <span style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg, rgba(20,12,6,0) 18%, rgba(20,12,6,0.8) 100%)" }} />
+                          <span style={{ position: "relative", zIndex: 2, flex: 1, display: "flex", flexDirection: "column", justifyContent: "space-between", textAlign: "left", padding: 16, boxSizing: "border-box" }}>
+                            <span style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between" }}>
+                              <span style={{ width: 42, height: 42, borderRadius: 13, display: "grid", placeItems: "center", background: "rgba(255,255,255,0.16)", border: "1px solid rgba(255,255,255,0.28)", backdropFilter: "blur(3px)" }}>
+                                <Icon name={b.icon} size={21} color="#fff" />
+                              </span>
+                              <span style={{ width: 34, height: 34, borderRadius: "50%", background: "rgba(255,255,255,0.22)", border: "1px solid rgba(255,255,255,0.4)", backdropFilter: "blur(3px)", display: "grid", placeItems: "center", color: "#fff" }}>
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.3"><path d="M9 6l6 6-6 6" /></svg>
+                              </span>
+                            </span>
+                            <span style={{ display: "block" }}>
+                              <span style={{ display: "block", fontFamily: DISPLAY_FONT, fontWeight: 700, fontSize: 19, letterSpacing: "-0.01em", color: "#fff" }}>{b.title}</span>
+                              <span style={{ display: "block", fontFamily: BODY_FONT, fontSize: 12.5, lineHeight: 1.45, color: "rgba(255,255,255,0.86)", marginTop: 5, maxWidth: 300 }}>{m.desc}</span>
+                              <span style={{ display: "flex", flexWrap: "wrap", gap: 6, marginTop: 11 }}>
+                                {m.stats.map(s => (
+                                  <span key={s} style={{ fontFamily: MONO_FONT, fontSize: 10.5, letterSpacing: "0.05em", textTransform: "uppercase", color: "#fff", background: "rgba(255,255,255,0.14)", border: "1px solid rgba(255,255,255,0.26)", borderRadius: 999, padding: "3px 9px" }}>{s}</span>
+                                ))}
+                              </span>
+                            </span>
                           </span>
                         </a>
                       );
