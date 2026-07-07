@@ -522,6 +522,7 @@ function SkyScene({ prayer: p, height = 200, intensity = 1 }) {
         fontFamily: SANS, fontSize: 10, fontWeight: 600,
         letterSpacing: '0.18em', textTransform: 'uppercase',
         color: p.onSky, opacity: 0.82,
+        textShadow: '0 1px 6px rgba(0,0,0,0.45)',
       }}>{p.timeLabel}</div>
     </div>
   );
@@ -662,7 +663,7 @@ function PrayerCard({ prayer: p, isCurrent, onOpen }) {
       )}
       <div style={{ padding: '16px 20px 18px', flex: 1, display: 'flex', flexDirection: 'column' }}>
         <h3 style={{ fontFamily: SERIF, fontSize: 26, fontWeight: 600, color: C.dark900, margin: 0, lineHeight: 1, letterSpacing: '-0.01em' }}>{p.nameAlb}</h3>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginTop: 14 }}>
+        <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '8px 12px', marginTop: 14 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
             <span style={{ fontFamily: MONO, fontSize: 14, fontWeight: 600, color: C.dark900 }}>{p.rakatFard}</span>
             <span style={{ fontSize: 10, letterSpacing: '0.12em', color: C.warm600, fontWeight: 600, textTransform: 'uppercase' }}>Farz</span>
@@ -994,7 +995,7 @@ function SiTeFaleshHome({ onOpenPrayer }) {
   return (
     <div style={{ minHeight: '100vh', background: C.bg, fontFamily: SANS, color: C.dark900 }}>
       {/* Hero */}
-      <section style={{ padding: 'clamp(32px,5vw,64px) clamp(20px,4vw,56px) clamp(20px,3vw,36px)', paddingLeft: window.innerWidth < 640 ? 60 : undefined, maxWidth: 1280, margin: '0 auto' }}>
+      <section className="stf-hero" style={{ maxWidth: 1280, margin: '0 auto' }}>
         <div className="stf-hero-grid">
           {/* Left — headline */}
           <div>
@@ -1117,6 +1118,8 @@ function SiTeFaleshHome({ onOpenPrayer }) {
 
       <style>{`
         @keyframes namaz-pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.4;transform:scale(.8)} }
+        .stf-hero { padding: clamp(32px,5vw,64px) clamp(20px,4vw,56px) clamp(20px,3vw,36px); }
+        @media(max-width:639px){ .stf-hero{ padding-left:60px; } }
         .stf-hero-grid { display:grid; grid-template-columns:1.35fr 1fr; gap:48px; align-items:end; }
         .stf-prayer-grid { display:grid; gap:18px; grid-template-columns:repeat(5,1fr); }
         @media(max-width:1180px){ .stf-prayer-grid{grid-template-columns:repeat(3,1fr);} }
