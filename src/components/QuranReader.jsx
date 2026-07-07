@@ -1198,7 +1198,7 @@ export default function QuranReader({ playQuranAudio, globalCurrentId, globalPla
                 {/* Prev / Next surah nav */}
                 {!loadingRead && verses.length > 0 && (
                   <div style={{ display: "flex", justifyContent: "space-between", marginTop: 48, gap: 12 }}>
-                    <button onClick={() => navSurah(-1)} disabled={current === 1} style={{ flex: 1, padding: "12px 0", background: "transparent", border: `1px solid ${T.warm200}`, borderRadius: 999, color: current === 1 ? T.warm200 : T.warm600, cursor: current === 1 ? "default" : "pointer", fontSize: 12, fontFamily: T.fontBody, transition: "all 0.2s" }}>← {isSq ? "Sure e mëparshme" : "Previous Surah"}</button>
+                    <button onClick={() => navSurah(-1)} disabled={current === 1} style={{ flex: 1, padding: "12px 0", background: "transparent", border: `1px solid ${T.warm200}`, borderRadius: 999, color: current === 1 ? T.warm200 : T.warm600, cursor: current === 1 ? "default" : "pointer", fontSize: 12, fontFamily: T.fontBody, transition: "all 0.2s" }}>← {isSq ? "Surja e mëparshme" : "Previous Surah"}</button>
                     <button onClick={() => navSurah(1)} disabled={current === 114} style={{ flex: 1, padding: "12px 0", background: "transparent", border: `1px solid ${T.warm200}`, borderRadius: 999, color: current === 114 ? T.warm200 : T.warm600, cursor: current === 114 ? "default" : "pointer", fontSize: 12, fontFamily: T.fontBody, transition: "all 0.2s" }}>{isSq ? "Surja tjetër" : "Next Surah"} →</button>
                   </div>
                 )}
