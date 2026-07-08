@@ -288,6 +288,7 @@ export default function NamaziDeep() {
       {/* ── Kohët ── */}
       <section style={{ maxWidth: 1100, margin: '64px auto 0', padding: '0 clamp(20px,4vw,56px)' }}>
         <SectionHead
+          id="kohet"
           eyebrow="Kohët · المواقيت"
           title="Kur hyn dhe del koha e çdo namazi"
           sub="«Namazi është detyrë për besimtarët në kohë të caktuara.» (En-Nisa 4:103) — kufijtë e çdo kohe sipas hadithit të Abdullah ibn Amrit."
@@ -303,6 +304,7 @@ export default function NamaziDeep() {
       {/* ── Udhëtari ── */}
       <section style={{ maxWidth: 1100, margin: '64px auto 0', padding: '0 clamp(20px,4vw,56px)' }}>
         <SectionHead
+          id="udhetari"
           eyebrow="Udhëtimi · السفر"
           title="Namazi i udhëtarit"
           sub="Shkurtimi dhe bashkimi janë lehtësime që Allahu do t'i pranohen — «sadaka» e Tij për umetin."
@@ -329,6 +331,7 @@ export default function NamaziDeep() {
       {/* ── Xhumaja ── */}
       <section style={{ maxWidth: 1100, margin: '64px auto 0', padding: '0 clamp(20px,4vw,56px)' }}>
         <SectionHead
+          id="xhumaja"
           eyebrow="E premtja · الجمعة"
           title="Xhumaja"
           sub="Dita më e mirë e javës dhe namazi i saj — nga gusli i mëngjesit deri te ora e përgjigjes."
@@ -341,6 +344,7 @@ export default function NamaziDeep() {
       {/* ── Bajramet ── */}
       <section style={{ maxWidth: 1100, margin: '64px auto 0', padding: '0 clamp(20px,4vw,56px)' }}>
         <SectionHead
+          id="bajramet"
           eyebrow="Festat · العيدان"
           title="Namazi i bajrameve"
           sub="Fitër dhe Kurban Bajrami — si falen dhe si festohen sipas sunetit."

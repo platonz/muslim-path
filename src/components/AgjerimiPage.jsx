@@ -1,4 +1,4 @@
-import { SourceChip, SectionHead, RulingCard } from "./AbdesPage";
+import { SourceChip, SectionHead, RulingCard, PageNav } from "./AbdesPage";
 import {
   SURFACE, SERIF, SANS, MONO,
   DARK_900, DARK_700,
@@ -438,9 +438,21 @@ export default function AgjerimiPage() {
         </div>
       </section>
 
+      {/* ── Jump nav ── */}
+      <PageNav items={[
+        { id: 'virtytet',   label: 'Pse agjërojmë' },
+        { id: 'fillimi',    label: 'Fillimi' },
+        { id: 'adabet',     label: 'Adabet' },
+        { id: 'prishesit',  label: 'Prishësit' },
+        { id: 'lehtesimet', label: 'Kush lirohet' },
+        { id: 'ndaluara',   label: 'Ditët e ndaluara' },
+        { id: 'vullnetare', label: 'Vullnetare' },
+        { id: 'itikafi',    label: 'Itikafi' },
+      ]} />
+
       {/* ── Virtytet ── */}
       <section style={{ maxWidth: 1100, margin: '24px auto 0', padding: '0 clamp(20px,4vw,56px)' }}>
-        <SectionHead eyebrow="Virtytet" title="Pse agjërojmë" sub="Agjërimi është mburojë dhe adhurim që Allahu e ka lidhur veçanërisht me Veten." />
+        <SectionHead id="virtytet" eyebrow="Virtytet" title="Pse agjërojmë" sub="Agjërimi është mburojë dhe adhurim që Allahu e ka lidhur veçanërisht me Veten." />
         <div className="agj-grid-3">
           {VIRTUES.map(item => <RulingCard key={item.title} item={item} />)}
         </div>
@@ -448,7 +460,7 @@ export default function AgjerimiPage() {
 
       {/* ── Hyrja e Ramazanit ── */}
       <section style={{ maxWidth: 1100, margin: '64px auto 0', padding: '0 clamp(20px,4vw,56px)' }}>
-        <SectionHead eyebrow="Fillimi" title="Kur nis Ramazani dhe si bëhet nijeti" sub="Muaji hapet me shikimin e hënës së re; agjërimi farz kërkon nijet çdo natë para agimit." />
+        <SectionHead id="fillimi" eyebrow="Fillimi" title="Kur nis Ramazani dhe si bëhet nijeti" sub="Muaji hapet me shikimin e hënës së re; agjërimi farz kërkon nijet çdo natë para agimit." />
         <div className="agj-grid-3">
           {RAMADAN_START.map(item => <RulingCard key={item.title} item={item} />)}
         </div>
@@ -456,7 +468,7 @@ export default function AgjerimiPage() {
 
       {/* ── Adabet ── */}
       <section style={{ maxWidth: 1100, margin: '64px auto 0', padding: '0 clamp(20px,4vw,56px)' }}>
-        <SectionHead eyebrow="Adabet" title="Syfyri, iftari dhe sjellja" sub="Nga bereqeti i syfyrit te nxitimi i iftarit — dhe ruajtja e gjuhës që agjërimi të mos mbetet vetëm uri." />
+        <SectionHead id="adabet" eyebrow="Adabet" title="Syfyri, iftari dhe sjellja" sub="Nga bereqeti i syfyrit te nxitimi i iftarit — dhe ruajtja e gjuhës që agjërimi të mos mbetet vetëm uri." />
         <div className="agj-grid-2">
           {FASTING_ADAB.map(item => <RulingCard key={item.title} item={item} />)}
         </div>
@@ -464,7 +476,7 @@ export default function AgjerimiPage() {
 
       {/* ── Prishësit ── */}
       <section style={{ maxWidth: 1100, margin: '64px auto 0', padding: '0 clamp(20px,4vw,56px)' }}>
-        <SectionHead eyebrow="Prishësit" title="Çfarë e prish agjërimin — dhe çfarë jo" sub="Rregulli bazë: veprimi s\'bazohet në dyshim, dhe harresa nuk e prish agjërimin." />
+        <SectionHead id="prishesit" eyebrow="Prishësit" title="Çfarë e prish agjërimin — dhe çfarë jo" sub="Rregulli bazë: veprimi s\'bazohet në dyshim, dhe harresa nuk e prish agjërimin." />
         <div className="agj-grid-2">
           <div>
             <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: '#8A2020', fontFamily: SANS, marginBottom: 10 }}>E prishin</div>
@@ -483,7 +495,7 @@ export default function AgjerimiPage() {
 
       {/* ── Kush lirohet ── */}
       <section style={{ maxWidth: 1100, margin: '64px auto 0', padding: '0 clamp(20px,4vw,56px)' }}>
-        <SectionHead eyebrow="Lehtësimet" title="Kush lirohet nga agjërimi" sub="Sëmundja, udhëtimi, mosha dhe shtatzënia — kush zëvendëson ditët dhe kush jep fidje." />
+        <SectionHead id="lehtesimet" eyebrow="Lehtësimet" title="Kush lirohet nga agjërimi" sub="Sëmundja, udhëtimi, mosha dhe shtatzënia — kush zëvendëson ditët dhe kush jep fidje." />
         <div className="agj-grid-2">
           {EXEMPT.map(item => <RulingCard key={item.title} item={item} />)}
         </div>
@@ -491,7 +503,7 @@ export default function AgjerimiPage() {
 
       {/* ── Ditët e ndaluara ── */}
       <section style={{ maxWidth: 1100, margin: '64px auto 0', padding: '0 clamp(20px,4vw,56px)' }}>
-        <SectionHead eyebrow="Ditët e ndaluara" title="Kur nuk agjërohet" sub="Ditët e bajrameve, teshriku, dhe veçimi i disa ditëve pa arsye." />
+        <SectionHead id="ndaluara" eyebrow="Ditët e ndaluara" title="Kur nuk agjërohet" sub="Ditët e bajrameve, teshriku, dhe veçimi i disa ditëve pa arsye." />
         <div className="agj-grid-3">
           {FORBIDDEN_DAYS.map(item => <RulingCard key={item.title} item={item} />)}
         </div>
@@ -499,7 +511,7 @@ export default function AgjerimiPage() {
 
       {/* ── Vullnetare ── */}
       <section style={{ maxWidth: 1100, margin: '64px auto 0', padding: '0 clamp(20px,4vw,56px)' }}>
-        <SectionHead eyebrow="Agjërimet vullnetare" title="Nafile përgjatë vitit" sub="Gjashtë ditët e Shevalit, Arafati, Ashura, e hëna e e enjtja dhe ditët e bardha." />
+        <SectionHead id="vullnetare" eyebrow="Agjërimet vullnetare" title="Nafile përgjatë vitit" sub="Gjashtë ditët e Shevalit, Arafati, Ashura, e hëna e e enjtja dhe ditët e bardha." />
         <div className="agj-grid-3">
           {VOLUNTARY.map(item => <RulingCard key={item.title} item={item} />)}
         </div>
@@ -507,7 +519,7 @@ export default function AgjerimiPage() {
 
       {/* ── Itikafi ── */}
       <section style={{ maxWidth: 1100, margin: '64px auto 0', padding: '0 clamp(20px,4vw,56px)' }}>
-        <SectionHead eyebrow="Itikafi · الاعتكاف" title="Dhjetë netët e fundit dhe Nata e Kadrit" sub="Ngjitja në xhami për ibadet dhe kërkimi i natës më të mirë të vitit." />
+        <SectionHead id="itikafi" eyebrow="Itikafi · الاعتكاف" title="Dhjetë netët e fundit dhe Nata e Kadrit" sub="Ngjitja në xhami për ibadet dhe kërkimi i natës më të mirë të vitit." />
         <div className="agj-grid-2">
           {ITIKAF.cards.map(s => (
             <div key={s.title} style={{ background: C.surface, border: `1px solid ${C.warm200}`, borderRadius: 14, padding: '16px 18px', display: 'flex', flexDirection: 'column' }}>

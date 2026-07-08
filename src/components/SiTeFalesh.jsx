@@ -1,5 +1,6 @@
 ﻿import { useState, useMemo } from "react";
 import NamaziDeep from "./NamaziDeep";
+import { PageNav } from "./AbdesPage";
 import {
   SURFACE, SERIF, SANS, MONO,
   DARK_900, DARK_700,
@@ -807,7 +808,7 @@ function SahuBlock() {
   const current = SAHW.principles.find(p => p.id === sel);
 
   return (
-    <section style={{ margin: '64px auto 0', maxWidth: 1100, padding: '0 clamp(20px,4vw,56px) 72px' }}>
+    <section id="gabimet" style={{ margin: '64px auto 0', maxWidth: 1100, padding: '0 clamp(20px,4vw,56px) 72px', scrollMarginTop: 84 }}>
       <style>{`
         .sahwb-rail {
           position: relative; display: grid;
@@ -1096,8 +1097,20 @@ function SiTeFaleshHome({ onOpenPrayer }) {
         </div>
       </section>
 
+      {/* Jump nav */}
+      <div style={{ paddingBottom: 'clamp(20px,3vw,32px)' }}>
+        <PageNav items={[
+          { id: 'namazet',  label: 'Pesë namazet' },
+          { id: 'gabimet',  label: 'Gabimet në namaz' },
+          { id: 'kohet',    label: 'Kohët' },
+          { id: 'udhetari', label: 'Namazi i udhëtarit' },
+          { id: 'xhumaja',  label: 'Xhumaja' },
+          { id: 'bajramet', label: 'Bajramet' },
+        ]} />
+      </div>
+
       {/* Prayer grid */}
-      <section style={{ padding: '0 clamp(20px,4vw,56px) clamp(40px,6vw,80px)', maxWidth: 1280, margin: '0 auto' }}>
+      <section id="namazet" style={{ padding: '0 clamp(20px,4vw,56px) clamp(40px,6vw,80px)', maxWidth: 1280, margin: '0 auto', scrollMarginTop: 84 }}>
         <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', marginBottom: 22 }}>
           <div>
             <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: '0.2em', textTransform: 'uppercase', color: C.gold600 }}>Pesë namazet</div>

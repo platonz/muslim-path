@@ -469,9 +469,9 @@ function TypeBadge({ type, times }) {
   );
 }
 
-export function SectionHead({ eyebrow, title, sub }) {
+export function SectionHead({ eyebrow, title, sub, id }) {
   return (
-    <div style={{ marginBottom: 26 }}>
+    <div id={id} style={{ marginBottom: 26, scrollMarginTop: 84 }}>
       <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: '0.2em', textTransform: 'uppercase', color: C.gold600, fontFamily: SANS }}>{eyebrow}</div>
       <h2 style={{ fontFamily: SERIF, fontSize: 'clamp(24px,3vw,34px)', fontWeight: 600, margin: '6px 0 0', color: C.dark900, letterSpacing: '-0.01em' }}>{title}</h2>
       {sub && <p style={{ fontSize: 14.5, lineHeight: 1.65, color: C.warm700, margin: '10px 0 0', maxWidth: 640, fontFamily: SANS }}>{sub}</p>}
@@ -497,6 +497,49 @@ export function RulingCard({ item }) {
       <div style={{ fontSize: 13.5, lineHeight: 1.6, color: C.warm700, marginTop: 6, fontFamily: SANS }}>{item.body}</div>
       <SourceChip evidence={item.evidence} />
     </div>
+  );
+}
+
+// ─── PAGE NAV ─────────────────────────────────────────────────────
+// Reusable "Në këtë faqe" jump strip for content-heavy pages.
+// Items: [{ id, label }] — id must match a SectionHead id (or any element id).
+export function PageNav({ items }) {
+  const jump = id => {
+    const el = document.getElementById(id);
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+  return (
+    <nav aria-label="Në këtë faqe" style={{ maxWidth: 1100, margin: '0 auto', padding: '0 clamp(20px,4vw,56px)' }}>
+      <style>{`.pgnav-chip:hover { background: ${C.gold100} !important; border-color: ${C.gold400} !important; color: ${C.gold700} !important; }`}</style>
+      <div style={{
+        display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap',
+        background: C.surface, border: `1px solid ${C.warm200}`,
+        borderRadius: 14, padding: '12px 16px',
+      }}>
+        <span style={{ display: 'inline-flex', alignItems: 'center', gap: 7, flexShrink: 0 }}>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={C.gold600} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/>
+            <line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/>
+          </svg>
+          <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: C.gold600, fontFamily: SANS }}>Në këtë faqe</span>
+        </span>
+        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+          {items.map(it => (
+            <button
+              key={it.id}
+              className="pgnav-chip"
+              onClick={() => jump(it.id)}
+              style={{
+                fontFamily: SANS, fontSize: 12.5, fontWeight: 600,
+                color: C.warm700, background: C.gold50,
+                border: `1px solid ${C.gold200}`, borderRadius: 999,
+                padding: '6px 14px', cursor: 'pointer', transition: 'all 150ms',
+              }}
+            >{it.label}</button>
+          ))}
+        </div>
+      </div>
+    </nav>
   );
 }
 
@@ -544,9 +587,18 @@ export default function AbdesPage() {
         </div>
       </section>
 
+      {/* ── Jump nav ── */}
+      <PageNav items={[
+        { id: 'hapat',     label: 'Si merret abdesi' },
+        { id: 'prishesit', label: 'Prishësit' },
+        { id: 'gusli',     label: 'Gusli' },
+        { id: 'tejemumi',  label: 'Tejemumi' },
+      ]} />
+
       {/* ── Steps ── */}
       <section style={{ maxWidth: 1100, margin: '24px auto 0', padding: '0 clamp(20px,4vw,56px)' }}>
         <SectionHead
+          id="hapat"
           eyebrow="Njëmbëdhjetë hapa"
           title="Si merret abdesi"
           sub="Katër hapat farz i cakton vetë Kurani; të tjerët janë sunete të vërtetuara nga përshkrimi i abdesit të Pejgamberit ﷺ. Prek burimin nën çdo hap për ta parë hadithin."
@@ -595,6 +647,7 @@ export default function AbdesPage() {
       {/* ── Nullifiers ── */}
       <section style={{ maxWidth: 1100, margin: '64px auto 0', padding: '0 clamp(20px,4vw,56px)' }}>
         <SectionHead
+          id="prishesit"
           eyebrow="Prishësit"
           title="Çfarë e prish abdesin — dhe çfarë jo"
           sub="Rregulli bazë: bindja nuk zhbëhet nga dyshimi. Abdesi mbetet i vlefshëm derisa të jesh i sigurt se e ke prishur."
@@ -618,6 +671,7 @@ export default function AbdesPage() {
       {/* ── Ghusl ── */}
       <section style={{ maxWidth: 1100, margin: '64px auto 0', padding: '0 clamp(20px,4vw,56px)' }}>
         <SectionHead
+          id="gusli"
           eyebrow="Gusli · الغُسْل"
           title="Larja e plotë"
           sub="Kur abdesi nuk mjafton — pastrimi i gjithë trupit sipas hadithit të Aishes (r.a.)."
@@ -656,6 +710,7 @@ export default function AbdesPage() {
       {/* ── Tayammum ── */}
       <section style={{ maxWidth: 1100, margin: '64px auto 0', padding: '0 clamp(20px,4vw,56px)' }}>
         <SectionHead
+          id="tejemumi"
           eyebrow="Tejemumi · التَّيَمُّم"
           title="Pastrimi pa ujë"
           sub="Një lehtësim i dhuruar vetëm këtij umeti: kur uji mungon ose dëmton, dheu i pastër zë vendin e tij."
