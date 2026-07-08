@@ -26,6 +26,8 @@ export default function Icon({ name, size = 20, color = "currentColor", sw = 1.6
       return <svg {...p}><path d="M18 11V6a3 3 0 00-6 0v5"/><path d="M6 11V6a3 3 0 016 0"/><path d="M6 11h12v8a3 3 0 01-3 3H9a3 3 0 01-3-3v-8z"/></svg>;
     case "abdes":
       return <svg {...p}><path d="M12 2.69l5.66 5.66a8 8 0 11-11.31 0z"/></svg>;
+    case "agjerim":
+      return <svg {...p}><path d="M12 3a6 6 0 009 9 9 9 0 11-9-9z"/></svg>;
     case "library":
       return <svg {...p}><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>;
     case "audio":

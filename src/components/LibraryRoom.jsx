@@ -15,6 +15,7 @@ export const SHELVES = [
     books: [
       { id: "abdes", title: "Abdesi", sub: "PASTËRTIA", icon: "abdes", c: ["#2e6a8a", "#1f4f6b", "#123449"] },
       { id: "namaz", title: "Si të Falesh", sub: "NAMAZI", icon: "dua", c: ["#355881", "#203d64", "#142843"] },
+      { id: "agjerim", title: "Agjërimi", sub: "RAMAZANI", icon: "agjerim", c: ["#4b3f7a", "#352c5c", "#221c3e"] },
       { id: "dua", title: "Duatë", sub: "LUTJET", icon: "heart", c: ["#842d3a", "#67202b", "#45131b"] },
       { id: "asma", title: "99 Emrat", sub: "EL-ESMA", icon: "asma", c: ["#66335b", "#4c2546", "#31172d"] },
       { id: "tasbeeh", title: "Tesbih", sub: "DHIKRI", icon: "tasbeeh", c: ["#2d6361", "#1f4a49", "#132f2f"] },

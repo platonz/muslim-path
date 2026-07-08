@@ -74,6 +74,11 @@ const NAV_ICONS = {
       <path d="M12 2.69l5.66 5.66a8 8 0 11-11.31 0z"/>
     </svg>
   ),
+  agjerim: (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M12 3a6 6 0 009 9 9 9 0 11-9-9z"/>
+    </svg>
+  ),
   namaz: (
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
       <circle cx="12" cy="5" r="2"/>

@@ -9,6 +9,7 @@ import NurDashboard from "./components/NurDashboard";
 import QuranReader from "./components/QuranReader";
 import SiTeFalesh from "./components/SiTeFalesh";
 import AbdesPage from "./components/AbdesPage";
+import AgjerimiPage from "./components/AgjerimiPage";
 import Zakat from "./components/Zakat";
 import Inheritance from "./components/Inheritance";
 import DateConverter from "./components/DateConverter";
@@ -296,6 +297,7 @@ export default function App() {
     audio:       { title: "Islamic Lectures - Sunneti.com",                 desc: "Listen to Islamic lectures and audio content." },
     namaz:       { title: "Si te Falesh - Sunneti.com",                     desc: "Pese namazet e dites, shpjeguar hap pas hapi me shqiptim dhe kuptim shqip." },
     abdes:       { title: "Abdesi - Sunneti.com",                           desc: "Si merret abdesi hap pas hapi, prishesit, gusli dhe tejemumi — sipas Bulugh al-Maram dhe Fikhut te Sunetit." },
+    agjerim:     { title: "Agjerimi - Sunneti.com",                         desc: "Ramazani, syfyri, iftari, prishesit, kush lirohet, ditet e ndaluara dhe agjerimet vullnetare — sipas Bulugh al-Maram dhe Fikhut te Sunetit." },
   };
   useEffect(() => {
     const m = PAGE_META[page] || PAGE_META.home;
@@ -375,6 +377,7 @@ export default function App() {
         {page === "admin"   && <AdminPage authSession={authSession} />}
         {page === "namaz"   && <SiTeFalesh initialPrayerId={namazPrayerId} />}
         {page === "abdes"   && <AbdesPage />}
+        {page === "agjerim" && <AgjerimiPage />}
       </main>
       )}
       {showSearch && (
