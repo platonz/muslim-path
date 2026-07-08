@@ -333,6 +333,116 @@ const ISTINJA = [
   },
 ];
 
+// ─── UJËRAT ───────────────────────────────────────────────────────
+const WATERS = [
+  {
+    title: 'Uji i pastër (mutlak)',
+    body: 'Shiu, bora dhe breshri — çdo ujë i lënë në gjendjen e vet natyrore — janë të pastër dhe pastrojnë. Me to merr abdes, lahesh dhe pastron çdo gjë.',
+    evidence: [
+      { book: 'bulugh', ref: '§2', text: 'Ebu Seid el-Hudri (r.a.): Pejgamberi ﷺ tha: «Uji është i pastër (tahur) dhe asgjë s\'e ndot.»', src: 'Tre imamët — sahih sipas Ahmedit' },
+      { book: 'fiqh', ref: '1.1b', text: 'Shiu, bora e breshri janë të pastër: «Ne zbresim nga qielli ujë të pastër» (El-Furkan 48). (transmeton grupi)' },
+    ],
+  },
+  {
+    title: 'Uji i detit',
+    body: 'Uji i detit është i pastër për abdes e gusël, dhe ngordhësira e tij (peshku e të tjera) është hallall pa therje.',
+    evidence: [
+      { book: 'bulugh', ref: '§1', text: 'Ebu Hurejra (r.a.): Për detin, Pejgamberi ﷺ tha: «Uji i tij është i pastër dhe ngordhësira e tij është hallall.»', src: 'Katër imamët — sahih sipas Tirmidhiut e Ibn Huzejmes' },
+      { book: 'fiqh', ref: '1.2', text: 'Një njeri pyeti: «Lundrojmë në det me pak ujë — a të marrim abdes me ujë deti?» Pejgamberi ﷺ: «Uji i tij është i pastër dhe ngordhësira e tij hallall.» (të pestë imamët)' },
+    ],
+  },
+  {
+    title: 'Ndotet vetëm kur ndryshon',
+    body: 'Uji mbetet i pastër derisa një papastërti t\'ia ndryshojë erën, shijen ose ngjyrën. Nëse ndryshon njëra prej të treve, s\'përdoret më për pastrim.',
+    evidence: [
+      { book: 'bulugh', ref: '§3', text: 'Ebu Umame (r.a.): «Uji nuk ndotet nga asgjë, veç asaj që ia ndryshon erën, shijen a ngjyrën.»', src: 'Ibn Maxhe' },
+      { book: 'fiqh', ref: '1.3a', text: 'Nëse papastërtia ia ndryshon shijen, ngjyrën a erën ujit — s\'përdoret; nëse jo, uji mbetet i pastër. Për këtë ka ixhma (Ibn Mundhiri).' },
+    ],
+  },
+  {
+    title: 'Sasia e madhe s\'ndotet lehtë',
+    body: 'Shumica: uji mbetet i pastër sa s\'i ndryshohet era, shija a ngjyra — pavarësisht sasisë. Disa (shafitë) mbështeten te hadithi i «dy kullave»: uji nën dy kulla ndotet nga vetë prekja e nexhsit.',
+    differed: true,
+    evidence: [
+      { book: 'bulugh', ref: '§5', text: 'Ibn Umeri (r.a.): «Kur uji arrin dy kulla (rreth 200 litra), s\'e mban papastërtinë» — dhe në një version: «s\'ndotet.»', src: 'Katër imamët — sahih sipas Ibn Huzejmes' },
+      { book: 'fiqh', ref: '1.3a', text: 'Për Ibn Abdul-Berrin, hadithi i dy kullave është i dobët në zinxhir; parimi më i fortë (pusi i Buda\'as): «Uji është i pastër, asgjë s\'e ndot.»' },
+    ],
+  },
+  {
+    title: 'Uji i mbetur është i pastër',
+    body: 'Uji që teproi pas abdesit a guslit mbetet i pastër, sepse besimtari nuk ndotet. Mund të lahesh edhe me ujin e mbetur nga tjetri.',
+    evidence: [
+      { book: 'bulugh', ref: '§10', text: 'Ibn Abasi (r.a.): Pejgamberi ﷺ lahej me ujin e mbetur nga gruaja e tij Mejmune (r.a.).', src: 'Muslimi' },
+      { book: 'fiqh', ref: '1.2c', text: 'Uji i përdorur (që rrjedh pas abdesit) është i pastër — «Besimtari nuk ndotet», tha Pejgamberi ﷺ; pra uji që ai përdor s\'bëhet nexhs.' },
+    ],
+  },
+  {
+    title: 'Lëkura e regjur bëhet e pastër',
+    body: 'Lëkura e kafshës së ngordhur, kur regjet (tabaklidhet), bëhet e pastër dhe mund të përdoret.',
+    evidence: [
+      { book: 'bulugh', ref: '§20', text: 'Ibn Abasi (r.a.): Pejgamberi ﷺ tha: «Kur lëkura regjet, ajo bëhet e pastër.»', src: 'Muslimi' },
+      { book: 'bulugh', ref: '§23', text: 'Mejmune (r.a.): Për një dele të ngordhur — «Pse s\'e shfrytëzuat lëkurën e saj? Uji dhe gjethet e tabakut e pastrojnë.»', src: 'Ebu Davudi & Nesaiu' },
+      { book: 'fiqh', ref: '1.15', text: 'Regjja pastron lëkurën dhe qimen e kafshës së ngordhur, nga hadithi i Ibn Abasit. (Buhariu & Muslimi)' },
+    ],
+  },
+];
+
+// ─── MENSTRUACIONET ───────────────────────────────────────────────
+const MENSTRUATION = [
+  {
+    title: 'Çka është hajdi',
+    body: 'Gjaku i menstruacioneve fillon zakonisht nga mosha nëntë vjeç dhe njihet nga ngjyra e errët. Gjatë ditëve të ciklit llogariten edhe ngjyra e verdhë a e turbullt — por jo pasi je pastruar.',
+    evidence: [
+      { book: 'bulugh', ref: '§154', text: 'Um Atije (r.a.): «Pas pastrimit, ngjyrën e verdhë a të turbullt s\'e llogaritnim si gjë (të hajdit).»', src: 'Buhariu & Ebu Davudi' },
+      { book: 'fiqh', ref: '1.69a', text: 'Gjaku i hajdit njihet kur është i errët; ngjyrat: e zezë, e kuqe, e verdhë, e turbullt. Aishja u thoshte grave: «Mos u ngutni derisa të shihni pambukun e bardhë të pastër.»' },
+    ],
+  },
+  {
+    title: 'Sa zgjat — sipas zakonit',
+    body: 'Nuk ka afat të prerë minimal a maksimal. Gruaja ndjek zakonin e vet mujor; kur mbaron cikli, lahet me gusël dhe rifillon namazin e agjërimin.',
+    evidence: [
+      { book: 'bulugh', ref: '§152', text: 'Aishja (r.a.): Për Um Habiben me gjakderdhje — «Rri (pa namaz) sa të zgjaste zakonisht periudha jote, pastaj lahu (dhe falu).»', src: 'Muslimi' },
+      { book: 'fiqh', ref: '1.70', text: 'S\'ka minimum a maksimum të vërtetuar; gruaja i llogarit ditët sipas zakonit të vet. (Um Seleme — të pestë imamët veç Tirmidhiut)' },
+    ],
+  },
+  {
+    title: 'Çka ndalohet gjatë hajdit',
+    body: 'Gjatë hajdit gruaja s\'fal namaz e s\'agjëron, dhe s\'bën tavaf rreth Qabes. Namazet e humbura nuk i zëvendëson; ditët e agjërimit të Ramazanit i plotëson më vonë.',
+    evidence: [
+      { book: 'bulugh', ref: '§158', text: 'Ebu Seid el-Hudri (r.a.): «A s\'është kështu që kur gruaja ka hajd, ajo as fal e as agjëron?»', src: 'Muttefekun alejhi' },
+      { book: 'bulugh', ref: '§159', text: 'Aishja (r.a.): Kur pati hajd gjatë Haxhit — «Bëj gjithçka që bën haxhiu, veç tavafit, derisa të pastrohesh.»', src: 'Muttefekun alejhi' },
+      { book: 'fiqh', ref: '1.71a', text: 'Aishja: «U urdhëruam ta zëvendësonim agjërimin, e jo namazin.» (grupi)' },
+    ],
+  },
+  {
+    title: 'Marrëdhëniet — gjithçka veç aktit',
+    body: 'Gjatë hajdit ndalohet vetëm marrëdhënia; çdo afri tjetër me bashkëshorten lejohet. Për atë që e kryen aktin me qëllim transmetohet një lëmoshë (një dinar a gjysmë) — por dijetarët ndryshojnë a është detyrim.',
+    differed: true,
+    evidence: [
+      { book: 'bulugh', ref: '§155', text: 'Enesi (r.a.): Për zakonin çifut që s\'hanin me gruan në hajd — Pejgamberi ﷺ: «Bëni gjithçka veç marrëdhënies.»', src: 'Muslimi' },
+      { book: 'bulugh', ref: '§157', text: 'Ibn Abasi (r.a.): Për atë që bën marrëdhënie me gruan në hajd — «Të japë një dinar a gjysmë dinari lëmoshë.»', src: 'Pesë imamët — sahih sipas Hakimit' },
+      { book: 'fiqh', ref: '1.71b', text: '«Bëni gjithçka veç marrëdhënies» (El-Bekare 222). Neveviu: prekja mbi mbulesë lejohet por është e papëlqyer; për shpagimin ka dy mendime.' },
+    ],
+  },
+  {
+    title: 'Istihadaja — gjaku i parregullt',
+    body: 'Gjakderdhja jashtë kohës së ciklit s\'është hajd — vjen nga një damar. Gruaja rri pa namaz sa ditët e zakonit të saj; pastaj lahet, mbyll vendin dhe falet, duke marrë abdes për çdo namaz.',
+    evidence: [
+      { book: 'bulugh', ref: '§149', text: 'Aishja (r.a.): Për Fatimen bint Ebi Hubejsh me gjakderdhje — «Nëse është gjak hajdi, është i errët e i njohur: atëherë lëre namazin. Nëse jo, merr abdes e falu, sepse është veç damar.»', src: 'Ebu Davudi & Nesaiu — sahih' },
+      { book: 'fiqh', ref: '1.74', text: 'Gruaja me istihada merr abdes për çdo namaz (Malik: e pëlqyer, jo detyrim veç kur prishet abdesi); e trajtohet si e pastër — falet, agjëron dhe i afrohet burrit.' },
+    ],
+  },
+  {
+    title: 'Lehonia (nifas)',
+    body: 'Gjaku pas lindjes zgjat deri në dyzet ditë. Nëse ndalon më herët, gruaja lahet dhe falet. Namazet e lëna gjatë lehonisë nuk zëvendësohen.',
+    evidence: [
+      { book: 'bulugh', ref: '§161', text: 'Um Seleme (r.a.): Në kohën e Pejgamberit ﷺ, lehona rrinte pa namaz dyzet ditë pas lindjes.', src: 'Pesë imamët veç Nesaiut' },
+      { book: 'bulugh', ref: '§162', text: 'Në një version të Ebu Davudit, Pejgamberi ﷺ s\'e urdhëronte të zëvendësonte namazet e lëna gjatë lehonisë.', src: 'Ebu Davudi' },
+      { book: 'fiqh', ref: '1.70a', text: 'Lehonia s\'ka minimum; maksimumi është dyzet ditë. Nëse gjaku ndalon më parë, gruaja lahet e falet.' },
+    ],
+  },
+];
+
 // ─── PRISHËSIT ────────────────────────────────────────────────────
 const NULLIFIERS_YES = [
   {
@@ -756,9 +866,11 @@ export default function AbdesPage() {
         { id: 'meste',     label: 'Mes-hi mbi meste' },
         { id: 'nexhaset',  label: 'Nexhaset' },
         { id: 'istinxha',  label: 'Adabet e nevojës' },
+        { id: 'ujerat',    label: 'Ujërat' },
         { id: 'prishesit', label: 'Prishësit' },
         { id: 'gusli',     label: 'Gusli' },
         { id: 'tejemumi',  label: 'Tejemumi' },
+        { id: 'menstruacionet', label: 'Menstruacionet' },
       ]} />
 
       {/* ── Steps ── */}
@@ -846,6 +958,19 @@ export default function AbdesPage() {
         />
         <div className="abd-grid-3">
           {ISTINJA.map(item => <RulingCard key={item.title} item={item} />)}
+        </div>
+      </section>
+
+      {/* ── Ujërat ── */}
+      <section style={{ maxWidth: 1100, margin: '64px auto 0', padding: '0 clamp(20px,4vw,56px)' }}>
+        <SectionHead
+          id="ujerat"
+          eyebrow="Ujërat · المياه"
+          title="Cili ujë pastron"
+          sub="Themeli i çdo pastrimi: cili ujë vlen për abdes e gusël, kur ndotet dhe kur jo — plus lëkura që regjja e pastron."
+        />
+        <div className="abd-grid-3">
+          {WATERS.map(item => <RulingCard key={item.title} item={item} />)}
         </div>
       </section>
 
@@ -950,6 +1075,19 @@ export default function AbdesPage() {
         </div>
       </section>
 
+      {/* ── Menstruacionet ── */}
+      <section style={{ maxWidth: 1100, margin: '64px auto 0', padding: '0 clamp(20px,4vw,56px)' }}>
+        <SectionHead
+          id="menstruacionet"
+          eyebrow="Menstruacionet · الحيض"
+          title="Hajdi, istihadaja dhe lehonia"
+          sub="Gjendjet e veçanta të gruas — çfarë ndalohet, sa zgjasin dhe si kthehet pastërtia për namaz e agjërim."
+        />
+        <div className="abd-grid-3">
+          {MENSTRUATION.map(item => <RulingCard key={item.title} item={item} />)}
+        </div>
+      </section>
+
       {/* ── Sources footer ── */}
       <section style={{ maxWidth: 1100, margin: '56px auto 0', padding: '0 clamp(20px,4vw,56px)' }}>
         <div style={{
@@ -961,8 +1099,8 @@ export default function AbdesPage() {
           </svg>
           <div style={{ fontSize: 13, lineHeight: 1.7, color: C.warm700, fontFamily: SANS }}>
             <strong style={{ color: C.dark900 }}>Burimet.</strong> Çdo rregull në këtë faqe mbështetet njëkohësisht në{' '}
-            <em>Bulugh al-Maram min Adil-lat al-Ahkam</em> të Ibn Haxher el-Askalanit (Libri i Pastërtisë, hadithet 1–156)
-            dhe në <em>Fikhun e Sunetit</em> të Sejjid Sabikut (kapitujt 1.25–1.68). Aty ku dy burimet shënojnë
+            <em>Bulugh al-Maram min Adil-lat al-Ahkam</em> të Ibn Haxher el-Askalanit (Libri i Pastërtisë, hadithet 1–162)
+            dhe në <em>Fikhun e Sunetit</em> të Sejjid Sabikut (kapitujt 1.1–1.75). Aty ku dy burimet shënojnë
             mospajtim mes dijetarëve, rregulla mban shenjën <em>«Mendime të ndryshme»</em>. Për raste të veçanta
             pyet një hoxhë të kualifikuar.
           </div>
