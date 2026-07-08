@@ -167,7 +167,7 @@ const BREAKERS = [
   },
   {
     title: 'Hixhamja (kupat)',
-    body: 'Sipas shumicës së dijetarëve hixhamja lejohet gjatë agjërimit; hadithi që e ndalon u konsiderua i shfuqizuar.',
+    body: 'Hadithi i saktë — «ai që bën hixhame dhe ai që i bëhet, të dy e kanë prishur agjërimin» — tregon se hixhamja e prish agjërimin; këtë mendim e mbajtën Imam Ahmedi dhe ehl-hadithi. Shumica e lejojnë duke e quajtur hadithin të shfuqizuar, por vetë pretendimi për shfuqizim mbetet i diskutueshëm — ndaj më e sigurta për agjëruesin është ta shmangë.',
     differed: true,
     evidence: [
       { book: 'bulugh', ref: '§687', text: '«Ai që bën hixhame dhe ai që i bëhet, të dy e kanë prishur agjërimin.»', src: 'Të pestë imamët veç Tirmidhiut — sahih' },

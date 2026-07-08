@@ -75,7 +75,7 @@ const WUDU_STEPS = [
   },
   {
     n: 5, name: 'Hunda', nameAr: 'الاسْتِنْشَاق', type: 'sunet', times: '3×',
-    body: 'Thith ujë me hundë dhe nxirre — tri herë. Suneti është ta thithësh me të djathtën dhe ta nxjerrësh me të majtën, thellë — veç nëse je agjërueshëm.',
+    body: 'Thith ujë me hundë dhe nxirre — tri herë. Urdhri i Pejgamberit ﷺ («thithe ujin thellë me hundë») është urdhër i drejtpërdrejtë, prandaj mendimi me provën më të fortë — Imam Ahmedi dhe ehl-hadithi — e quan istinshakun vaxhib: mos e lër. Suneti është ta thithësh me të djathtën dhe ta nxjerrësh me të majtën, thellë — veç nëse je agjërueshëm.',
     evidence: [
       { book: 'bulugh', ref: '§44', text: '«Plotësoje dhe përsose abdesin, kaloje ujin mes gishtave dhe thithe ujin thellë me hundë — veç nëse je duke agjëruar.»', src: 'Katër imamët — sahih sipas Ibn Huzejmes' },
       { book: 'fiqh', ref: '1.30b', text: '«Kur dikush merr abdes, le të thithë ujë me hundë e pastaj ta nxjerrë.» (Buhariu, Muslimi, Ebu Davudi)' },
@@ -487,7 +487,7 @@ const NULLIFIERS_YES = [
   },
   {
     title: 'Mishi i devesë',
-    body: 'Hadithi i saktë thotë të merret abdes pas tij; shumica e dijetarëve megjithatë s\'e quajnë prishës.',
+    body: 'Hadithi i saktë (Muslimi) e urdhëron abdesin pas tij — këtë dispozitë ndjekim, sepse teksti i qartë ka provën më të fortë. Shumica e dijetarëve mendojnë ndryshe, por mbi bazë më të dobët se urdhri i drejtpërdrejtë i hadithit.',
     differed: true,
     evidence: [
       { book: 'bulugh', ref: '§81', text: '«A të marrim abdes pas mishit të deles?» — «Nëse do.» — «Po pas mishit të devesë?» — «Po.»', src: 'Muslimi' },
