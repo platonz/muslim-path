@@ -170,6 +170,59 @@ const WUDU_RULES = [
   },
 ];
 
+// ─── MES-HI MBI MESTE ─────────────────────────────────────────────
+const MASH_KHUFF = [
+  {
+    title: 'Lejohet — mëshirë e sunetit',
+    body: 'Në vend që t\'i lash këmbët, mund të fshish me dorë të lagur mbi meste — këpucët e lëkurës që mbulojnë nyjet — pa i hequr fare. Transmetimet për këtë janë të shumta dhe të forta.',
+    evidence: [
+      { book: 'bulugh', ref: '§63', text: 'Mugire ibn Shu\'be (r.a.): Isha me Pejgamberin ﷺ në udhëtim dhe desha t\'ia heqja mestet për abdes; ai tha: «Lëri ashtu, sepse i vesha kur isha me abdes» — dhe fshiu mbi to.', src: 'Muttefekun alejhi' },
+      { book: 'fiqh', ref: '1.44', text: 'Neveviu: të gjithë dijetarët e ixhmasë pajtohen se lejohet — në udhëtim a në shtëpi, me nevojë a pa të. Ibn Haxheri: transmetimet për këtë kalojnë tetëdhjetë, mes tyre nga dhjetë sahabët e përgëzuar me Xhenet.' },
+    ],
+  },
+  {
+    title: 'Kushti: vishen me abdes',
+    body: 'Mes-hi lejohet vetëm nëse i ke veshur mestet kur ishe me abdes të plotë. Nëse i vesh pa abdes, duhet t\'i heqësh dhe të lash këmbët.',
+    evidence: [
+      { book: 'bulugh', ref: '§70', text: 'Ebu Bekre (r.a.): Pejgamberi ﷺ lejoi fshirjen mbi meste — tri ditë e net për udhëtarin, një ditë e natë për vendasin — «për sa kohë i kishte veshur kur ishte i pastër».', src: 'Darakutni — sahih sipas Ibn Huzejmes' },
+      { book: 'fiqh', ref: '1.45', text: 'Mugireja: «Lëri, sepse i vesha kur isha i pastër.» Ky është kushti i vetëm i vërtetuar; stipulimet e tjera (të mbulojnë plotësisht nyjen, të ecësh dot me to) Ibn Tejmije i quajti të dobëta.' },
+    ],
+  },
+  {
+    title: 'Fshihet vetëm sipër',
+    body: 'Dora e lagur kalon mbi pjesën e sipërme të mestit — mjafton një herë. Nuk kërkohet të fshihet fundi.',
+    evidence: [
+      { book: 'bulugh', ref: '§65', text: 'Aliu (r.a.): «Po të ishte feja me mendje, fundi i mestit do të kishte më shumë të drejtë të fshihej se sipër; por e pashë Pejgamberin ﷺ duke fshirë mbi sipër.»', src: 'Ebu Davudi — zinxhir i mirë (hasen)' },
+      { book: 'fiqh', ref: '1.46', text: 'Mugireja: e pashë Pejgamberin ﷺ duke fshirë mbi sipër të mesteve. (Ahmedi, Ebu Davudi, Tirmidhiu — hasen) Nuk ka masë të prerë — mjafton kuptimi gjuhësor i fjalës «fshirje».' },
+    ],
+  },
+  {
+    title: 'Afati: 1 ditë vendasi, 3 udhëtari',
+    body: 'Vendasi fshin mbi meste një ditë e një natë; udhëtari tri ditë e tri net. Dijetarët ndryshojnë vetëm a nis afati nga mes-hi i parë apo nga prishja e parë e abdesit pas veshjes.',
+    evidence: [
+      { book: 'bulugh', ref: '§67', text: 'Aliu (r.a.): Pejgamberi ﷺ caktoi tri ditë e tri net për udhëtarin dhe një ditë e një natë për vendasin — si afati i mes-hit mbi meste.', src: 'Muslimi' },
+      { book: 'fiqh', ref: '1.46a', text: 'Safvan ibn Assal dhe Aishja (r.a.) transmetojnë të njëjtin afat; Bejhekiu: «ky është transmetimi më i saktë në këtë temë».' },
+    ],
+  },
+  {
+    title: 'Çfarë e prish mes-hin',
+    body: 'Mes-hi mbi meste bie kur: (1) mbaron afati, (2) bie xhunubllëku, ose (3) i heq mestet. Nëse afati mbaron a i heq kur je me abdes, mjafton t\'i lash këmbët — s\'ke nevojë ta rifillosh abdesin.',
+    evidence: [
+      { book: 'bulugh', ref: '§66', text: 'Safvan ibn Assal (r.a.): Na urdhëronte të mos i hiqnim mestet tri ditë e net kur ishim udhëtarë; s\'i hiqnim veçse nga xhunubllëku — jo për jashtëqitje, urinë a gjumë.', src: 'Nesaiu & Tirmidhiu' },
+      { book: 'fiqh', ref: '1.47', text: 'Mes-hin e prishin: mbarimi i afatit, xhunubllëku dhe heqja e mesteve. Nëse afati mbaron ose i heq kur je i pastër, mjafton t\'i lash këmbët.' },
+    ],
+  },
+  {
+    title: 'Edhe mbi çorape e mbulesa',
+    body: 'Shumica lejojnë fshirjen edhe mbi çorape të trasha e mbulesa këmbësh të veshura për nevojë (ftohtë, plagë). Disa e kufizuan te mestet e lëkurës; Ebu Hanife fillimisht s\'e lejoi mbi çorape të holla, por e ndryshoi mendimin pak para vdekjes.',
+    differed: true,
+    evidence: [
+      { book: 'bulugh', ref: '§68', text: 'Theubani (r.a.): Pejgamberi ﷺ dërgoi një ekspeditë dhe i urdhëroi të fshinin mbi çallmat dhe mbi mestet e tyre.', src: 'Ahmedi & Ebu Davudi — sahih sipas Hakimit' },
+      { book: 'fiqh', ref: '1.44a', text: 'Ibn Tejmije: çdo mbulesë këmbe e veshur për nevojë merr të njëjtin gjykim si mestet. Fshirja mbi këpucë (nalle) transmetohet nga shumë sahabë; Ebu Hanife e ndryshoi mendimin dhe fshiu mbi to gjatë sëmundjes së fundit.' },
+    ],
+  },
+];
+
 // ─── PRISHËSIT ────────────────────────────────────────────────────
 const NULLIFIERS_YES = [
   {
@@ -590,6 +643,7 @@ export default function AbdesPage() {
       {/* ── Jump nav ── */}
       <PageNav items={[
         { id: 'hapat',     label: 'Si merret abdesi' },
+        { id: 'meste',     label: 'Mes-hi mbi meste' },
         { id: 'prishesit', label: 'Prishësit' },
         { id: 'gusli',     label: 'Gusli' },
         { id: 'tejemumi',  label: 'Tejemumi' },
@@ -641,6 +695,19 @@ export default function AbdesPage() {
         {/* Rules band */}
         <div className="abd-grid-2" style={{ marginTop: 14 }}>
           {WUDU_RULES.map(r => <RulingCard key={r.title} item={r} />)}
+        </div>
+      </section>
+
+      {/* ── Mes-hi mbi meste ── */}
+      <section style={{ maxWidth: 1100, margin: '64px auto 0', padding: '0 clamp(20px,4vw,56px)' }}>
+        <SectionHead
+          id="meste"
+          eyebrow="Mes-hi mbi meste · المسح على الخفين"
+          title="Fshirja mbi çorape e meste"
+          sub="Një lehtësim i njohur: kur i ke veshur mestet me abdes, s'ke nevojë t'i heqësh — mjafton t'i fshish me dorë të lagur. Praktike sidomos në dimër dhe në udhëtim."
+        />
+        <div className="abd-grid-3">
+          {MASH_KHUFF.map(item => <RulingCard key={item.title} item={item} />)}
         </div>
       </section>
 
