@@ -25,17 +25,21 @@ export default function Icon({ name, size = 20, color = "currentColor", sw = 1.6
     case "dua":
       return <svg {...p}><path d="M18 11V6a3 3 0 00-6 0v5"/><path d="M6 11V6a3 3 0 016 0"/><path d="M6 11h12v8a3 3 0 01-3 3H9a3 3 0 01-3-3v-8z"/></svg>;
     case "abdes":
-      return <svg {...p}><path d="M12 2.69l5.66 5.66a8 8 0 11-11.31 0z"/></svg>;
+      return <svg {...p}><path d="M12 3.2c3.1 3.9 5.2 6.6 5.2 9.3a5.2 5.2 0 0 1-10.4 0c0-2.7 2.1-5.4 5.2-9.3Z"/><path d="M9.6 13.4a2.4 2.4 0 0 0 2.4 2.4"/></svg>;
+    case "mihrab":
+      return <svg {...p}><path d="M5 21V10.5a7 7 0 0 1 14 0V21"/><path d="M3.4 21h17.2"/><path d="M12 8.6V6.4"/><circle cx="12" cy="10.4" r="1.3"/></svg>;
     case "agjerim":
-      return <svg {...p}><path d="M12 3a6 6 0 009 9 9 9 0 11-9-9z"/></svg>;
+      return <svg {...p}><path d="M18.6 15.4A7 7 0 1 1 12.8 4.1a5.5 5.5 0 0 0 5.8 11.3Z"/><path d="M18.8 3.8l.7 1.9 1.9.7-1.9.7-.7 1.9-.7-1.9-1.9-.7 1.9-.7Z"/></svg>;
+    case "duaHands":
+      return <svg {...p}><path d="M5 13c0 4 3 6.6 7 6.6s7-2.6 7-6.6"/><path d="M8.6 13.4V7.6a1.35 1.35 0 0 1 2.7 0V12.6"/><path d="M12.7 12.6V7.6a1.35 1.35 0 0 1 2.7 0V13.4"/><path d="M12 4.6l.35.95.95.35-.95.35L12 7.2l-.35-.95L10.7 5.9l.95-.35Z"/></svg>;
     case "library":
       return <svg {...p}><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>;
     case "audio":
       return <svg {...p}><path d="M12 2a3 3 0 013 3v7a3 3 0 01-6 0V5a3 3 0 013-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="8" y1="22" x2="16" y2="22"/></svg>;
     case "tasbeeh":
-      return <svg {...p}><circle cx="12" cy="8" r="3"/><circle cx="19" cy="14" r="2"/><circle cx="5" cy="14" r="2"/><path d="M12 11c0 5 7 3 7 0M12 11c0 5-7 3-7 0"/></svg>;
+      return <svg {...p}><path d="M12 4c-3.6 0-6.4 3-6.4 6.7S8.4 17.4 12 17.4s6.4-3 6.4-6.7S15.6 4 12 4Z"/><circle cx="12" cy="4" r="1.5" fill={color} stroke="none"/><circle cx="5.6" cy="10.7" r="1.5" fill={color} stroke="none"/><circle cx="18.4" cy="10.7" r="1.5" fill={color} stroke="none"/><circle cx="12" cy="17.4" r="1.5" fill={color} stroke="none"/><path d="M12 19v1.1"/><circle cx="12" cy="21.4" r="1.6" fill={color} stroke="none"/></svg>;
     case "asma":
-      return <svg {...p}><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>;
+      return <svg {...p}><rect x="6.4" y="6.4" width="11.2" height="11.2" rx="1.4"/><rect x="6.4" y="6.4" width="11.2" height="11.2" rx="1.4" transform="rotate(45 12 12)"/></svg>;
 
     /* ── Tools ── */
     case "zakat":

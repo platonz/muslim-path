@@ -275,8 +275,8 @@ export default function NurDashboard({ navigate, onSearch, authUser, onAuthClick
                       const b = BOOKS[id];
                       return (
                         <a key={id} className="nur-card" href={pageToUrl(id)} onClick={(e) => { e.preventDefault(); navigate(id); }} style={{ display: "flex", flexDirection: "column", gap: 15, alignItems: "flex-start", background: "var(--surface)", border: "1px solid var(--line)", borderRadius: 20, padding: 16, cursor: "pointer", minHeight: 140, textDecoration: "none", boxSizing: "border-box", animation: "nurDashUp .5s cubic-bezier(.25,.46,.45,.94) both", animationDelay: (0.05 + i * 0.06).toFixed(2) + "s" }}>
-                          <span style={{ width: 52, height: 52, borderRadius: 16, display: "grid", placeItems: "center", background: `linear-gradient(150deg, ${b.c[0]}, ${b.c[1]})`, boxShadow: `0 8px 14px -6px ${b.c[2]}` }}>
-                            <Icon name={b.icon} size={24} color="#f2ece1" />
+                          <span style={{ width: 52, height: 52, borderRadius: 13, display: "grid", placeItems: "center", background: dark ? "#14110c" : "#1a1915", border: dark ? "1px solid rgba(212,186,136,0.22)" : "none", boxShadow: dark ? "none" : "0 8px 14px -8px rgba(0,0,0,0.5)" }}>
+                            <Icon name={b.icon} size={26} color="#d4ba88" sw={1.7} />
                           </span>
                           <span style={{ display: "block", textAlign: "left", width: "100%" }}>
                             <span style={{ display: "block", fontFamily: DISPLAY_FONT, fontWeight: 700, fontSize: 16.5, letterSpacing: "-0.01em", color: "var(--ink)" }}>{b.title}</span>
