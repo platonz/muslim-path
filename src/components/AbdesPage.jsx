@@ -223,6 +223,116 @@ const MASH_KHUFF = [
   },
 ];
 
+// ─── NEXHASET ─────────────────────────────────────────────────────
+const NAJASAH = [
+  {
+    title: 'Qeni — larje shtatë herë',
+    body: 'Ena që e lëpin qeni lahet shtatë herë, njëra prej tyre me dhé (ujë të përzier me baltë). Qimja e qenit, megjithatë, është e pastër.',
+    evidence: [
+      { book: 'bulugh', ref: '§12', text: 'Ebu Hurejra (r.a.): «Pastrimi i enës që e ka lëpirë qeni bëhet duke e larë shtatë herë, të parën me dhé.»', src: 'Muslimi' },
+      { book: 'fiqh', ref: '1.13a', text: 'Qeni është nexhs; ena e lëpirë prej tij lahet shtatë herë, e para me baltë (ujë të përzier me dhé derisa të turbullohet). Qimja e qenit vetë është e pastër.' },
+    ],
+  },
+  {
+    title: 'Macja s\'është e papastër',
+    body: 'Uji dhe ena që prek macja mbeten të pastra — mund të marrësh abdes e të pish prej tyre pa problem.',
+    evidence: [
+      { book: 'bulugh', ref: '§13', text: 'Ebu Katade (r.a.): Për macen, Pejgamberi ﷺ tha: «Ajo s\'është e papastër; është nga ata që sillen mes jush.»', src: 'Katër imamët — sahih sipas Tirmidhiut e Ibn Huzejmes' },
+      { book: 'fiqh', ref: '1.6', text: 'Uji i mbetur pasi pi macja është i pastër — macja s\'është nexhs, sepse sillet vazhdimisht mes njerëzve.' },
+    ],
+  },
+  {
+    title: 'Urina e foshnjës',
+    body: 'Urina e vajzës së vogël lahet me ujë; urina e djalit të vogël që ende s\'ha ushqim (vetëm gji) mjafton të spërkatet me ujë. Kur fëmija fillon të hajë, të dyja lahen.',
+    evidence: [
+      { book: 'bulugh', ref: '§33', text: 'Ebu Semh (r.a.): «Urina e vajzës lahet, kurse mbi urinën e djalit vetëm spërkatet ujë.»', src: 'Ebu Davudi & Nesaiu — sahih sipas Hakimit' },
+      { book: 'fiqh', ref: '1.9a', text: 'Um Kajs: foshnja i urinoi në prehër Pejgamberit ﷺ; ai kërkoi ujë dhe e spërkati rrobën pa e larë plotësisht. (Buhariu & Muslimi) Spërkatja mjafton sa djali është me gji; kur ha ushqim, urina lahet.' },
+    ],
+  },
+  {
+    title: 'Gjaku i hajdit në rroba',
+    body: 'Gjaku i menstruacioneve në rroba: gërvishte, fërkoje me ujë, spërkate — pastaj falu me to. Nëse mbetet ndonjë gjurmë ngjyre pas larjes, s\'ka gjë.',
+    evidence: [
+      { book: 'bulugh', ref: '§34', text: 'Esma bint Ebu Bekr (r.a.): Për gjakun e menstruacioneve në rroba — «Gërvishte, fërkoje me ujë, spërkate dhe falu me to.»', src: 'Muttefekun alejhi' },
+      { book: 'bulugh', ref: '§35', text: 'Havla pyeti ç\'të bëjë nëse gjurma s\'largohet krejt; Pejgamberi ﷺ: «Uji të mjafton, dhe s\'ka gjë nëse mbetet një shenjë.»', src: 'Tirmidhiu — zinxhir i dobët' },
+      { book: 'fiqh', ref: '1.13', text: 'Rrobat a trupi i ndotur me nexhs lahen me ujë derisa të pastrohen; gjurmët e vështira që mbeten pas larjes falen.' },
+    ],
+  },
+  {
+    title: 'Menia — fshihet kur është e njomë',
+    body: 'Shumica e dijetarëve e quajnë menien të pastër: nëse është e njomë, laje ose fshije; nëse është tharë, gërvishte — dhe falu me atë rrobë. Disa dijetarë e quajnë nexhs.',
+    differed: true,
+    evidence: [
+      { book: 'bulugh', ref: '§30–32', text: 'Aishja (r.a.): «E laja menien nga rroba e Pejgamberit ﷺ, pastaj ai dilte e falej me të» — dhe në një version: «e fërkoja»; në një tjetër: «e gërvishtja me thua kur ishte tharë.»', src: 'Muttefekun alejhi + Muslimi' },
+      { book: 'fiqh', ref: '1.11', text: 'Sabiku: dukshëm menia është e pastër, sepse vetëm rekomandohet të lahet kur është e njomë e të gërvishtet kur është tharë; një pjesë e dijetarëve e quajnë nexhs.' },
+    ],
+  },
+  {
+    title: 'Papastërtia në tokë',
+    body: 'Papastërtia e lëngshme në tokë pastrohet duke hedhur ujë mbi të — s\'ka nevojë ta gërmosh a ta heqësh dheun.',
+    evidence: [
+      { book: 'bulugh', ref: '§14', text: 'Enesi (r.a.): Një beduin urinoi në një cep të xhamisë; Pejgamberi ﷺ i ndaloi ta ndërprisnin, pastaj urdhëroi të hidhnin një kovë të madhe ujë mbi urinë.', src: 'Muttefekun alejhi' },
+      { book: 'fiqh', ref: '1.14', text: 'Toka e ndotur pastrohet duke derdhur ujë mbi të. Kjo mjafton për nexhsin e lëngshëm; nëse papastërtia është e ngurtë, ajo hiqet.' },
+    ],
+  },
+];
+
+// ─── ADABET E NEVOJËS ─────────────────────────────────────────────
+const ISTINJA = [
+  {
+    title: 'Dua-ja e hyrjes dhe daljes',
+    body: 'Kur hyn (ose para se të zbulohesh në natyrë), thuaj: «Bismil-lah, Allahumme inni eudhu bike minel-hubthi vel-habaith» — kërkoj mbrojtje te Ti nga djajtë mashkuj e femra. Kur del, thuaj: «Gufraneke» — kërkoj faljen Tënde.',
+    evidence: [
+      { book: 'bulugh', ref: '§94', text: 'Enesi (r.a.): Kur hynte në nevojtore, Pejgamberi ﷺ thoshte: «O Allah, kërkoj mbrojtje te Ti nga djajtë mashkuj e femra.»', src: 'Shtatë imamët' },
+      { book: 'bulugh', ref: '§106', text: 'Aishja (r.a.): Kur dilte nga nevojtorja, thoshte «Gufraneke» — «Kërkoj faljen Tënde».', src: 'Pesë imamët — sahih' },
+      { book: 'fiqh', ref: '1.17a', text: 'Enesi: hyrja fillon me «Bismil-lah» dhe pastaj lutja e mbrojtjes nga djajtë. (transmeton «grupi»)' },
+    ],
+  },
+  {
+    title: 'Fshihu dhe mos fol',
+    body: 'Largohu nga sytë e njerëzve kur kryen nevojën. Gjatë saj s\'flitet — as për t\'iu përgjigjur selamit a ezanit — veç në rast nevoje.',
+    evidence: [
+      { book: 'bulugh', ref: '§96', text: 'Mugire ibn Shu\'be (r.a.): Pejgamberi ﷺ largohej derisa s\'e shihja më, pastaj kryente nevojën.', src: 'Muttefekun alejhi' },
+      { book: 'fiqh', ref: '1.17b', text: 'Një njeri e përshëndeti Pejgamberin ﷺ ndërsa urinonte — ai s\'ia ktheu selamin. (grupi, veç Buhariut) Shumica e dijetarëve: të folurit gjatë nevojës është mekruh, jo haram.' },
+    ],
+  },
+  {
+    title: 'Mos u drejto nga kibla',
+    body: 'Në natyrë të hapur mos ia kthe fytyrën as shpinën Kabes kur kryen nevojën — kthehu nga lindja a perëndimi. Brenda një ndërtese, me pengesë mes teje e kiblës, shumica e lejojnë.',
+    differed: true,
+    evidence: [
+      { book: 'bulugh', ref: '§104', text: 'Ebu Ejjub el-Ensari (r.a.): «Kur ndonjëri kryen nevojën, të mos ia kthejë fytyrën as shpinën kiblës — le të kthehet nga lindja a perëndimi.»', src: 'Shtatë imamët' },
+      { book: 'fiqh', ref: '1.18', text: 'Ndalimi vlen për vendet e hapura; Ibn Umeri e pa Pejgamberin ﷺ duke kryer nevojën i kthyer nga Shami me shpinë nga Kaba (brenda një ndërtese). «Nëse ka pengesë mes teje e kiblës, s\'ka gjë.»' },
+    ],
+  },
+  {
+    title: 'Pastrimi: ujë ose gurë',
+    body: 'Pastrohu me ujë (istinxha) ose me gurë tek numër — jo më pak se tri. Nuk pastrohesh me eshtra a bajga, sepse ato nuk pastrojnë.',
+    evidence: [
+      { book: 'bulugh', ref: '§95', text: 'Enesi (r.a.): I sillnim Pejgamberit ﷺ një enë me ujë dhe një shkop, dhe ai pastrohej me ujë.', src: 'Muttefekun alejhi' },
+      { book: 'bulugh', ref: '§103', text: 'Selmani (r.a.): Na ndaloi të pastrohemi me më pak se tri gurë, ose me eshtra e bajga.', src: 'Muslimi' },
+      { book: 'fiqh', ref: '1.19b', text: 'Pastrimi bëhet me tri gurë ose me ujë — të dyja të vërtetuara nga suneti; mund të kombinohen.' },
+    ],
+  },
+  {
+    title: 'Me dorën e majtë',
+    body: 'Pastrimi pas nevojës bëhet me dorën e majtë. E djathta lihet për ushqim, pije e vepra të nderit.',
+    evidence: [
+      { book: 'bulugh', ref: '§102', text: 'Ebu Katade (r.a.): «Askush prej jush të mos e prekë organin me dorën e djathtë kur urinon, as të mos pastrohet me të djathtën.»', src: 'Buhariu & Muslimi' },
+      { book: 'fiqh', ref: '1.20', text: 'Hafsa (r.a.): Pejgamberi ﷺ e ruante dorën e djathtë për ngrënie, pije e veshje, dhe përdorte të majtën për gjërat e tjera.' },
+    ],
+  },
+  {
+    title: 'Ku të mos e bësh — dhe ruaju nga urina',
+    body: 'Shmang vendet që i sjellin mallkim njeriut: rrugët, hijet ku ulen njerëzit, dhe ujin e ndenjur a rrjedhës. Ruaju veçanërisht nga spërkatja e urinës — pakujdesia ndaj saj është shkak i shumicës së dënimit të varrit.',
+    evidence: [
+      { book: 'bulugh', ref: '§97', text: 'Ebu Hurejra (r.a.): «Ruhuni nga dy veprat që sjellin mallkim: kryerja e nevojës në rrugët e njerëzve ose në hijen e tyre.»', src: 'Muslimi' },
+      { book: 'bulugh', ref: '§109', text: 'Ebu Hurejra (r.a.): «Ruhuni nga urina, sepse ajo është shkak i shumicës së dënimit të varrit.»', src: 'Darakutni' },
+      { book: 'fiqh', ref: '1.18c–1.19', text: 'Ndalohet kryerja e nevojës në rrugë e hije, si dhe urinimi në ujë të ndenjur a rrjedhës.' },
+    ],
+  },
+];
+
 // ─── PRISHËSIT ────────────────────────────────────────────────────
 const NULLIFIERS_YES = [
   {
@@ -644,6 +754,8 @@ export default function AbdesPage() {
       <PageNav items={[
         { id: 'hapat',     label: 'Si merret abdesi' },
         { id: 'meste',     label: 'Mes-hi mbi meste' },
+        { id: 'nexhaset',  label: 'Nexhaset' },
+        { id: 'istinxha',  label: 'Adabet e nevojës' },
         { id: 'prishesit', label: 'Prishësit' },
         { id: 'gusli',     label: 'Gusli' },
         { id: 'tejemumi',  label: 'Tejemumi' },
@@ -708,6 +820,32 @@ export default function AbdesPage() {
         />
         <div className="abd-grid-3">
           {MASH_KHUFF.map(item => <RulingCard key={item.title} item={item} />)}
+        </div>
+      </section>
+
+      {/* ── Nexhaset ── */}
+      <section style={{ maxWidth: 1100, margin: '64px auto 0', padding: '0 clamp(20px,4vw,56px)' }}>
+        <SectionHead
+          id="nexhaset"
+          eyebrow="Nexhaset · النجاسة"
+          title="Papastërtitë dhe si pastrohen"
+          sub="Çfarë e ndot trupin, rrobat a vendin — dhe si largohet. Rregulli bazë: papastërtia largohet me ujë derisa të zhduket gjurma e saj."
+        />
+        <div className="abd-grid-3">
+          {NAJASAH.map(item => <RulingCard key={item.title} item={item} />)}
+        </div>
+      </section>
+
+      {/* ── Adabet e nevojës ── */}
+      <section style={{ maxWidth: 1100, margin: '64px auto 0', padding: '0 clamp(20px,4vw,56px)' }}>
+        <SectionHead
+          id="istinxha"
+          eyebrow="Adabet e nevojës · آداب قضاء الحاجة"
+          title="Në nevojtore"
+          sub="Edhe kryerja e nevojës ka edukatën e vet — nga dua-ja e hyrjes te pastrimi dhe ruajtja nga urina."
+        />
+        <div className="abd-grid-3">
+          {ISTINJA.map(item => <RulingCard key={item.title} item={item} />)}
         </div>
       </section>
 
