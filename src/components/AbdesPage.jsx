@@ -406,7 +406,7 @@ function chipLabel(evidence) {
     .join(' · ');
 }
 
-function SourceChip({ evidence }) {
+export function SourceChip({ evidence }) {
   const [open, setOpen] = useState(false);
   return (
     <div style={{ marginTop: 12 }}>
@@ -469,7 +469,7 @@ function TypeBadge({ type, times }) {
   );
 }
 
-function SectionHead({ eyebrow, title, sub }) {
+export function SectionHead({ eyebrow, title, sub }) {
   return (
     <div style={{ marginBottom: 26 }}>
       <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: '0.2em', textTransform: 'uppercase', color: C.gold600, fontFamily: SANS }}>{eyebrow}</div>
@@ -479,7 +479,7 @@ function SectionHead({ eyebrow, title, sub }) {
   );
 }
 
-function RulingCard({ item }) {
+export function RulingCard({ item }) {
   return (
     <div style={{
       background: C.surface, border: `1px solid ${item.differed ? C.gold300 : C.warm200}`,

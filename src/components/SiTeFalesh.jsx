@@ -1,4 +1,5 @@
 ﻿import { useState, useMemo } from "react";
+import NamaziDeep from "./NamaziDeep";
 import {
   SURFACE, SERIF, SANS, MONO,
   DARK_900, DARK_700,
@@ -1115,6 +1116,8 @@ function SiTeFaleshHome({ onOpenPrayer }) {
       </section>
 
       <SahuBlock />
+
+      <NamaziDeep />
 
       <style>{`
         @keyframes namaz-pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.4;transform:scale(.8)} }
