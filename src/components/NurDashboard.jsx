@@ -47,6 +47,13 @@ const LEXIMI_META = {
 const VEGLA_IDS = ["zakat", "inheritance", "calendar", "dates"];
 const BOOKS = Object.fromEntries(SHELVES.flatMap(s => s.books.map(b => [b.id, b])));
 
+// Burimet e informatave dhe referencave në aplikacion — librat dhe autorët.
+const SOURCES = [
+  { book: "Kurani Famëlartë", author: null },
+  { book: "Bulugh al-Maram", author: "Ibn Haxher el-Askalani" },
+  { book: "Fikhu i Sunetit", author: "Sejjid Sabik" },
+];
+
 function NavRow({ icon, label, active, href, onClick }) {
   return (
     <a
@@ -242,6 +249,17 @@ export default function NurDashboard({ navigate, onSearch, authUser, onAuthClick
                       <a className="nur-btn-outline" href={pageToUrl("library")} onClick={(e) => { e.preventDefault(); navigate("library"); }} style={{ display: "flex", alignItems: "center", gap: 9, ...heroOutlineBtnStyle, borderRadius: 14, padding: "14px 20px", fontFamily: BODY_FONT, fontWeight: 700, fontSize: 14.5, cursor: "pointer", backdropFilter: "blur(4px)", textDecoration: "none" }}>
                         Eksploro Bibliotekën <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="3" width="7" height="7" rx="1.5" /><rect x="14" y="3" width="7" height="7" rx="1.5" /><rect x="3" y="14" width="7" height="7" rx="1.5" /><rect x="14" y="14" width="7" height="7" rx="1.5" /></svg>
                       </a>
+                    </div>
+                    <div style={{ display: "flex", alignItems: "center", flexWrap: "wrap", gap: 8, marginTop: 10 }}>
+                      <span style={{ display: "inline-flex", alignItems: "center", gap: 7, fontFamily: MONO_FONT, fontSize: 10.5, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: heroEyebrowColor }}>
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" /><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" /></svg>
+                        Burimet
+                      </span>
+                      {SOURCES.map(s => (
+                        <span key={s.book} style={{ fontFamily: BODY_FONT, fontSize: 12, fontWeight: 600, color: heroTitleColor, background: dark ? "rgba(255,255,255,0.07)" : "rgba(255,255,255,0.55)", border: `1px solid ${dark ? "rgba(255,255,255,0.16)" : "rgba(120,90,50,0.22)"}`, borderRadius: 999, padding: "5px 11px" }}>
+                          {s.book}{s.author && <span style={{ color: heroSubColor, fontWeight: 500 }}> · {s.author}</span>}
+                        </span>
+                      ))}
                     </div>
                   </div>
                   <div style={{ position: "relative", flex: heroRow ? 1 : "none", minWidth: 0, height: heroRow ? "auto" : 150, minHeight: heroRow ? 280 : 150, overflow: "hidden", borderRadius: heroRow ? "0 24px 24px 0" : 0 }}>
