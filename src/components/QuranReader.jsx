@@ -2,6 +2,7 @@ import { useState, useEffect, useRef, useMemo, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import i18n from "../i18n";
 import ReactDOM from "react-dom";
+import { SURAH_NAMES } from "../lib/surahNames";
 
 // ─── TOKENS ──────────────────────────────────────────────────────────────────
 const T = {
@@ -44,8 +45,9 @@ function normSearch(s) {
     .normalize("NFD")
     .replace(/[̀-ͯ]/g, "")
     .replace(/[''ʿʾʻˀ`]/g, "")
-    .replace(/[-]/g, "")
-    .toLowerCase();
+    .replace(/[-\s]/g, "")
+    .toLowerCase()
+    .replace(/([aeiou])\1+/g, "$1");
 }
 
 async function fetchQuranComSurah(surahNumber) {
@@ -579,7 +581,10 @@ export default function QuranReader({ playQuranAudio, globalCurrentId, globalPla
     if (_surahCache) { setSurahs(_surahCache); setLoadingList(false); return; }
     fetch("https://api.alquran.cloud/v1/surah")
       .then(r => r.json())
-      .then(d => { _surahCache = d.data || []; setSurahs(_surahCache); setLoadingList(false); })
+      .then(d => {
+        _surahCache = (d.data || []).map(s => ({ ...s, englishName: SURAH_NAMES[s.number] ?? s.englishName }));
+        setSurahs(_surahCache); setLoadingList(false);
+      })
       .catch(() => setLoadingList(false));
   }, []);
 
